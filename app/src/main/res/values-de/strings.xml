@@ -133,6 +133,7 @@
 
     <!-- Keyboard status messages -->
     <string name="status_transcribing">Wird transkribiert …</string>
+    <string name="status_no_speech">Nicht verstanden – bitte noch einmal</string>
     <string name="status_engine_model_missing">Modell nicht installiert - Outspoke öffnen</string>
     <string name="status_engine_loading">Transkriptions-Engine wird geladen …</string>
     <string name="status_error_mic_permission">Mikrofonberechtigung fehlt - Outspoke öffnen</string>
@@ -169,5 +170,20 @@
         Standardquelle wird das Lautsprecher-Signal aus dem Mikrofon entfernt und es wird Stille transkribiert. In
         lauten Räumen etwas weniger saubere Aufnahme.
     </string>
-</resources>
 
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Wähle das Mikrofon, das hohe Frequenzen am klarsten aufnimmt. Das Sprachmodell braucht sie, um kurze Wörter wie \"Thanks\" zu erkennen.</string>
+    <string name="calib_instructions">Warte bei jedem Mikrofon auf die rote Anzeige und sage dann deutlich \'thanks\'. Das klarste Mikrofon wird automatisch ausgewählt.</string>
+    <string name="calib_start">Kalibrierung starten</string>
+    <string name="calib_mic_of">Mikrofon %1$d von %2$d</string>
+    <string name="calib_speak_now">Sage jetzt \'thanks\'</string>
+    <string name="calib_get_ready">Mach dich bereit, \'thanks\' zu sagen</string>
+    <string name="calib_done">Kalibrierung abgeschlossen</string>
+    <string name="calib_best">Bestes Mikrofon</string>
+    <string name="calib_hf">Hochfrequenz</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Als bevorzugtes Mikrofon gespeichert</string>
+    <string name="calib_run_again">Erneut ausführen</string>
+    <string name="calib_no_mics">Keine Mikrofone gefunden.</string>
+    <string name="calib_current">Aktuell</string>
+</resources>
