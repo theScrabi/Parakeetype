@@ -14,8 +14,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -264,10 +266,16 @@ fun KeyboardScreen(
                     }
                     // A filled, larger key: the old 40 dp icon-only button was easy to miss
                     // and looked like the delete buttons.
+                    val haptics = LocalHapticFeedback.current
                     KeyboardActionButton(
                         icon = enterIcon,
                         contentDescription = enterDescription,
-                        onClick = onEnterAction,
+                        onClick = {
+                            // Standard keyboard key vibration; honours the system's
+                            // keyboard-vibration setting.
+                            haptics.performHapticFeedback(HapticFeedbackType.KeyboardTap)
+                            onEnterAction()
+                        },
                         // Disable auto-repeat for action buttons - search/send/go should only fire once.
                         repeatEnabled = enterAction == EnterAction.NEWLINE,
                         size = DpSize(64.dp, 52.dp),
