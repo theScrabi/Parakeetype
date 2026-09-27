@@ -123,12 +123,10 @@ fun KeyboardScreen(
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        // Main keyboard content — always pinned to the bottom with a fixed height.
-        // Uses a Box so the button row is anchored to the bottom edge and the top row
-        // is vertically centred in the remaining space above. This
-        // prevents the large empty gap that appears on tablets/high-res screens when a
-        // Column with SpaceBetween distributes all leftover space as dead whitespace.
-        Box(
+        // Main keyboard content — pinned to the bottom with a fixed height. Its content area
+        // is the keyboard area above the nav bar: the top row is pinned to its top edge and
+        // the button row is centred vertically in it (see below).
+        BoxWithConstraints(
             modifier = if (mainContentHeight != null) {
                 Modifier
                     .align(Alignment.BottomCenter)
@@ -138,20 +136,16 @@ fun KeyboardScreen(
                 Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .wrapContentHeight()
+                    .fillMaxHeight()
             }
-                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = navBarPaddingDp + 64.dp),
+                .padding(start = 16.dp, end = 16.dp, bottom = navBarPaddingDp),
         ) {
-            // Top row, centred vertically in the space above the button row so that on
-            // tall keyboard windows (tablets) it sits in the middle rather than being pushed
-            // hard against the top edge.
+            // Top row: pinned to the top edge.
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Center)
-                    // Keep it above the button row so they never overlap.
-                    // The TalkButton is 72 dp tall; 80 dp gives a safe margin.
-                    .padding(bottom = 80.dp),
+                    .align(Alignment.TopCenter)
+                    .padding(top = TOP_ROW_TOP_PADDING),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (uiState is KeyboardUiState.Error) {
@@ -195,13 +189,21 @@ fun KeyboardScreen(
                 }
             }
 
-            //  Bottom row: 4 buttons with TalkButton centred
+            //  Button row: 4 buttons with TalkButton centred horizontally.
             // Left and right groups each have weight(1f) so the centre button stays
             // exactly in the middle regardless of screen width.
+            //
+            // Vertically the row is centred exactly in the keyboard area on every screen
+            // size (its height is fixed to the talk button's, so its middle is the talk
+            // button's middle). Only on very short keyboards, where the centred row would
+            // run into the top row, is it pushed down just far enough to clear it.
+            val centredTop = (maxHeight - BUTTON_ROW_HEIGHT) / 2
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
+                    .height(BUTTON_ROW_HEIGHT)
+                    .align(Alignment.TopCenter)
+                    .offset(y = centredTop.coerceAtLeast(TOP_ROW_CLEARANCE)),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Left group: [Delete All], directly left of the talk button
@@ -290,6 +292,19 @@ fun KeyboardScreen(
 }
 
 private val KEY_SHAPE = RoundedCornerShape(16.dp)
+
+/** Height of the button row: the talk button's fixed 72 dp size (the tallest key). */
+private val BUTTON_ROW_HEIGHT = 72.dp
+
+/** Space between the keyboard's top edge and the top row. */
+private val TOP_ROW_TOP_PADDING = 2.dp
+
+/**
+ * Minimum distance from the keyboard's top edge to the button row: the top row
+ * ([TOP_ROW_TOP_PADDING] + the 40 dp switch-keyboard key) plus a small gap. Only binds on
+ * very short keyboards; normally the button row is exactly centred.
+ */
+private val TOP_ROW_CLEARANCE = TOP_ROW_TOP_PADDING + 40.dp + 4.dp
 
 /**
  * A delete key (trash / delete word): a regular Material 3 [IconButton] — fires on release
