@@ -51,6 +51,14 @@ class KeyboardViewModel(
     val deleteButtonMode: StateFlow<String> = appPreferences.deleteButtonMode
         .stateIn(viewModelScope, SharingStarted.Eagerly, "DELETE_ALL")
 
+    /** Keyboard UI position in portrait: `"CENTER"` (default), `"LEFT"` or `"RIGHT"`. */
+    val keyboardPositionPortrait: StateFlow<String> = appPreferences.keyboardPositionPortrait
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "CENTER")
+
+    /** Edge the keyboard UI is docked to in landscape: `"RIGHT"` (default) or `"LEFT"`. */
+    val keyboardPositionLandscape: StateFlow<String> = appPreferences.keyboardPositionLandscape
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "RIGHT")
+
     /**
      * `true` when the user opted into raw (unprocessed) microphone capture,
      * which bypasses the platform's echo cancellation - needed when transcribing

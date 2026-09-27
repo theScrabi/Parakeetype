@@ -22,10 +22,11 @@ import dev.brgr.outspoke.settings.preferences.PreferencesViewModel
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
 
 /**
- * Category 1 — Microphone, Trigger & Delete Button.
+ * Category 1 — Microphone, Trigger, Delete Button & Keyboard Position.
  *
- * Microphone calibration entry point, the recording trigger mode, and the
- * behaviour of the keyboard's delete (trash) button.
+ * Microphone calibration entry point, the recording trigger mode, the
+ * behaviour of the keyboard's delete (trash) button, and where the keyboard
+ * controls sit in portrait and landscape.
  * Backed by [PreferencesViewModel] / DataStore; settings persist across
  * process restarts.
  */
@@ -38,6 +39,8 @@ fun InputPreferencesScreen(
     val triggerMode by viewModel.triggerMode.collectAsState()
     val deleteButtonMode by viewModel.deleteButtonMode.collectAsState()
     val rawMicCapture by viewModel.rawMicCapture.collectAsState()
+    val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
+    val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
 
     PreferencesColumn {
         MicSection(
@@ -54,6 +57,13 @@ fun InputPreferencesScreen(
         DeleteButtonSection(
             deleteButtonMode = deleteButtonMode,
             onDeleteButtonModeChange = viewModel::setDeleteButtonMode,
+        )
+        HorizontalDivider()
+        KeyboardPositionSection(
+            positionPortrait = positionPortrait,
+            positionLandscape = positionLandscape,
+            onPositionPortraitChange = viewModel::setKeyboardPositionPortrait,
+            onPositionLandscapeChange = viewModel::setKeyboardPositionLandscape,
         )
     }
 }
@@ -259,6 +269,71 @@ private fun DeleteButtonSection(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun KeyboardPositionSection(
+    positionPortrait: String,
+    positionLandscape: String,
+    onPositionPortraitChange: (String) -> Unit,
+    onPositionLandscapeChange: (String) -> Unit,
+) {
+    val portraitOptions = listOf(
+        "LEFT" to R.string.pref_position_left,
+        "CENTER" to R.string.pref_position_center,
+        "RIGHT" to R.string.pref_position_right,
+    )
+    // Landscape is always docked to an edge so the controls stay within thumb reach.
+    val landscapeOptions = listOf(
+        "LEFT" to R.string.pref_position_left,
+        "RIGHT" to R.string.pref_position_right,
+    )
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.pref_position_title),
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.pref_position_subtitle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        PositionChoiceRow(
+            label = stringResource(R.string.pref_position_portrait),
+            options = portraitOptions,
+            selected = positionPortrait,
+            onSelect = onPositionPortraitChange,
+        )
+        PositionChoiceRow(
+            label = stringResource(R.string.pref_position_landscape),
+            options = landscapeOptions,
+            selected = positionLandscape,
+            onSelect = onPositionLandscapeChange,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PositionChoiceRow(
+    label: String,
+    options: List<Pair<String, Int>>,
+    selected: String,
+    onSelect: (String) -> Unit,
+) {
+    Text(text = label, style = MaterialTheme.typography.titleSmall)
+    SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+        options.forEachIndexed { index, (value, labelRes) ->
+            SegmentedButton(
+                selected = selected == value,
+                onClick = { onSelect(value) },
+                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+            ) {
+                Text(stringResource(labelRes))
+            }
+        }
+    }
+}
+
 @Composable
 private fun VadSection(
     vadSensitivity: Boolean,
@@ -442,6 +517,21 @@ private fun TriggerModeSectionTapTogglePreview() {
     OutspokeTheme {
         PreferencesColumn {
             TriggerModeSection(triggerMode = "TAP_TOGGLE", onTriggerModeChange = {})
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Prefs · Keyboard Position")
+@Composable
+private fun KeyboardPositionSectionPreview() {
+    OutspokeTheme {
+        PreferencesColumn {
+            KeyboardPositionSection(
+                positionPortrait = "CENTER",
+                positionLandscape = "RIGHT",
+                onPositionPortraitChange = {},
+                onPositionLandscapeChange = {},
+            )
         }
     }
 }

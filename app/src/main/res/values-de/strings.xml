@@ -56,7 +56,7 @@
     <string name="home_model_not_downloaded_subtitle">Installiere ein Transkriptionsmodell, um die Tastatur zu
         verwenden.
     </string>
-    <string name="home_pref_input">Mikrofon &amp; Auslösemodus</string>
+    <string name="home_pref_input">Mikrofon, Auslösemodus &amp; Layout</string>
     <string name="home_pref_speech">Spracherkennung, Nachbearbeitung &amp; Modellspeicher</string>
     <string name="home_pref_tools">Tutorial &amp; Diagnose</string>
 
@@ -71,6 +71,15 @@
     </string>
     <string name="pref_delete_all">Gesamter Text</string>
     <string name="pref_delete_last_sentence">Letzter Satz</string>
+    <string name="pref_position_title">Tastaturposition</string>
+    <string name="pref_position_subtitle">Wo die Tastatur-Bedienelemente liegen. Links oder rechts bleiben sie mit einem
+        Daumen erreichbar – praktisch im Querformat, für Linkshänder und auf Tablets.
+    </string>
+    <string name="pref_position_portrait">Im Hochformat</string>
+    <string name="pref_position_landscape">Im Querformat</string>
+    <string name="pref_position_left">Links</string>
+    <string name="pref_position_center">Mitte</string>
+    <string name="pref_position_right">Rechts</string>
     <string name="pref_vad_title">Sprachaktivitätserkennung (VAD)</string>
     <string name="pref_vad_subtitle">Verwendet Silero VAD, um Stille und Hintergrundgeräusche vor der Transkription
         herauszufiltern. Nur deaktivieren, wenn VAD den Anfang deiner Sprache abschneidet oder leere Ergebnisse erzeugt.

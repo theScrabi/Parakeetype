@@ -35,6 +35,13 @@ import java.io.File
 private const val TAG = "OutspokeIME"
 
 /**
+ * Minimum keyboard content height (above the nav bar), in dp: the top row (~46 dp incl.
+ * spacing), the 72 dp button row and a small bottom margin. Only binds when 20 % of the
+ * screen height is less, i.e. in landscape on phones.
+ */
+private const val MIN_KEYBOARD_CONTENT_HEIGHT_DP = 130
+
+/**
  * The core IME service. Implements [LifecycleOwner], [ViewModelStoreOwner], and
  * [SavedStateRegistryOwner] so that [ImeComposeView] can wire them onto the view tree,
  * allowing Compose to function correctly inside a Service context.
@@ -244,33 +251,62 @@ class OutspokeInputMethodService :
      *
      * On gesture navigation both sources return 0, so the result is correctly 0.
      * On button navigation, if source 1 is broken by the OEM, source 2 saves us.
+     *
+     * Computed on every access (not cached): it changes with the orientation. In landscape
+     * the button nav bar usually moves to the side of the screen, in which case there is no
+     * bottom bar and the result is 0.
      */
-    private val navBarHeightPx: Int by lazy {
-        val wm = getSystemService(WINDOW_SERVICE) as WindowManager
+    private val navBarHeightPx: Int
+        get() {
+            val wm = getSystemService(WINDOW_SERVICE) as WindowManager
 
-        // Source 1: public API
-        val fromWindowMetrics = wm.currentWindowMetrics.windowInsets
-            .getInsets(android.view.WindowInsets.Type.navigationBars()).bottom
+            // Source 1: public API
+            val navInsets = wm.currentWindowMetrics.windowInsets
+                .getInsets(android.view.WindowInsets.Type.navigationBars())
+            val fromWindowMetrics = navInsets.bottom
 
-        // Source 2: internal system resource — only consulted when source 1 returns 0,
-        // because on gesture-nav devices the resource may still report the physical bar
-        // height even though no space is reserved. We only trust it when source 1 is 0.
-        if (fromWindowMetrics > 0) {
-            fromWindowMetrics
-        } else {
-            try {
-                val resId = Resources.getSystem()
-                    .getIdentifier("navigation_bar_height", "dimen", "android")
-                if (resId != 0) Resources.getSystem().getDimensionPixelSize(resId) else 0
-            } catch (_: Exception) {
+            // Source 2: internal system resource — only consulted when source 1 returns 0,
+            // because on gesture-nav devices the resource may still report the physical bar
+            // height even though no space is reserved. We only trust it when source 1 is 0.
+            return if (fromWindowMetrics > 0) {
+                fromWindowMetrics
+            } else if (navInsets.left > 0 || navInsets.right > 0) {
+                // Nav bar is on the side (landscape): nothing to reserve at the bottom.
                 0
+            } else {
+                try {
+                    val resId = Resources.getSystem()
+                        .getIdentifier("navigation_bar_height", "dimen", "android")
+                    if (resId != 0) Resources.getSystem().getDimensionPixelSize(resId) else 0
+                } catch (_: Exception) {
+                    0
+                }
             }
         }
-    }
 
     /**
-     * Total height of the IME window for the keyboard panel. This equals 20 % of the usable screen height (above the nav bar) PLUS the
-     * nav bar height.
+     * Left / right system insets (a side navigation bar or a display cutout, typically in
+     * landscape), in pixels. Passed to [KeyboardScreen] so a keyboard docked to that side is
+     * not drawn underneath them. Computed on every access, like [navBarHeightPx].
+     */
+    private val sideInsetsPx: android.graphics.Insets
+        get() {
+            val wm = getSystemService(WINDOW_SERVICE) as WindowManager
+            return wm.currentWindowMetrics.windowInsets.getInsets(
+                android.view.WindowInsets.Type.navigationBars() or
+                        android.view.WindowInsets.Type.displayCutout()
+            )
+        }
+
+    /**
+     * Total height of the IME window for the keyboard panel. This equals 20 % of the usable
+     * screen height (above the nav bar), but never less than [MIN_KEYBOARD_CONTENT_HEIGHT_DP]
+     * so the talk button and top row always fit (20 % of a landscape screen is too little),
+     * PLUS the nav bar height.
+     *
+     * Computed on every access (not cached): the IME service survives rotation, and a value
+     * cached in the first orientation made landscape keyboards far too tall (or, when first
+     * opened in landscape, portrait ones far too short).
      *
      * Why include [navBarHeightPx]:
      * The Android IME window is anchored to the very bottom of the screen — it is NOT
@@ -281,12 +317,15 @@ class OutspokeInputMethodService :
      * and [KeyboardTutorialOverlay]), which is more reliable than [Modifier.navigationBarsPadding]
      * because inset dispatch inside IME windows is broken on some OEM ROMs.
      */
-    private val keyboardHeightPx: Int by lazy {
-        val wm = getSystemService(WINDOW_SERVICE) as WindowManager
-        val screenHeight = wm.currentWindowMetrics.bounds.height()
-        val usableHeight = screenHeight - navBarHeightPx
-        (usableHeight * 0.20f).toInt() + navBarHeightPx
-    }
+    private val keyboardHeightPx: Int
+        get() {
+            val wm = getSystemService(WINDOW_SERVICE) as WindowManager
+            val screenHeight = wm.currentWindowMetrics.bounds.height()
+            val navBar = navBarHeightPx
+            val usableHeight = screenHeight - navBar
+            val minContentPx = (MIN_KEYBOARD_CONTENT_HEIGHT_DP * resources.displayMetrics.density).toInt()
+            return maxOf((usableHeight * 0.20f).toInt(), minContentPx) + navBar
+        }
 
     /**
      * Apply [height] to both the compose view layout params and the IME window attributes.
@@ -329,6 +368,8 @@ class OutspokeInputMethodService :
 
     override fun onCreateInputView(): View {
         val initialHeight = keyboardHeightPx
+        val navBarPx = navBarHeightPx
+        val sideInsets = sideInsetsPx
         Log.d(TAG, "onCreateInputView initialHeight=$initialHeight")
         return ImeComposeView(
             context = this,
@@ -365,8 +406,10 @@ class OutspokeInputMethodService :
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             )
                         },
-                        keyboardContentHeightPx = keyboardHeightPx,
-                        navBarHeightPx = navBarHeightPx,
+                        keyboardContentHeightPx = initialHeight,
+                        navBarHeightPx = navBarPx,
+                        leftInsetPx = sideInsets.left,
+                        rightInsetPx = sideInsets.right,
                     )
                 }
             }

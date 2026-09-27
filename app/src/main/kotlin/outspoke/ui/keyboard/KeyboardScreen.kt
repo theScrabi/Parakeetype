@@ -1,5 +1,6 @@
 package dev.brgr.outspoke.ui.keyboard
 
+import android.content.res.Configuration
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material.icons.automirrored.rounded.Backspace
@@ -24,11 +25,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -112,6 +115,15 @@ fun KeyboardScreen(
      * 0 on gesture-navigation devices (no bar to avoid), real height on button-nav devices.
      */
     navBarHeightPx: Int = 0,
+    /**
+     * Horizontal position of the keyboard UI: `"CENTER"` (full width), `"LEFT"` or `"RIGHT"`
+     * (docked to that screen edge at most [DOCKED_KEYBOARD_WIDTH] wide, so it stays within
+     * thumb reach in landscape and on tablets). Physical left / right, also in RTL locales.
+     */
+    keyboardPosition: String = "CENTER",
+    /** Left / right system insets (side nav bar, display cutout) in pixels, kept clear. */
+    leftInsetPx: Int = 0,
+    rightInsetPx: Int = 0,
 ) {
     val density = LocalDensity.current
     // Convert the service-provided pixel heights to Dp once; stay constant per session.
@@ -121,28 +133,36 @@ fun KeyboardScreen(
     // Explicit nav bar bottom padding — authoritative service-level value, same pattern
     // as KeyboardTutorialOverlay. 0 on gesture nav, real height on button-nav devices.
     val navBarPaddingDp = with(density) { navBarHeightPx.toDp() }
+    val leftInsetDp = with(density) { leftInsetPx.toDp() }
+    val rightInsetDp = with(density) { rightInsetPx.toDp() }
+    val docked = keyboardPosition == "LEFT" || keyboardPosition == "RIGHT"
 
     Box(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.background)
+            .absolutePadding(left = leftInsetDp, right = rightInsetDp),
     ) {
         // Main keyboard content — pinned to the bottom with a fixed height. Its content area
         // is the keyboard area above the nav bar: the top row is pinned to its top edge and
         // the button row is centred vertically in it (see below).
+        // When docked to an edge it is at most DOCKED_KEYBOARD_WIDTH wide.
         BoxWithConstraints(
-            modifier = if (mainContentHeight != null) {
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .height(mainContentHeight)
-            } else {
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-            }
+            modifier = Modifier
+                .align(
+                    when (keyboardPosition) {
+                        "LEFT" -> AbsoluteAlignment.BottomLeft
+                        "RIGHT" -> AbsoluteAlignment.BottomRight
+                        else -> Alignment.BottomCenter
+                    }
+                )
+                .then(if (docked) Modifier.widthIn(max = DOCKED_KEYBOARD_WIDTH) else Modifier)
+                .fillMaxWidth()
+                .then(
+                    if (mainContentHeight != null) Modifier.height(mainContentHeight)
+                    else Modifier.fillMaxHeight()
+                )
                 .padding(start = 16.dp, end = 16.dp, bottom = navBarPaddingDp),
         ) {
             // Top row: pinned to the top edge.
@@ -308,6 +328,13 @@ fun KeyboardScreen(
 
 private val KEY_SHAPE = RoundedCornerShape(16.dp)
 
+/**
+ * Maximum width of the keyboard UI when docked to the left or right edge (landscape, or the
+ * portrait LEFT / RIGHT setting): a typical phone portrait width, so every key stays within
+ * one thumb's reach.
+ */
+private val DOCKED_KEYBOARD_WIDTH = 400.dp
+
 /** Height of the button row: the talk button's fixed 72 dp size (the tallest key). */
 private val BUTTON_ROW_HEIGHT = 72.dp
 
@@ -365,6 +392,10 @@ private fun DeleteKey(
  *                       are always positioned above the system navigation bar, regardless of
  *                       whether insets are correctly dispatched into the IME window's Compose
  *                       tree on the current device.
+ * @param leftInsetPx / [rightInsetPx] Side system insets (side nav bar, cutout) in pixels.
+ *
+ * The keyboard position follows the orientation: the landscape setting (docked right by
+ * default) in landscape, the portrait setting (centred by default) otherwise.
  */
 @Composable
 fun KeyboardScreen(
@@ -373,6 +404,8 @@ fun KeyboardScreen(
     onOpenCompanionApp: () -> Unit,
     keyboardContentHeightPx: Int = 0,
     navBarHeightPx: Int = 0,
+    leftInsetPx: Int = 0,
+    rightInsetPx: Int = 0,
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isContinuous by viewModel.isContinuousMode.collectAsState()
@@ -383,6 +416,9 @@ fun KeyboardScreen(
     val showPipelineDiagnostics by viewModel.showPipelineDiagnostics.collectAsState()
     val enterAction by viewModel.enterAction.collectAsState()
     val showTutorial by viewModel.showTutorial.collectAsState()
+    val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
+    val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     // Only surface real diagnostics counters when the user has enabled the badge in settings.
     val diagnostics = if (showPipelineDiagnostics) rawDiagnostics else PipelineDiagnostics()
@@ -417,6 +453,9 @@ fun KeyboardScreen(
             keyboardContentHeightPx = keyboardContentHeightPx,
             tutorialPositions = tutorialPositions,
             navBarHeightPx = navBarHeightPx,
+            keyboardPosition = if (isLandscape) positionLandscape else positionPortrait,
+            leftInsetPx = leftInsetPx,
+            rightInsetPx = rightInsetPx,
         )
 
         // Tutorial overlay covers the keyboard on first launch.
@@ -439,9 +478,11 @@ private fun KeyboardScreenPreviewScaffold(
     whisperLanguage: String = "auto",
     showLockHint: Boolean = false,
     enterAction: EnterAction = EnterAction.DONE,
+    keyboardPosition: String = "CENTER",
+    height: Int = 220,
 ) {
     OutspokeKeyboardTheme {
-        Box(modifier = Modifier.height(220.dp)) {
+        Box(modifier = Modifier.height(height.dp)) {
             KeyboardScreen(
                 uiState = uiState,
                 isContinuous = isContinuous,
@@ -459,9 +500,26 @@ private fun KeyboardScreenPreviewScaffold(
                 onSwitchKeyboard = {},
                 onOpenCompanionApp = {},
                 previewForceLockHint = showLockHint,
+                keyboardPosition = keyboardPosition,
             )
         }
     }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF111111, widthDp = 800, name = "Landscape · docked right")
+@Composable
+private fun KeyboardScreenLandscapeRightPreview() {
+    KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Idle, keyboardPosition = "RIGHT", height = 140)
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF111111, widthDp = 800, name = "Landscape · docked left")
+@Composable
+private fun KeyboardScreenLandscapeLeftPreview() {
+    KeyboardScreenPreviewScaffold(
+        uiState = KeyboardUiState.Processing("Hello world…"),
+        keyboardPosition = "LEFT",
+        height = 140,
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)

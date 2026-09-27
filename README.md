@@ -28,6 +28,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Parakeet-TDT 0.6B v3** - INT8 quantized, ~700 MB, runs on mid-range hardware
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
+- **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets)
 - **Keep model loaded (optional)** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Outspoke needs no reload. Off by default.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
 - **No Google Play Services, no telemetry, no analytics**

@@ -31,6 +31,26 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch { prefs.setDeleteButtonMode(mode) }
     }
 
+    val keyboardPositionPortrait: StateFlow<String> = prefs.keyboardPositionPortrait.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = "CENTER",
+    )
+
+    fun setKeyboardPositionPortrait(position: String) {
+        viewModelScope.launch { prefs.setKeyboardPositionPortrait(position) }
+    }
+
+    val keyboardPositionLandscape: StateFlow<String> = prefs.keyboardPositionLandscape.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = "RIGHT",
+    )
+
+    fun setKeyboardPositionLandscape(position: String) {
+        viewModelScope.launch { prefs.setKeyboardPositionLandscape(position) }
+    }
+
     val rawMicCapture: StateFlow<Boolean> = prefs.rawMicCapture.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),

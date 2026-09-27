@@ -46,6 +46,35 @@ class AppPreferences(private val context: Context) {
         context.dataStore.edit { prefs -> prefs[keyDeleteButtonMode] = mode }
     }
 
+    private val keyKeyboardPositionPortrait = stringPreferencesKey("keyboard_position_portrait")
+
+    /**
+     * Horizontal position of the keyboard UI in portrait: `"CENTER"` (default, full width),
+     * `"LEFT"` or `"RIGHT"` (docked to that edge at a phone-like width — for tablets and
+     * one-handed use).
+     */
+    val keyboardPositionPortrait: Flow<String> = context.dataStore.data.map { prefs ->
+        prefs[keyKeyboardPositionPortrait] ?: "CENTER"
+    }
+
+    suspend fun setKeyboardPositionPortrait(position: String) {
+        context.dataStore.edit { prefs -> prefs[keyKeyboardPositionPortrait] = position }
+    }
+
+    private val keyKeyboardPositionLandscape = stringPreferencesKey("keyboard_position_landscape")
+
+    /**
+     * Edge the keyboard UI is docked to in landscape: `"RIGHT"` (default) or `"LEFT"`
+     * (left-handed use). In landscape the UI is always docked so it stays within thumb reach.
+     */
+    val keyboardPositionLandscape: Flow<String> = context.dataStore.data.map { prefs ->
+        prefs[keyKeyboardPositionLandscape] ?: "RIGHT"
+    }
+
+    suspend fun setKeyboardPositionLandscape(position: String) {
+        context.dataStore.edit { prefs -> prefs[keyKeyboardPositionLandscape] = position }
+    }
+
     private val keyRawMicCapture = booleanPreferencesKey("raw_mic_capture")
 
     /**

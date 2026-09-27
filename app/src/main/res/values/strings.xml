@@ -53,7 +53,7 @@
     <string name="home_model_not_downloaded">Model not installed</string>
     <string name="home_model_ready_subtitle">A transcription model is installed and ready.</string>
     <string name="home_model_not_downloaded_subtitle">Install a transcription model to use the keyboard.</string>
-    <string name="home_pref_input">Microphone &amp; Trigger Mode</string>
+    <string name="home_pref_input">Microphone, Trigger Mode &amp; Layout</string>
     <string name="home_pref_speech">Voice Activity, Post-Processing &amp; Model Memory</string>
     <string name="home_pref_tools">Tutorial &amp; Diagnostics</string>
 
@@ -68,6 +68,15 @@
     </string>
     <string name="pref_delete_all">All Text</string>
     <string name="pref_delete_last_sentence">Last Sentence</string>
+    <string name="pref_position_title">Keyboard Position</string>
+    <string name="pref_position_subtitle">Where the keyboard controls sit. Left or right keeps them within reach of one
+        thumb — useful in landscape, for left-handed use and on tablets.
+    </string>
+    <string name="pref_position_portrait">In portrait</string>
+    <string name="pref_position_landscape">In landscape</string>
+    <string name="pref_position_left">Left</string>
+    <string name="pref_position_center">Center</string>
+    <string name="pref_position_right">Right</string>
     <string name="pref_vad_title">Voice Activity Detection (VAD)</string>
     <string name="pref_vad_subtitle">Uses Silero VAD to filter out silence and background noise before transcription.
         Disable only if VAD is cutting off the start of your speech or producing empty results.
