@@ -17,36 +17,23 @@ as a result — each box needs an observed outcome.
 - [ ] Dictation into a real third-party app (Messages, browser search box) → text lands
       correctly; partial results show as an underlined composing span.
 
-## 2. Word correction / suggestion bar
-
-- [ ] **KNOWN SUSPECTED BUG (developer flag, 2026-08): the correction UI/UX is believed to
-      contain a small bug. Verify this flow carefully, and write down exactly what the bug
-      is before shipping.**
-- [ ] Enable word suggestions in Settings; download one language pack.
-- [ ] Commit a dictation, then tap a word → suggestion bar appears with ≤ 5 candidates.
-- [ ] Tap a candidate → only that word is replaced; surrounding text stays intact.
-- [ ] Type or commit new text → the bar dismisses correctly.
-- [ ] With no language pack downloaded → no bar, no crash.
-- [ ] With the feature disabled in Settings → no bar at all.
-
-## 3. Languages
+## 2. Languages
 
 - [ ] English dictation → correct.
 - [ ] German dictation (umlauts) → correct.
 - [ ] One non-Latin script language (e.g. Russian) → Cyrillic passes, nothing suppressed.
 - [ ] Language selector on the keyboard → switching languages mid-session works.
 
-## 4. Model & settings
+## 3. Model & settings
 
 - [ ] Model download from scratch (fresh install or deleted model dir) → resumable,
       SHA-256 verified, engine loads, dictation works.
-- [ ] Suggestion language download completes → language auto-activated.
 - [ ] VAD sensitivity toggle, post-processing toggle, tutorial reset → all work, no crash.
 - [ ] Mic calibration (optional): open the calibration screen, run it (2+ mics if the
       device has them) → a mic is selected, dictation uses it, and the selection survives
       an app restart.
 
-## 5. Privacy audit
+## 4. Privacy audit
 
 - [ ] `adb shell ls -R /sdcard/Android/data/dev.brgr.outspoke/files/`
       → **no audio/WAV files anywhere** (the debug audio-tap was removed in this release;
@@ -57,7 +44,7 @@ as a result — each box needs an observed outcome.
 - [ ] `adb logcat -d | grep -iE "PARTIAL|FINAL|GRAMMAR|HALLUCINATION|STUTTER"`
       → structural logs only (char/word counts, confidences) — no transcribed content.
 
-## 6. Release artifacts
+## 5. Release artifacts
 
 - [ ] `./gradlew assembleRelease` builds.
 - [ ] APK sizes within IzzyOnDroid's ~30 MB per-app budget

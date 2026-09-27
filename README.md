@@ -28,7 +28,6 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Parakeet-TDT 0.6B v3** - INT8 quantized, ~700 MB, runs on mid-range hardware
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
-- **Word correction bar** - optional suggestion bar that appears after dictation, offering up to 5 on-device correction candidates for the word under the cursor. Uses downloadable language packs (dictionary + ARPA trigram language model) covering 25 languages. Language packs are fetched on demand from [minburg/outspoke-data](https://github.com/minburg/outspoke-data) — the only external source used at runtime besides the one-time ASR model download. All correction runs entirely on-device once files are downloaded; the feature is opt-in and off by default.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
 - **No Google Play Services, no telemetry, no analytics**
 
@@ -40,10 +39,10 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 |---|------------------------------------------------------------------------|
 | Android version | 11 (API 30)                                                            |
 | RAM | 4 GB recommended                                                       |
-| Free storage | ~750 MB (for ASR model files) + up to ~8 MB per language for optional word-correction packs |
+| Free storage | ~750 MB (for ASR model files) |
 | Permissions | `RECORD_AUDIO`, `INTERNET` (model download only), `POST_NOTIFICATIONS` |
 
-> The `INTERNET` permission is used for the one-time ASR model download from Hugging Face, and optionally for downloading word-correction language packs (~8 MB per language, only if you enable the feature). After both are downloaded, the keyboard works fully offline.
+> The `INTERNET` permission is used for the one-time ASR model download from Hugging Face. After that, the keyboard works fully offline.
 
 ---
 
@@ -112,10 +111,6 @@ Outspoke is structured as a clean layered pipeline. The `SpeechEngine` interface
 | `ui` | `KeyboardViewModel` | Bridges IME lifecycle, audio capture, and inference results into `KeyboardUiState`; owns `captureJob` |
 | `settings` | `ModelDownloadManager` | Downloads model files from Hugging Face over OkHttp with SHA-256 verification |
 | `settings` | `ModelStorageManager` | Manages model file paths inside `filesDir` (no external storage permission needed) |
-| `ime/correction` | `WordSuggestionProvider` | Public façade for on-device word correction; loads only user-selected languages and delivers results on the main thread |
-| `ime/correction` | `WordCorrector` | Rescores decode-time acoustic word alternatives with the ARPA trigram LM in the log domain (alternatives are filtered to real dictionary words); phonetic dictionary candidates act as a low-prior fallback when no usable acoustic evidence exists |
-| `ime/correction` | `SuggestionFileDownloader` | Downloads dictionary + ARPA LM files for a given language from [minburg/outspoke-data](https://github.com/minburg/outspoke-data); supports resumable downloads and SHA-256 verification |
-| `ui/keyboard/components` | `SuggestionBar` | Animated chip row that appears after dictation commits, showing up to 5 correction candidates |
 
 ### Inference pipeline (Parakeet-TDT v3)
 
@@ -179,7 +174,7 @@ A debug build for sideloading:
 | Permission | Why |
 |---|---|
 | `RECORD_AUDIO` | Capturing microphone input for speech recognition |
-| `INTERNET` | One-time ASR model download from Hugging Face (~700 MB); optional word-correction language pack downloads from [minburg/outspoke-data](https://github.com/minburg/outspoke-data) (~8 MB per language) |
+| `INTERNET` | One-time ASR model download from Hugging Face (~700 MB) |
 | `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MICROPHONE` | Keeping the inference engine alive while the keyboard is in use |
 | `POST_NOTIFICATIONS` | Showing the required foreground service notification |
 
@@ -192,8 +187,7 @@ No permission is used for any purpose beyond what is listed above.
 - Audio stays on your device - all recognition runs locally via ONNX Runtime.
 - No analytics, crash reporters, or third-party SDKs are included.
 - No accounts or sign-in of any kind.
-- The only network access is the one-time ASR model download from Hugging Face, and optional word-correction language pack downloads from [minburg/outspoke-data](https://github.com/minburg/outspoke-data). Both can be done manually if preferred (see [manual model installation](../../wiki/Manual-Model-Installation)).
-- Word-correction language packs are downloaded only when explicitly enabled by the user and only from the project-owned repository above. No data is sent anywhere — correction runs fully on-device.
+- The only network access is the one-time ASR model download from Hugging Face. It can be done manually if preferred (see [manual model installation](../../wiki/Manual-Model-Installation)).
 
 ---
 

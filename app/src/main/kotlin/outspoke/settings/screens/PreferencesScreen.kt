@@ -14,8 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.brgr.outspoke.R
-import dev.brgr.outspoke.ime.correction.SuggestionDownloadState
-import dev.brgr.outspoke.ime.correction.SuggestionLanguage
 import dev.brgr.outspoke.settings.preferences.PreferencesViewModel
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
 
@@ -59,8 +57,7 @@ fun InputPreferencesScreen(
 /**
  * Category 2 — Speech Processing.
  *
- * Voice activity detection, transcript post-processing, and the word
- * suggestion bar. Backed by [PreferencesViewModel] / DataStore.
+ * Voice activity detection and transcript post-processing. Backed by [PreferencesViewModel] / DataStore.
  */
 @Composable
 fun SpeechPreferencesScreen(
@@ -68,9 +65,6 @@ fun SpeechPreferencesScreen(
 ) {
     val vadSensitivity by viewModel.vadSensitivity.collectAsState()
     val postprocessingEnabled by viewModel.postprocessingEnabled.collectAsState()
-    val suggestionBarEnabled by viewModel.suggestionBarEnabled.collectAsState()
-    val suggestionBarLanguages by viewModel.suggestionBarLanguages.collectAsState()
-    val downloadStates by viewModel.downloadStates.collectAsState()
 
     PreferencesColumn {
         VadSection(
@@ -81,17 +75,6 @@ fun SpeechPreferencesScreen(
         PostprocessingSection(
             postprocessingEnabled = postprocessingEnabled,
             onPostprocessingChange = viewModel::setPostprocessingEnabled,
-        )
-        HorizontalDivider()
-        SuggestionBarSection(
-            suggestionBarEnabled = suggestionBarEnabled,
-            suggestionBarLanguages = suggestionBarLanguages,
-            downloadStates = downloadStates,
-            onSuggestionBarEnabledChange = viewModel::setSuggestionBarEnabled,
-            onSuggestionBarLanguagesChange = viewModel::setSuggestionBarLanguages,
-            onDownloadLanguage = viewModel::downloadLanguage,
-            onCancelDownload = viewModel::cancelDownload,
-            onDeleteLanguage = viewModel::deleteLanguage,
         )
     }
 }
@@ -318,96 +301,6 @@ private fun PostprocessingSection(
     }
 }
 
-/**
- * Word Suggestion Bar — master toggle + per-language download controls.
- */
-@Composable
-private fun SuggestionBarSection(
-    suggestionBarEnabled: Boolean,
-    suggestionBarLanguages: Set<String>,
-    downloadStates: Map<String, SuggestionDownloadState>,
-    onSuggestionBarEnabledChange: (Boolean) -> Unit,
-    onSuggestionBarLanguagesChange: (Set<String>) -> Unit,
-    onDownloadLanguage: (String) -> Unit,
-    onCancelDownload: (String) -> Unit,
-    onDeleteLanguage: (String) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_suggestion_bar_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_suggestion_bar_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (suggestionBarEnabled) stringResource(R.string.pref_suggestion_bar_enabled)
-                else stringResource(R.string.pref_suggestion_bar_disabled),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = suggestionBarEnabled,
-                onCheckedChange = onSuggestionBarEnabledChange,
-            )
-        }
-
-        if (suggestionBarEnabled) {
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = stringResource(R.string.pref_suggestion_bar_languages_title),
-                style = MaterialTheme.typography.titleSmall,
-            )
-            Text(
-                text = stringResource(R.string.pref_suggestion_bar_languages_subtitle),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-
-            // One row per supported language with download state + enable toggle.
-            SuggestionLanguage.entries.forEach { lang ->
-                val dlState = downloadStates[lang.tag] ?: SuggestionDownloadState.NotDownloaded
-                val isReady = dlState is SuggestionDownloadState.Ready
-                val isSelected = lang.tag in suggestionBarLanguages
-
-                SuggestionLanguageRow(
-                    language = lang,
-                    downloadState = dlState,
-                    isSelected = isSelected,
-                    onToggleSelected = { checked ->
-                        if (isReady) {
-                            val updated = if (checked) suggestionBarLanguages + lang.tag
-                            else suggestionBarLanguages - lang.tag
-                            onSuggestionBarLanguagesChange(updated)
-                        }
-                    },
-                    onDownload = { onDownloadLanguage(lang.tag) },
-                    onCancelDownload = { onCancelDownload(lang.tag) },
-                    onDelete = { onDeleteLanguage(lang.tag) },
-                )
-            }
-
-            val anyReady = SuggestionLanguage.entries.any {
-                downloadStates[it.tag] is SuggestionDownloadState.Ready && it.tag in suggestionBarLanguages
-            }
-            if (!anyReady) {
-                Text(
-                    text = stringResource(R.string.pref_suggestion_bar_no_language),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.error,
-                )
-            }
-        }
-    }
-}
-
 @Composable
 private fun TutorialSection(
     onResetTutorial: () -> Unit,
@@ -464,104 +357,6 @@ private fun DiagnosticsSection(
     }
 }
 
-/**
- * Single row for a suggestion language: shows the language name, its download state,
- * and appropriate action controls.
- *
- * States:
- * - [SuggestionDownloadState.NotDownloaded] → Download button
- * - [SuggestionDownloadState.Downloading]   → Progress bar + Cancel button
- * - [SuggestionDownloadState.Ready]         → Checkmark icon + enable Checkbox + Delete button
- * - [SuggestionDownloadState.Failed]        → Error text + Retry button
- */
-@Composable
-private fun SuggestionLanguageRow(
-    language: SuggestionLanguage,
-    downloadState: SuggestionDownloadState,
-    isSelected: Boolean,
-    onToggleSelected: (Boolean) -> Unit,
-    onDownload: () -> Unit,
-    onCancelDownload: () -> Unit,
-    onDelete: () -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = language.displayName,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.weight(1f),
-            )
-
-            when (downloadState) {
-                is SuggestionDownloadState.NotDownloaded -> {
-                    TextButton(onClick = onDownload) {
-                        Text(stringResource(R.string.suggestion_lang_download))
-                    }
-                }
-
-                is SuggestionDownloadState.Downloading -> {
-                    TextButton(onClick = onCancelDownload) {
-                        Text(stringResource(R.string.suggestion_lang_cancel))
-                    }
-                }
-
-                is SuggestionDownloadState.Ready -> {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    ) {
-                        Checkbox(
-                            checked = isSelected,
-                            onCheckedChange = onToggleSelected,
-                        )
-                        TextButton(onClick = onDelete) {
-                            Text(
-                                text = stringResource(R.string.suggestion_lang_delete),
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
-                    }
-                }
-
-                is SuggestionDownloadState.Failed -> {
-                    TextButton(onClick = onDownload) {
-                        Text(
-                            text = stringResource(R.string.suggestion_lang_retry),
-                            color = MaterialTheme.colorScheme.error,
-                        )
-                    }
-                }
-            }
-        }
-
-        // Progress bar shown while downloading.
-        if (downloadState is SuggestionDownloadState.Downloading) {
-            LinearProgressIndicator(
-                progress = { downloadState.progress },
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
-
-        // Error message when download failed.
-        if (downloadState is SuggestionDownloadState.Failed) {
-            Text(
-                text = downloadState.message,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.error,
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true, name = "Prefs · Microphone")
 @Composable
 private fun MicSectionPreview() {
@@ -610,33 +405,6 @@ private fun PostprocessingSectionPreview() {
     OutspokeTheme {
         PreferencesColumn {
             PostprocessingSection(postprocessingEnabled = false, onPostprocessingChange = {})
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Suggestion Bar Enabled")
-@Composable
-private fun SuggestionBarSectionPreview() {
-    OutspokeTheme {
-        PreferencesColumn {
-            SuggestionBarSection(
-                suggestionBarEnabled = true,
-                suggestionBarLanguages = setOf("en"),
-                downloadStates = mapOf(
-                    "nl" to SuggestionDownloadState.NotDownloaded,
-                    "en" to SuggestionDownloadState.Ready,
-                    "fr" to SuggestionDownloadState.Downloading(0.45f),
-                    "de" to SuggestionDownloadState.Failed("Network error"),
-                    "it" to SuggestionDownloadState.NotDownloaded,
-                    "pl" to SuggestionDownloadState.NotDownloaded,
-                    "es" to SuggestionDownloadState.NotDownloaded,
-                ),
-                onSuggestionBarEnabledChange = {},
-                onSuggestionBarLanguagesChange = {},
-                onDownloadLanguage = {},
-                onCancelDownload = {},
-                onDeleteLanguage = {},
-            )
         }
     }
 }

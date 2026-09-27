@@ -60,7 +60,7 @@
         verwenden.
     </string>
     <string name="home_pref_input">Mikrofon &amp; Auslösemodus</string>
-    <string name="home_pref_speech">Spracherkennung, Nachbearbeitung &amp; Vorschläge</string>
+    <string name="home_pref_speech">Spracherkennung &amp; Nachbearbeitung</string>
     <string name="home_pref_tools">Tutorial &amp; Diagnose</string>
 
     <!-- Preferences screen -->

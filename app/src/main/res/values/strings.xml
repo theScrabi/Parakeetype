@@ -40,7 +40,6 @@
     <string name="cd_delete_model">Delete model</string>
     <string name="cd_status_idle">Idle - tap the button to start dictating</string>
     <string name="cd_status_error">Error</string>
-    <string name="cd_dismiss_suggestion_bar">Dismiss suggestions</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Setup</string>
@@ -58,7 +57,7 @@
     <string name="home_model_ready_subtitle">A transcription model is installed and ready.</string>
     <string name="home_model_not_downloaded_subtitle">Download a transcription model to use the keyboard.</string>
     <string name="home_pref_input">Microphone &amp; Trigger Mode</string>
-    <string name="home_pref_speech">Voice Activity, Post-Processing &amp; Suggestions</string>
+    <string name="home_pref_speech">Voice Activity &amp; Post-Processing</string>
     <string name="home_pref_tools">Tutorial &amp; Diagnostics</string>
 
     <!-- Preferences screen -->
@@ -92,29 +91,6 @@
     <string name="pref_tutorial_subtitle">Replay the step-by-step button guide the next time you open the keyboard.
     </string>
     <string name="pref_tutorial_reset">Show tutorial again</string>
-
-    <!-- Word Suggestion Bar -->
-    <string name="pref_suggestion_bar_title">Word Suggestions</string>
-    <string name="pref_suggestion_bar_subtitle">After each dictation commit, shows alternative words for the one under
-        the cursor using an on-device phonetic and language-model pipeline. Works offline. Language data files must be
-        downloaded separately — they are not included in the app to keep its size small.
-    </string>
-    <string name="pref_suggestion_bar_enabled">Enabled</string>
-    <string name="pref_suggestion_bar_disabled">Disabled</string>
-    <string name="pref_suggestion_bar_languages_title">Correction Languages</string>
-    <string name="pref_suggestion_bar_languages_subtitle">Download the languages you dictate in. Downloaded languages
-        are activated automatically; uncheck a language to disable it. Only checked languages are searched for
-        suggestions.
-    </string>
-    <string name="pref_suggestion_bar_no_language">No active language with downloaded data — suggestions will not appear
-        until you download at least one language.
-    </string>
-
-    <!-- Suggestion language download actions -->
-    <string name="suggestion_lang_download">Download</string>
-    <string name="suggestion_lang_cancel">Cancel</string>
-    <string name="suggestion_lang_delete">Delete</string>
-    <string name="suggestion_lang_retry">Retry</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Speech Recognition Models</string>

@@ -49,40 +49,6 @@ fun resolveModelDir(): File {
 }
 
 /**
- * Resolve the directory containing the word-correction data files (dictionary + ARPA LM)
- * for one language, for JVM tests.
- *
- * Priority:
- *  1. System property `-Dtest.suggestion.dir=/path` (files named `dict_<tag>.txt` / `lm_<tag>.arpa`)
- *  2. Environment variable `OUTSPOKE_TEST_SUGGESTION_DIR`
- *  3. `~/.cache/outspoke-test-model/suggestion/<tag>/`
- *
- * @throws IllegalStateException if no directory with both files is found.
- */
-fun resolveSuggestionDir(tag: String): File {
-    val candidates = ArrayList<File>()
-    System.getProperty("test.suggestion.dir")?.takeIf { it.isNotBlank() }?.let { candidates.add(File(it)) }
-    System.getenv("OUTSPOKE_TEST_SUGGESTION_DIR")?.takeIf { it.isNotBlank() }?.let { candidates.add(File(it)) }
-    candidates.add(File(System.getProperty("user.home"), ".cache/outspoke-test-model/suggestion/$tag"))
-
-    for (dir in candidates) {
-        val dict = File(dir, "dict_$tag.txt")
-        val lm = File(dir, "lm_$tag.arpa")
-        if (dict.isFile && dict.length() > 0 && lm.isFile && lm.length() > 0) return dir
-    }
-    throw IllegalStateException(
-        buildString {
-            appendLine("Word-correction data files not found for language '$tag'.")
-            appendLine()
-            appendLine("Set one of:")
-            appendLine("  -Dtest.suggestion.dir=/path/to/suggestion-data")
-            appendLine("  OUTSPOKE_TEST_SUGGESTION_DIR=/path/to/suggestion-data")
-            appendLine("Or place dict_$tag.txt + lm_$tag.arpa in: ${candidates.last()}")
-        }
-    )
-}
-
-/**
  * Computes word error rate (WER) between two strings using Levenshtein distance on word lists.
  * Returns a value in [0.0, 1.0] where 0.0 = perfect match.
  */

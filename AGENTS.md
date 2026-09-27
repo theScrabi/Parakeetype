@@ -19,15 +19,14 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 | Package | Key files | Responsibility |
 |---|---|---|
-|`inference`|`SpeechEngine`, `ParakeetEngine`, `ChunkStreamingEngine`, `WhisperEngine`, `VoxtralEngine`, `InferenceRepository`, `InferenceService`, `SpeechEngineFactory`, `TranscriptResult`, `EngineState`, `PipelineDiagnostics`, `NumberNormaliser`, `GrammarCorrector`, `AcousticCandidates`|ASR pipeline, sliding window, post-processing, foreground service, acoustic word-alternative capture|
+|`inference`|`SpeechEngine`, `ParakeetEngine`, `ChunkStreamingEngine`, `WhisperEngine`, `VoxtralEngine`, `InferenceRepository`, `InferenceService`, `SpeechEngineFactory`, `TranscriptResult`, `EngineState`, `PipelineDiagnostics`, `NumberNormaliser`, `GrammarCorrector`|ASR pipeline, sliding window, post-processing, foreground service|
 | `audio` | `AudioCaptureManager`, `MicCalibrationManager`, `SileroVadFilter`, `RMSVadFilter`, `VadFilter`, `AudioChunk`, `PermissionHelper` | Mic capture + VAD + optional mic calibration |
-| `ime` | `OutspokeInputMethodService`, `TextInjector`, `TranscriptAligner`, `EnterAction`, `WordSuggestionProvider` | Keyboard / text insertion |
-| `ime/correction` | `WordCorrector`, `CandidateGenerator`, `ArpaLanguageModel`, `SuggestionFileDownloader`, `SuggestionFileManager`, `SuggestionLanguage`, `DoubleMetaphone`, `KolnerPhonetik`, `EditDistance` | On-device word correction + language pack management |
+| `ime` | `OutspokeInputMethodService`, `TextInjector`, `TranscriptAligner`, `EnterAction` | Keyboard / text insertion |
 | `settings/model` | `ModelRegistry`, `ModelId`, `ModelDownloadManager`, `ModelStorageManager`, `ModelState`, `ModelViewModel`, `DownloadService` | Model lifecycle |
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
 | `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `MicCalibrationScreen` | Settings Compose UI |
-| `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView`, `WordAtCursor` | IME Compose hosting, UI state |
-| `ui/keyboard/components` | `TalkButton`, `SuggestionBar`, `WaveformBar`, `StatusIndicator`, `KeyboardActionButton`, `KeyboardTutorialOverlay`, `LanguageSelector` | Keyboard UI sub-components |
+| `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
+| `ui/keyboard/components` | `TalkButton`, `WaveformBar`, `StatusIndicator`, `KeyboardActionButton`, `KeyboardTutorialOverlay`, `LanguageSelector` | Keyboard UI sub-components |
 | `ui/theme` | `OutspokeKeyboardTheme` | Compose theming |
 
 ## Architecture — What Isn't Obvious from Single Files
@@ -50,16 +49,6 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 **VAD is dual-layer:** `SileroVadFilter` (Silero v4 ONNX) is primary; `RMSVadFilter` (energy threshold) is the automatic fallback if the ONNX VAD model fails to load.
 
-**Word-suggestion / correction feature (new in v0.2.0):**
-- `SuggestionBar` (keyboard UI) appears after a dictation commit and shows up to 5 correction candidates for the word under the cursor.
-- Language packs (dictionary + ARPA language model) are downloaded on demand from `https://github.com/minburg/outspoke-data` — the only external URL used at runtime beyond the one-time ASR model download from Hugging Face. Files are pinned to a specific release tag to prevent silent breakage.
-- Supported languages: Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, Ukrainian (`SuggestionLanguage` enum).
-- `SuggestionFileManager` stores packs in `<filesDir>/suggestion_files/<tag>/`; `SuggestionFileDownloader` handles resumable HTTP downloads with SHA-256 verification.
-- **Acoustic-first candidates:** at decode time `ParakeetEngine` captures the top-3 runner-up tokens per emission (the logits are already in memory) and, for low-confidence words (< 0.6, capped at 3 per chunk), runs a bounded local beam over the word's frame range. `InferenceRepository` segments emissions into words and writes the per-word alternatives (word + length-normalised acoustic log-prob) to a bounded, per-session `AcousticCandidateCache` (`inference/AcousticCandidates.kt`).
-- `WordCorrector` rescores the acoustic alternatives in the log domain: `score = acousticLogProb + λ·ln(10)·lmLog10(candidate | context)` (λ = 0.5; the acoustic term dominates). Because the TDT decoder is lexicon-unconstrained (its beam can emit acoustically plausible strings that are not words), acoustic alternatives are first **filtered to genuine dictionary words** (case-insensitive, deduplicated case-insensitively — `CandidateGenerator.isKnownWord`). The dictionary (`CandidateGenerator`: phonetic index via Kölner Phonetik for DE / Double Metaphone otherwise + Damerau-Levenshtein edit distance) is a low-prior fallback (fixed prior -2.0) when a word has no usable acoustic evidence (none, or all filtered out as non-words). `ArpaLanguageModel` scores with standard ARPA backoff (trigram → bigram → unigram, raw log10).
-- `WordSuggestionProvider` is the public façade used by the IME; its `acousticLookup` is wired to the `InferenceRepository` by `OutspokeInputMethodService`; it loads only languages selected by the user and delivers results on the main thread.
-- The feature is **opt-in** — disabled by default (`suggestionBarEnabled = false`). No data leaves the device once files are downloaded.
-
 ## Adding a New Model
 
 1. Add a `ModelId` enum value with a stable `storageDirName` (changing it breaks existing installs).
@@ -75,12 +64,11 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 - **`val` over `var`**; avoid nullable types unless genuinely optional.
 - **`application.yml`** is not used (Android project) — preferences go through `DataStore` (`settings/preferences/`).
 - **Model files** are stored in `<filesDir>/models/<storageDirName>/` — no external storage permission.
-- **Suggestion files** are stored in `<filesDir>/suggestion_files/<tag>/` — same constraint.
 - **SHA-256** is verified after each file download; add hashes to `RemoteFile` entries whenever available.
 - ABI splits produce per-ABI APKs: `armeabi-v7a` (×1), `arm64-v8a` (×2), universal (×0 offset). `versionCode = defaultVersionCode * 10 + abiOffset`.
 - `dependenciesInfo` is disabled in the APK for F-Droid / IzzyOnDroid reproducibility.
 - Do not add analytics, crash reporters, or any SDK that phones home.
-- External file downloads (suggestion packs) come **only** from `github.com/minburg/outspoke-data`. Do not add other external hosts.
+- **No word-suggestion / correction system.** It was removed in favour of a lean keyboard (the IME deletes the legacy `<filesDir>/suggestion_files/` on start). Do not reintroduce tap-a-word alternatives, dictionaries or language models.
 
 ## Release Process
 

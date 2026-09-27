@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import dev.brgr.outspoke.R
 import dev.brgr.outspoke.ime.EnterAction
 import dev.brgr.outspoke.inference.PipelineDiagnostics
@@ -52,10 +51,6 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  * @param onSwitchKeyboard       Switches the active IME back to the previous keyboard.
  * @param onOpenCompanionApp     Opens the Outspoke companion app (e.g. to grant permission or download the model).
  * @param diagnostics            Pipeline counters from the most recent recording session.
- * @param wordSuggestions        Alternative word candidates for the word under the cursor.
- * @param suggestionBarDismissed `true` after the user dismissed the bar; suppresses it.
- * @param onSuggestionTapped     Called when the user taps a word suggestion chip.
- * @param onDismissSuggestionBar Called when the user taps the × button in the suggestion bar.
  */
 @Composable
 fun KeyboardScreen(
@@ -80,23 +75,9 @@ fun KeyboardScreen(
     modifier: Modifier = Modifier,
     diagnostics: PipelineDiagnostics = PipelineDiagnostics(),
     previewForceLockHint: Boolean = false,
-    wordSuggestions: List<String> = emptyList(),
-    suggestionBarDismissed: Boolean = false,
-    onSuggestionTapped: (String) -> Unit = {},
-    onDismissSuggestionBar: () -> Unit = {},
-    dismissSuggestionBarContentDescription: String = "",
-    /**
-     * Called immediately when the suggestion bar's visibility target changes, with the
-     * desired window add-on height in pixels. -1 means "use the full bar slot height"
-     * (resolved by the service using its density). 0 means bar is hidden.
-     * The service uses this for a single up-front window resize instead of per-frame.
-     */
-    onSuggestionBarHeightChanged: (Int) -> Unit = {},
     /**
      * Fixed height in pixels for the main keyboard content area (buttons, waveform, status).
-     * When non-zero this is used directly so the content is completely decoupled from the
-     * animated window height — the buttons never move during the suggestion bar animation.
-     * Defaults to 0 for previews, which fall back to [Modifier.weight].
+     * When non-zero this is used directly so the content has a stable size. Defaults to 0 for previews, which fall back to [Modifier.weight].
      */
     keyboardContentHeightPx: Int = 0,
     tutorialPositions: TutorialPositions? = null,
@@ -124,30 +105,12 @@ fun KeyboardScreen(
     // as KeyboardTutorialOverlay. 0 on gesture nav, real height on button-nav devices.
     val navBarPaddingDp = with(density) { navBarHeightPx.toDp() }
 
-    // The IME window is a fixed size (keyboard + suggestion bar slot). The bar clips its
-    // own content internally as it animates. The keyboard Column is pinned to the bottom
-    // with a fixed height and is completely unaffected by bar animation or window events.
     Box(
         modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        // Suggestion bar — clips its content to the animated height. When hidden, the
-        // bar slot at the top of the window shows the background colour; the app above
-        // is scrolled to fill that area via onComputeInsets, so no gap is visible.
-        SuggestionBar(
-            suggestions = wordSuggestions,
-            dismissed = suggestionBarDismissed,
-            onSuggestionTapped = onSuggestionTapped,
-            onDismiss = onDismissSuggestionBar,
-            dismissContentDescription = dismissSuggestionBarContentDescription,
-            onWindowSizeTarget = onSuggestionBarHeightChanged,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .zIndex(1f),
-        )
-
         // Main keyboard content — always pinned to the bottom with a fixed height.
         // Uses a Box so the button row is anchored to the bottom edge and the top section
         // (status + waveform) is vertically centred in the remaining space above. This
@@ -341,7 +304,6 @@ fun KeyboardScreen(
     viewModel: KeyboardViewModel,
     onSwitchKeyboard: () -> Unit,
     onOpenCompanionApp: () -> Unit,
-    onSuggestionBarHeightChanged: (Int) -> Unit = {},
     keyboardContentHeightPx: Int = 0,
     navBarHeightPx: Int = 0,
 ) {
@@ -355,8 +317,6 @@ fun KeyboardScreen(
     val showPipelineDiagnostics by viewModel.showPipelineDiagnostics.collectAsState()
     val enterAction by viewModel.enterAction.collectAsState()
     val showTutorial by viewModel.showTutorial.collectAsState()
-    val wordSuggestions by viewModel.wordSuggestions.collectAsState()
-    val suggestionBarDismissed by viewModel.suggestionBarDismissed.collectAsState()
 
     // Only surface real diagnostics counters when the user has enabled the badge in settings.
     val diagnostics = if (showPipelineDiagnostics) rawDiagnostics else PipelineDiagnostics()
@@ -390,12 +350,6 @@ fun KeyboardScreen(
             onSwitchKeyboard = onSwitchKeyboard,
             onOpenCompanionApp = onOpenCompanionApp,
             diagnostics = diagnostics,
-            wordSuggestions = wordSuggestions,
-            suggestionBarDismissed = suggestionBarDismissed,
-            onSuggestionTapped = viewModel::replaceWordAtCursor,
-            onDismissSuggestionBar = viewModel::dismissSuggestionBar,
-            dismissSuggestionBarContentDescription = stringResource(R.string.cd_dismiss_suggestion_bar),
-            onSuggestionBarHeightChanged = onSuggestionBarHeightChanged,
             keyboardContentHeightPx = keyboardContentHeightPx,
             tutorialPositions = tutorialPositions,
             navBarHeightPx = navBarHeightPx,
@@ -422,16 +376,9 @@ private fun KeyboardScreenPreviewScaffold(
     whisperLanguage: String = "auto",
     showLockHint: Boolean = false,
     enterAction: EnterAction = EnterAction.DONE,
-    wordSuggestions: List<String> = emptyList(),
-    suggestionBarDismissed: Boolean = false,
 ) {
-    // Add SUGGESTION_BAR_HEIGHT_DP when the bar will be visible so the preview
-    // is tall enough to show both the bar and the keyboard buttons without clipping.
-    val barVisible = wordSuggestions.isNotEmpty() && !suggestionBarDismissed
-    val previewHeight =
-        if (barVisible) (220 + SUGGESTION_BAR_HEIGHT_DP) else 220
     OutspokeKeyboardTheme {
-        Box(modifier = Modifier.height(previewHeight.dp)) {
+        Box(modifier = Modifier.height(220.dp)) {
             KeyboardScreen(
                 uiState = uiState,
                 amplitude = amplitude,
@@ -451,8 +398,6 @@ private fun KeyboardScreenPreviewScaffold(
                 onSwitchKeyboard = {},
                 onOpenCompanionApp = {},
                 previewForceLockHint = showLockHint,
-                wordSuggestions = wordSuggestions,
-                suggestionBarDismissed = suggestionBarDismissed,
             )
         }
     }
@@ -523,25 +468,6 @@ private fun KeyboardScreenSendActionPreview() {
 @Composable
 private fun KeyboardScreenNewlineActionPreview() {
     KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Idle, enterAction = EnterAction.NEWLINE)
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF111111)
-@Composable
-private fun KeyboardScreenSuggestionsPreview() {
-    KeyboardScreenPreviewScaffold(
-        uiState = KeyboardUiState.Idle,
-        wordSuggestions = listOf("hello", "hallo", "hollow", "hell"),
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF111111)
-@Composable
-private fun KeyboardScreenSuggestionsDismissedPreview() {
-    KeyboardScreenPreviewScaffold(
-        uiState = KeyboardUiState.Idle,
-        wordSuggestions = listOf("hello", "hallo", "hollow"),
-        suggestionBarDismissed = true,
-    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)

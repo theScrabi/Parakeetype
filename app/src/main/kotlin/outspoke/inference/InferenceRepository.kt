@@ -1,6 +1,5 @@
 package dev.brgr.outspoke.inference
 
-import ai.onnxruntime.OnnxTensor
 import android.util.Log
 import dev.brgr.outspoke.audio.AudioChunk
 import kotlinx.coroutines.Dispatchers
@@ -843,32 +842,6 @@ private const val RIGHT_CONTEXT_SAMPLES = SAMPLE_RATE * 2    // 2 s = 32 000 sam
 /** Trailing (left) context kept before each chunk for encoder anchoring (2 s). */
 private const val LEFT_CONTEXT_SAMPLES = SAMPLE_RATE * 2     // 2 s = 32 000 samples
 
-// ── Acoustic word-alternative capture (word-correction overhaul) ──────────────────────
-// Per-word confidence below which the bounded local beam runs. Words above the gate are
-// ones the model is confident about (correction unlikely) and skip the beam entirely —
-// the common case, so the added decode cost is near zero.
-private const val ACUSTIC_CONF_GATE = 0.6f
-
-// Maximum local beams per decoded chunk, so a pathological chunk (many low-confidence
-// words) cannot blow up decode time.
-private const val MAX_BEAMS_PER_CHUNK = 3
-
-// Frames of slack past a word's last token that the local beam may search — a genuine
-// alternative word can be slightly longer (more frames) than the emitted one.
-private const val BEAM_FRAME_MARGIN = 2
-
-// Number of acoustic alternatives kept per word in the cache (the correction layer
-// rescores these with the LM and returns the top 5 to the UI).
-private const val MAX_CACHED_ALTERNATIVES = 5
-
-/**
- * A plausible single-word candidate for the suggestion bar: at least 2 characters, no
- * internal whitespace (the beam can occasionally emit a two-word fragment), and at least
- * one letter (drops pure-digit / pure-punctuation detokenisation artefacts).
- */
-private fun isValidCandidateWord(w: String): Boolean =
-    w.length >= 2 && !w.contains(' ') && w.any { it.isLetter() }
-
 /**
  * Deterministic encoder frame offset for a sample position.
  *
@@ -1272,16 +1245,6 @@ class InferenceRepository(
 ) {
 
     /**
-     * Bounded cache of per-word acoustic alternatives, populated at decode time by the
-     * Parakeet streaming path (top-K token swaps + bounded local beam over low-confidence
-     * words) and read by the word-correction layer via [getAcousticAlternatives].
-     * Process-local to this repository (the long-lived bound inference service), so it
-     * persists across keyboard hide/show cycles and is cleared at the start of each new
-     * recording session.
-     */
-    val acousticCache: AcousticCandidateCache = AcousticCandidateCache()
-
-    /**
      * Forwards a language tag to the underlying engine.
      * No-op for engines that do not support language selection (Parakeet, Voxtral).
      */
@@ -1292,18 +1255,6 @@ class InferenceRepository(
      * No-op for engines that do not support language selection (Parakeet, Voxtral).
      */
     fun setLanguageConstraints(tags: List<String>) = engine.setLanguageConstraints(tags)
-
-    /**
-     * Returns the cached acoustic alternatives for [word] — the ASR model's own
-     * word-level hypotheses captured at decode time (top-K token swaps and/or a bounded
-     * local beam) — or an empty list when the word has no acoustic evidence (decoded
-     * before capture was active, evicted from the bounded cache, or manually typed).
-     * The word-correction layer rescores these with the language model; an empty result
-     * falls back to dictionary candidates.
-     *
-     * Safe to call from any thread (the IME main / Default threads).
-     */
-    fun getAcousticAlternatives(word: String): List<WordAlternative> = acousticCache.get(word)
 
     /**
      * Applies grammar correction to [result] if it is a [TranscriptResult.Final].
@@ -1351,11 +1302,6 @@ class InferenceRepository(
             return@channelFlow
         }
 
-        // Each transcribe() call is a fresh recording session: drop stale acoustic
-        // alternatives from the previous session so the correction layer never rescores
-        // words against evidence from a different utterance.
-        acousticCache.clear()
-
         // ── Chunked-TDT streaming state ────────────────────────────────────────────────
         // The audio buffer (growing list of PCM chunks) plus the TDT decoder state. Audio is
         // processed in fixed [CHUNK_SAMPLES] strides with [RIGHT_CONTEXT_SAMPLES] of lookahead
@@ -1384,12 +1330,6 @@ class InferenceRepository(
         // so an engine error surfaces as a contained result (the IME shows it) instead of
         // an uncaught exception that the keyboard's catch-all mislabels.
         var streamFailure: Exception? = null
-        // The last word segment of the most recent decoded chunk, held back because it is
-        // only known to be complete when the next chunk (or the utterance end) arrives —
-        // a word may continue across the chunk boundary. Consumed by
-        // [captureAcousticCandidates] on the next chunk and flushed by [flushAsFinal].
-        var pendingEmissions: List<TokenEmission> = emptyList()
-
         // Geometric-mean confidence over every non-blank emission this utterance.
         fun utteranceConfidence(): Float = if (totalEmissions > 0) {
             Math.exp(totalLogProbSum / totalEmissions).toFloat().coerceIn(0f, 1f)
@@ -1444,164 +1384,6 @@ class InferenceRepository(
             }
         }
 
-        // ── Acoustic word-alternative capture (word-correction overhaul) ────────────────
-        // Top-K token-swap candidates for a completed word: swap each runner-up token into
-        // each position, detokenise, dedupe, keep the best length-normalised log-prob per
-        // resulting word (including the word itself). The logits were in memory at decode
-        // time, so this is near-free.
-        fun tokenSwapCandidates(wordEmissions: List<TokenEmission>): HashMap<String, Double> {
-            val tokenCount = wordEmissions.size
-            val logProbSum = wordEmissions.sumOf { it.logProb }
-            val candidates = HashMap<String, Double>()
-            candidates[streaming.detokenizeTokens(wordEmissions.map { it.token })] = logProbSum / tokenCount
-            val baseTokens = wordEmissions.map { it.token }.toMutableList()
-            for (i in wordEmissions.indices) {
-                for (alt in wordEmissions[i].topTokens) {
-                    if (alt.token == wordEmissions[i].token) continue
-                    baseTokens[i] = alt.token
-                    val swappedText = streaming.detokenizeTokens(baseTokens)
-                    baseTokens[i] = wordEmissions[i].token
-                    if (swappedText.isBlank()) continue
-                    val swappedNorm = (logProbSum - wordEmissions[i].logProb + alt.logProb) / tokenCount
-                    if (swappedNorm > candidates.getOrDefault(swappedText, Double.NEGATIVE_INFINITY)) {
-                        candidates[swappedText] = swappedNorm
-                    }
-                }
-            }
-            return candidates
-        }
-
-        // Filters [candidates] to plausible single words (dropping [emittedWord] itself —
-        // the bar replaces it, so suggesting it is pointless) and writes the top
-        // [MAX_CACHED_ALTERNATIVES] to the acoustic cache.
-        fun cacheCandidates(emittedWord: String, candidates: Map<String, Double>) {
-            val emittedKey = emittedWord.lowercase()
-            val alternatives = candidates.entries
-                .filter { (w, _) -> isValidCandidateWord(w) && w.lowercase() != emittedKey }
-                .sortedByDescending { it.value }
-                .take(MAX_CACHED_ALTERNATIVES)
-                .map { (w, lp) -> WordAlternative(w, lp.toFloat()) }
-            if (alternatives.isNotEmpty()) {
-                acousticCache.put(emittedWord, alternatives)
-                Log.d(TAG, "[ACOUSTIC] captured ${alternatives.size} alternative(s)")
-            }
-        }
-
-        // The utterance is over: the pending word (if any) is now complete. Only top-K
-        // token swaps are possible here — the local beam needs the chunk's encoder tensor,
-        // which is already closed.
-        fun flushPendingWordCandidates() {
-            val wordEmissions = pendingEmissions
-            if (wordEmissions.isEmpty()) return
-            pendingEmissions = emptyList()
-            val wordText = streaming.detokenizeTokens(wordEmissions.map { it.token })
-            if (wordText.isBlank() || wordText.length < 2) return
-            cacheCandidates(wordText, tokenSwapCandidates(wordEmissions))
-        }
-
-        // Captures the ASR model's own word-level alternatives while the chunk's encoder
-        // tensor is still open: top-K token swaps for every completed word (cheap — the
-        // logits were in memory at decode time) and a bounded local beam for
-        // low-confidence words (the quality step, gated + capped). Results are written to
-        // [acousticCache] keyed by the detokenised word and read by the word-correction
-        // layer when the user places the cursor on a word.
-        //
-        // Word segmentation: a SentencePiece word starts at a word-initial token (▁) and
-        // ends at the next word-initial token or the utterance end. The chunk's final
-        // segment is deferred ([pendingEmissions]) — it is only known to be complete when
-        // the next chunk (or the utterance end) arrives, because a word may continue
-        // across the chunk boundary.
-        //
-        // A word is *beamable* only when fully contained in this chunk (its first
-        // token's decoder-state snapshot lives in this chunk's [decoded.stateSnapshots]);
-        // words continued from a previous chunk get token-swap candidates only.
-        fun captureAcousticCandidates(
-            decoded: ChunkDecodeResult,
-            encOut: OnnxTensor,
-            encLen: Int,
-        ) {
-            if (decoded.emissions.isEmpty()) return   // no new tokens; pending stays pending
-
-            // 1. Segment this chunk's emissions into word segments (▁ starts a new word).
-            val segments = ArrayList<List<TokenEmission>>()
-            val current = ArrayList<TokenEmission>()
-            for (em in decoded.emissions) {
-                if (current.isNotEmpty() && streaming.tokenStartsWord(em.token)) {
-                    segments.add(current.toList())   // copy — [current] is reused below
-                    current.clear()
-                }
-                current.add(em)
-            }
-            if (current.isNotEmpty()) segments.add(current)
-
-            // 2. Resolve which segments complete words and which stay pending.
-            val completed = ArrayList<List<TokenEmission>>()
-            val beamable = ArrayList<Boolean>()
-            val pending = pendingEmissions
-            if (pending.isNotEmpty()) {
-                if (segments.size >= 2) {
-                    completed.add(pending + segments[0])
-                    beamable.add(false)   // continuation — start state is in a previous chunk
-                    for (i in 1 until segments.size - 1) {
-                        completed.add(segments[i])
-                        beamable.add(true)
-                    }
-                    pendingEmissions = segments.last()
-                } else {
-                    pendingEmissions = pending + segments[0]
-                }
-            } else {
-                for (i in 0 until segments.size - 1) {
-                    completed.add(segments[i])
-                    beamable.add(true)
-                }
-                pendingEmissions = segments.last()
-            }
-
-            // 3. Build candidates for each completed word and write them to the cache.
-            var beamsUsed = 0
-            for (idx in completed.indices) {
-                val wordEmissions = completed[idx]
-                val wordText = streaming.detokenizeTokens(wordEmissions.map { it.token })
-                if (wordText.isBlank() || wordText.length < 2) continue
-                val tokenCount = wordEmissions.size
-                val logProbSum = wordEmissions.sumOf { it.logProb }
-                // Per-word confidence: geometric mean of token probabilities (the same
-                // formula as the utterance confidence). Words below the gate are the ones
-                // the model itself is unsure about — the likely mis-hearings worth
-                // correcting; confident words skip the beam (the common case, zero cost).
-                val confidence = Math.exp(logProbSum / tokenCount).toFloat().coerceIn(0f, 1f)
-
-                // Phase 1 — top-K token swaps (every word, near-free).
-                val candidates = tokenSwapCandidates(wordEmissions)
-
-                // Phase 2 — bounded local beam for low-confidence words (gated + capped):
-                // finds genuine alternative *words* (different token sequences) that
-                // single-token swapping cannot reach. Beam results supersede swap results
-                // for the same word when they score higher.
-                if (beamable[idx] && confidence < ACUSTIC_CONF_GATE && beamsUsed < MAX_BEAMS_PER_CHUNK) {
-                    val firstFrame = wordEmissions.first().frame
-                    val lastFrame = wordEmissions.last().frame
-                    val snapshot = decoded.stateSnapshots.firstOrNull { it.frame == firstFrame }
-                    if (snapshot != null) {
-                        beamsUsed++
-                        val beamEnd = (lastFrame + BEAM_FRAME_MARGIN).coerceAtMost(encLen - 1)
-                        try {
-                            for (alt in streaming.localWordBeam(encOut, encLen, firstFrame, beamEnd, snapshot)) {
-                                if (alt.acousticLogProb > candidates.getOrDefault(alt.word, Double.NEGATIVE_INFINITY)) {
-                                    candidates[alt.word] = alt.acousticLogProb.toDouble()
-                                }
-                            }
-                        } catch (ex: Exception) {
-                            Log.w(TAG, "[ACOUSTIC] local beam failed", ex)
-                        }
-                    }
-                }
-
-                cacheCandidates(wordText, candidates)
-            }
-        }
-
         // Decode the chunk [chunkStart, chunkEnd) using [rightEnd) as the right-context limit,
         // appending its tokens to [allTokens] and updating [state].
         fun decodeChunkRange(chunkStart: Int, chunkEnd: Int, rightEnd: Int) {
@@ -1639,8 +1421,6 @@ class InferenceRepository(
                 allTokens += decoded.tokens
                 totalLogProbSum += decoded.logProbSum
                 totalEmissions += decoded.emissionCount
-                // Capture acoustic word alternatives while the encoder tensor is open.
-                captureAcousticCandidates(decoded, encOut, encLen)
             } catch (ex: Exception) {
                 recordStreamFailure(ex, chunkStart, chunkEnd)
             } finally {
@@ -1734,8 +1514,6 @@ class InferenceRepository(
                     decodeChunkRange(nextChunkStart, chunkEnd, totalSamples)
                     nextChunkStart = chunkEnd
                 }
-                // The utterance is over — complete the pending word (token swaps only).
-                flushPendingWordCandidates()
                 if (streamFailure != null) return "" to 0f
                 return streaming.detokenizeTokens(allTokens) to utteranceConfidence()
             }
@@ -1757,7 +1535,6 @@ class InferenceRepository(
                 totalLogProbSum = 0.0
                 totalEmissions = 0
                 nextChunkStart = 0
-                pendingEmissions = emptyList()
                 val (raw, confidence) = decodeRemaining(padTail = padTail)
                 if (streamFailure != null) return Triple("", 0f, 0f)
                 val gated = estimateConfidence(TranscriptResult.Final(raw, confidence = confidence))
@@ -1856,7 +1633,6 @@ class InferenceRepository(
                 nextChunkStart = 0
                 totalLogProbSum = 0.0
                 totalEmissions = 0
-                pendingEmissions = emptyList()
                 return@collect
             }
 

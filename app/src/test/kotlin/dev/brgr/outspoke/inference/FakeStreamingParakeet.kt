@@ -108,14 +108,6 @@ class FakeStreamingParakeet(
         }
 
         val logProb = Math.log(0.9)
-        val emissions = tokens.mapIndexed { idx, id ->
-            TokenEmission(
-                token = id,
-                frame = frameStart + idx,
-                logProb = logProb,
-                topTokens = listOf(EmissionToken(id, logProb)),
-            )
-        }
         return ChunkDecodeResult(
             tokens = tokens,
             state = TdtState(
@@ -126,27 +118,11 @@ class FakeStreamingParakeet(
             ),
             logProbSum = tokens.size * logProb,
             emissionCount = tokens.size,
-            emissions = emissions,
-            stateSnapshots = emptyList(),
         )
     }
 
     override fun detokenizeTokens(tokens: List<Int>): String =
         tokens.joinToString(" ") { idToWord[it] ?: "?" }
-
-    override fun tokenStartsWord(tokenId: Int): Boolean = idToWord.containsKey(tokenId)
-
-    override fun localWordBeam(
-        encoderOut: OnnxTensor,
-        totalLength: Int,
-        startFrame: Int,
-        endFrame: Int,
-        initialState: FrameState,
-        beamWidth: Int,
-        topK: Int,
-        maxSteps: Int,
-        maxAlternatives: Int,
-    ): List<WordAlternative> = emptyList()
 
     companion object {
         private const val TOKEN_BASE = 10_000

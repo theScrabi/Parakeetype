@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.res.Resources
 import android.inputmethodservice.InputMethodService
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -28,10 +26,11 @@ import dev.brgr.outspoke.settings.preferences.AppPreferences
 import dev.brgr.outspoke.ui.keyboard.ImeComposeView
 import dev.brgr.outspoke.ui.keyboard.KeyboardScreen
 import dev.brgr.outspoke.ui.keyboard.KeyboardViewModel
-import dev.brgr.outspoke.ui.keyboard.components.SUGGESTION_BAR_HEIGHT_DP
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.io.File
 
 private const val TAG = "OutspokeIME"
 
@@ -58,12 +57,9 @@ class OutspokeInputMethodService :
 
     private lateinit var keyboardViewModel: KeyboardViewModel
 
-    /** On-device phonetic + n-gram word corrector; language-aware, no system dependencies. */
-    private lateinit var wordSuggestionProvider: WordSuggestionProvider
-
     /**
-     * Cached reference to the current input view so we can resize it when the suggestion
-     * bar appears or disappears without recreating the whole Compose hierarchy.
+     * Cached reference to the current input view so the window height can be re-applied
+     * when the keyboard is reshown without recreating the whole Compose hierarchy.
      */
     private var imeComposeView: ImeComposeView? = null
 
@@ -72,9 +68,6 @@ class OutspokeInputMethodService :
 
     /** True whenever [bindService] has been called and [unbindService] has not yet matched it. */
     private var isBound = false
-
-    /** Used to post and cancel bar-shrink runnables on the main thread. */
-    private val handler = Handler(Looper.getMainLooper())
 
     /**
      * The active collector of [InferenceService.engineState], launched inside
@@ -148,30 +141,13 @@ class OutspokeInputMethodService :
             decorView.setViewTreeSavedStateRegistryOwner(this)
         }
 
-        wordSuggestionProvider = WordSuggestionProvider(this)
-        // Wire the correction layer to the ASR model's acoustic alternatives: the lookup
-        // reads the currently bound InferenceRepository's acoustic cache (populated at
-        // decode time). Returns empty when no repository is bound (engine not ready) so
-        // the corrector falls back to dictionary candidates.
-        wordSuggestionProvider.acousticLookup = { word ->
-            inferenceBinder?.getRepository()?.getAcousticAlternatives(word) ?: emptyList()
-        }
-
         keyboardViewModel = ViewModelProvider(
             this,
             KeyboardViewModel.Factory(
                 AudioCaptureManager(this),
                 AppPreferences(this),
-                wordSuggestionProvider,
             ),
         )[KeyboardViewModel::class.java]
-
-        // When the keyboard is reshown after being hidden, sync the window height to the
-        // current bar state. The per-frame animation callback handles all transitions while
-        // the keyboard is visible; this is only needed for the initial show after a hide.
-        lifecycleScope.launch {
-            keyboardViewModel.wordSuggestions.collect { }
-        }
 
         // If the user presses record while EngineState is Ready but
         // no InferenceRepository is bound (a binder desync), let the VM nudge us so we can
@@ -188,23 +164,23 @@ class OutspokeInputMethodService :
         bindService(inferenceServiceIntent(), inferenceServiceConnection, BIND_AUTO_CREATE)
         isBound = true
         Log.d(TAG, "InferenceService bind requested")
+
+        // The word-suggestion feature was removed; free the language packs it may have
+        // downloaded into internal storage on earlier versions.
+        lifecycleScope.launch(Dispatchers.IO) {
+            File(filesDir, "suggestion_files").takeIf { it.exists() }?.deleteRecursively()
+        }
     }
 
     override fun onBindInput() {
         super.onBindInput()
         Log.d(TAG, "onBindInput")
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_START)
-        wordSuggestionProvider.open()
     }
 
     override fun onWindowShown() {
         super.onWindowShown()
-        val targetHeight = keyboardHeightPx + (if (barVisible) barSlotHeightPx else 0)
-        Log.d(
-            TAG,
-            "onWindowShown barVisible=$barVisible targetHeight=$targetHeight" +
-                    " imeComposeView=${imeComposeView != null} isBound=$isBound"
-        )
+        Log.d(TAG, "onWindowShown imeComposeView=${imeComposeView != null} isBound=$isBound")
         // Rebind if a previous unbind (process-death recovery path or a future
         // explicit unload) left us disconnected. Without this the keyboard stayed
         // permanently detached from InferenceService after any unbind.
@@ -218,17 +194,12 @@ class OutspokeInputMethodService :
         // closed the engine and went Unloaded), reload it now so it is ready by the time
         // the user presses the talk button.
         inferenceBinder?.reloadIfNeeded()
-        applyWindowHeight(targetHeight, force = true)
+        applyWindowHeight(keyboardHeightPx, force = true)
     }
 
     override fun onWindowHidden() {
         super.onWindowHidden()
-        Log.d(TAG, "onWindowHidden barVisible=$barVisible")
-        // Cancel any pending bar-shrink. The bar's visible state must be preserved as-is
-        // while the keyboard is hidden — it is restored from barVisible when onWindowShown
-        // fires. Letting the shrink runnable fire while hidden would corrupt barVisible and
-        // cause the window to come back at the wrong height.
-        handler.removeCallbacks(shrinkWindowRunnable)
+        Log.d(TAG, "onWindowHidden")
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_PAUSE)
         // Intentionally do NOT unbind here. The inference service stays
         // bound for the lifetime of the IME process so the ~700 MB Parakeet model remains
@@ -244,13 +215,11 @@ class OutspokeInputMethodService :
     }
 
     override fun onDestroy() {
-        handler.removeCallbacks(shrinkWindowRunnable)
         detachFromBinder()
         if (isBound) {
             unbindService(inferenceServiceConnection)
             isBound = false
         }
-        wordSuggestionProvider.close()
         super.onDestroy()
         lifecycleRegistry.handleLifecycleEvent(Lifecycle.Event.ON_DESTROY)
         store.clear()
@@ -300,8 +269,7 @@ class OutspokeInputMethodService :
     }
 
     /**
-     * Total height of the IME window for the keyboard panel (excludes the suggestion bar
-     * slot). This equals 20 % of the usable screen height (above the nav bar) PLUS the
+     * Total height of the IME window for the keyboard panel. This equals 20 % of the usable screen height (above the nav bar) PLUS the
      * nav bar height.
      *
      * Why include [navBarHeightPx]:
@@ -318,71 +286,6 @@ class OutspokeInputMethodService :
         val screenHeight = wm.currentWindowMetrics.bounds.height()
         val usableHeight = screenHeight - navBarHeightPx
         (usableHeight * 0.20f).toInt() + navBarHeightPx
-    }
-
-    /**
-     * Pixel height of the suggestion bar slot (chips row + hairline divider).
-     * Pre-computed from the dp constant so we never run density resolution on main thread
-     * from a background context.
-     */
-    private val barSlotHeightPx: Int by lazy {
-        // SUGGESTION_BAR_HEIGHT_DP + 1dp divider = SUGGESTION_BAR_HEIGHT_DP + 1
-        val density = resources.displayMetrics.density
-        ((SUGGESTION_BAR_HEIGHT_DP + 1) * density + 0.5f).toInt()
-    }
-
-    /**
-     * Whether the suggestion bar is currently intended to be visible.
-     * Drives [onWindowShown] restoring to the right size and the one-shot resize logic.
-     */
-    private var barVisible: Boolean = false
-
-    /**
-     * Resize the IME window to accommodate the suggestion bar slot.
-     *
-     * [targetBarPx] is 0 (hide bar slot) or [barSlotHeightPx] (show bar slot). The sentinel
-     * value -1 means "use [barSlotHeightPx]" (sent by the Compose layer which does not have
-     * direct access to the resolved pixel value).
-     *
-     * **Show path:** window grows immediately, before the visual animation starts, so the
-     * underlying app gets exactly one layout event up front and then sees the bar slide in
-     * smoothly — no per-frame jank.
-     *
-     * **Hide path:** window shrinks after a brief delay that matches the visual animation
-     * duration ([SUGGESTION_BAR_HIDE_DELAY_MS]). The app keeps its position while the bar
-     * slides away, then snaps back down once — again a single layout event.
-     */
-    private fun updateImeHeight(targetBarPx: Int) {
-        val resolvedBarPx = if (targetBarPx == -1) barSlotHeightPx else targetBarPx
-        val newVisible = resolvedBarPx > 0
-        Log.d(TAG, "updateImeHeight targetBarPx=$targetBarPx newVisible=$newVisible barVisible=$barVisible")
-        handler.removeCallbacks(shrinkWindowRunnable)
-
-        if (newVisible) {
-            // Show: grow window immediately before animation starts.
-            if (!barVisible) {
-                barVisible = true
-                applyWindowHeight(keyboardHeightPx + barSlotHeightPx)
-            }
-        } else {
-            // Hide: schedule shrink to fire after the slide-out animation completes.
-            if (barVisible) {
-                handler.postDelayed(shrinkWindowRunnable, SUGGESTION_BAR_HIDE_DELAY_MS)
-            }
-        }
-    }
-
-    /**
-     * How long to wait after the bar's hide signal before shrinking the window.
-     * Should be >= the visual animation duration so the window never shrinks mid-animation.
-     * A small additional buffer (50 ms) absorbs frame-timing variance.
-     */
-    private val SUGGESTION_BAR_HIDE_DELAY_MS = 270L  // 220 ms anim + 50 ms buffer
-
-    /** Runnable that actually shrinks the window after the bar hide animation completes. */
-    private val shrinkWindowRunnable = Runnable {
-        barVisible = false
-        applyWindowHeight(keyboardHeightPx)
     }
 
     /**
@@ -425,11 +328,8 @@ class OutspokeInputMethodService :
     }
 
     override fun onCreateInputView(): View {
-        val currentlyVisible = keyboardViewModel.wordSuggestions.value.isNotEmpty() &&
-                !keyboardViewModel.suggestionBarDismissed.value
-        barVisible = currentlyVisible
-        val initialHeight = keyboardHeightPx + (if (barVisible) barSlotHeightPx else 0)
-        Log.d(TAG, "onCreateInputView barVisible=$barVisible initialHeight=$initialHeight")
+        val initialHeight = keyboardHeightPx
+        Log.d(TAG, "onCreateInputView initialHeight=$initialHeight")
         return ImeComposeView(
             context = this,
             lifecycleOwner = this,
@@ -465,7 +365,6 @@ class OutspokeInputMethodService :
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             )
                         },
-                        onSuggestionBarHeightChanged = { barPx -> updateImeHeight(barPx) },
                         keyboardContentHeightPx = keyboardHeightPx,
                         navBarHeightPx = navBarHeightPx,
                     )
@@ -480,7 +379,7 @@ class OutspokeInputMethodService :
     override fun onEvaluateFullscreenMode(): Boolean = false
 
     override fun onFinishInputView(finishingInput: Boolean) {
-        Log.d(TAG, "onFinishInputView finishingInput=$finishingInput barVisible=$barVisible")
+        Log.d(TAG, "onFinishInputView finishingInput=$finishingInput")
         super.onFinishInputView(finishingInput)
         imeComposeView = null
     }
@@ -489,8 +388,7 @@ class OutspokeInputMethodService :
      * Report insets to the framework so the focused app scrolls its content above the
      * keyboard correctly, and so that the IME window properly intercepts touch events.
      *
-     * The IME window height equals [keyboardHeightPx] + the current bar height, and grows
-     * or shrinks in sync with the suggestion bar animation via [updateImeHeight]. Setting
+     * The IME window height equals [keyboardHeightPx]. Setting
      * [Insets.contentTopInsets] and [Insets.visibleTopInsets] to 0 tells the framework
      * that the IME content occupies the full window height, so the app above scrolls up
      * by the full window height — exactly matching GBoard's behaviour.
@@ -509,9 +407,6 @@ class OutspokeInputMethodService :
     override fun onStartInput(attribute: EditorInfo?, restarting: Boolean) {
         super.onStartInput(attribute, restarting)
         Log.d(TAG, "onStartInput restarting=$restarting")
-        // Open the spell-checker session here as a fallback — on some devices onBindInput
-        // fires after onStartInput, or not at all. open() is idempotent.
-        wordSuggestionProvider.open()
         val connection = currentInputConnection ?: return
         keyboardViewModel.setTextInjector(
             TextInjector(
@@ -565,9 +460,6 @@ class OutspokeInputMethodService :
         super.onUpdateSelection(
             oldSelStart, oldSelEnd, newSelStart, newSelEnd, candidatesStart, candidatesEnd
         )
-
-        // Notify the suggestion bar about the word under the (possibly new) cursor position.
-        keyboardViewModel.updateWordAtCursor()
 
         // Fast-path exit: the vast majority of selection updates have newSelStart > 0
         // (cursor after injected text, user tapped elsewhere, etc.).  Skip the IPC calls
