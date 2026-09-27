@@ -29,7 +29,7 @@ as a result — each box needs an observed outcome.
 - [ ] Model install from scratch (fresh install or deleted model dir): *Download in browser*
       fetches the ZIP, *Import model file* imports it → SHA-256 verified, engine loads,
       dictation works. A wrong/damaged file is rejected with a message.
-- [ ] VAD sensitivity toggle, post-processing toggle, tutorial reset → all work, no crash.
+- [ ] VAD sensitivity toggle, post-processing toggle, diagnostics toggle → all work, no crash.
 - [ ] Mic calibration (optional): open the calibration screen, run it (2+ mics if the
       device has them) → a mic is selected, dictation uses it, and the selection survives
       an app restart.

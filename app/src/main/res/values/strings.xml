@@ -8,7 +8,7 @@
     <string name="nav_title_model">Install Model</string>
     <string name="nav_title_input">Microphone, Trigger &amp; Layout</string>
     <string name="nav_title_speech">Speech Processing</string>
-    <string name="nav_title_tools">Tools</string>
+    <string name="nav_title_tools">Diagnostics</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Open Settings</string>
@@ -55,7 +55,7 @@
     <string name="home_model_not_downloaded_subtitle">Install a transcription model to use the keyboard.</string>
     <string name="home_pref_input">Microphone, Trigger Mode &amp; Layout</string>
     <string name="home_pref_speech">Voice Activity, Post-Processing &amp; Model Memory</string>
-    <string name="home_pref_tools">Tutorial &amp; Diagnostics</string>
+    <string name="home_pref_tools">Diagnostics</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Trigger Mode</string>
@@ -98,10 +98,6 @@
     </string>
     <string name="pref_diagnostics_visible">Visible</string>
     <string name="pref_diagnostics_hidden">Hidden</string>
-    <string name="pref_tutorial_title">Keyboard Tutorial</string>
-    <string name="pref_tutorial_subtitle">Replay the step-by-step button guide the next time you open the keyboard.
-    </string>
-    <string name="pref_tutorial_reset">Show tutorial again</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Speech Recognition Models</string>
@@ -144,24 +140,6 @@
     <string name="status_error_audio_capture">Audio capture failed</string>
     <string name="status_error_engine_load">Engine failed to load</string>
 
-    <!-- First-run keyboard tutorial -->
-    <string name="tutorial_title">How to use Parakeetype</string>
-    <string name="tutorial_talk_button_title">Talk Button (centre)</string>
-    <string name="tutorial_talk_button_desc">Hold to record, release to transcribe. In Tap-to-Toggle mode, tap once to
-        start and again to stop.
-    </string>
-    <string name="tutorial_switch_keyboard_title">Switch Keyboard (top right)</string>
-    <string name="tutorial_switch_keyboard_desc">Returns to your previous keyboard.</string>
-    <string name="tutorial_delete_all_title">Delete All (left of mic)</string>
-    <string name="tutorial_delete_all_desc">Clears the entire text field at once.</string>
-    <string name="tutorial_delete_word_title">Delete Word (right of mic)</string>
-    <string name="tutorial_delete_word_desc">Removes the last word.</string>
-    <string name="tutorial_enter_title">Enter / Action (far right)</string>
-    <string name="tutorial_enter_desc">Performs the context-aware action: send, search, go, or insert a newline.
-    </string>
-    <string name="tutorial_skip">Skip</string>
-    <string name="tutorial_next">Next</string>
-    <string name="tutorial_dismiss">Got it!</string>
 
     <!-- Preferences · microphone section -->
     <string name="pref_mic_title">Microphone</string>

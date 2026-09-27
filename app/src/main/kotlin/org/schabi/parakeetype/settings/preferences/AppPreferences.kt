@@ -170,20 +170,6 @@ class AppPreferences(private val context: Context) {
         context.dataStore.edit { prefs -> prefs[keyShowPipelineDiagnostics] = enabled }
     }
 
-    private val keyKeyboardTutorialShown = booleanPreferencesKey("keyboard_tutorial_shown")
-
-    /**
-     * `true` once the first-run keyboard tutorial has been dismissed by the user.
-     * Defaults to `false` so the tutorial is shown on the very first keyboard opening.
-     */
-    val keyboardTutorialShown: Flow<Boolean> = context.dataStore.data.map { prefs ->
-        prefs[keyKeyboardTutorialShown] ?: false
-    }
-
-    suspend fun setKeyboardTutorialShown(shown: Boolean) {
-        context.dataStore.edit { prefs -> prefs[keyKeyboardTutorialShown] = shown }
-    }
-
     private val keyForcedLanguage = stringPreferencesKey("forced_language")
 
     /**

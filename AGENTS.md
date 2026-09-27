@@ -26,7 +26,7 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
 | `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `MicCalibrationScreen` | Settings Compose UI |
 | `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
-| `ui/keyboard/components` | `TalkButton`, `StatusIndicator`, `KeyboardActionButton`, `KeyboardTutorialOverlay`, `LanguageSelector` | Keyboard UI sub-components |
+| `ui/keyboard/components` | `TalkButton`, `StatusIndicator`, `KeyboardActionButton`, `LanguageSelector` | Keyboard UI sub-components |
 | `ui/theme` | `ParakeetypeKeyboardTheme` | Compose theming |
 
 ## Architecture — What Isn't Obvious from Single Files

@@ -149,20 +149,6 @@ class KeyboardViewModel(
         viewModelScope.launch { appPreferences.setWhisperLanguage(tag) }
     }
 
-    /**
-     * Whether the first-run keyboard tutorial should currently be visible.
-     * Resolves to `true` on the very first keyboard opening and `false` permanently
-     * after [dismissTutorial] is called.
-     */
-    val showTutorial: StateFlow<Boolean> = appPreferences.keyboardTutorialShown
-        .map { shown -> !shown }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
-    /** Persists the tutorial as seen so it is never shown again. */
-    fun dismissTutorial() {
-        viewModelScope.launch { appPreferences.setKeyboardTutorialShown(true) }
-    }
-
     private val _engineState = MutableStateFlow<EngineState>(EngineState.Unloaded)
 
     /** Called by [ParakeetypeInputMethodService] whenever [InferenceService.engineState] changes. */

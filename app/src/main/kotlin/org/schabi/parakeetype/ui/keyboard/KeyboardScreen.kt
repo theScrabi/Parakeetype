@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -100,14 +99,12 @@ fun KeyboardScreen(
      * When non-zero this is used directly so the content has a stable size. Defaults to 0 for previews, which fall back to [Modifier.weight].
      */
     keyboardContentHeightPx: Int = 0,
-    tutorialPositions: TutorialPositions? = null,
     /**
      * Navigation bar height in pixels from [WindowManager.currentWindowMetrics] at the
      * service level. Applied as explicit bottom padding on the keyboard content column so
      * that buttons are never drawn behind the system navigation bar.
      *
-     * This mirrors the same pattern used by [KeyboardTutorialOverlay]: we do NOT use
-     * [Modifier.navigationBarsPadding] here because inset dispatch inside an IME window
+     * We do NOT use [Modifier.navigationBarsPadding] here because inset dispatch inside an IME window
      * is unreliable on some OEM ROMs — if insets are never delivered the modifier is a
      * silent no-op and the buttons draw behind the nav bar. The service-level value is
      * authoritative and always correct.
@@ -130,8 +127,8 @@ fun KeyboardScreen(
     val mainContentHeight = if (keyboardContentHeightPx > 0) {
         with(density) { keyboardContentHeightPx.toDp() }
     } else null
-    // Explicit nav bar bottom padding — authoritative service-level value, same pattern
-    // as KeyboardTutorialOverlay. 0 on gesture nav, real height on button-nav devices.
+    // Explicit nav bar bottom padding — authoritative service-level value.
+    // 0 on gesture nav, real height on button-nav devices.
     val navBarPaddingDp = with(density) { navBarHeightPx.toDp() }
     val leftInsetDp = with(density) { leftInsetPx.toDp() }
     val rightInsetDp = with(density) { rightInsetPx.toDp() }
@@ -205,11 +202,7 @@ fun KeyboardScreen(
                         icon = Icons.Rounded.Keyboard,
                         contentDescription = stringResource(R.string.cd_switch_keyboard),
                         onClick = onSwitchKeyboard,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.SWITCH_KEYBOARD, lc)
-                            },
+                        modifier = Modifier.align(Alignment.CenterEnd),
                     )
                 }
             }
@@ -247,9 +240,6 @@ fun KeyboardScreen(
                             icon = Icons.Rounded.DeleteForever,
                             contentDescription = stringResource(R.string.cd_delete_all),
                             onClick = onDeleteAll,
-                            modifier = Modifier.onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.DELETE_ALL, lc)
-                            },
                         )
                     }
                 }
@@ -270,9 +260,6 @@ fun KeyboardScreen(
                     enabled = uiState !is KeyboardUiState.EngineLoading && uiState !is KeyboardUiState.Error && uiState !is KeyboardUiState.Transcribing,
                     previewForceLockHint = previewForceLockHint,
                     onLockHintVisibleChange = { lockHintVisible = it },
-                    modifier = Modifier.onGloballyPositioned { lc ->
-                        tutorialPositions?.record(TutorialButtonId.TALK, lc)
-                    },
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -283,11 +270,7 @@ fun KeyboardScreen(
                         icon = Icons.AutoMirrored.Rounded.Backspace,
                         contentDescription = stringResource(R.string.cd_delete_word),
                         onClick = onDeleteWord,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.DELETE_WORD, lc)
-                            },
+                        modifier = Modifier.align(Alignment.CenterStart),
                     )
 
                     // Far-right: context-aware Enter action
@@ -313,11 +296,7 @@ fun KeyboardScreen(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         tint = MaterialTheme.colorScheme.onSecondaryContainer,
                         shape = KEY_SHAPE,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.ENTER, lc)
-                            },
+                        modifier = Modifier.align(Alignment.CenterEnd),
                     )
 
                 }
@@ -385,13 +364,8 @@ private fun DeleteKey(
  * Convenience overload that reads directly from a [KeyboardViewModel]'s state flows.
  * Used by [org.schabi.parakeetype.ime.ParakeetypeInputMethodService] to set up the content.
  *
- * Shows the [KeyboardTutorialOverlay] on first launch until the user dismisses it.
- *
- * @param navBarHeightPx Navigation bar height in pixels from [WindowManager.currentWindowMetrics].
- *                       Passed directly to [KeyboardTutorialOverlay] so its Skip/Next buttons
- *                       are always positioned above the system navigation bar, regardless of
- *                       whether insets are correctly dispatched into the IME window's Compose
- *                       tree on the current device.
+ * @param navBarHeightPx Navigation bar height in pixels from [WindowManager.currentWindowMetrics],
+ *                       kept clear below the keyboard content.
  * @param leftInsetPx / [rightInsetPx] Side system insets (side nav bar, cutout) in pixels.
  *
  * The keyboard position follows the orientation: the landscape setting (docked right by
@@ -415,7 +389,6 @@ fun KeyboardScreen(
     val rawDiagnostics by viewModel.diagnostics.collectAsState()
     val showPipelineDiagnostics by viewModel.showPipelineDiagnostics.collectAsState()
     val enterAction by viewModel.enterAction.collectAsState()
-    val showTutorial by viewModel.showTutorial.collectAsState()
     val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
     val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -423,51 +396,30 @@ fun KeyboardScreen(
     // Only surface real diagnostics counters when the user has enabled the badge in settings.
     val diagnostics = if (showPipelineDiagnostics) rawDiagnostics else PipelineDiagnostics()
 
-    // Shared state that records each button's LayoutCoordinates for the tutorial spotlight.
-    // Created once and kept alive so positions are ready the moment the overlay appears.
-    val tutorialPositions = remember { TutorialPositions() }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight()
-    ) {
-        KeyboardScreen(
-            uiState = uiState,
-            isContinuous = isContinuous,
-            triggerMode = triggerMode,
-            isWhisperEngine = isWhisperEngine,
-            whisperLanguage = whisperLanguage,
-            onWhisperLanguageSelected = viewModel::setWhisperLanguage,
-            onRecordStart = viewModel::onRecordStart,
-            onRecordStop = viewModel::onRecordStop,
-            onContinuousModeEnabled = viewModel::onContinuousModeEnabled,
-            onRetry = viewModel::onRetry,
-            onDeleteWord = viewModel::deleteWord,
-            onDeleteAll = viewModel::deleteAll,
-            onEnterAction = viewModel::performEnterAction,
-            enterAction = enterAction,
-            onSwitchKeyboard = onSwitchKeyboard,
-            onOpenCompanionApp = onOpenCompanionApp,
-            diagnostics = diagnostics,
-            keyboardContentHeightPx = keyboardContentHeightPx,
-            tutorialPositions = tutorialPositions,
-            navBarHeightPx = navBarHeightPx,
-            keyboardPosition = if (isLandscape) positionLandscape else positionPortrait,
-            leftInsetPx = leftInsetPx,
-            rightInsetPx = rightInsetPx,
-        )
-
-        // Tutorial overlay covers the keyboard on first launch.
-        if (showTutorial) {
-            KeyboardTutorialOverlay(
-                positions = tutorialPositions,
-                onDismiss = viewModel::dismissTutorial,
-                modifier = Modifier.matchParentSize(),
-                navBarHeightPx = navBarHeightPx,
-            )
-        }
-    }
+    KeyboardScreen(
+        uiState = uiState,
+        isContinuous = isContinuous,
+        triggerMode = triggerMode,
+        isWhisperEngine = isWhisperEngine,
+        whisperLanguage = whisperLanguage,
+        onWhisperLanguageSelected = viewModel::setWhisperLanguage,
+        onRecordStart = viewModel::onRecordStart,
+        onRecordStop = viewModel::onRecordStop,
+        onContinuousModeEnabled = viewModel::onContinuousModeEnabled,
+        onRetry = viewModel::onRetry,
+        onDeleteWord = viewModel::deleteWord,
+        onDeleteAll = viewModel::deleteAll,
+        onEnterAction = viewModel::performEnterAction,
+        enterAction = enterAction,
+        onSwitchKeyboard = onSwitchKeyboard,
+        onOpenCompanionApp = onOpenCompanionApp,
+        diagnostics = diagnostics,
+        keyboardContentHeightPx = keyboardContentHeightPx,
+        navBarHeightPx = navBarHeightPx,
+        keyboardPosition = if (isLandscape) positionLandscape else positionPortrait,
+        leftInsetPx = leftInsetPx,
+        rightInsetPx = rightInsetPx,
+    )
 }
 
 @Composable

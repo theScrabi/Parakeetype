@@ -313,8 +313,8 @@ class ParakeetypeInputMethodService :
      * automatically placed above the navigation bar. The window therefore must be tall
      * enough to span the nav bar area so that its top edge reaches the desired keyboard
      * height above the nav bar. Content inside the Compose tree is then pushed above the
-     * nav bar via explicit [navBarHeightPx] bottom padding (passed down to [KeyboardScreen]
-     * and [KeyboardTutorialOverlay]), which is more reliable than [Modifier.navigationBarsPadding]
+     * nav bar via explicit [navBarHeightPx] bottom padding (passed down to [KeyboardScreen]),
+     * which is more reliable than [Modifier.navigationBarsPadding]
      * because inset dispatch inside IME windows is broken on some OEM ROMs.
      */
     private val keyboardHeightPx: Int

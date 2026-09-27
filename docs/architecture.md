@@ -67,7 +67,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
 | ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
-| ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, KeyboardTutorialOverlay, LanguageSelector | Keyboard UI sub-components |
+| ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, LanguageSelector | Keyboard UI sub-components |
 | ui/theme | ParakeetypeKeyboardTheme | Compose theming |
 
 ---
@@ -188,7 +188,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Parakeetype itself never downloads anything.
 
-**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), keyboard_tutorial_shown (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
+**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
 
 ---
 

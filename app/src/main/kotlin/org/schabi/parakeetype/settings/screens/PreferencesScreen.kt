@@ -116,7 +116,7 @@ fun SpeechPreferencesScreen(
 /**
  * Category 3 — Tools.
  *
- * Keyboard tutorial replay and the pipeline diagnostics toggle.
+ * The pipeline diagnostics toggle.
  * Backed by [PreferencesViewModel] / DataStore.
  */
 @Composable
@@ -126,8 +126,6 @@ fun ToolsPreferencesScreen(
     val showPipelineDiagnostics by viewModel.showPipelineDiagnostics.collectAsState()
 
     PreferencesColumn {
-        TutorialSection(onResetTutorial = viewModel::resetTutorial)
-        HorizontalDivider()
         DiagnosticsSection(
             showPipelineDiagnostics = showPipelineDiagnostics,
             onShowPipelineDiagnosticsChange = viewModel::setShowPipelineDiagnostics,
@@ -434,29 +432,6 @@ private fun KeepModelLoadedSection(
 }
 
 @Composable
-private fun TutorialSection(
-    onResetTutorial: () -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_tutorial_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_tutorial_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        OutlinedButton(
-            onClick = onResetTutorial,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(R.string.pref_tutorial_reset))
-        }
-    }
-}
-
-@Composable
 private fun DiagnosticsSection(
     showPipelineDiagnostics: Boolean,
     onShowPipelineDiagnosticsChange: (Boolean) -> Unit,
@@ -562,16 +537,6 @@ private fun KeepModelLoadedSectionPreview() {
     ParakeetypeTheme {
         PreferencesColumn {
             KeepModelLoadedSection(keepModelLoaded = true, onKeepModelLoadedChange = {})
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Tutorial")
-@Composable
-private fun TutorialSectionPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            TutorialSection(onResetTutorial = {})
         }
     }
 }

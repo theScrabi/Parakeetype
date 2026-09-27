@@ -110,8 +110,4 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
         }
     }
 
-    /** Resets the tutorial-shown flag so it plays again the next time the keyboard opens. */
-    fun resetTutorial() {
-        viewModelScope.launch { prefs.setKeyboardTutorialShown(false) }
-    }
 }
