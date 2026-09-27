@@ -6,7 +6,7 @@
     <string name="subtype_de">Deutsch (DE) - Sprache</string>
 
     <!-- Navigation titles -->
-    <string name="nav_title_model">Modell herunterladen</string>
+    <string name="nav_title_model">Modell installieren</string>
     <string name="nav_title_input">Mikrofon &amp; Auslöser</string>
     <string name="nav_title_speech">Sprachverarbeitung</string>
     <string name="nav_title_tools">Werkzeuge</string>
@@ -14,13 +14,12 @@
     <!-- Common actions -->
     <string name="action_open_settings">Einstellungen öffnen</string>
     <string name="action_grant_permission">Berechtigung erteilen</string>
-    <string name="action_download">Herunterladen</string>
+    <string name="action_download">Installieren</string>
     <string name="action_manage">Verwalten</string>
     <string name="action_cancel">Abbrechen</string>
     <string name="action_delete">Löschen</string>
     <string name="action_retry">Erneut versuchen</string>
     <string name="action_set_as_active">Als aktiv festlegen</string>
-    <string name="action_download_anyway">Trotzdem herunterladen</string>
     <string name="action_open_outspoke">Outspoke öffnen</string>
 
     <!-- Common states -->
@@ -53,9 +52,9 @@
     <string name="home_mic_granted_subtitle">Audio wird vollständig auf dem Gerät verarbeitet.</string>
     <string name="home_mic_required_subtitle">Tippen, um Mikrofonzugriff zu erteilen.</string>
     <string name="home_model_ready">Modell bereit</string>
-    <string name="home_model_not_downloaded">Modell nicht heruntergeladen</string>
+    <string name="home_model_not_downloaded">Modell nicht installiert</string>
     <string name="home_model_ready_subtitle">Ein Transkriptionsmodell ist installiert und bereit.</string>
-    <string name="home_model_not_downloaded_subtitle">Lade ein Transkriptionsmodell herunter, um die Tastatur zu
+    <string name="home_model_not_downloaded_subtitle">Installiere ein Transkriptionsmodell, um die Tastatur zu
         verwenden.
     </string>
     <string name="home_pref_input">Mikrofon &amp; Auslösemodus</string>
@@ -103,32 +102,38 @@
 
     <!-- Model screen -->
     <string name="model_screen_title">Spracherkennungsmodelle</string>
-    <string name="model_screen_subtitle">Lade ein Modell herunter und tippe auf „Als aktiv festlegen", um es für die
-        Transkription zu verwenden. Es wird immer nur ein Modell geladen.
+    <string name="model_screen_subtitle">Installiere ein Modell und tippe auf „Als aktiv festlegen“, um es für die
+        Transkription zu verwenden. Es wird immer nur ein Modell geladen. Outspoke hat keinen Internetzugriff: Du lädst
+        die Modelldatei im Browser herunter und importierst sie hier.
     </string>
     <string name="model_size_format">~%d MB</string>
     <string name="model_active_label">Aktives Modell</string>
-    <string name="model_download_failed">Download fehlgeschlagen oder beschädigt</string>
     <string name="dialog_delete_title">Löschen bestätigen</string>
     <string name="dialog_delete_message">Dieses Modell wirklich löschen? Diese Aktion kann nicht rückgängig gemacht
         werden.
     </string>
-    <string name="dialog_mobile_data_title">Über mobile Daten herunterladen?</string>
-    <string name="dialog_mobile_data_message">Dieses Modell ist ~%d MB groß. Das Herunterladen verbraucht mobile Daten.
-        Mit WLAN verbinden, um unerwartete Kosten zu vermeiden.
-    </string>
+    <string name="model_install_explanation">1. Lade die Modelldatei (~%d MB, ein ZIP-Archiv) im Browser herunter.\n2. Tippe auf „Modelldatei importieren“ und wähle das heruntergeladene Archiv.\nNach dem Import kannst du das Archiv aus deinem Download-Ordner löschen.</string>
+    <string name="action_download_in_browser">Im Browser herunterladen</string>
+    <string name="action_import_model_file">Modelldatei importieren</string>
+    <string name="model_importing_format">Wird importiert… %d%%</string>
+    <string name="model_no_browser">Kein Browser gefunden, um den Download-Link zu öffnen.</string>
+    <string name="model_import_success">Modell importiert. Du kannst das heruntergeladene Archiv jetzt löschen.</string>
+    <string name="model_import_not_archive">Die gewählte Datei ist kein Outspoke-Modellarchiv.</string>
+    <string name="model_import_missing_files">Das Archiv ist unvollständig. Es fehlt: %s</string>
+    <string name="model_import_corrupted">Das Archiv ist beschädigt (Prüfsumme stimmt nicht): %s. Bitte erneut herunterladen.</string>
+    <string name="model_import_io_error">Import fehlgeschlagen: %s</string>
 
     <!-- Inference service notifications -->
     <string name="notif_channel_name">Outspoke Sprachtranskription</string>
     <string name="notif_channel_desc">Wird angezeigt, solange die Spracherkennungs-Engine aktiv ist</string>
     <string name="notif_engine_loading">Transkriptions-Engine wird geladen\u2026</string>
-    <string name="notif_model_not_downloaded">Modell nicht heruntergeladen - Outspoke öffnen</string>
+    <string name="notif_model_not_downloaded">Modell nicht installiert - Outspoke öffnen</string>
     <string name="notif_engine_ready">Outspoke bereit (%s)</string>
     <string name="notif_engine_failed">Engine konnte nicht geladen werden: %s</string>
 
     <!-- Keyboard status messages -->
     <string name="status_transcribing">Wird transkribiert …</string>
-    <string name="status_engine_model_missing">Modell nicht heruntergeladen - Outspoke öffnen</string>
+    <string name="status_engine_model_missing">Modell nicht installiert - Outspoke öffnen</string>
     <string name="status_engine_loading">Transkriptions-Engine wird geladen …</string>
     <string name="status_error_mic_permission">Mikrofonberechtigung fehlt - Outspoke öffnen</string>
     <string name="status_error_mic_init">Mikrofon konnte nicht geöffnet werden</string>

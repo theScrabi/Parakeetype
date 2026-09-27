@@ -37,7 +37,7 @@ import dev.brgr.outspoke.ui.theme.OutspokeTheme
  * Shows the three setup requirements the user must fulfil before the keyboard works:
  *  1. IME enabled in system settings
  *  2. Microphone permission granted
- *  3. Model downloaded
+ *  3. Model installed
  *
  * All three statuses are re-evaluated every time the screen comes into the foreground
  * so that changes made in system Settings or the file system are reflected immediately.
@@ -147,7 +147,7 @@ private fun HomeScreenContent(
             action = if (!hasMicPermission) onRequestMicPermission else null,
         )
 
-        // 3. Model downloaded - always show an action so the model screen stays reachable
+        // 3. Model installed - always show an action so the model screen stays reachable
         StatusRow(
             icon = if (isModelReady) MyIcons.CheckCircle else MyIcons.CloudDownload,
             iconTint = if (isModelReady) MaterialTheme.colorScheme.primary

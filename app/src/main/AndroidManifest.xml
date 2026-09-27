@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
 >
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- Outspoke has no network access. onnxruntime-android declares these in its own
+         manifest (unused for on-device inference); strip them from the merged manifest.
+         Models are downloaded by the user in their browser and imported from storage. -->
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove"/>
 
     <application
             android:allowBackup="true"
@@ -63,17 +67,6 @@
             <property
                     android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                     android:value="Keeps the on-device speech recognition model loaded in memory between keyboard sessions (opt-in setting) so dictation is available instantly after switching keyboards."/>
-        </service>
-
-        <!-- Foreground service that manages model file downloads in the background -->
-        <service
-                android:name=".settings.model.DownloadService"
-                android:foregroundServiceType="dataSync"
-                android:exported="false">
-            <!-- Android 14+ foreground service type justification -->
-            <meta-data
-                    android:name="android.app.foregroundServiceType.dataSync.justification"
-                    android:value="Required for downloading speech recognition model files in the background."/>
         </service>
 
     </application>

@@ -8,7 +8,7 @@
 | [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png" alt="Get it at IzzyOnDroid" height="60">](https://apt.izzysoft.de/packages/dev.brgr.outspoke) | [<img src="https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/dev.brgr.outspoke&label=IzzyOnDroid" alt="Get it at IzzyOnDroid" height="30">](https://apt.izzysoft.de/packages/dev.brgr.outspoke) |
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
-A privacy-focused speech-to-text keyboard(IME) for Android. Speech recognition runs entirely on-device - no internet needed after the initial model download, no account, no data leaving your phone.
+A privacy-focused speech-to-text keyboard(IME) for Android. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
 
 It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) automatic speech recognition model, quantized to INT8 and run via [ONNX Runtime](https://onnxruntime.ai/) for efficient on-device inference. Voice activity detection uses [Silero VAD v4](https://github.com/snakers4/silero-vad) (also ONNX, also fully on-device) to suppress silence before it ever reaches the ASR model.
 
@@ -41,9 +41,9 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 | Android version | 11 (API 30)                                                            |
 | RAM | 4 GB recommended                                                       |
 | Free storage | ~750 MB (for ASR model files) |
-| Permissions | `RECORD_AUDIO`, `INTERNET` (model download only), `POST_NOTIFICATIONS` |
+| Permissions | `RECORD_AUDIO`, `POST_NOTIFICATIONS` (no `INTERNET`) |
 
-> The `INTERNET` permission is used for the one-time ASR model download from Hugging Face. After that, the keyboard works fully offline.
+> Outspoke has **no network access**. You download the model archive once in your browser and import it into the app; the keyboard itself never goes online.
 
 ---
 
@@ -53,7 +53,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 2. **Open the Outspoke app** and follow the three setup steps:
    - Enable Outspoke in *System Settings → Keyboard / Input Methods*
    - Grant the microphone permission
-   - Download the model (~700 MB, Wi-Fi recommended)
+   - Install the model: tap *Download in browser* to fetch the single model archive (~700 MB, Wi-Fi recommended), then *Import model file* and pick the downloaded ZIP
 3. **Switch** to the Outspoke keyboard in any text field and tap the mic button.
 
 ---
@@ -110,7 +110,7 @@ Outspoke is structured as a clean layered pipeline. The `SpeechEngine` interface
 | `ime` | `TextInjector` | Writes partial/final text into the focused field via `InputConnection`; keeps the last 6 words as a mutable composing span (underlined) and permanently freezes earlier words; delegates new-content discovery to `TranscriptAligner.findNewContent`; on `WindowTrimmed` performs a three-step reset (commit composing minus last 2 uncertain tail words, clear `lastPartial`, re-anchor `committedWords` from the actual field content); two-layer alignment recovery (field-scan → composing-commit fallback) prevents silent word drops on complete divergence |
 | `ime` | `TranscriptAligner` | Stateless alignment utilities (`normalizeWord`, `splitToWords`, `findNewContent`); `findNewContent` uses a three-layer overlap search - (1) full prefix match, (2) suffix-prefix overlap ≥ 2 words, (3) interior scan ≥ 2 words - to locate genuinely new content in a fresh partial relative to already-committed words, tolerating Parakeet attention drift and post-trim leading garbage tokens |
 | `ui` | `KeyboardViewModel` | Bridges IME lifecycle, audio capture, and inference results into `KeyboardUiState`; owns `captureJob` |
-| `settings` | `ModelDownloadManager` | Downloads model files from Hugging Face over OkHttp with SHA-256 verification |
+| `settings` | `ModelImporter` | Installs a model from the single ZIP archive the user picked (SAF); verifies every file's SHA-256 and swaps the model in atomically |
 | `settings` | `ModelStorageManager` | Manages model file paths inside `filesDir` (no external storage permission needed) |
 
 ### Inference pipeline (Parakeet-TDT v3)
@@ -144,7 +144,7 @@ interface SpeechEngine {
 To add, for example, a Whisper or Moonshine backend:
 
 1. Create a new class implementing `SpeechEngine` (e.g. `WhisperEngine`).
-2. Add a `ModelId` enum value and a `ModelInfo` entry in `ModelRegistry` - this covers display name, download URLs, file list, and size estimate.
+2. Add a `ModelId` enum value and a `ModelInfo` entry in `ModelRegistry` - this covers display name, the single-file archive URL, the file list with SHA-256 hashes, and size estimate. Build and publish the archive (see `devtools/package-model.sh`).
 3. Add a branch in `SpeechEngineFactory` to instantiate the new engine for that `ModelId`.
 
 The repository and IME layers don't need to change.
@@ -175,7 +175,6 @@ A debug build for sideloading:
 | Permission | Why |
 |---|---|
 | `RECORD_AUDIO` | Capturing microphone input for speech recognition |
-| `INTERNET` | One-time ASR model download from Hugging Face (~700 MB) |
 | `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MICROPHONE` | Keeping the inference engine alive while the keyboard is in use |
 | `FOREGROUND_SERVICE_SPECIAL_USE` | Optional *Keep model loaded* setting: keeps the model in RAM while another keyboard is active |
 | `POST_NOTIFICATIONS` | Showing the required foreground service notification |
@@ -189,7 +188,7 @@ No permission is used for any purpose beyond what is listed above.
 - Audio stays on your device - all recognition runs locally via ONNX Runtime.
 - No analytics, crash reporters, or third-party SDKs are included.
 - No accounts or sign-in of any kind.
-- The only network access is the one-time ASR model download from Hugging Face. It can be done manually if preferred (see [manual model installation](../../wiki/Manual-Model-Installation)).
+- No network access at all: the app has no `INTERNET` permission. The model archive is downloaded by you in your browser (or copied from a computer) and imported from local storage.
 
 ---
 

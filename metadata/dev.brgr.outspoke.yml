@@ -20,16 +20,10 @@ Description: |-
   No audio leaves the device. No account is required. No Google Play Services
   or any third-party telemetry libraries are used.
 
-  The model file (~700 MB) is downloaded once over the internet and stored
-  locally; the keyboard then works fully offline.
+  The app has no internet permission. The model file (~700 MB) is downloaded
+  once in your browser and imported into the app, which then stores it locally.
 
   Requires Android 11 (API 30) or higher.
-
-AntiFeatures:
-  NonFreeNet:
-    # The app downloads the Parakeet ONNX model file from an external server
-    # on first launch. After that, no network access is required.
-    en-US: Downloads the ASR model file from an external server on first use.
 
 Repo: https://github.com/minburg/outspoke/releases
 RepoType: git

@@ -16,7 +16,7 @@
 6. Sliding-Window Inference Details
 7. Post-Processing Pipeline
 8. Text Injection and Alignment
-9. Model Registry and Download
+9. Model Registry and Import
 10. Engine Implementations
 11. Service and Lifecycle Management
 12. State Machines
@@ -30,7 +30,7 @@
 ## 1. High-Level Overview
 
 Outspoke is a privacy-first Android Input Method Editor (IME). All speech recognition runs
-on-device via ONNX Runtime; no audio ever leaves the device after the one-time model download.
+on-device via ONNX Runtime; no audio ever leaves the device, and the app has no network access at all (no INTERNET permission).
 
     Active App (Text Field)
          | InputConnection API
@@ -63,7 +63,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, AudioChunk, PermissionHelper | Mic capture, PCM chunking, Voice Activity Detection, optional mic calibration |
 | inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
 | ime | OutspokeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
-| settings/model | ModelId, ModelRegistry, ModelDownloadManager, ModelStorageManager, ModelState, ModelViewModel, DownloadService | Model enumeration, download, SHA-256 verification, on-disk paths |
+| settings/model | ModelId, ModelRegistry, ModelImporter, ModelStorageManager, ModelState, ModelViewModel | Model enumeration, single-archive import, SHA-256 verification, on-disk paths |
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
 | ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
@@ -140,7 +140,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 - Owns the SpeechEngine instance; reloads on selectedModelId preference change.
 - Uses a Mutex to protect engine swaps.
 - Exposes StateFlow<EngineState> to bound clients.
-- FileObserver on models/ directory detects newly downloaded models.
+- FileObserver on models/ directory detects newly imported models.
 - Default: destroyed on the IME's final unbind (keyboard switch). Keep-loaded mode: started + foreground, survives the unbind; only critical memory pressure unloads the engine.
 
 ---
@@ -182,11 +182,11 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 > Warning: storageDirName must never change after release - it is the on-disk key for existing installations.
 
-**ModelRegistry** maps each ModelId to a ModelInfo: display name, DownloadSource, RemoteFile list with URLs and SHA-256 hashes, size estimate. ModelRegistry.all contains only models confirmed to run within acceptable resource limits on real devices.
+**ModelRegistry** maps each ModelId to a ModelInfo: display name, archiveUrl (the single-file ZIP the user downloads in the browser), ModelFile list with SHA-256 hashes, size estimate. ModelRegistry.all contains only models confirmed to run within acceptable resource limits on real devices.
 
-**ModelStorageManager** stores all files in <filesDir>/models/<storageDirName>/. Checks requiredFiles list for readiness; uses INSTALLED_MARKER file for ZIP-installed models.
+**ModelStorageManager** stores all files in <filesDir>/models/<storageDirName>/. Checks the requiredFiles list (all ModelFile names) for readiness.
 
-**ModelDownloadManager** downloads via OkHttp with resume support, verifies SHA-256 after each file, emits ModelState.Downloading(progress).
+**ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Outspoke itself never downloads anything.
 
 **AppPreferences** (DataStore, store name outspoke_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), keyboard_tutorial_shown (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
 
@@ -250,7 +250,7 @@ Unloaded | Loading | Ready | Error(message: String)
 
 ### ModelState (sealed class)
 
-NotDownloaded | Downloading(progress: Float) | Ready | Corrupted
+NotDownloaded | Importing(progress: Float) | Ready
 
 ### PipelineDiagnostics
 
@@ -333,7 +333,7 @@ If all three layers fail, the entire partial is returned as new content (alignme
 
 ---
 
-## 9. Model Registry and Download
+## 9. Model Registry and Import
 
 ### Storage layout
 
@@ -348,13 +348,13 @@ If all three layers fail, the entire partial is returned as new content (alignme
       whisper-small-int8/ (placeholder - disabled)
 
 
-### Download flow
+### Install flow (no network access)
 
-1. ModelDownloadManager fetches each RemoteFile via OkHttp.
-2. Supports HTTP range requests for resume.
-3. SHA-256 verified after each file; on mismatch the file is deleted and download fails with ModelState.Corrupted.
-4. ZIP archives are extracted in place; INSTALLED_MARKER is written on success.
-5. ModelStorageManager.isReady(modelId) checks all requiredFiles exist (and the marker for ZIP installs).
+1. The model screen's *Download in browser* button opens ModelInfo.archiveUrl (a pinned release asset on github.com/minburg/outspoke-data, built by devtools/package-model.sh from the Hugging Face files) with ACTION_VIEW; the browser downloads the single ZIP.
+2. *Import model file* opens the SAF picker; the user selects the archive.
+3. ModelImporter streams the ZIP once: entries whose file name (directories ignored) matches a ModelFile are written to models/.import-<storageDirName>/ while their SHA-256 is computed.
+4. Any checksum mismatch, missing file, or non-ZIP input aborts and deletes the staging directory; the previous state is untouched.
+5. On success the staging directory is renamed over models/<storageDirName>/ in one step; ModelStorageManager.isModelReady(modelId) then checks all files exist.
 
 ---
 
@@ -417,7 +417,7 @@ Memory pressure: by default RUNNING_LOW / RUNNING_CRITICAL / MODERATE / COMPLETE
 
 ### FileObserver integration
 
-InferenceService watches <filesDir>/models/ for CLOSE_WRITE / MOVED_TO events. When a new model finishes downloading, the observer triggers a reload check without requiring an app restart.
+InferenceService watches <filesDir>/models/ for CLOSE_WRITE / MOVED_TO events. The observer only watches the models/ root (not subdirectories); ModelImporter's final directory rename (MOVED_TO) is what triggers the reload check, so a new model loads without an app restart.
 
 ---
 
@@ -431,13 +431,13 @@ InferenceService watches <filesDir>/models/ for CLOSE_WRITE / MOVED_TO events. W
                                                 |
                                            retry load()--> Loading
 
-### Model download state
+### Model install state
 
-    NotDownloaded --start--> Downloading(0..1) --complete--> Ready
-                                  |                   |
-                             cancel/error        SHA-256 fail
-                                  v                   v
-                            NotDownloaded        Corrupted --retry--> Downloading
+    NotDownloaded --import--> Importing(0..1) --verified + renamed--> Ready
+                                   |
+                  cancel / SHA-256 fail / missing file / not a ZIP
+                                   v
+                             NotDownloaded   (message shown in a snackbar)
 
 ### Keyboard UI state
 
@@ -517,7 +517,7 @@ Instrumented tests (device/emulator required) in app/src/androidTest/, run with 
 ## 15. Extension Guide: Adding a New Engine
 
 1. **ModelId**: add a new enum value with a stable storageDirName. Never change existing values.
-2. **ModelRegistry**: add a ModelInfo (display name, DownloadSource, RemoteFile list with SHA-256 hashes, size estimate). Add to ModelRegistry.all only when confirmed to run within acceptable resource limits on real devices.
+2. **ModelRegistry**: add a ModelInfo (display name, archiveUrl of the single-file ZIP, ModelFile list with SHA-256 hashes, size estimate) and publish the archive. Add to ModelRegistry.all only when confirmed to run within acceptable resource limits on real devices.
 3. **New engine class** under inference/: implement SpeechEngine.
 4. **SpeechEngineFactory**: add a branch for the new ModelId.
 
@@ -533,7 +533,8 @@ No changes required in InferenceRepository, InferenceService, TextInjector, or a
 | val over var | Avoid nullable types unless genuinely optional |
 | No external telemetry | No analytics, crash reporters, or SDKs that phone home |
 | Model storage | <filesDir>/models/<storageDirName>/ - no external storage permission |
-| SHA-256 verification | Required for all downloaded model files; add hashes to RemoteFile entries |
+| SHA-256 verification | Required for all model files on import; add hashes to ModelFile entries |
+| No network access | No INTERNET / ACCESS_NETWORK_STATE permission (stripped from onnxruntime's manifest via tools:node="remove"); models come from a single user-downloaded ZIP |
 | storageDirName immutability | Changing it breaks existing installations |
 | WindowTrimmed handling | TextInjector.resetAfterTrim(stableWords) must be called immediately on every WindowTrimmed event - skipping causes silent word drops on every stride after a window trim |
 | Final(isUtteranceBoundary=true) | Do NOT stop audio capture - used for mid-session sentence boundaries in long dictation |

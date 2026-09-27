@@ -26,8 +26,9 @@ as a result — each box needs an observed outcome.
 
 ## 3. Model & settings
 
-- [ ] Model download from scratch (fresh install or deleted model dir) → resumable,
-      SHA-256 verified, engine loads, dictation works.
+- [ ] Model install from scratch (fresh install or deleted model dir): *Download in browser*
+      fetches the ZIP, *Import model file* imports it → SHA-256 verified, engine loads,
+      dictation works. A wrong/damaged file is rejected with a message.
 - [ ] VAD sensitivity toggle, post-processing toggle, tutorial reset → all work, no crash.
 - [ ] Mic calibration (optional): open the calibration screen, run it (2+ mics if the
       device has them) → a mic is selected, dictation uses it, and the selection survives
@@ -43,6 +44,8 @@ as a result — each box needs an observed outcome.
       → **no hits** (transcribed text must not reach device logs).
 - [ ] `adb logcat -d | grep -iE "PARTIAL|FINAL|GRAMMAR|HALLUCINATION|STUTTER"`
       → structural logs only (char/word counts, confidences) — no transcribed content.
+- [ ] APK requests no network permission:
+      `aapt2 dump permissions app-release.apk` → no `INTERNET` / `ACCESS_NETWORK_STATE`.
 
 ## 5. Release artifacts
 

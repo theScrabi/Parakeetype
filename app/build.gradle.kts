@@ -174,7 +174,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.navigation:navigation-compose:2.9.8")
     implementation("androidx.datastore:datastore-preferences:1.2.1")
-    implementation("com.squareup.okhttp3:okhttp:5.5.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
     implementation("androidx.lifecycle:lifecycle-service:2.11.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.29.0")

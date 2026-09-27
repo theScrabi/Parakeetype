@@ -5,7 +5,7 @@
     <string name="subtype_de">German (DE) - Voice</string>
 
     <!-- Navigation titles -->
-    <string name="nav_title_model">Download Model</string>
+    <string name="nav_title_model">Install Model</string>
     <string name="nav_title_input">Microphone &amp; Trigger</string>
     <string name="nav_title_speech">Speech Processing</string>
     <string name="nav_title_tools">Tools</string>
@@ -13,13 +13,12 @@
     <!-- Common actions -->
     <string name="action_open_settings">Open Settings</string>
     <string name="action_grant_permission">Grant Permission</string>
-    <string name="action_download">Download</string>
+    <string name="action_download">Install</string>
     <string name="action_manage">Manage</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
     <string name="action_retry">Retry</string>
     <string name="action_set_as_active">Set as Active</string>
-    <string name="action_download_anyway">Download anyway</string>
     <string name="action_open_outspoke">Open Outspoke</string>
 
     <!-- Common states -->
@@ -52,9 +51,9 @@
     <string name="home_mic_granted_subtitle">Audio is processed entirely on-device.</string>
     <string name="home_mic_required_subtitle">Tap to grant microphone access.</string>
     <string name="home_model_ready">Model ready</string>
-    <string name="home_model_not_downloaded">Model not downloaded</string>
+    <string name="home_model_not_downloaded">Model not installed</string>
     <string name="home_model_ready_subtitle">A transcription model is installed and ready.</string>
-    <string name="home_model_not_downloaded_subtitle">Download a transcription model to use the keyboard.</string>
+    <string name="home_model_not_downloaded_subtitle">Install a transcription model to use the keyboard.</string>
     <string name="home_pref_input">Microphone &amp; Trigger Mode</string>
     <string name="home_pref_speech">Voice Activity, Post-Processing &amp; Model Memory</string>
     <string name="home_pref_tools">Tutorial &amp; Diagnostics</string>
@@ -98,32 +97,38 @@
 
     <!-- Model screen -->
     <string name="model_screen_title">Speech Recognition Models</string>
-    <string name="model_screen_subtitle">Download a model and tap \"Set as Active\" to use it for transcription. Only
-        one model is loaded at a time.
+    <string name="model_screen_subtitle">Install a model and tap \"Set as Active\" to use it for transcription. Only
+        one model is loaded at a time. Outspoke has no internet access: you download the model file in your browser and
+        import it here.
     </string>
     <string name="model_size_format">~%d MB</string>
     <string name="model_active_label">Active model</string>
-    <string name="model_download_failed">Download failed or corrupted</string>
     <string name="dialog_delete_title">Confirm Deletion</string>
     <string name="dialog_delete_message">Are you sure you want to delete this model? This action cannot be undone.
     </string>
-    <string name="dialog_mobile_data_title">Download over mobile data?</string>
-    <string name="dialog_mobile_data_message">This model is ~%d MB. Downloading now will use your mobile data. Connect
-        to Wi-Fi to avoid unexpected charges.
-    </string>
+    <string name="model_install_explanation">1. Download the model file (~%d MB, one ZIP archive) in your browser.\n2. Tap \"Import model file\" and pick the downloaded archive.\nAfter importing you can delete the archive from your Downloads folder.</string>
+    <string name="action_download_in_browser">Download in browser</string>
+    <string name="action_import_model_file">Import model file</string>
+    <string name="model_importing_format">Importing… %d%%</string>
+    <string name="model_no_browser">No browser found to open the download link.</string>
+    <string name="model_import_success">Model imported. You can now delete the downloaded archive.</string>
+    <string name="model_import_not_archive">The selected file is not an Outspoke model archive.</string>
+    <string name="model_import_missing_files">The archive is incomplete. Missing: %s</string>
+    <string name="model_import_corrupted">The archive is damaged (checksum mismatch): %s. Download it again.</string>
+    <string name="model_import_io_error">Import failed: %s</string>
 
     <!-- Inference service notifications -->
     <string name="notif_channel_name">Outspoke Voice Transcription</string>
     <string name="notif_channel_desc">Shown while the voice transcription engine is active</string>
     <string name="notif_engine_loading">Loading transcription engine\u2026</string>
-    <string name="notif_model_not_downloaded">Model not downloaded - open Outspoke to download</string>
+    <string name="notif_model_not_downloaded">Model not installed - open Outspoke to install it</string>
     <string name="notif_engine_ready">Outspoke ready (%s)</string>
     <string name="notif_engine_failed">Engine failed to load: %s</string>
 
     <!-- Keyboard status messages -->
     <string name="status_transcribing">Transcribing…</string>
     <string name="status_no_speech">Didn\'t catch that — try again</string>
-    <string name="status_engine_model_missing">Model not downloaded - open Outspoke to download</string>
+    <string name="status_engine_model_missing">Model not installed - open Outspoke to install it</string>
     <string name="status_engine_loading">Loading transcription engine…</string>
     <string name="status_error_mic_permission">Microphone permission denied - open Outspoke to grant it</string>
     <string name="status_error_mic_init">Could not open the microphone</string>

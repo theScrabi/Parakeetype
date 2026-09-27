@@ -1,6 +1,6 @@
 # Outspoke — Agent Guide
 
-Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No cloud, no Google Play Services.
+Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No cloud, no Google Play Services, **no network access at all** (no `INTERNET` permission).
 
 ## Build & Test
 
@@ -22,7 +22,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 |`inference`|`SpeechEngine`, `ParakeetEngine`, `ChunkStreamingEngine`, `WhisperEngine`, `VoxtralEngine`, `InferenceRepository`, `InferenceService`, `SpeechEngineFactory`, `TranscriptResult`, `EngineState`, `PipelineDiagnostics`, `NumberNormaliser`, `GrammarCorrector`|ASR pipeline, sliding window, post-processing, foreground service|
 | `audio` | `AudioCaptureManager`, `MicCalibrationManager`, `SileroVadFilter`, `RMSVadFilter`, `VadFilter`, `AudioChunk`, `PermissionHelper` | Mic capture + VAD + optional mic calibration |
 | `ime` | `OutspokeInputMethodService`, `TextInjector`, `TranscriptAligner`, `EnterAction` | Keyboard / text insertion |
-| `settings/model` | `ModelRegistry`, `ModelId`, `ModelDownloadManager`, `ModelStorageManager`, `ModelState`, `ModelViewModel`, `DownloadService` | Model lifecycle |
+| `settings/model` | `ModelRegistry`, `ModelId`, `ModelImporter`, `ModelStorageManager`, `ModelState`, `ModelViewModel` | Model lifecycle: single-archive import from local storage |
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
 | `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `MicCalibrationScreen` | Settings Compose UI |
 | `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
@@ -32,6 +32,8 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 ## Architecture — What Isn't Obvious from Single Files
 
 **`InferenceService` is a `LifecycleService`** that the IME binds to. The engine stays alive across keyboard hide/show cycles (the IME stays bound while it is the current input method). By default the service is *only bound*: when the user switches to another keyboard the system destroys the IME, the last binding goes away, and the service is destroyed with the model unloaded. With the opt-in **Keep model loaded** setting (`AppPreferences.keepModelLoaded`) the service additionally *starts* itself as a `specialUse` foreground service (`InferenceService.startKeepLoaded`, persistent notification) so it survives the unbind and the model stays warm; in that mode only critical memory pressure (`TRIM_MEMORY_RUNNING_CRITICAL` / `onLowMemory`) unloads it. Turning the setting off calls `stopForeground` + `stopSelf`, returning to bound-only behaviour.
+
+**Model install (no network):** `ModelImporter` streams the user-picked ZIP once, writes the model's files into `models/.import-<dir>/` while hashing them, and only when every file is present and verified renames the staging directory over `models/<storageDirName>/`. That single rename is also what `InferenceService`'s `FileObserver` on `models/` reacts to (it only watches the root, not subdirectories), so the engine loads right after the import.
 
 **`SpeechEngine` is the only seam for adding a new model.** Implement `load`, `transcribe`, `close`, `setLanguage`, `setLanguageFilter`, register a `ModelId` enum value and a `ModelInfo` in `ModelRegistry`, add a branch in `SpeechEngineFactory`. Nothing in the IME or repository layer needs to change.
 
@@ -54,7 +56,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 ## Adding a New Model
 
 1. Add a `ModelId` enum value with a stable `storageDirName` (changing it breaks existing installs).
-2. Add a `ModelInfo` + private val in `ModelRegistry` — only add it to `ModelRegistry.all` when the engine works on-device.
+2. Add a `ModelInfo` + private val in `ModelRegistry` (its `archiveUrl` single-file ZIP and the `ModelFile` list with SHA-256s) — only add it to `ModelRegistry.all` when the engine works on-device. Publish the archive (see `devtools/package-model.sh`).
 3. Implement `SpeechEngine` in a new class under `inference/`.
 4. Add a branch in `SpeechEngineFactory`.
 
@@ -66,7 +68,9 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 - **`val` over `var`**; avoid nullable types unless genuinely optional.
 - **`application.yml`** is not used (Android project) — preferences go through `DataStore` (`settings/preferences/`).
 - **Model files** are stored in `<filesDir>/models/<storageDirName>/` — no external storage permission.
-- **SHA-256** is verified after each file download; add hashes to `RemoteFile` entries whenever available.
+- **SHA-256** is verified for every model file on import; add hashes to the `ModelFile` entries in `ModelRegistry`.
+- **No network access.** The app has no `INTERNET` / `ACCESS_NETWORK_STATE` permission — the manifest strips the ones `onnxruntime-android` declares via `tools:node="remove"`. Never add HTTP clients, network permissions, or any code that contacts a server.
+- **Models are installed from a single file.** The user downloads one ZIP archive (`ModelInfo.archiveUrl`, a pinned release asset on `github.com/minburg/outspoke-data`, built with `devtools/package-model.sh`) in their **browser** and imports it through the system file picker (`ModelImporter`, SAF `OpenDocument` — no storage permission). Keep it to one file; do not reintroduce multi-file picking or in-app downloads.
 - ABI splits produce per-ABI APKs: `armeabi-v7a` (×1), `arm64-v8a` (×2), universal (×0 offset). `versionCode = defaultVersionCode * 10 + abiOffset`.
 - `dependenciesInfo` is disabled in the APK for F-Droid / IzzyOnDroid reproducibility.
 - Do not add analytics, crash reporters, or any SDK that phones home.

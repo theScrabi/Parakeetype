@@ -1,8 +1,10 @@
 package dev.brgr.outspoke.settings.screens
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,10 +22,12 @@ import dev.brgr.outspoke.R
 import dev.brgr.outspoke.settings.model.*
 import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
+import kotlinx.coroutines.launch
 
 /**
  * Displays the full model catalog - one card per registered model - and allows the user
- * to download, delete, and select the active speech recognition model.
+ * to install (download in the browser, then import the archive), delete, and select the
+ * active speech recognition model. Outspoke itself has no network access.
  */
 @Composable
 fun ModelScreen(
@@ -32,12 +36,15 @@ fun ModelScreen(
     val modelStates by viewModel.modelStates.collectAsState()
     val selectedModel by viewModel.selectedModelId.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(viewModel) {
-        viewModel.errorMessage.collect { message ->
+        viewModel.messages.collect { message ->
             snackbarHostState.showSnackbar(message = message, duration = SnackbarDuration.Long)
         }
     }
+
+    val noBrowserMessage = stringResource(R.string.model_no_browser)
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -46,10 +53,10 @@ fun ModelScreen(
             modelStates = modelStates,
             selectedModel = selectedModel,
             modifier = Modifier.padding(padding),
-            onDownload = { viewModel.startDownload(it) },
-            onCancel = { viewModel.cancelDownload(it) },
+            onImport = { id, uri -> viewModel.importArchive(id, uri) },
+            onNoBrowser = { scope.launch { snackbarHostState.showSnackbar(noBrowserMessage) } },
+            onCancel = { viewModel.cancelImport(it) },
             onDelete = { viewModel.deleteModel(it) },
-            onRetry = { viewModel.startDownload(it) },
             onSelect = { viewModel.selectModel(it) },
         )
     }
@@ -59,10 +66,10 @@ fun ModelScreen(
 private fun ModelListContent(
     modelStates: Map<ModelId, ModelState>,
     selectedModel: ModelId?,
-    onDownload: (ModelId) -> Unit,
+    onImport: (ModelId, Uri) -> Unit,
+    onNoBrowser: () -> Unit,
     onCancel: (ModelId) -> Unit,
     onDelete: (ModelId) -> Unit,
-    onRetry: (ModelId) -> Unit,
     onSelect: (ModelId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -91,10 +98,10 @@ private fun ModelListContent(
                 modelInfo = modelInfo,
                 state = state,
                 isSelected = isSelected,
-                onDownload = { onDownload(modelInfo.id) },
+                onImport = { uri -> onImport(modelInfo.id, uri) },
+                onNoBrowser = onNoBrowser,
                 onCancel = { onCancel(modelInfo.id) },
                 onDelete = { onDelete(modelInfo.id) },
-                onRetry = { onRetry(modelInfo.id) },
                 onSelect = { onSelect(modelInfo.id) },
             )
         }
@@ -106,10 +113,10 @@ private fun ModelCard(
     modelInfo: ModelInfo,
     state: ModelState,
     isSelected: Boolean,
-    onDownload: () -> Unit,
+    onImport: (Uri) -> Unit,
+    onNoBrowser: () -> Unit,
     onCancel: () -> Unit,
     onDelete: () -> Unit,
-    onRetry: () -> Unit,
     onSelect: () -> Unit,
 ) {
     val borderColor = when {
@@ -168,85 +175,68 @@ private fun ModelCard(
 
             // State-specific actions
             when (state) {
-                is ModelState.NotDownloaded -> NotDownloadedActions(modelInfo, onDownload)
-                is ModelState.Downloading -> DownloadingActions(state.progressFraction, onCancel)
+                is ModelState.NotDownloaded -> InstallActions(modelInfo, onImport, onNoBrowser)
+                is ModelState.Importing -> ImportingActions(state.progressFraction, onCancel)
                 is ModelState.Ready -> ReadyActions(isSelected, onSelect, onDelete)
-                is ModelState.Corrupted -> CorruptedActions(onRetry)
             }
         }
     }
 }
 
+/**
+ * Two-step install: (1) open the model archive URL in the browser, (2) import the
+ * downloaded archive through the system file picker (no storage permission needed).
+ */
 @Composable
-private fun NotDownloadedActions(modelInfo: ModelInfo, onDownload: () -> Unit) {
-    val context = LocalContext.current
-    var showMobileDataDialog by remember { mutableStateOf(false) }
-
-    Button(
-        onClick = {
-            if (context.isOnMobileData()) {
-                showMobileDataDialog = true
-            } else {
-                onDownload()
-            }
-        },
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Icon(MyIcons.Download, contentDescription = null)
-        Spacer(Modifier.width(8.dp))
-        Text(stringResource(R.string.action_download))
-    }
-
-    if (showMobileDataDialog) {
-        MobileDataWarningDialog(
-            sizeMb = modelInfo.approximateSizeMb,
-            onConfirm = {
-                showMobileDataDialog = false
-                onDownload()
-            },
-            onDismiss = { showMobileDataDialog = false },
-        )
-    }
-}
-
-/** Returns `true` when the device is connected via cellular but not Wi-Fi. */
-private fun Context.isOnMobileData(): Boolean {
-    val cm = getSystemService(ConnectivityManager::class.java) ?: return false
-    val caps = cm.getNetworkCapabilities(cm.activeNetwork) ?: return false
-    return caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) &&
-            !caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-}
-
-@Composable
-private fun MobileDataWarningDialog(
-    sizeMb: Int,
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
+private fun InstallActions(
+    modelInfo: ModelInfo,
+    onImport: (Uri) -> Unit,
+    onNoBrowser: () -> Unit,
 ) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        icon = {
-            Icon(
-                imageVector = MyIcons.Warning,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.error,
-            )
-        },
-        title = { Text(stringResource(R.string.dialog_mobile_data_title)) },
-        text = {
-            Text(stringResource(R.string.dialog_mobile_data_message, sizeMb))
-        },
-        confirmButton = {
-            Button(onClick = onConfirm) { Text(stringResource(R.string.action_download_anyway)) }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text(stringResource(R.string.action_cancel)) }
-        },
-    )
+    val context = LocalContext.current
+    val pickArchive = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        if (uri != null) onImport(uri)
+    }
+
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.model_install_explanation, modelInfo.approximateSizeMb),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        OutlinedButton(
+            onClick = {
+                try {
+                    context.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(modelInfo.archiveUrl))
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
+                } catch (_: ActivityNotFoundException) {
+                    onNoBrowser()
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(MyIcons.Download, contentDescription = null)
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.action_download_in_browser))
+        }
+        Button(
+            // "*/*": browsers do not reliably tag the download as application/zip.
+            onClick = { pickArchive.launch(arrayOf("*/*")) },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Icon(MyIcons.CloudDownload, contentDescription = null)
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.action_import_model_file))
+        }
+    }
 }
 
 @Composable
-private fun DownloadingActions(progress: Float, onCancel: () -> Unit) {
+private fun ImportingActions(progress: Float, onCancel: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(6.dp),
@@ -260,7 +250,7 @@ private fun DownloadingActions(progress: Float, onCancel: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = "${(progress * 100).toInt()}%",
+                text = stringResource(R.string.model_importing_format, (progress * 100).toInt()),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -329,33 +319,6 @@ private fun ReadyActions(
 }
 
 @Composable
-private fun CorruptedActions(onRetry: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Icon(
-            imageVector = MyIcons.Error,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.error,
-            modifier = Modifier.size(18.dp),
-        )
-        Text(
-            text = stringResource(R.string.model_download_failed),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.error,
-            modifier = Modifier.weight(1f),
-        )
-        OutlinedButton(onClick = onRetry) {
-            Icon(MyIcons.Refresh, contentDescription = null)
-            Spacer(Modifier.width(4.dp))
-            Text(stringResource(R.string.action_retry))
-        }
-    }
-}
-
-@Composable
 private fun DeleteConfirmDialog(
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
@@ -387,8 +350,8 @@ private val previewModelSmall = ModelInfo(
     displayName = "Parakeet-V3 (Default)",
     description = "Fast and compact English on-device ASR. Recommended for most devices.",
     approximateSizeMb = 700,
-    source = DownloadSource.ZipArchive("https://example.com"),
-    requiredFiles = listOf("model.onnx"),
+    archiveUrl = "https://example.com/model.zip",
+    files = listOf(ModelFile("model.onnx")),
 )
 
 private val previewModelLarge = ModelInfo(
@@ -396,8 +359,8 @@ private val previewModelLarge = ModelInfo(
     displayName = "Whisper Large-v3 Turbo (INT8)",
     description = "OpenAI Whisper Large-v3 with a turbo decoder. Multilingual, INT8 (~1.1 GB).",
     approximateSizeMb = 1_037,
-    source = DownloadSource.ZipArchive("https://example.com"),
-    requiredFiles = listOf("encoder.onnx", "decoder.onnx"),
+    archiveUrl = "https://example.com/model.zip",
+    files = listOf(ModelFile("encoder.onnx"), ModelFile("decoder.onnx")),
 )
 
 @Preview(showBackground = true, name = "Model Screen · Mixed States")
@@ -410,33 +373,33 @@ private fun ModelListContentPreview() {
                 ModelId.WHISPER_SMALL to ModelState.NotDownloaded,
             ),
             selectedModel = ModelId.PARAKEET_V3,
-            onDownload = {}, onCancel = {}, onDelete = {}, onRetry = {}, onSelect = {},
+            onImport = { _, _ -> }, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
         )
     }
 }
 
-@Preview(showBackground = true, name = "Model Card · Not Downloaded")
+@Preview(showBackground = true, name = "Model Card · Not Installed")
 @Composable
-private fun ModelCardNotDownloadedPreview() {
+private fun ModelCardNotInstalledPreview() {
     OutspokeTheme {
         ModelCard(
             modelInfo = previewModelSmall,
             state = ModelState.NotDownloaded,
             isSelected = false,
-            onDownload = {}, onCancel = {}, onDelete = {}, onRetry = {}, onSelect = {},
+            onImport = {}, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
         )
     }
 }
 
-@Preview(showBackground = true, name = "Model Card · Downloading 45%")
+@Preview(showBackground = true, name = "Model Card · Importing 45%")
 @Composable
-private fun ModelCardDownloadingPreview() {
+private fun ModelCardImportingPreview() {
     OutspokeTheme {
         ModelCard(
             modelInfo = previewModelLarge,
-            state = ModelState.Downloading(0.45f),
+            state = ModelState.Importing(0.45f),
             isSelected = false,
-            onDownload = {}, onCancel = {}, onDelete = {}, onRetry = {}, onSelect = {},
+            onImport = {}, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
         )
     }
 }
@@ -449,53 +412,9 @@ private fun ModelCardReadySelectedPreview() {
             modelInfo = previewModelSmall,
             state = ModelState.Ready,
             isSelected = true,
-            onDownload = {}, onCancel = {}, onDelete = {}, onRetry = {}, onSelect = {},
+            onImport = {}, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
         )
     }
-}
-
-@Preview(showBackground = true, name = "Model Card · Ready (not selected)")
-@Composable
-private fun ModelCardReadyNotSelectedPreview() {
-    OutspokeTheme {
-        ModelCard(
-            modelInfo = previewModelLarge,
-            state = ModelState.Ready,
-            isSelected = false,
-            onDownload = {}, onCancel = {}, onDelete = {}, onRetry = {}, onSelect = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, name = "Model Card · Corrupted")
-@Composable
-private fun ModelCardCorruptedPreview() {
-    OutspokeTheme {
-        ModelCard(
-            modelInfo = previewModelSmall,
-            state = ModelState.Corrupted,
-            isSelected = false,
-            onDownload = {}, onCancel = {}, onDelete = {}, onRetry = {}, onSelect = {},
-        )
-    }
-}
-
-@Preview(showBackground = true, name = "Action · Not Downloaded")
-@Composable
-private fun NotDownloadedActionsPreview() {
-    OutspokeTheme { NotDownloadedActions(modelInfo = previewModelSmall, onDownload = {}) }
-}
-
-@Preview(showBackground = true, name = "Action · Downloading 70%")
-@Composable
-private fun DownloadingActionsPreview() {
-    OutspokeTheme { DownloadingActions(progress = 0.7f, onCancel = {}) }
-}
-
-@Preview(showBackground = true, name = "Action · Ready (selected)")
-@Composable
-private fun ReadyActionsSelectedPreview() {
-    OutspokeTheme { ReadyActions(isSelected = true, onSelect = {}, onDelete = {}) }
 }
 
 @Preview(showBackground = true, name = "Action · Ready (not selected)")
@@ -504,15 +423,8 @@ private fun ReadyActionsNotSelectedPreview() {
     OutspokeTheme { ReadyActions(isSelected = false, onSelect = {}, onDelete = {}) }
 }
 
-@Preview(showBackground = true, name = "Action · Corrupted")
-@Composable
-private fun CorruptedActionsPreview() {
-    OutspokeTheme { CorruptedActions(onRetry = {}) }
-}
-
 @Preview(showBackground = true, name = "Delete Confirm Dialog")
 @Composable
 private fun DeleteConfirmDialogPreview() {
     OutspokeTheme { DeleteConfirmDialog(onConfirm = {}, onDismiss = {}) }
 }
-

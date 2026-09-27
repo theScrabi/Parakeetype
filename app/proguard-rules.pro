@@ -26,8 +26,3 @@
 # ---------------------------------------------------------------------------
 -keep class ai.onnxruntime.** { *; }
 -keepclassmembers class ai.onnxruntime.** { *; }
-
-# OkHttp / Okio - suppress warnings from internal Kotlin/JVM intrinsics.
--dontwarn okhttp3.**
--dontwarn okio.**
-
