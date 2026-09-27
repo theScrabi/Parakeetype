@@ -1,7 +1,7 @@
 package dev.brgr.outspoke.ui.keyboard.components
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material.icons.rounded.Mic
@@ -25,16 +25,18 @@ import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 
-/** How many dp upward the user must drag to engage continuous mode. */
+/** How many dp to the left the user must drag to engage continuous mode. */
 private const val CONTINUOUS_DRAG_THRESHOLD_DP = 56
 
-/** Gap between the TalkButton top and the bottom of the lock hint indicator. */
+/** Gap between the TalkButton's left edge and the right edge of the lock hint indicator. */
 private const val LOCK_HINT_GAP_DP = 8
 
 /**
@@ -42,10 +44,10 @@ private const val LOCK_HINT_GAP_DP = 8
  *
  * **HOLD mode** - press-and-hold to record; release to stop.
  *
- * **Drag-up-to-lock** (HOLD mode only) - while holding, drag upward past [CONTINUOUS_DRAG_THRESHOLD_DP] dp
- * to engage continuous mode.  A lock indicator floats above the button while the user holds,
- * similar to the WhatsApp voice-message lock UI: a bouncing upward chevron invites the swipe,
- * and a lock icon fills with colour as the drag threshold is approached.
+ * **Drag-left-to-lock** (HOLD mode only) - while holding, drag left past [CONTINUOUS_DRAG_THRESHOLD_DP] dp
+ * to engage continuous mode.  A lock indicator floats to the left of the button while the user
+ * holds, similar to the WhatsApp voice-message lock UI: a bouncing left chevron invites the
+ * swipe, and the lock closes and fills with colour as the drag threshold is approached.
  * The button scales and turns red to confirm the lock.
  * Recording continues without the user needing to keep touching the screen.
  *
@@ -57,7 +59,7 @@ private const val LOCK_HINT_GAP_DP = 8
  *
  * @param triggerMode          `"HOLD"` (default) or `"TAP_TOGGLE"`.
  * @param isContinuous         `true` when continuous (locked) mode is active (HOLD mode only).
- * @param onContinuousModeEnabled Callback fired when the drag-up threshold is crossed (HOLD mode only).
+ * @param onContinuousModeEnabled Callback fired when the drag-left threshold is crossed (HOLD mode only).
  */
 @Composable
 fun TalkButton(
@@ -178,7 +180,7 @@ fun TalkButton(
                                     currentOnRecordStart()
                                 }
                             } else {
-                                //  HOLD mode: hold to record, drag up to lock 
+                                //  HOLD mode: hold to record, drag left to lock 
                                 val down = awaitFirstDown(requireUnconsumed = false)
                                 buzz()
 
@@ -192,7 +194,7 @@ fun TalkButton(
                                     isHolding = true
                                     currentOnRecordStart()
                                     var locked = false
-                                    val startY = down.position.y
+                                    val startX = down.position.x
 
                                     // try/finally guarantees recording stops when the gesture ends
                                     // for ANY reason — not only an explicit finger-up. A lost
@@ -215,10 +217,10 @@ fun TalkButton(
                                             if (!change.pressed) break  // finger up → release
 
                                             change.consume()
-                                            val upDelta = startY - change.position.y
-                                            dragProgress = (upDelta / thresholdPx).coerceIn(0f, 1f)
+                                            val leftDelta = startX - change.position.x
+                                            dragProgress = (leftDelta / thresholdPx).coerceIn(0f, 1f)
 
-                                            if (!locked && upDelta > thresholdPx) {
+                                            if (!locked && leftDelta > thresholdPx) {
                                                 locked = true
                                                 dragProgress = 0f
                                                 isHolding = false
@@ -258,24 +260,26 @@ fun TalkButton(
                     isListening && triggerMode == "TAP_TOGGLE" -> "Tap to stop recording"
                     isListening -> "Stop recording"
                     triggerMode == "TAP_TOGGLE" -> "Tap to start recording"
-                    else -> "Start recording (hold) · swipe up to lock"
+                    else -> "Start recording (hold) · swipe left to lock"
                 },
                 tint = iconTint,
                 modifier = Modifier.size(32.dp),
             )
         }
 
-        //  Lock hint: floats above without disturbing layout
+        //  Lock hint: floats to the left without disturbing layout
         // Modifier.layout reports (0, 0) to the parent Box so the button's
         // measured position is never shifted.  The placeable is then placed
-        // with a negative Y offset so it renders above the button bounds.
+        // with a negative X offset so it renders left of the button bounds
+        // (over the delete-all key, which can't be hit while the finger holds
+        // the talk button - the gesture stays with this button).
         if (triggerMode == "HOLD") {
             AnimatedVisibility(
                 visible = isHolding && !isContinuousActive,
                 enter = fadeIn(animationSpec = tween(150)) +
                         scaleIn(
                             initialScale = 0.75f,
-                            transformOrigin = TransformOrigin(0.5f, 1f),
+                            transformOrigin = TransformOrigin(1f, 0.5f),
                             animationSpec = spring(
                                 dampingRatio = Spring.DampingRatioMediumBouncy,
                                 stiffness = Spring.StiffnessMedium,
@@ -284,44 +288,48 @@ fun TalkButton(
                 exit = fadeOut(animationSpec = tween(120)) +
                         scaleOut(
                             targetScale = 0.75f,
-                            transformOrigin = TransformOrigin(0.5f, 1f),
+                            transformOrigin = TransformOrigin(1f, 0.5f),
                             animationSpec = tween(120),
                         ),
                 modifier = Modifier.layout { measurable, constraints ->
-                    // Allow the hint to be taller than the 72dp button by measuring
-                    // without a height cap.
+                    // Allow the hint to be wider than the 72dp button by measuring
+                    // without a width cap.
                     val placeable = measurable.measure(
                         constraints.copy(
                             minWidth = 0,
                             minHeight = 0,
-                            maxHeight = Constraints.Infinity,
+                            maxWidth = Constraints.Infinity,
                         ),
                     )
                     val gapPx = LOCK_HINT_GAP_DP.dp.roundToPx()
-                    // The zero-size child sits at the Box centre (constraints.maxHeight / 2
-                    // from the top).  Subtract that offset so the hint bottom aligns with
-                    // the button's top edge, not the centre.
-                    val buttonHalfPx = constraints.maxHeight / 2
+                    // The zero-size child sits at the Box centre (constraints.maxWidth / 2
+                    // from the left).  Subtract that offset so the hint's right edge aligns
+                    // with the button's left edge, vertically centred on the button.
+                    val buttonHalfPx = constraints.maxWidth / 2
                     layout(0, 0) {
                         placeable.place(
-                            x = -placeable.width / 2,
-                            y = -placeable.height - gapPx - buttonHalfPx,
+                            x = -placeable.width - gapPx - buttonHalfPx,
+                            y = -placeable.height / 2,
                         )
                     }
                 },
             ) {
-                LockHint(dragProgress = dragProgress)
+                // The lock gesture is always a physical drag to the left, so keep the hint
+                // left-to-right even in RTL locales (no mirrored chevron / reversed order).
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    LockHint(dragProgress = dragProgress)
+                }
             }
         }
     }
 }
 
 /**
- * Visual hint displayed above [TalkButton] while the user holds in HOLD mode.
+ * Visual hint displayed to the left of [TalkButton] while the user holds in HOLD mode.
  *
  * Mimics the WhatsApp voice-message lock indicator:
- * - A bouncing [KeyboardArrowUp] chevron (closest to the button) invites the upward swipe.
- * - A lock icon pill above it transitions from outlined → filled, and its colour lerps from
+ * - A bouncing left chevron (closest to the button) invites the leftward swipe.
+ * - A lock icon pill left of it switches from open → closed, and its colour lerps from
  *   `onSurfaceVariant` → `primary` as [dragProgress] approaches 1, confirming the lock is near.
  */
 @Composable
@@ -336,7 +344,7 @@ private fun LockHint(
     val lockScale = 0.65f + dragProgress * 0.35f
     val lockAlpha = 0.50f + dragProgress * 0.50f
 
-    // Infinite bounce animation for the upward chevron.
+    // Infinite bounce animation for the left chevron.
     val arrowTransition = rememberInfiniteTransition(label = "lockHintArrow")
     val arrowOffsetDp by arrowTransition.animateFloat(
         initialValue = 0f,
@@ -348,9 +356,9 @@ private fun LockHint(
         label = "lockArrowOffset",
     )
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(0.dp),
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(0.dp),
         modifier = modifier,
     ) {
         // Lock icon inside a circular pill that scales and brightens with drag progress.
@@ -370,14 +378,14 @@ private fun LockHint(
             )
         }
 
-        // Upward chevron: bounces to signal the swipe-up gesture.
+        // Left chevron: bounces to signal the swipe-left gesture.
         Icon(
-            imageVector = Icons.Rounded.KeyboardArrowUp,
+            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
             modifier = Modifier
                 .size(25.dp)
-                .offset(y = arrowOffsetDp.dp),
+                .offset(x = arrowOffsetDp.dp),
         )
     }
 }
@@ -414,19 +422,19 @@ private fun TalkButtonContinuousPreview() {
     }
 }
 
-/** Shows all three drag-progress states of [LockHint] side-by-side. */
+/** Shows all three drag-progress states of [LockHint] stacked. */
 @Preview(
     showBackground = true, backgroundColor = 0xFF111111, name = "LockHint - all states",
-    widthDp = 200, heightDp = 120
+    widthDp = 120, heightDp = 230
 )
 @Composable
 private fun LockHintPreview() {
     OutspokeKeyboardTheme {
-        Row(
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.Bottom,
+        Column(
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.End,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(8.dp),
         ) {
             // Just appeared (finger just touched down)

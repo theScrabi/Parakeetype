@@ -7,6 +7,7 @@ import androidx.compose.material.icons.rounded.DeleteForever
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SubdirectoryArrowLeft
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,25 +40,24 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  * Root composable for the keyboard input view.
  *
  * Layout (top → bottom):
- *  1. [StatusIndicator] - crossfades between Idle / Listening / Processing / Error states.
- *  2. [WaveformBar]     - animates with real-time amplitude.
- *  3. Bottom row (left → right):
+ *  1. Top row: a left slot plus the Switch Keyboard button on the right. The left slot shows
+ *     the [LanguageSelector] (Whisper models only, while idle) or otherwise the
+ *     [StatusIndicator] (listening / processing / transcribing / error / loading).
+ *  2. Bottom row (left → right):
  *       [Delete All] · [TalkButton] · [Delete Word] · [Enter]
  *     The two delete keys flank the TalkButton; Enter is pinned to the right edge. The
- *     TalkButton stays centred with equal weight on both sides. The Switch Keyboard
- *     button sits top-right in the status row.
+ *     TalkButton stays centred with equal weight on both sides.
  *
  * @param uiState                Current UI state collected from [KeyboardViewModel.uiState].
- * @param amplitude              Normalised RMS amplitude [0.0, 1.0].
  * @param isContinuous           `true` when continuous (locked) recording mode is active.
  * @param triggerMode            `"HOLD"` (default) or `"TAP_TOGGLE"`.
- * @param isWhisperEngine        `true` when the active engine is a Whisper variant - controls
- *                               visibility of the language selector row.
+ * @param isWhisperEngine        `true` when the active engine is a Whisper variant - only then
+ *                               can the language selector appear.
  * @param whisperLanguage        Currently selected Whisper language tag (`"auto"`, `"en"`, …).
  * @param onWhisperLanguageSelected Called when the user taps a language pill.
  * @param onRecordStart          Callback fired when the user presses the talk button.
  * @param onRecordStop           Callback fired when the user releases / stops recording.
- * @param onContinuousModeEnabled Callback fired when the drag-up lock threshold is crossed.
+ * @param onContinuousModeEnabled Callback fired when the drag-left lock threshold is crossed.
  * @param onDeleteWord           Delete backward to the previous word boundary.
  * @param onDeleteAll            Delete all text in the current editor.
  * @param onEnterAction          Perform the context-aware Enter action (newline or IME action).
@@ -69,7 +69,6 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 @Composable
 fun KeyboardScreen(
     uiState: KeyboardUiState,
-    amplitude: Float,
     isContinuous: Boolean,
     triggerMode: String,
     isWhisperEngine: Boolean,
@@ -89,7 +88,7 @@ fun KeyboardScreen(
     diagnostics: PipelineDiagnostics = PipelineDiagnostics(),
     previewForceLockHint: Boolean = false,
     /**
-     * Fixed height in pixels for the main keyboard content area (buttons, waveform, status).
+     * Fixed height in pixels for the main keyboard content area (buttons, status row).
      * When non-zero this is used directly so the content has a stable size. Defaults to 0 for previews, which fall back to [Modifier.weight].
      */
     keyboardContentHeightPx: Int = 0,
@@ -125,8 +124,8 @@ fun KeyboardScreen(
             .background(MaterialTheme.colorScheme.background),
     ) {
         // Main keyboard content — always pinned to the bottom with a fixed height.
-        // Uses a Box so the button row is anchored to the bottom edge and the top section
-        // (status + waveform) is vertically centred in the remaining space above. This
+        // Uses a Box so the button row is anchored to the bottom edge and the top row
+        // is vertically centred in the remaining space above. This
         // prevents the large empty gap that appears on tablets/high-res screens when a
         // Column with SpaceBetween distributes all leftover space as dead whitespace.
         Box(
@@ -143,63 +142,57 @@ fun KeyboardScreen(
             }
                 .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = navBarPaddingDp + 64.dp),
         ) {
-            // Top section: status row + (optional) language selector + waveform.
-            // Centred vertically in the space above the button row so that on tall
-            // keyboard windows (tablets) the waveform sits in the middle rather than
-            // being pushed hard against the top edge.
-            Column(
+            // Top row, centred vertically in the space above the button row so that on
+            // tall keyboard windows (tablets) it sits in the middle rather than being pushed
+            // hard against the top edge.
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.Center)
                     // Keep it above the button row so they never overlap.
                     // The TalkButton is 72 dp tall; 80 dp gives a safe margin.
                     .padding(bottom = 80.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    if (uiState is KeyboardUiState.Error) {
-                        Box(modifier = Modifier.weight(1f)) {}
-                        Spacer(modifier = Modifier.width(8.dp))
-                    }
-
-                    StatusIndicator(
-                        uiState = uiState,
-                        diagnostics = diagnostics,
-                        onOpenCompanionApp = onOpenCompanionApp,
-                        onRetry = onRetry ?: onRecordStart,
-                    )
+                if (uiState is KeyboardUiState.Error) {
+                    Box(modifier = Modifier.weight(1f)) {}
                     Spacer(modifier = Modifier.width(8.dp))
+                }
 
-                    Box(modifier = Modifier.weight(1f)) {
-                        KeyboardActionButton(
-                            icon = Icons.Rounded.Keyboard,
-                            contentDescription = stringResource(R.string.cd_switch_keyboard),
-                            onClick = onSwitchKeyboard,
-                            modifier = Modifier
-                                .align(Alignment.CenterEnd)
-                                .onGloballyPositioned { lc ->
-                                    tutorialPositions?.record(TutorialButtonId.SWITCH_KEYBOARD, lc)
-                                },
+                // Left slot: the language pills while idle (Whisper models only - Parakeet
+                // never shows them), otherwise the status line.
+                Crossfade(
+                    targetState = isWhisperEngine && uiState is KeyboardUiState.Idle,
+                    label = "topLeftSlot",
+                ) { showLanguageSelector ->
+                    if (showLanguageSelector) {
+                        LanguageSelector(
+                            selectedLanguage = whisperLanguage,
+                            onLanguageSelected = onWhisperLanguageSelected,
+                        )
+                    } else {
+                        StatusIndicator(
+                            uiState = uiState,
+                            diagnostics = diagnostics,
+                            onOpenCompanionApp = onOpenCompanionApp,
+                            onRetry = onRetry ?: onRecordStart,
                         )
                     }
                 }
+                Spacer(modifier = Modifier.width(8.dp))
 
-                // Language selector - only shown for Whisper models and when the engine
-                // is actually ready (hide during loading / error states).
-                if (isWhisperEngine && uiState !is KeyboardUiState.EngineLoading && uiState !is KeyboardUiState.Error) {
-                    LanguageSelector(
-                        selectedLanguage = whisperLanguage,
-                        onLanguageSelected = onWhisperLanguageSelected,
+                Box(modifier = Modifier.weight(1f)) {
+                    KeyboardActionButton(
+                        icon = Icons.Rounded.Keyboard,
+                        contentDescription = stringResource(R.string.cd_switch_keyboard),
+                        onClick = onSwitchKeyboard,
+                        modifier = Modifier
+                            .align(Alignment.CenterEnd)
+                            .onGloballyPositioned { lc ->
+                                tutorialPositions?.record(TutorialButtonId.SWITCH_KEYBOARD, lc)
+                            },
                     )
                 }
-                WaveformBar(
-                    amplitude = amplitude,
-                    modifier = Modifier.wrapContentWidth(),
-                )
             }
 
             //  Bottom row: 4 buttons with TalkButton centred
@@ -352,7 +345,6 @@ fun KeyboardScreen(
     navBarHeightPx: Int = 0,
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    val amplitude by viewModel.amplitude.collectAsState()
     val isContinuous by viewModel.isContinuousMode.collectAsState()
     val triggerMode by viewModel.triggerMode.collectAsState()
     val isWhisperEngine by viewModel.isWhisperEngine.collectAsState()
@@ -376,7 +368,6 @@ fun KeyboardScreen(
     ) {
         KeyboardScreen(
             uiState = uiState,
-            amplitude = amplitude,
             isContinuous = isContinuous,
             triggerMode = triggerMode,
             isWhisperEngine = isWhisperEngine,
@@ -413,7 +404,6 @@ fun KeyboardScreen(
 @Composable
 private fun KeyboardScreenPreviewScaffold(
     uiState: KeyboardUiState,
-    amplitude: Float = 0f,
     isContinuous: Boolean = false,
     isWhisperEngine: Boolean = false,
     whisperLanguage: String = "auto",
@@ -424,7 +414,6 @@ private fun KeyboardScreenPreviewScaffold(
         Box(modifier = Modifier.height(220.dp)) {
             KeyboardScreen(
                 uiState = uiState,
-                amplitude = amplitude,
                 isContinuous = isContinuous,
                 triggerMode = "HOLD",
                 isWhisperEngine = isWhisperEngine,
@@ -465,7 +454,7 @@ private fun KeyboardScreenWhisperIdlePreview() {
 @Preview(showBackground = true, backgroundColor = 0xFF111111)
 @Composable
 private fun KeyboardScreenListeningPreview() {
-    KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Listening, amplitude = 0.6f, showLockHint = true)
+    KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Listening, showLockHint = true)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)
@@ -473,7 +462,6 @@ private fun KeyboardScreenListeningPreview() {
 private fun KeyboardScreenContinuousPreview() {
     KeyboardScreenPreviewScaffold(
         uiState = KeyboardUiState.Listening,
-        amplitude = 0.4f,
         isContinuous = true,
         showLockHint = true,
     )

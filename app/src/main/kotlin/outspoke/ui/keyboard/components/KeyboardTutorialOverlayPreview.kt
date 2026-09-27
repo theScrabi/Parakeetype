@@ -297,7 +297,6 @@ private fun TutorialFullPreview(step: TutorialPreviewStep) {
         // Real keyboard - registers true button LayoutCoordinates into positions
         KeyboardScreen(
             uiState = KeyboardUiState.Idle,
-            amplitude = 0f,
             isContinuous = false,
             triggerMode = "HOLD",
             isWhisperEngine = false,

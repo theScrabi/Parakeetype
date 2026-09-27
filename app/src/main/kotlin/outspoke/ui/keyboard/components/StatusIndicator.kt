@@ -27,7 +27,7 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  * Crossfades between the visual states driven by [uiState].
  *
  * - [KeyboardUiState.Idle]          → nothing (diagnostics badge if non-clean)
- * - [KeyboardUiState.Listening]     → nothing (the talk button and waveform show it)
+ * - [KeyboardUiState.Listening]     → nothing (the talk button shows it)
  * - [KeyboardUiState.Processing]    → partial transcript text
  * - [KeyboardUiState.Transcribing]  → "Transcribing…" label (mic off, engine busy)
  * - [KeyboardUiState.Error]         → warning icon + error message + recovery action(s)

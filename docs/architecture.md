@@ -67,7 +67,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
 | ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
-| ui/keyboard/components | TalkButton, WaveformBar, StatusIndicator, KeyboardActionButton, KeyboardTutorialOverlay, LanguageSelector | Keyboard UI sub-components |
+| ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, KeyboardTutorialOverlay, LanguageSelector | Keyboard UI sub-components |
 | ui/theme | OutspokeKeyboardTheme | Compose theming |
 
 ---

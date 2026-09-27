@@ -12,7 +12,6 @@ import dev.brgr.outspoke.settings.preferences.AppPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.*
-import kotlin.math.log10
 import kotlin.math.sqrt
 import kotlinx.coroutines.isActive
 
@@ -30,20 +29,6 @@ private const val CHUNK_SAMPLES = 480
  * so the hangover always expires before this cap is hit.
  */
 private const val HANGOVER_DRAIN_SAFETY_FRAMES = 20
-
-/**
- * dBFS level at which the waveform bar reads 0.0. Levels below this floor
- * (typical device ambient noise) are inaudible on the bar.
- */
-private const val NOISE_FLOOR_DB = -60f
-
-/**
- * Display gain applied to the normalised waveform amplitude after the dB mapping.
- * Purely cosmetic: [amplitude] only feeds the [WaveformBar] animation. Typical speech
- * (-50..-20 dBFS) otherwise lands at ~0.2..0.7, which reads as "low gain" on the bar;
- * 1.5× lifts it to ~0.3..1.0 with loud speech reaching full height.
- */
-private const val WAVEFORM_DISPLAY_GAIN = 1.5f
 
 // Capture source: MediaRecorder.AudioSource.DEFAULT — the vendor-recommended source.
 // It arrives at a usable level with the platform's standard voice processing, so no
@@ -83,8 +68,6 @@ class AudioCaptureManager(private val context: Context) {
     /** Calibration-selected microphone, applied to each [AudioRecord] via setPreferredDevice. */
     private val prefs = AppPreferences(context.applicationContext)
 
-    private val _amplitude = MutableStateFlow(0f)
-
     /**
      * Set to `true` by [stopCapture] to end the read loop on the next iteration.
      * Using a flag instead of coroutine cancellation lets the [Flow] complete normally
@@ -100,12 +83,6 @@ class AudioCaptureManager(private val context: Context) {
     fun stopCapture() {
         stopRequested = true
     }
-
-    /**
-     * Normalised RMS amplitude of the most recently captured chunk, in the range [0.0, 1.0].
-     * Resets to 0.0 when capture stops.
-     */
-    val amplitude: StateFlow<Float> = _amplitude.asStateFlow()
 
     /**
      * Starts microphone capture and emits each 40 ms [AudioChunk] downstream.
@@ -183,7 +160,6 @@ class AudioCaptureManager(private val context: Context) {
                             val samples = buffer.copyOf(read)
                             val chunk = AudioChunk(samples = samples)
                             val rms = calculateRms(chunk.samples)
-                            _amplitude.value = normaliseAmplitude(rms)
 
                             val toSend = vad?.process(chunk, rms) ?: listOf(chunk)
                             for (c in toSend) {
@@ -248,7 +224,6 @@ class AudioCaptureManager(private val context: Context) {
                 vad?.close()
                 recorder.stop()
                 recorder.release()
-                _amplitude.value = 0f
                 Log.d(TAG, "AudioRecord stopped and released")
             }
         }.flowOn(Dispatchers.IO)
@@ -284,20 +259,4 @@ class AudioCaptureManager(private val context: Context) {
             Log.w(TAG, "setPreferredDevice failed for id=$id", e)
         }
     }
-
-    /**
-     * Returns the RMS for the waveform display, clamped to [0.0, 1.0].
-     */
-    private fun normaliseAmplitude(rms: Float): Float {
-        if (rms <= 0f) return 0f
-        // Full-scale-linear normalisation is useless for the waveform bar: normal
-        // speech through a phone mic with AudioSource.DEFAULT (voice processing /
-        // AGC applied) typically sits at ~1-5 % of full scale, so the bars barely
-        // move. Map the dB scale instead: NOISE_FLOOR_DB dBFS -> 0.0, 0 dBFS -> 1.0,
-        // which lifts the typical speech range (-50..-20 dBFS) to ~0.2..0.7.
-        val db = 20f * log10(rms)
-        return ((db - NOISE_FLOOR_DB) / (0f - NOISE_FLOOR_DB) * WAVEFORM_DISPLAY_GAIN).coerceIn(0f, 1f)
-    }
-
 }
-

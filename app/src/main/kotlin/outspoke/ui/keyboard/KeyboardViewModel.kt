@@ -35,9 +35,6 @@ class KeyboardViewModel(
     )
     val uiState: StateFlow<KeyboardUiState> = _uiState.asStateFlow()
 
-    /** Normalised RMS amplitude [0.0, 1.0] - updated by [AudioCaptureManager] per chunk. */
-    val amplitude: StateFlow<Float> = audioCaptureManager.amplitude
-
     /**
      * `"HOLD"` (default) or `"TAP_TOGGLE"`.
      * Collected eagerly so the TalkButton always has the latest value without
@@ -223,7 +220,7 @@ class KeyboardViewModel(
 
     /**
      * `true` while the keyboard is in locked continuous-recording mode (engaged by
-     * dragging the talk button upward).  Resets to `false` whenever recording stops.
+     * dragging the talk button to the left).  Resets to `false` whenever recording stops.
      */
     val isContinuousMode: StateFlow<Boolean> = _isContinuousMode.asStateFlow()
 
@@ -239,7 +236,7 @@ class KeyboardViewModel(
      * Called when the user taps "Retry" after a transient error (e.g. low-confidence failure).
      *
      * Clears the error and returns to [KeyboardUiState.Idle] so the user starts a fresh
-     * recording with a normal press (HOLD) or a drag-up-to-lock — exactly like the initial
+     * recording with a normal press (HOLD) or a drag-left-to-lock — exactly like the initial
      * recording.
      *
      * We intentionally do NOT auto-start recording and do NOT engage continuous mode. The

@@ -26,7 +26,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
 | `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `MicCalibrationScreen` | Settings Compose UI |
 | `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
-| `ui/keyboard/components` | `TalkButton`, `WaveformBar`, `StatusIndicator`, `KeyboardActionButton`, `KeyboardTutorialOverlay`, `LanguageSelector` | Keyboard UI sub-components |
+| `ui/keyboard/components` | `TalkButton`, `StatusIndicator`, `KeyboardActionButton`, `KeyboardTutorialOverlay`, `LanguageSelector` | Keyboard UI sub-components |
 | `ui/theme` | `OutspokeKeyboardTheme` | Compose theming |
 
 ## Architecture — What Isn't Obvious from Single Files
@@ -51,7 +51,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 **VAD is dual-layer:** `SileroVadFilter` (Silero v4 ONNX) is primary; `RMSVadFilter` (energy threshold) is the automatic fallback if the ONNX VAD model fails to load.
 
-**Keyboard keys.** Enter and switch-keyboard are `KeyboardActionButton`s that fire on pointer-down via `detectTapGestures(onPress)`, not from a `LaunchedEffect` on the pressed state — a recomposition-driven trigger drops taps whose press and release land before the next frame. The delete keys (trash, delete word) are regular Material 3 `IconButton`s (`DeleteKey` in `KeyboardScreen`) that fire on release. Every key press gives `HapticFeedbackType.KeyboardTap` (honours the system keyboard-vibration setting); keep that in both components. `TalkButton` buzzes the same way on every finger down and finger up. `OutspokeKeyboardTheme` provides `LocalContentColor` — without it ripples are black and invisible on the dark keyboard. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
+**Keyboard keys.** Enter and switch-keyboard are `KeyboardActionButton`s that fire on pointer-down via `detectTapGestures(onPress)`, not from a `LaunchedEffect` on the pressed state — a recomposition-driven trigger drops taps whose press and release land before the next frame. The delete keys (trash, delete word) are regular Material 3 `IconButton`s (`DeleteKey` in `KeyboardScreen`) that fire on release. Every key press gives `HapticFeedbackType.KeyboardTap` (honours the system keyboard-vibration setting); keep that in both components. `TalkButton` buzzes the same way on every finger down and finger up. In HOLD mode, dragging **left** past 56 dp locks continuous recording; the lock hint floats to the left of the button (over the delete-all key). The keyboard's top row shows the `LanguageSelector` only for Whisper models while idle, otherwise the `StatusIndicator`; there is no waveform. `OutspokeKeyboardTheme` provides `LocalContentColor` — without it ripples are black and invisible on the dark keyboard. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
 
 ## Adding a New Model
 

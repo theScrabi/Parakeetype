@@ -66,7 +66,6 @@ class ImeComposeView(
 @Composable
 private fun ImePreviewScaffold(
     uiState: KeyboardUiState,
-    amplitude: Float = 0f,
     isContinuous: Boolean = false,
     isWhisperEngine: Boolean = false,
     whisperLanguage: String = "auto",
@@ -75,7 +74,6 @@ private fun ImePreviewScaffold(
         Box(modifier = Modifier.height(220.dp)) {
             KeyboardScreen(
                 uiState = uiState,
-                amplitude = amplitude,
                 isContinuous = isContinuous,
                 triggerMode = "HOLD",
                 isWhisperEngine = isWhisperEngine,
@@ -103,13 +101,13 @@ private fun ImeIdlePreview() {
 @Preview(showBackground = true, backgroundColor = 0xFF111111, name = "IME · Listening")
 @Composable
 private fun ImeListeningPreview() {
-    ImePreviewScaffold(uiState = KeyboardUiState.Listening, amplitude = 0.65f)
+    ImePreviewScaffold(uiState = KeyboardUiState.Listening)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111, name = "IME · Continuous")
 @Composable
 private fun ImeContinuousPreview() {
-    ImePreviewScaffold(uiState = KeyboardUiState.Listening, amplitude = 0.4f, isContinuous = true)
+    ImePreviewScaffold(uiState = KeyboardUiState.Listening, isContinuous = true)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111, name = "IME · Processing")
