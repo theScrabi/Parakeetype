@@ -51,7 +51,7 @@ private val KeyboardDarkColorScheme = darkColorScheme(
     onSurface = KeyboardOnSurface,
     surfaceVariant = KeyboardSurfaceVariant,
     onSurfaceVariant = KeyboardOnSurfaceVariant,
-    error = KeyboardError,
+    // error / errorContainer: Material 3 baseline defaults (no Material 2 override).
 )
 
 private val KeyboardLightColorScheme = lightColorScheme(
@@ -63,7 +63,7 @@ private val KeyboardLightColorScheme = lightColorScheme(
     onSurface = KeyboardLightOnSurface,
     surfaceVariant = KeyboardLightSurfaceVariant,
     onSurfaceVariant = KeyboardLightOnSurfaceVariant,
-    error = KeyboardLightError,
+    // error / errorContainer: Material 3 baseline defaults (no Material 2 override).
 )
 
 /**

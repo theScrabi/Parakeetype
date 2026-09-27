@@ -18,7 +18,6 @@ val KeyboardAccent = Color(0xFF00D4AA)        // teal-green accent
 val KeyboardOnAccent = Color(0xFF000000)
 val KeyboardOnSurface = Color(0xFFEEEEEE)
 val KeyboardOnSurfaceVariant = Color(0xFF9E9E9E)
-val KeyboardError = Color(0xFFCF6679)
 
 // Keyboard light colours (mirrors the dark palette with inverted luminance)
 val KeyboardLightBackground = Color(0xFFF3F3F3)
@@ -28,5 +27,4 @@ val KeyboardLightAccent = Color(0xFF007A65)   // darker teal for contrast on lig
 val KeyboardLightOnAccent = Color(0xFFFFFFFF)
 val KeyboardLightOnSurface = Color(0xFF111111)
 val KeyboardLightOnSurfaceVariant = Color(0xFF555555)
-val KeyboardLightError = Color(0xFFB32045)
 

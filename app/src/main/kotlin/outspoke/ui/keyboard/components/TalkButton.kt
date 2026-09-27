@@ -48,7 +48,7 @@ private const val LOCK_HINT_GAP_DP = 8
  * to engage continuous mode.  A lock indicator floats to the left of the button while the user
  * holds, similar to the WhatsApp voice-message lock UI: a bouncing left chevron invites the
  * swipe, and the lock closes and fills with colour as the drag threshold is approached.
- * The button scales and turns red to confirm the lock.
+ * The button scales and turns to the error container colour to confirm the lock.
  * Recording continues without the user needing to keep touching the screen.
  *
  * **Continuous mode** (HOLD) - button shows a pulsing [Stop] icon.  Tap once to stop recording.
@@ -125,12 +125,13 @@ fun TalkButton(
             (if (isContinuousActive) pulse else 1f) +
             (if (effectiveListening && !isContinuousActive) dragProgress * 0.05f else 0f)
 
-    //  Colours
+    //  Colours - Material 3 tonal container pairs: listening uses the same
+    //  secondaryContainer as the Enter key, locked (continuous) mode the errorContainer.
     val backgroundColor by animateColorAsState(
         targetValue = when {
             !enabled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-            isContinuousActive -> MaterialTheme.colorScheme.error
-            effectiveListening -> MaterialTheme.colorScheme.primary
+            isContinuousActive -> MaterialTheme.colorScheme.errorContainer
+            effectiveListening -> MaterialTheme.colorScheme.secondaryContainer
             else -> MaterialTheme.colorScheme.surfaceVariant
         },
         label = "talkButtonBackground",
@@ -138,8 +139,8 @@ fun TalkButton(
     val iconTint by animateColorAsState(
         targetValue = when {
             !enabled -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-            isContinuousActive -> MaterialTheme.colorScheme.onError
-            effectiveListening -> MaterialTheme.colorScheme.onPrimary
+            isContinuousActive -> MaterialTheme.colorScheme.onErrorContainer
+            effectiveListening -> MaterialTheme.colorScheme.onSecondaryContainer
             else -> MaterialTheme.colorScheme.onSurfaceVariant
         },
         label = "talkButtonIconTint",
