@@ -1,5 +1,8 @@
 package dev.brgr.outspoke
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.MicOff
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
 
 class MainActivity : ComponentActivity() {
@@ -129,7 +131,7 @@ private fun GrantedContent() {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Icon(
-            imageVector = MyIcons.Mic,
+            imageVector = Icons.Rounded.Mic,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.primary,
@@ -155,7 +157,7 @@ private fun RationaleContent(onGrant: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Icon(
-            imageVector = MyIcons.MicOff,
+            imageVector = Icons.Rounded.MicOff,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.error,
@@ -185,7 +187,7 @@ private fun PermanentlyDeniedContent(onOpenSettings: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Icon(
-            imageVector = MyIcons.MicOff,
+            imageVector = Icons.Rounded.MicOff,
             contentDescription = null,
             modifier = Modifier.size(64.dp),
             tint = MaterialTheme.colorScheme.error,

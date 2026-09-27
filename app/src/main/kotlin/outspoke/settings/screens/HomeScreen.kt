@@ -1,5 +1,13 @@
 package dev.brgr.outspoke.settings.screens
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.CloudDownload
+import androidx.compose.material.icons.rounded.Keyboard
+import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.MicOff
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Warning
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -28,7 +36,6 @@ import dev.brgr.outspoke.audio.PermissionHelper
 import dev.brgr.outspoke.inference.InferenceService
 import dev.brgr.outspoke.settings.model.ModelRegistry
 import dev.brgr.outspoke.settings.model.ModelStorageManager
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
 
 /**
@@ -123,7 +130,7 @@ private fun HomeScreenContent(
 
         // 1. IME enabled
         StatusRow(
-            icon = if (isImeEnabled) MyIcons.Keyboard else MyIcons.Warning,
+            icon = if (isImeEnabled) Icons.Rounded.Keyboard else Icons.Rounded.Warning,
             iconTint = if (isImeEnabled) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.error,
             title = if (isImeEnabled) stringResource(R.string.home_ime_enabled)
@@ -136,7 +143,7 @@ private fun HomeScreenContent(
 
         // 2. Microphone permission
         StatusRow(
-            icon = if (hasMicPermission) MyIcons.Mic else MyIcons.MicOff,
+            icon = if (hasMicPermission) Icons.Rounded.Mic else Icons.Rounded.MicOff,
             iconTint = if (hasMicPermission) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.error,
             title = if (hasMicPermission) stringResource(R.string.home_mic_granted)
@@ -149,7 +156,7 @@ private fun HomeScreenContent(
 
         // 3. Model installed - always show an action so the model screen stays reachable
         StatusRow(
-            icon = if (isModelReady) MyIcons.CheckCircle else MyIcons.CloudDownload,
+            icon = if (isModelReady) Icons.Rounded.CheckCircle else Icons.Rounded.CloudDownload,
             iconTint = if (isModelReady) MaterialTheme.colorScheme.primary
             else MaterialTheme.colorScheme.error,
             title = if (isModelReady) stringResource(R.string.home_model_ready)
@@ -172,17 +179,17 @@ private fun HomeScreenContent(
         )
 
         ConfigurationButton(
-            icon = MyIcons.Mic,
+            icon = Icons.Rounded.Mic,
             label = stringResource(R.string.home_pref_input),
             onClick = onNavigateToInput,
         )
         ConfigurationButton(
-            icon = MyIcons.Keyboard,
+            icon = Icons.Rounded.Keyboard,
             label = stringResource(R.string.home_pref_speech),
             onClick = onNavigateToSpeech,
         )
         ConfigurationButton(
-            icon = MyIcons.Settings,
+            icon = Icons.Rounded.Settings,
             label = stringResource(R.string.home_pref_tools),
             onClick = onNavigateToTools,
         )
@@ -312,7 +319,7 @@ private fun HomeScreenPartialSetupPreview() {
 private fun StatusRowDonePreview() {
     OutspokeTheme {
         StatusRow(
-            icon = MyIcons.CheckCircle,
+            icon = Icons.Rounded.CheckCircle,
             iconTint = Color.Unspecified,
             title = "Keyboard enabled",
             subtitle = "Outspoke is in the keyboard list.",
@@ -327,7 +334,7 @@ private fun StatusRowDonePreview() {
 private fun StatusRowPendingPreview() {
     OutspokeTheme {
         StatusRow(
-            icon = MyIcons.Warning,
+            icon = Icons.Rounded.Warning,
             iconTint = Color.Unspecified,
             title = "Keyboard not enabled",
             subtitle = "Add Outspoke in system keyboard settings.",

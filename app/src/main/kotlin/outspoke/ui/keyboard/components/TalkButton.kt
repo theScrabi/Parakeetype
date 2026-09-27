@@ -1,5 +1,11 @@
 package dev.brgr.outspoke.ui.keyboard.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.Lock
+import androidx.compose.material.icons.rounded.LockOpen
+import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
@@ -23,7 +29,6 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 
 /** How many dp upward the user must drag to engage continuous mode. */
@@ -246,7 +251,7 @@ fun TalkButton(
                 .background(backgroundColor),
         ) {
             Icon(
-                imageVector = if (isContinuousActive) MyIcons.Stop else MyIcons.Mic,
+                imageVector = if (isContinuousActive) Icons.Rounded.Stop else Icons.Rounded.Mic,
                 contentDescription = when {
                     !enabled -> "Talk button disabled - engine not ready"
                     isContinuousActive -> "Stop continuous recording"
@@ -358,7 +363,7 @@ private fun LockHint(
                 .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = lockAlpha)),
         ) {
             Icon(
-                imageVector = if (dragProgress >= 0.85f) MyIcons.Lock else MyIcons.LockOutlined,
+                imageVector = if (dragProgress >= 0.85f) Icons.Rounded.Lock else Icons.Rounded.LockOpen,
                 contentDescription = null,
                 tint = lockColor,
                 modifier = Modifier.size(40.dp),
@@ -367,7 +372,7 @@ private fun LockHint(
 
         // Upward chevron: bounces to signal the swipe-up gesture.
         Icon(
-            imageVector = MyIcons.KeyboardArrowUp,
+            imageVector = Icons.Rounded.KeyboardArrowUp,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
             modifier = Modifier

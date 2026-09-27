@@ -1,5 +1,12 @@
 package dev.brgr.outspoke.ui.keyboard
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowForward
+import androidx.compose.material.icons.automirrored.rounded.Backspace
+import androidx.compose.material.icons.rounded.DeleteForever
+import androidx.compose.material.icons.rounded.Keyboard
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.SubdirectoryArrowLeft
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,7 +33,6 @@ import dev.brgr.outspoke.R
 import dev.brgr.outspoke.ime.EnterAction
 import dev.brgr.outspoke.inference.PipelineDiagnostics
 import dev.brgr.outspoke.ui.keyboard.components.*
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 
 /**
@@ -170,7 +176,7 @@ fun KeyboardScreen(
 
                     Box(modifier = Modifier.weight(1f)) {
                         KeyboardActionButton(
-                            icon = MyIcons.Keyboard,
+                            icon = Icons.Rounded.Keyboard,
                             contentDescription = stringResource(R.string.cd_switch_keyboard),
                             onClick = onSwitchKeyboard,
                             modifier = Modifier
@@ -208,7 +214,7 @@ fun KeyboardScreen(
                 // Left group: [Delete All], directly left of the talk button
                 Box(modifier = Modifier.weight(1f)) {
                     DeleteKey(
-                        icon = MyIcons.DeleteForever,
+                        icon = Icons.Rounded.DeleteForever,
                         contentDescription = stringResource(R.string.cd_delete_all),
                         onClick = onDeleteAll,
                         modifier = Modifier
@@ -244,7 +250,7 @@ fun KeyboardScreen(
                 // Right group: [Delete Word] directly right of the talk button, [Enter] far right
                 Box(modifier = Modifier.weight(1f)) {
                     DeleteKey(
-                        icon = MyIcons.BackspaceOutlined,
+                        icon = Icons.AutoMirrored.Rounded.Backspace,
                         contentDescription = stringResource(R.string.cd_delete_word),
                         onClick = onDeleteWord,
                         modifier = Modifier
@@ -256,13 +262,13 @@ fun KeyboardScreen(
 
                     // Far-right: context-aware Enter action
                     val (enterIcon, enterDescription) = when (enterAction) {
-                        EnterAction.SEARCH -> MyIcons.Search to stringResource(R.string.cd_action_search)
-                        EnterAction.GO -> MyIcons.ArrowForward to stringResource(R.string.cd_action_go)
-                        EnterAction.NEXT -> MyIcons.ArrowForward to stringResource(R.string.cd_action_next)
+                        EnterAction.SEARCH -> Icons.Rounded.Search to stringResource(R.string.cd_action_search)
+                        EnterAction.GO -> Icons.AutoMirrored.Rounded.ArrowForward to stringResource(R.string.cd_action_go)
+                        EnterAction.NEXT -> Icons.AutoMirrored.Rounded.ArrowForward to stringResource(R.string.cd_action_next)
                         EnterAction.SEND,
                         EnterAction.DONE,
                         EnterAction.ENTER_KEY,
-                        EnterAction.NEWLINE -> MyIcons.SubdirectoryArrowLeft to stringResource(R.string.cd_action_enter)
+                        EnterAction.NEWLINE -> Icons.Rounded.SubdirectoryArrowLeft to stringResource(R.string.cd_action_enter)
                     }
                     // A filled, larger key: the old 40 dp icon-only button was easy to miss
                     // and looked like the delete buttons.

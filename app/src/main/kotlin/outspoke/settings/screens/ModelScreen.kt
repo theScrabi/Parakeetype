@@ -1,5 +1,11 @@
 package dev.brgr.outspoke.settings.screens
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.CloudDownload
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.Sync
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
@@ -20,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.brgr.outspoke.R
 import dev.brgr.outspoke.settings.model.*
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
 import kotlinx.coroutines.launch
 
@@ -159,7 +164,7 @@ private fun ModelCard(
                 }
                 if (isSelected) {
                     Icon(
-                        imageVector = MyIcons.CheckCircle,
+                        imageVector = Icons.Rounded.CheckCircle,
                         contentDescription = stringResource(R.string.cd_active_model),
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier.size(22.dp),
@@ -219,7 +224,7 @@ private fun InstallActions(
             },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Icon(MyIcons.Download, contentDescription = null)
+            Icon(Icons.Rounded.Download, contentDescription = null)
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.action_download_in_browser))
         }
@@ -228,7 +233,7 @@ private fun InstallActions(
             onClick = { pickArchive.launch(arrayOf("*/*")) },
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Icon(MyIcons.CloudDownload, contentDescription = null)
+            Icon(Icons.Rounded.CloudDownload, contentDescription = null)
             Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.action_import_model_file))
         }
@@ -255,7 +260,7 @@ private fun ImportingActions(progress: Float, onCancel: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             Icon(
-                imageVector = MyIcons.Sync,
+                imageVector = Icons.Rounded.Sync,
                 contentDescription = null,
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.primary,
@@ -303,7 +308,7 @@ private fun ReadyActions(
                 contentColor = MaterialTheme.colorScheme.error,
             ),
         ) {
-            Icon(MyIcons.Delete, contentDescription = stringResource(R.string.cd_delete_model))
+            Icon(Icons.Rounded.Delete, contentDescription = stringResource(R.string.cd_delete_model))
         }
     }
 

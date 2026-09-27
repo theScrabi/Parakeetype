@@ -1,5 +1,7 @@
 package dev.brgr.outspoke.settings
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -28,7 +30,6 @@ import dev.brgr.outspoke.settings.screens.MicCalibrationScreen
 import dev.brgr.outspoke.settings.screens.ModelScreen
 import dev.brgr.outspoke.settings.screens.SpeechPreferencesScreen
 import dev.brgr.outspoke.settings.screens.ToolsPreferencesScreen
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeTheme
 
 /** Entry-point for the Outspoke companion / settings app (the launcher icon). */
@@ -83,7 +84,7 @@ private fun SettingsNavHost(navController: NavHostController) {
                     if (currentRoute != SettingsRoutes.HOME) {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
-                                imageVector = MyIcons.ArrowBack,
+                                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                                 contentDescription = stringResource(R.string.cd_back),
                             )
                         }

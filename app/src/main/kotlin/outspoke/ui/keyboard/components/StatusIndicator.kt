@@ -1,5 +1,7 @@
 package dev.brgr.outspoke.ui.keyboard.components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -19,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import dev.brgr.outspoke.R
 import dev.brgr.outspoke.inference.PipelineDiagnostics
 import dev.brgr.outspoke.ui.keyboard.KeyboardUiState
-import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 
 /**
@@ -171,7 +172,7 @@ private fun ErrorIndicator(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                imageVector = MyIcons.Warning,
+                imageVector = Icons.Rounded.Warning,
                 contentDescription = stringResource(R.string.cd_status_error),
                 tint = MaterialTheme.colorScheme.error,
                 modifier = Modifier.size(16.dp),

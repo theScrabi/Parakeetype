@@ -1,5 +1,7 @@
 package dev.brgr.outspoke.settings.screens
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Mic
 import android.os.SystemClock
 import androidx.compose.animation.core.EaseOutCubic
 import androidx.compose.animation.core.RepeatMode
@@ -51,7 +53,6 @@ import dev.brgr.outspoke.audio.MicScore
 import dev.brgr.outspoke.settings.preferences.CalibrationState
 import dev.brgr.outspoke.settings.preferences.MicCalibrationViewModel
 import dev.brgr.outspoke.settings.preferences.MicResult
-import dev.brgr.outspoke.ui.theme.MyIcons
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -264,7 +265,7 @@ private fun RecordButton(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MyIcons.Mic,
+                imageVector = Icons.Rounded.Mic,
                 contentDescription = label,
                 tint = if (enabled) Color.White else MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(40.dp),
@@ -405,7 +406,7 @@ private fun CaptureIndicator(isLive: Boolean) {
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                imageVector = MyIcons.Mic,
+                imageVector = Icons.Rounded.Mic,
                 contentDescription = null,
                 tint = Color.White,
                 modifier = Modifier.size(40.dp),
