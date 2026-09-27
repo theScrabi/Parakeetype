@@ -128,12 +128,6 @@ private fun localizedLoadingMessage(state: KeyboardUiState.EngineLoading): Strin
 @Composable
 private fun IdleIndicator(diagnostics: PipelineDiagnostics = PipelineDiagnostics()) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(
-            imageVector = MyIcons.Mic,
-            contentDescription = stringResource(R.string.cd_status_idle),
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(20.dp),
-        )
         if (!diagnostics.isClean) {
             Spacer(modifier = Modifier.width(6.dp))
             Text(
@@ -158,14 +152,6 @@ private fun ListeningIndicator() {
         ),
         label = "pulseScale",
     )
-
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .size(20.dp)
-            .scale(pulseScale)
-            .background(MaterialTheme.colorScheme.primary, CircleShape),
-    ) { /* pulsing filled circle - no inner content needed */ }
 }
 
 @Composable
@@ -318,25 +304,6 @@ private fun GradientArcSpinner(
         ),
         label = "arcSpinnerAngle",
     )
-
-    Canvas(modifier = modifier) {
-        val strokePx = strokeWidth.toPx()
-        rotate(rotation) {
-            drawArc(
-                brush = Brush.sweepGradient(
-                    0f to head.copy(alpha = 0f),      // tail  - fully transparent
-                    0.55f to mid.copy(alpha = 0.65f),    // mid   - tertiary, half-visible
-                    0.75f to head,                       // head  - full primary
-                    1f to head.copy(alpha = 0f),      // close - fade to transparent so the
-                    //         seam at 360°/0° is invisible
-                ),
-                startAngle = 0f,
-                sweepAngle = 270f,
-                useCenter = false,
-                style = Stroke(width = strokePx, cap = StrokeCap.Round),
-            )
-        }
-    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)

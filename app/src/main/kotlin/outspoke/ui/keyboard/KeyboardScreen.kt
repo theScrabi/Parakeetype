@@ -129,7 +129,7 @@ fun KeyboardScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
             }
-                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = navBarPaddingDp + 8.dp),
+                .padding(start = 16.dp, end = 16.dp, top = 2.dp, bottom = navBarPaddingDp + 16.dp),
         ) {
             // Top section: status row + (optional) language selector + waveform.
             // Centred vertically in the space above the button row so that on tall
