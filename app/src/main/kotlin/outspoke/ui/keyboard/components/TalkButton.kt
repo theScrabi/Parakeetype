@@ -16,8 +16,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
@@ -45,6 +47,8 @@ private const val LOCK_HINT_GAP_DP = 8
  * **Continuous mode** (HOLD) - button shows a pulsing [Stop] icon.  Tap once to stop recording.
  *
  * **TAP_TOGGLE mode** - single tap starts recording; another tap stops it.  No hold needed.
+ *
+ * Every finger down and finger up on the button gives the standard keyboard key vibration.
  *
  * @param triggerMode          `"HOLD"` (default) or `"TAP_TOGGLE"`.
  * @param isContinuous         `true` when continuous (locked) mode is active (HOLD mode only).
@@ -139,6 +143,11 @@ fun TalkButton(
     val currentIsContinuous by rememberUpdatedState(isContinuous)
     val currentIsListening by rememberUpdatedState(isListening)
 
+    // Keyboard key vibration on finger down and finger up (honours the system's
+    // keyboard-vibration setting), matching the other keyboard keys.
+    val haptics = LocalHapticFeedback.current
+    val buzz = { haptics.performHapticFeedback(HapticFeedbackType.KeyboardTap) }
+
     //  Root container: fixed 72dp, handles all gestures
     // Box does NOT clip children by default, which lets the LockHint render
     // above the 72dp bounds without affecting layout measurement.
@@ -155,7 +164,9 @@ fun TalkButton(
                             if (triggerMode == "TAP_TOGGLE") {
                                 //  TAP_TOGGLE mode: tap once to start, tap again to stop 
                                 awaitFirstDown(requireUnconsumed = false)
+                                buzz()
                                 waitForUpOrCancellation()
+                                buzz()
                                 if (currentIsListening) {
                                     currentOnRecordStop()
                                 } else {
@@ -164,10 +175,12 @@ fun TalkButton(
                             } else {
                                 //  HOLD mode: hold to record, drag up to lock 
                                 val down = awaitFirstDown(requireUnconsumed = false)
+                                buzz()
 
                                 if (currentIsContinuous) {
                                     // Continuous mode: single tap to stop
                                     waitForUpOrCancellation()
+                                    buzz()
                                     dragProgress = 0f
                                     currentOnRecordStop()
                                 } else {
@@ -213,6 +226,7 @@ fun TalkButton(
                                         // tap-to-stop path above, not by gesture exit.
                                         dragProgress = 0f
                                         isHolding = false
+                                        buzz()
                                         if (!locked) currentOnRecordStop()
                                     }
                                 }
