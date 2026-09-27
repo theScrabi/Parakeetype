@@ -31,7 +31,6 @@
     <string name="cd_switch_keyboard">Switch keyboard</string>
     <string name="cd_delete_all">Delete all text</string>
     <string name="cd_delete_word">Delete last word</string>
-    <string name="cd_delete_char">Delete character</string>
     <string name="cd_action_search">Search</string>
     <string name="cd_action_go">Go</string>
     <string name="cd_action_next">Next</string>
@@ -139,8 +138,6 @@
     <string name="tutorial_delete_all_desc">Clears the entire text field at once.</string>
     <string name="tutorial_delete_word_title">Delete Word (left of mic)</string>
     <string name="tutorial_delete_word_desc">Removes the last word.</string>
-    <string name="tutorial_delete_char_title">Delete Character (right of mic)</string>
-    <string name="tutorial_delete_char_desc">Removes the last character.</string>
     <string name="tutorial_enter_title">Enter / Action (far right)</string>
     <string name="tutorial_enter_desc">Performs the context-aware action: send, search, go, or insert a newline.
     </string>

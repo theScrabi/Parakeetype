@@ -63,7 +63,6 @@ private fun FakeKeyboard(positions: TutorialPositions) {
             listOf(
                 TutorialButtonId.DELETE_ALL,
                 TutorialButtonId.DELETE_WORD,
-                TutorialButtonId.DELETE_CHAR,
                 TutorialButtonId.ENTER,
             ).forEach { id ->
                 Box(
@@ -273,17 +272,10 @@ private val PREVIEW_STEPS = listOf(
         cardAtBottom = false
     ),
     TutorialPreviewStep(
-        TutorialButtonId.DELETE_CHAR,
-        "Delete Character (right of mic)",
-        "Removes the last character.",
-        4,
-        cardAtBottom = false
-    ),
-    TutorialPreviewStep(
         TutorialButtonId.ENTER,
         "Enter / Action (far right)",
         "Performs the context-aware action: send, search, go, or insert a newline.",
-        5,
+        4,
         cardAtBottom = false
     ),
 )
@@ -314,7 +306,6 @@ private fun TutorialFullPreview(step: TutorialPreviewStep) {
             onRecordStart = {},
             onRecordStop = {},
             onContinuousModeEnabled = {},
-            onDeleteChar = {},
             onDeleteWord = {},
             onDeleteAll = {},
             onEnterAction = {},

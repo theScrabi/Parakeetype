@@ -258,11 +258,6 @@ class KeyboardViewModel(
         _uiState.value = KeyboardUiState.Idle
     }
 
-    /** Delete the character immediately before the cursor. */
-    fun deleteChar() {
-        textInjector?.deleteChar()
-    }
-
     /** Delete backward to the previous word boundary. */
     fun deleteWord() {
         textInjector?.deleteWord()

@@ -926,20 +926,6 @@ class TextInjector(
         inputConnection.getSelectedText(0)?.isNotEmpty() == true
 
     /**
-     * Delete the active selection if one exists, otherwise delete the single
-     * character immediately before the cursor.
-     */
-    fun deleteChar() {
-        if (hasActiveSelection()) {
-            // Replace the selection with nothing - equivalent to the Delete key
-            // behaviour on desktop editors when text is selected.
-            inputConnection.commitText("", 1)
-            return
-        }
-        inputConnection.deleteSurroundingText(1, 0)
-    }
-
-    /**
      * Delete the active selection if one exists, otherwise delete backward until
      * (but not including) the last space before the cursor, effectively removing
      * the last word.  Trailing whitespace is skipped first, then word characters

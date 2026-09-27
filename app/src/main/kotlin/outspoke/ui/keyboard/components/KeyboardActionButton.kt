@@ -96,11 +96,6 @@ private fun KeyboardActionButtonAllPreview() {
                 onClick = {},
             )
             KeyboardActionButton(
-                icon = MyIcons.Backspace,
-                contentDescription = "Delete char",
-                onClick = {},
-            )
-            KeyboardActionButton(
                 icon = MyIcons.SubdirectoryArrowLeft,
                 contentDescription = "Newline",
                 onClick = {},
@@ -119,8 +114,8 @@ private fun KeyboardActionButtonAllPreview() {
 private fun KeyboardActionButtonDisabledPreview() {
     OutspokeKeyboardTheme {
         KeyboardActionButton(
-            icon = MyIcons.Backspace,
-            contentDescription = "Delete char (disabled)",
+            icon = MyIcons.BackspaceOutlined,
+            contentDescription = "Delete word (disabled)",
             onClick = {},
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f),
         )

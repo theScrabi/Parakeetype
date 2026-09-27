@@ -28,9 +28,10 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  *  1. [StatusIndicator] - crossfades between Idle / Listening / Processing / Error states.
  *  2. [WaveformBar]     - animates with real-time amplitude.
  *  3. Bottom row (left → right):
- *       [Delete All] · [Delete Word] · [TalkButton] · [Delete Char] · [Switch Keyboard]
- *     The outer pair is pinned to each edge; the TalkButton stays centred with equal
- *     weight on both sides.
+ *       [Delete All] · [Delete Word] · [TalkButton] · [Enter]
+ *     Delete All and Enter are pinned to the edges; the TalkButton stays centred with
+ *     equal weight on both sides. The Switch Keyboard button sits top-right in the
+ *     status row.
  *
  * @param uiState                Current UI state collected from [KeyboardViewModel.uiState].
  * @param amplitude              Normalised RMS amplitude [0.0, 1.0].
@@ -43,7 +44,6 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  * @param onRecordStart          Callback fired when the user presses the talk button.
  * @param onRecordStop           Callback fired when the user releases / stops recording.
  * @param onContinuousModeEnabled Callback fired when the drag-up lock threshold is crossed.
- * @param onDeleteChar           Delete the character immediately before the cursor.
  * @param onDeleteWord           Delete backward to the previous word boundary.
  * @param onDeleteAll            Delete all text in the current editor.
  * @param onEnterAction          Perform the context-aware Enter action (newline or IME action).
@@ -65,7 +65,6 @@ fun KeyboardScreen(
     onRecordStop: () -> Unit,
     onContinuousModeEnabled: () -> Unit,
     onRetry: (() -> Unit)? = null,
-    onDeleteChar: () -> Unit,
     onDeleteWord: () -> Unit,
     onDeleteAll: () -> Unit,
     onEnterAction: () -> Unit,
@@ -189,7 +188,7 @@ fun KeyboardScreen(
                 )
             }
 
-            //  Bottom row: 5 buttons with TalkButton centred
+            //  Bottom row: 4 buttons with TalkButton centred
             // Left and right groups each have weight(1f) so the centre button stays
             // exactly in the middle regardless of screen width.
             Row(
@@ -246,20 +245,9 @@ fun KeyboardScreen(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Right group: [Delete Char]  [Switch Keyboard]
+                // Right group: [Enter]
                 Box(modifier = Modifier.weight(1f)) {
-                    // Adjacent-right: delete single character
-                    KeyboardActionButton(
-                        icon = MyIcons.Backspace,
-                        contentDescription = stringResource(R.string.cd_delete_char),
-                        onClick = onDeleteChar,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.DELETE_CHAR, lc)
-                            },
-                    )
-                    // Centre-right: context-aware Enter action
+                    // Far-right: context-aware Enter action (mirror of Delete All)
                     val (enterIcon, enterDescription) = when (enterAction) {
                         EnterAction.SEARCH -> MyIcons.Search to stringResource(R.string.cd_action_search)
                         EnterAction.GO -> MyIcons.ArrowForward to stringResource(R.string.cd_action_go)
@@ -342,7 +330,6 @@ fun KeyboardScreen(
             onRecordStop = viewModel::onRecordStop,
             onContinuousModeEnabled = viewModel::onContinuousModeEnabled,
             onRetry = viewModel::onRetry,
-            onDeleteChar = viewModel::deleteChar,
             onDeleteWord = viewModel::deleteWord,
             onDeleteAll = viewModel::deleteAll,
             onEnterAction = viewModel::performEnterAction,
@@ -390,7 +377,6 @@ private fun KeyboardScreenPreviewScaffold(
                 onRecordStart = {},
                 onRecordStop = {},
                 onContinuousModeEnabled = {},
-                onDeleteChar = {},
                 onDeleteWord = {},
                 onDeleteAll = {},
                 onEnterAction = {},

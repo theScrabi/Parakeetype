@@ -32,7 +32,6 @@
     <string name="cd_switch_keyboard">Tastatur wechseln</string>
     <string name="cd_delete_all">Gesamten Text löschen</string>
     <string name="cd_delete_word">Letztes Wort löschen</string>
-    <string name="cd_delete_char">Zeichen löschen</string>
     <string name="cd_action_search">Suchen</string>
     <string name="cd_action_go">Los</string>
     <string name="cd_action_next">Weiter</string>
@@ -144,8 +143,6 @@
     <string name="tutorial_delete_all_desc">Löscht das gesamte Textfeld auf einmal.</string>
     <string name="tutorial_delete_word_title">Wort löschen (links vom Mikrofon)</string>
     <string name="tutorial_delete_word_desc">Entfernt das letzte Wort.</string>
-    <string name="tutorial_delete_char_title">Zeichen löschen (rechts vom Mikrofon)</string>
-    <string name="tutorial_delete_char_desc">Entfernt das letzte Zeichen.</string>
     <string name="tutorial_enter_title">Eingabe / Aktion (ganz rechts)</string>
     <string name="tutorial_enter_desc">Führt die kontextabhängige Aktion aus: Senden, Suchen, Los oder Neue Zeile.
     </string>

@@ -84,7 +84,6 @@ private fun ImePreviewScaffold(
                 onRecordStart = {},
                 onRecordStop = {},
                 onContinuousModeEnabled = {},
-                onDeleteChar = {},
                 onDeleteWord = {},
                 onDeleteAll = {},
                 onEnterAction = {},
