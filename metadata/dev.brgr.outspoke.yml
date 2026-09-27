@@ -23,7 +23,7 @@ Description: |-
   The app has no internet permission. The model file (~700 MB) is downloaded
   once in your browser and imported into the app, which then stores it locally.
 
-  Requires Android 11 (API 30) or higher.
+  Requires Android 12 (API 31) or higher.
 
 Repo: https://github.com/minburg/outspoke/releases
 RepoType: git

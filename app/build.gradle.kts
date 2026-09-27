@@ -16,7 +16,7 @@ configure<ApplicationExtension> {
 
     defaultConfig {
         applicationId = "dev.brgr.outspoke"
-        minSdk = 30
+        minSdk = 31
         targetSdk = 37
         versionCode = 11
         versionName = "0.3.1"

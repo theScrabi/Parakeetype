@@ -38,7 +38,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 
 | Requirement | Minimum                                                                |
 |---|------------------------------------------------------------------------|
-| Android version | 11 (API 30)                                                            |
+| Android version | 12 (API 31)                                                            |
 | RAM | 4 GB recommended                                                       |
 | Free storage | ~750 MB (for ASR model files) |
 | Permissions | `RECORD_AUDIO`, `POST_NOTIFICATIONS` (no `INTERNET`) |
@@ -159,7 +159,7 @@ cd outspoke
 ./gradlew assembleRelease
 ```
 
-**Requirements:** JDK 17 to run the build (code targets Java 11; the Gradle wrapper is included), Android SDK 30–36.
+**Requirements:** JDK 17 to run the build (code targets Java 11; the Gradle wrapper is included), Android SDK 31–36.
 
 A debug build for sideloading:
 

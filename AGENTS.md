@@ -11,7 +11,7 @@ Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No c
 ./gradlew connectedAndroidTest   # instrumented tests (requires device/emulator)
 ```
 
-Target SDK 36, min SDK 30, JDK 11, Kotlin official code style (`kotlin.code.style=official`).
+Target SDK 36, min SDK 31 (Android 12 — required by Material You dynamic colour in `OutspokeTheme`), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
 
 ## Package Structure
 
