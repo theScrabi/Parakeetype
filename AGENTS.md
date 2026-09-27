@@ -31,7 +31,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 ## Architecture — What Isn't Obvious from Single Files
 
-**`InferenceService` is a foreground `LifecycleService`** that the IME binds to. The engine stays alive across keyboard hide/show cycles. Unbinding does not stop the service — it shuts down only when explicitly stopped.
+**`InferenceService` is a `LifecycleService`** that the IME binds to. The engine stays alive across keyboard hide/show cycles (the IME stays bound while it is the current input method). By default the service is *only bound*: when the user switches to another keyboard the system destroys the IME, the last binding goes away, and the service is destroyed with the model unloaded. With the opt-in **Keep model loaded** setting (`AppPreferences.keepModelLoaded`) the service additionally *starts* itself as a `specialUse` foreground service (`InferenceService.startKeepLoaded`, persistent notification) so it survives the unbind and the model stays warm; in that mode only critical memory pressure (`TRIM_MEMORY_RUNNING_CRITICAL` / `onLowMemory`) unloads it. Turning the setting off calls `stopForeground` + `stopSelf`, returning to bound-only behaviour.
 
 **`SpeechEngine` is the only seam for adding a new model.** Implement `load`, `transcribe`, `close`, `setLanguage`, `setLanguageFilter`, register a `ModelId` enum value and a `ModelInfo` in `ModelRegistry`, add a branch in `SpeechEngineFactory`. Nothing in the IME or repository layer needs to change.
 

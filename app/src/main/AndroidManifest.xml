@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -49,15 +50,19 @@
                     android:resource="@xml/method"/>
         </service>
 
-        <!-- Foreground service that owns the ParakeetEngine lifecycle -->
+        <!-- Service that owns the ParakeetEngine lifecycle. Bound by the IME; additionally
+             started as a specialUse foreground service when "keep model loaded" is enabled. -->
         <service
                 android:name=".inference.InferenceService"
-                android:foregroundServiceType="microphone"
+                android:foregroundServiceType="microphone|specialUse"
                 android:exported="false">
             <!-- Android 14+ foreground service type justification -->
             <meta-data
                     android:name="android.app.foregroundServiceType.microphone.justification"
                     android:value="Required for real-time speech recognition and transcription."/>
+            <property
+                    android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                    android:value="Keeps the on-device speech recognition model loaded in memory between keyboard sessions (opt-in setting) so dictation is available instantly after switching keyboards."/>
         </service>
 
         <!-- Foreground service that manages model file downloads in the background -->

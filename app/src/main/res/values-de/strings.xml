@@ -59,7 +59,7 @@
         verwenden.
     </string>
     <string name="home_pref_input">Mikrofon &amp; Auslösemodus</string>
-    <string name="home_pref_speech">Spracherkennung &amp; Nachbearbeitung</string>
+    <string name="home_pref_speech">Spracherkennung, Nachbearbeitung &amp; Modellspeicher</string>
     <string name="home_pref_tools">Tutorial &amp; Diagnose</string>
 
     <!-- Preferences screen -->
@@ -83,6 +83,11 @@
         die Bereinigung Wörter weglässt oder verändert.
     </string>
     <string name="pref_postprocessing_disabled_raw">Deaktiviert (Rohausgabe)</string>
+    <string name="pref_keep_loaded_title">Modell geladen halten</string>
+    <string name="pref_keep_loaded_subtitle">Hält das Sprachmodell im Speicher, während du eine andere Tastatur
+        verwendest, damit die Spracheingabe beim Zurückwechseln sofort bereit ist, statt das Modell neu zu laden. Läuft als
+        Vordergrunddienst mit dauerhafter Benachrichtigung und belegt etwa 700 MB Arbeitsspeicher.
+    </string>
     <string name="pref_diagnostics_title">Pipeline-Diagnose</string>
     <string name="pref_diagnostics_subtitle">Zeigt ein Live-Badge auf der Tastatur mit Zählern für Fensterkürzungen,
         Ausrichtungswiederherstellungen und verworfene leere Schritte. Nützlich zur Diagnose von Pipeline-Problemen;

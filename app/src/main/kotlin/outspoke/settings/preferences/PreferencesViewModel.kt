@@ -3,6 +3,7 @@ package dev.brgr.outspoke.settings.preferences
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dev.brgr.outspoke.inference.InferenceService
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -68,6 +69,25 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
 
     fun setShowPipelineDiagnostics(enabled: Boolean) {
         viewModelScope.launch { prefs.setShowPipelineDiagnostics(enabled) }
+    }
+
+    val keepModelLoaded: StateFlow<Boolean> = prefs.keepModelLoaded.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = false,
+    )
+
+    /**
+     * Persists the keep-model-loaded choice. Enabling it also starts [InferenceService] in
+     * its foreground mode right away (allowed: the settings Activity is visible), which
+     * preloads the model. Disabling is handled by the service itself, which observes the
+     * preference and leaves the foreground state.
+     */
+    fun setKeepModelLoaded(enabled: Boolean) {
+        viewModelScope.launch {
+            prefs.setKeepModelLoaded(enabled)
+            if (enabled) InferenceService.startKeepLoaded(getApplication())
+        }
     }
 
     /** Resets the tutorial-shown flag so it plays again the next time the keyboard opens. */

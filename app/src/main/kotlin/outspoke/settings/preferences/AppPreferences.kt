@@ -199,6 +199,23 @@ class AppPreferences(private val context: Context) {
         context.dataStore.edit { prefs -> prefs[keyFormatNumbersAsDigits] = enabled }
     }
 
+    private val keyKeepModelLoaded = booleanPreferencesKey("keep_model_loaded")
+
+    /**
+     * When `true`, [dev.brgr.outspoke.inference.InferenceService] runs as a *started*
+     * foreground service (persistent notification) so the ~700 MB speech model stays in
+     * RAM while the user switches to another keyboard. Without it the service is only
+     * bound by the IME and is destroyed — model unloaded — as soon as another IME is
+     * picked. Opt-in; defaults to `false`.
+     */
+    val keepModelLoaded: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[keyKeepModelLoaded] ?: false
+    }
+
+    suspend fun setKeepModelLoaded(enabled: Boolean) {
+        context.dataStore.edit { prefs -> prefs[keyKeepModelLoaded] = enabled }
+    }
+
     private val keyPreferredMicId = intPreferencesKey("preferred_mic_id")
 
     /**

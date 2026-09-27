@@ -48,7 +48,7 @@ on-device via ONNX Runtime; no audio ever leaves the device after the one-time m
 **Core design principles:**
 
 - SpeechEngine is the *only* seam for adding a new ASR model. Nothing in the IME or service layer changes.
-- InferenceService keeps the engine alive across keyboard hide/show cycles. Unbinding does **not** stop the service.
+- InferenceService keeps the engine alive across keyboard hide/show cycles. It is bound-only by default (destroyed — model unloaded — when the user switches to another IME and the IME unbinds); with the opt-in *Keep model loaded* setting (`keep_model_loaded`) it also starts itself as a `specialUse` foreground service, which survives the unbind and keeps the model warm across keyboard switches.
 - Constructor injection only throughout; no field injection.
 - No external SDKs that phone home (no analytics, no crash reporters).
 
@@ -135,13 +135,13 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **InferenceService**
 
-- LifecycleService running as an Android foreground service.
+- LifecycleService, bound by the IME; optionally a started `specialUse` foreground service (keep-loaded mode).
 - Notification channel: outspoke_inference, notification ID 1001.
 - Owns the SpeechEngine instance; reloads on selectedModelId preference change.
 - Uses a Mutex to protect engine swaps.
 - Exposes StateFlow<EngineState> to bound clients.
 - FileObserver on models/ directory detects newly downloaded models.
-- Stays alive independently of IME bind/unbind; shuts down only when explicitly stopped.
+- Default: destroyed on the IME's final unbind (keyboard switch). Keep-loaded mode: started + foreground, survives the unbind; only critical memory pressure unloads the engine.
 
 ---
 
@@ -151,7 +151,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 - Extends InputMethodService; implements LifecycleOwner and SavedStateRegistryOwner to host Compose.
 - Hosts the keyboard UI via ImeComposeView.
-- Binds to InferenceService on keyboard show; starts an unload timer (30 s) after keyboard hidden.
+- Binds to InferenceService in onCreate and stays bound for the IME's lifetime (unbinds in onDestroy, i.e. when another keyboard is selected).
 - Forwards InputConnection changes to TextInjector and KeyboardViewModel.
 
 **TextInjector**
@@ -188,7 +188,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **ModelDownloadManager** downloads via OkHttp with resume support, verifies SHA-256 after each file, emits ModelState.Downloading(progress).
 
-**AppPreferences** (DataStore, store name outspoke_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), keyboard_tutorial_shown (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
+**AppPreferences** (DataStore, store name outspoke_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), keyboard_tutorial_shown (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
 
 ---
 
@@ -390,17 +390,19 @@ Voxtral-Mini-4B-Realtime ONNX (~4 GB RAM requirement). Same Whisper-compatible l
 
 ### Binding lifecycle
 
-    OutspokeInputMethodService.onCreateInputView()
-        -> bindService(InferenceService)
+    OutspokeInputMethodService.onCreate()
+        -> bindService(InferenceService, BIND_AUTO_CREATE)
 
-    OutspokeInputMethodService.onWindowHidden()
-        -> starts 30 s unload timer
-           (cancels if keyboard re-shown within 30 s)
+    OutspokeInputMethodService.onDestroy()          (user switched to another keyboard)
+        -> unbindService(InferenceService)
+               default:          last client gone -> service destroyed -> engine closed
+               keep-loaded mode: service is started + foreground -> stays alive, engine warm
 
-    Timer fires
-        -> stopService(InferenceService)
+    AppPreferences.keepModelLoaded (DataStore Flow, observed in InferenceService.onCreate)
+        true  -> startForegroundService(self) -> onStartCommand -> startForeground(SPECIAL_USE), START_STICKY
+        false -> stopForeground(REMOVE) + stopSelf()  (service lives on while still bound)
 
-Unbinding alone does NOT stop InferenceService. The 30 s timer is the only stop path during normal use.
+Memory pressure: by default RUNNING_LOW / RUNNING_CRITICAL / MODERATE / COMPLETE close the engine; in keep-loaded mode only RUNNING_CRITICAL / onLowMemory do. The IME reloads it on the next onWindowShown via InferenceBinder.reloadIfNeeded().
 
 ### Engine reload on model change
 
@@ -535,5 +537,5 @@ No changes required in InferenceRepository, InferenceService, TextInjector, or a
 | storageDirName immutability | Changing it breaks existing installations |
 | WindowTrimmed handling | TextInjector.resetAfterTrim(stableWords) must be called immediately on every WindowTrimmed event - skipping causes silent word drops on every stride after a window trim |
 | Final(isUtteranceBoundary=true) | Do NOT stop audio capture - used for mid-session sentence boundaries in long dictation |
-| InferenceService stop | Unbinding does not stop the service; shuts down only when explicitly stopped or after the 30 s keyboard-hidden timer |
+| InferenceService stop | Default: destroyed on the IME's final unbind. Keep-loaded mode: started foreground service, survives the unbind until the setting is turned off |
 | Kotlin code style | kotlin.code.style=official |

@@ -4,24 +4,30 @@ import android.app.ActivityManager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ComponentCallbacks2
+import android.content.Context
+import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.content.res.Configuration
 import android.os.*
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import dev.brgr.outspoke.R
 import dev.brgr.outspoke.settings.model.ModelId
 import dev.brgr.outspoke.settings.model.ModelRegistry
 import dev.brgr.outspoke.settings.model.ModelStorageManager
+import dev.brgr.outspoke.settings.SettingsActivity
 import dev.brgr.outspoke.settings.preferences.AppPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -33,11 +39,18 @@ private const val CHANNEL_ID = "outspoke_inference"
 private const val NOTIFICATION_ID = 1001
 
 /**
- * A foreground [LifecycleService] that owns the [SpeechEngine] lifecycle.
+ * A [LifecycleService] that owns the [SpeechEngine] lifecycle.
+ *
+ * **Lifetime.** By default the service is only *bound* by the IME, so it lives exactly as
+ * long as the IME: when the user switches to another keyboard the system destroys the IME,
+ * the last binding goes away, the service is destroyed and the model is unloaded. With the
+ * opt-in [AppPreferences.keepModelLoaded] setting the service additionally *starts* itself
+ * as a foreground service (see [startKeepLoaded] / [onStartCommand]); a started service
+ * survives the unbind and the foreground state protects the process from being reclaimed,
+ * so the model stays warm across keyboard switches.
  *
  * Responsibilities:
- *  - Show a persistent low-priority notification so Android keeps the process alive
- *    while the keyboard is active
+ *  - Show a persistent low-priority notification while running in the foreground
  *  - Observe [AppPreferences.selectedModelId] and load the appropriate [SpeechEngine]
  *    via [SpeechEngineFactory] whenever the selection changes
  *  - Watch the `models/` directory for file-system changes so the engine auto-reloads
@@ -72,6 +85,16 @@ class InferenceService : LifecycleService() {
      */
     @Volatile
     private var memoryUnloaded: Boolean = false
+
+    /**
+     * Mirrors [AppPreferences.keepModelLoaded]. While `true` the engine is only released
+     * on critical memory pressure (see [registerMemoryCallback]).
+     */
+    @Volatile
+    private var keepLoaded: Boolean = false
+
+    /** `true` while the service is in the started (keep-loaded foreground) state. Main thread only. */
+    private var isStarted: Boolean = false
 
     /** Mutex preventing concurrent [reloadForModel] calls from racing. */
     private val engineLoadMutex = Mutex()
@@ -128,6 +151,10 @@ class InferenceService : LifecycleService() {
             // no persistent notification, but the engine loads and the keyboard stays functional.
             // The notification will appear the next time the user opens the companion Activity.
             Log.w(TAG, "startForeground rejected - running as bound service without notification", e)
+        } catch (e: IllegalStateException) {
+            // ForegroundServiceStartNotAllowedException (API 31+) when created in the background,
+            // e.g. a START_STICKY restart. Same fallback as above.
+            Log.w(TAG, "startForeground not allowed - running as bound service without notification", e)
         }
 
         // Log device and memory info at service startup
@@ -153,6 +180,24 @@ class InferenceService : LifecycleService() {
             }
         }
 
+        // Opt-in keep-loaded mode: become a started foreground service so the engine
+        // outlives the IME binding (keyboard switches destroy the IME and unbind us).
+        lifecycleScope.launch {
+            AppPreferences(applicationContext).keepModelLoaded.distinctUntilChanged().collect { keep ->
+                keepLoaded = keep
+                if (keep && !isStarted) {
+                    startKeepLoaded(this@InferenceService)
+                } else if (!keep && isStarted) {
+                    Log.i(TAG, "keep-model-loaded disabled - leaving started foreground state")
+                    isStarted = false
+                    ServiceCompat.stopForeground(this@InferenceService, ServiceCompat.STOP_FOREGROUND_REMOVE)
+                    // Only clears the started state: while the IME is still bound the service
+                    // keeps running and is destroyed on the next unbind, as in the default mode.
+                    stopSelf()
+                }
+            }
+        }
+
         // Keep the model warm across keyboard hide/show and brief app
         // switches by staying bound (the IME no longer unbinds on idle). To avoid being
         // OOM-killed with ~700 MB resident, proactively close the engine when the OS
@@ -165,6 +210,35 @@ class InferenceService : LifecycleService() {
     }
 
     /**
+     * Enters the started foreground state requested via [startKeepLoaded]. Must call
+     * startForeground promptly: the service was launched with `startForegroundService`.
+     */
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+        val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
+        } else 0
+        val text = when (_engineState.value) {
+            EngineState.Ready -> currentModelId?.let { getString(R.string.notif_engine_ready, ModelRegistry[it].displayName) }
+            EngineState.Unloaded -> getString(R.string.notif_model_not_downloaded)
+            else -> null
+        } ?: getString(R.string.notif_engine_loading)
+        return try {
+            ServiceCompat.startForeground(this, NOTIFICATION_ID, buildNotification(text), type)
+            isStarted = true
+            Log.i(TAG, "Started as keep-loaded foreground service")
+            START_STICKY
+        } catch (e: Exception) {
+            // ForegroundServiceStartNotAllowedException / SecurityException: we cannot hold
+            // the process in the foreground right now. Drop the started state; the service
+            // keeps working as a plain bound service.
+            Log.w(TAG, "Could not enter keep-loaded foreground state", e)
+            stopSelf(startId)
+            START_NOT_STICKY
+        }
+    }
+
+    /**
      * Registered on the application context in [onCreate]; closes the loaded engine when
      * the OS reports running-low / critical memory pressure so the ~700 MB Parakeet model
      * is reclaimed cooperatively instead of via an OOM kill. Unregistered in [onDestroy].
@@ -172,6 +246,10 @@ class InferenceService : LifecycleService() {
      * Only the running-low and critical levels trigger an unload — those are the levels at
      * which the process is genuinely at risk. Background / moderate levels leave the model
      * resident so brief app switches keep it warm.
+     *
+     * In keep-loaded mode ([keepLoaded]) the user has explicitly traded RAM for instant
+     * dictation, so only the critical levels ([ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL]
+     * and [ComponentCallbacks2.onLowMemory]) release the engine.
      */
     private var memoryCallback: ComponentCallbacks2? = null
 
@@ -193,7 +271,12 @@ class InferenceService : LifecycleService() {
         )
         val cb = object : ComponentCallbacks2 {
             override fun onTrimMemory(level: Int) {
-                if (level !in unloadLevels) return
+                val unload = if (keepLoaded) {
+                    level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL
+                } else {
+                    level in unloadLevels
+                }
+                if (!unload) return
                 unloadDueToMemoryPressure(level)
             }
 
@@ -400,6 +483,14 @@ class InferenceService : LifecycleService() {
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    this,
+                    0,
+                    Intent(this, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+                )
+            )
             .build()
 
     private fun updateNotification(text: String) {
@@ -418,5 +509,23 @@ class InferenceService : LifecycleService() {
             TAG,
             "Debug memory: dalvik=${debugMem.dalvikPrivateDirty}KB, native=${debugMem.nativePrivateDirty}KB, totalPss=${debugMem.totalPss}KB"
         )
+    }
+
+    companion object {
+        /**
+         * Starts the service in keep-loaded foreground mode (and loads the model if the
+         * service was not running yet). Allowed from a visible Activity or from the IME
+         * process (the current input method is exempt from background-start limits);
+         * failures are logged and otherwise ignored — the service still works bound-only.
+         */
+        fun startKeepLoaded(context: Context) {
+            try {
+                ContextCompat.startForegroundService(context, Intent(context, InferenceService::class.java))
+            } catch (e: IllegalStateException) {
+                Log.w(TAG, "Cannot start keep-loaded foreground service right now", e)
+            } catch (e: SecurityException) {
+                Log.w(TAG, "Cannot start keep-loaded foreground service", e)
+            }
+        }
     }
 }

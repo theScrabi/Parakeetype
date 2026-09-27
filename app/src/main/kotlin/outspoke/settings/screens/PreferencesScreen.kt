@@ -1,5 +1,9 @@
 package dev.brgr.outspoke.settings.screens
 
+import android.Manifest
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -57,7 +61,8 @@ fun InputPreferencesScreen(
 /**
  * Category 2 — Speech Processing.
  *
- * Voice activity detection and transcript post-processing. Backed by [PreferencesViewModel] / DataStore.
+ * Voice activity detection, transcript post-processing, and keeping the model loaded
+ * across keyboard switches. Backed by [PreferencesViewModel] / DataStore.
  */
 @Composable
 fun SpeechPreferencesScreen(
@@ -65,6 +70,20 @@ fun SpeechPreferencesScreen(
 ) {
     val vadSensitivity by viewModel.vadSensitivity.collectAsState()
     val postprocessingEnabled by viewModel.postprocessingEnabled.collectAsState()
+    val keepModelLoaded by viewModel.keepModelLoaded.collectAsState()
+
+    // The keep-loaded foreground service must show a notification; ask for the permission
+    // (API 33+) when the user turns the feature on. Denial is fine — the service still runs,
+    // Android just hides the notification.
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { }
+    val onKeepModelLoadedChange: (Boolean) -> Unit = { enabled ->
+        if (enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        viewModel.setKeepModelLoaded(enabled)
+    }
 
     PreferencesColumn {
         VadSection(
@@ -75,6 +94,11 @@ fun SpeechPreferencesScreen(
         PostprocessingSection(
             postprocessingEnabled = postprocessingEnabled,
             onPostprocessingChange = viewModel::setPostprocessingEnabled,
+        )
+        HorizontalDivider()
+        KeepModelLoadedSection(
+            keepModelLoaded = keepModelLoaded,
+            onKeepModelLoadedChange = onKeepModelLoadedChange,
         )
     }
 }
@@ -302,6 +326,39 @@ private fun PostprocessingSection(
 }
 
 @Composable
+private fun KeepModelLoadedSection(
+    keepModelLoaded: Boolean,
+    onKeepModelLoadedChange: (Boolean) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.pref_keep_loaded_title),
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.pref_keep_loaded_subtitle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = if (keepModelLoaded) stringResource(R.string.state_enabled)
+                else stringResource(R.string.state_disabled),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Switch(
+                checked = keepModelLoaded,
+                onCheckedChange = onKeepModelLoadedChange,
+            )
+        }
+    }
+}
+
+@Composable
 private fun TutorialSection(
     onResetTutorial: () -> Unit,
 ) {
@@ -405,6 +462,16 @@ private fun PostprocessingSectionPreview() {
     OutspokeTheme {
         PreferencesColumn {
             PostprocessingSection(postprocessingEnabled = false, onPostprocessingChange = {})
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Prefs · Keep Model Loaded")
+@Composable
+private fun KeepModelLoadedSectionPreview() {
+    OutspokeTheme {
+        PreferencesColumn {
+            KeepModelLoadedSection(keepModelLoaded = true, onKeepModelLoadedChange = {})
         }
     }
 }
