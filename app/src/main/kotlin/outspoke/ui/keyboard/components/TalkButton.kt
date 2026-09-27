@@ -60,6 +60,8 @@ private const val LOCK_HINT_GAP_DP = 8
  * @param triggerMode          `"HOLD"` (default) or `"TAP_TOGGLE"`.
  * @param isContinuous         `true` when continuous (locked) mode is active (HOLD mode only).
  * @param onContinuousModeEnabled Callback fired when the drag-left threshold is crossed (HOLD mode only).
+ * @param onLockHintVisibleChange Called whenever the lock hint (left of the button) appears or
+ *                                disappears, so the caller can hide what it would cover.
  */
 @Composable
 fun TalkButton(
@@ -72,6 +74,7 @@ fun TalkButton(
     triggerMode: String = "HOLD",
     enabled: Boolean = true,
     previewForceLockHint: Boolean = false, // For previews: force lock hint visible
+    onLockHintVisibleChange: (Boolean) -> Unit = {},
 ) {
     val effectiveListening = isListening && enabled
     val isContinuousActive = isContinuous && effectiveListening
@@ -270,12 +273,15 @@ fun TalkButton(
         //  Lock hint: floats to the left without disturbing layout
         // Modifier.layout reports (0, 0) to the parent Box so the button's
         // measured position is never shifted.  The placeable is then placed
-        // with a negative X offset so it renders left of the button bounds
-        // (over the delete-all key, which can't be hit while the finger holds
-        // the talk button - the gesture stays with this button).
+        // with a negative X offset so it renders left of the button bounds, where
+        // the delete-all key sits; KeyboardScreen hides that key while the hint is
+        // visible (see onLockHintVisibleChange).
+        val lockHintVisible = triggerMode == "HOLD" && isHolding && !isContinuousActive
+        val currentOnLockHintVisibleChange by rememberUpdatedState(onLockHintVisibleChange)
+        LaunchedEffect(lockHintVisible) { currentOnLockHintVisibleChange(lockHintVisible) }
         if (triggerMode == "HOLD") {
             AnimatedVisibility(
-                visible = isHolding && !isContinuousActive,
+                visible = lockHintVisible,
                 enter = fadeIn(animationSpec = tween(150)) +
                         scaleIn(
                             initialScale = 0.75f,

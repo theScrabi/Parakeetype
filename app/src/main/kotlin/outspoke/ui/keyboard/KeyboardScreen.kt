@@ -8,6 +8,9 @@ import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SubdirectoryArrowLeft
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +21,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -198,6 +203,8 @@ fun KeyboardScreen(
             // button's middle). Only on very short keyboards, where the centred row would
             // run into the top row, is it pushed down just far enough to clear it.
             val centredTop = (maxHeight - BUTTON_ROW_HEIGHT) / 2
+            // True while the talk button shows its lock hint over the delete-all key.
+            var lockHintVisible by remember { mutableStateOf(false) }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -206,18 +213,25 @@ fun KeyboardScreen(
                     .offset(y = centredTop.coerceAtLeast(TOP_ROW_CLEARANCE)),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Left group: [Delete All], directly left of the talk button
+                // Left group: [Delete All], directly left of the talk button. Hidden while the
+                // talk button's lock hint is shown, since the hint floats over this spot.
                 Box(modifier = Modifier.weight(1f)) {
-                    DeleteKey(
-                        icon = Icons.Rounded.DeleteForever,
-                        contentDescription = stringResource(R.string.cd_delete_all),
-                        onClick = onDeleteAll,
-                        modifier = Modifier
-                            .align(Alignment.CenterEnd)
-                            .onGloballyPositioned { lc ->
+                    // Fully qualified: the enclosing Row's RowScope overload isn't usable here.
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = !lockHintVisible,
+                        enter = fadeIn(tween(150)),
+                        exit = fadeOut(tween(120)),
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                    ) {
+                        DeleteKey(
+                            icon = Icons.Rounded.DeleteForever,
+                            contentDescription = stringResource(R.string.cd_delete_all),
+                            onClick = onDeleteAll,
+                            modifier = Modifier.onGloballyPositioned { lc ->
                                 tutorialPositions?.record(TutorialButtonId.DELETE_ALL, lc)
                             },
-                    )
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.width(8.dp))
@@ -235,6 +249,7 @@ fun KeyboardScreen(
                     onContinuousModeEnabled = onContinuousModeEnabled,
                     enabled = uiState !is KeyboardUiState.EngineLoading && uiState !is KeyboardUiState.Error && uiState !is KeyboardUiState.Transcribing,
                     previewForceLockHint = previewForceLockHint,
+                    onLockHintVisibleChange = { lockHintVisible = it },
                     modifier = Modifier.onGloballyPositioned { lc ->
                         tutorialPositions?.record(TutorialButtonId.TALK, lc)
                     },
