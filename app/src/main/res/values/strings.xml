@@ -6,7 +6,7 @@
 
     <!-- Navigation titles -->
     <string name="nav_title_model">Install Model</string>
-    <string name="nav_title_input">Microphone &amp; Trigger</string>
+    <string name="nav_title_input">Microphone, Trigger &amp; Layout</string>
     <string name="nav_title_speech">Speech Processing</string>
     <string name="nav_title_tools">Tools</string>
 
