@@ -2,6 +2,7 @@ package dev.brgr.outspoke.ui.keyboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -13,6 +14,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import dev.brgr.outspoke.R
 import dev.brgr.outspoke.ime.EnterAction
@@ -254,14 +256,22 @@ fun KeyboardScreen(
                         EnterAction.NEXT -> MyIcons.ArrowForward to stringResource(R.string.cd_action_next)
                         EnterAction.SEND,
                         EnterAction.DONE,
+                        EnterAction.ENTER_KEY,
                         EnterAction.NEWLINE -> MyIcons.SubdirectoryArrowLeft to stringResource(R.string.cd_action_enter)
                     }
+                    // A filled, larger key: the old 40 dp icon-only button was easy to miss
+                    // and looked like the delete buttons.
                     KeyboardActionButton(
                         icon = enterIcon,
                         contentDescription = enterDescription,
                         onClick = onEnterAction,
                         // Disable auto-repeat for action buttons - search/send/go should only fire once.
                         repeatEnabled = enterAction == EnterAction.NEWLINE,
+                        size = DpSize(64.dp, 52.dp),
+                        iconSize = 28.dp,
+                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        shape = RoundedCornerShape(16.dp),
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .onGloballyPositioned { lc ->

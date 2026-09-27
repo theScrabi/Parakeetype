@@ -2,6 +2,7 @@ package dev.brgr.outspoke.ime
 
 import android.text.InputType
 import android.util.Log
+import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import dev.brgr.outspoke.ime.TranscriptAligner.findNewContent
@@ -876,6 +877,7 @@ class TextInjector(
     /**
      * Perform the context-aware Enter action:
      * - [EnterAction.NEWLINE] → inserts a newline character.
+     * - [EnterAction.ENTER_KEY] → sends a raw `KEYCODE_ENTER` down/up key event.
      * - All other actions → forwards the corresponding IME action to the editor via
      *   [InputConnection.performEditorAction], triggering the app's native handler
      *   (e.g. submitting a search query, sending a chat message, navigating to a URL).
@@ -883,6 +885,7 @@ class TextInjector(
     fun performEnterAction() {
         when (enterAction) {
             EnterAction.NEWLINE -> sendNewline()
+            EnterAction.ENTER_KEY -> sendEnterKey()
             else -> {
                 val imeActionCode = when (enterAction) {
                     EnterAction.SEARCH -> EditorInfo.IME_ACTION_SEARCH
@@ -890,11 +893,18 @@ class TextInjector(
                     EnterAction.GO -> EditorInfo.IME_ACTION_GO
                     EnterAction.NEXT -> EditorInfo.IME_ACTION_NEXT
                     EnterAction.DONE -> EditorInfo.IME_ACTION_DONE
-                    EnterAction.NEWLINE -> EditorInfo.IME_ACTION_DONE // unreachable
+                    EnterAction.NEWLINE, EnterAction.ENTER_KEY -> EditorInfo.IME_ACTION_DONE // unreachable
                 }
                 inputConnection.performEditorAction(imeActionCode)
             }
         }
+    }
+
+    /** Sends a `KEYCODE_ENTER` down/up pair, as a hardware keyboard's Enter key would. */
+    private fun sendEnterKey() {
+        lastPartial = ""
+        inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER))
+        inputConnection.sendKeyEvent(KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER))
     }
 
     /**

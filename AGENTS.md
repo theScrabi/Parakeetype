@@ -49,6 +49,8 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 **VAD is dual-layer:** `SileroVadFilter` (Silero v4 ONNX) is primary; `RMSVadFilter` (energy threshold) is the automatic fallback if the ONNX VAD model fails to load.
 
+**Keyboard keys fire on pointer-down.** `KeyboardActionButton` triggers its action from `detectTapGestures(onPress)`, not from a `LaunchedEffect` on the pressed state — a recomposition-driven trigger drops taps whose press and release land before the next frame. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
+
 ## Adding a New Model
 
 1. Add a `ModelId` enum value with a stable `storageDirName` (changing it breaks existing installs).

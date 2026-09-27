@@ -1,29 +1,59 @@
 package dev.brgr.outspoke.ui.keyboard.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
+/**
+ * A keyboard key that fires [onClick] the moment a finger touches it.
+ *
+ * The action is triggered directly from the pointer-down event. (The previous
+ * implementation fired from a `LaunchedEffect` keyed on the pressed state, which only runs
+ * on the next recomposition: a tap whose press and release both landed before the next
+ * frame — a quick tap, or any tap while the main thread was busy injecting text — was
+ * silently dropped.)
+ *
+ * @param repeatEnabled When `true` the action auto-repeats while held (500 ms initial
+ *                      delay, then every 60 ms). When `false` it fires exactly once per press.
+ * @param size          Visual size and touch target of the key.
+ * @param iconSize      Size of the [icon] inside the key.
+ * @param containerColor Background of the key; transparent by default (icon-only key).
+ * @param shape         Clip shape for the background and the ripple.
+ */
 @Composable
 fun KeyboardActionButton(
     icon: ImageVector,
@@ -31,47 +61,59 @@ fun KeyboardActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     tint: Color = MaterialTheme.colorScheme.onSurfaceVariant,
-    /** When false the button fires once on press and does not auto-repeat while held. */
     repeatEnabled: Boolean = true,
+    size: DpSize = DpSize(40.dp, 40.dp),
+    iconSize: Dp = 22.dp,
+    containerColor: Color = Color.Transparent,
+    shape: Shape = CircleShape,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-
-    // This effect handles the "auto-repeat" logic
-    LaunchedEffect(isPressed) {
-        if (isPressed) {
-            // First click happens immediately
-            onClick()
-
-            if (repeatEnabled) {
-                // Initial delay before starting the rapid fire (standard keyboard behavior)
-                delay(500.milliseconds)
-
-                // Continuous loop while button is held
-                while (true) {
-                    onClick()
-                    delay(60.milliseconds) // Speed of deletion (60ms is roughly standard)
-                }
-            }
-        }
-    }
+    val currentOnClick by rememberUpdatedState(onClick)
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = modifier
-            .size(40.dp)
-            .clip(CircleShape) // Optional: gives it a ripple bound
-            .clickable(
-                interactionSource = interactionSource,
-                indication = ripple(), // Shows the visual feedback
-                onClick = {} // We handle logic in LaunchedEffect, but need this for accessibility
-            ),
+            .size(size)
+            .clip(shape)
+            .background(containerColor)
+            .indication(interactionSource, ripple())
+            .pointerInput(repeatEnabled) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        val press = PressInteraction.Press(offset)
+                        interactionSource.emit(press)
+                        currentOnClick()
+                        val repeatJob = if (repeatEnabled) {
+                            scope.launch {
+                                delay(500.milliseconds)
+                                while (isActive) {
+                                    currentOnClick()
+                                    delay(60.milliseconds)
+                                }
+                            }
+                        } else null
+                        val released = tryAwaitRelease()
+                        repeatJob?.cancel()
+                        interactionSource.emit(
+                            if (released) PressInteraction.Release(press) else PressInteraction.Cancel(press)
+                        )
+                    },
+                )
+            }
+            .semantics(mergeDescendants = true) {
+                role = Role.Button
+                onClick {
+                    currentOnClick()
+                    true
+                }
+            },
         contentAlignment = Alignment.Center
     ) {
         Icon(
             imageVector = icon,
             contentDescription = contentDescription,
             tint = tint,
-            modifier = Modifier.size(22.dp),
+            modifier = Modifier.size(iconSize),
         )
     }
 }
@@ -97,8 +139,13 @@ private fun KeyboardActionButtonAllPreview() {
             )
             KeyboardActionButton(
                 icon = MyIcons.SubdirectoryArrowLeft,
-                contentDescription = "Newline",
+                contentDescription = "Enter",
                 onClick = {},
+                size = DpSize(64.dp, 52.dp),
+                iconSize = 28.dp,
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                shape = RoundedCornerShape(16.dp),
             )
             KeyboardActionButton(
                 icon = MyIcons.Keyboard,

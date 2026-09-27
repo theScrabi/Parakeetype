@@ -19,6 +19,7 @@ import android.view.inputmethod.*
  *   - [getTextAfterCursor] - returns empty (cursor always at end in this fake)
  *   - [getSelectedText]    - returns null (no selection)
  *   - [deleteSurroundingText] - removes characters before the cursor
+ *   - [performEditorAction] / [sendKeyEvent] - recorded for assertions
  *
  * All other [InputConnection] methods are no-op stubs that return false / null / 0.
  */
@@ -170,11 +171,24 @@ class FakeInputConnection : InputConnection {
     override fun setComposingRegion(start: Int, end: Int): Boolean = false
     override fun commitCompletion(text: CompletionInfo?): Boolean = false
     override fun commitCorrection(correctionInfo: CorrectionInfo?): Boolean = false
-    override fun performEditorAction(editorAction: Int): Boolean = false
+    /** Every action passed to [performEditorAction], in call order. */
+    val editorActions = mutableListOf<Int>()
+
+    override fun performEditorAction(editorAction: Int): Boolean {
+        editorActions += editorAction
+        return true
+    }
     override fun performContextMenuAction(id: Int): Boolean = false
     override fun beginBatchEdit(): Boolean = true
     override fun endBatchEdit(): Boolean = true
-    override fun sendKeyEvent(event: KeyEvent?): Boolean = false
+    /** Number of [sendKeyEvent] calls (key codes are not inspectable on the stub android.jar). */
+    var keyEventCount: Int = 0
+        private set
+
+    override fun sendKeyEvent(event: KeyEvent?): Boolean {
+        keyEventCount++
+        return true
+    }
     override fun clearMetaKeyStates(states: Int): Boolean = false
     override fun reportFullscreenMode(enabled: Boolean): Boolean = false
     override fun performPrivateCommand(action: String?, data: Bundle?): Boolean = false
