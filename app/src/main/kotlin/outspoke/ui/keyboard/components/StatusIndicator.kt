@@ -1,30 +1,20 @@
 package dev.brgr.outspoke.ui.keyboard.components
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import dev.brgr.outspoke.R
 import dev.brgr.outspoke.inference.PipelineDiagnostics
@@ -33,14 +23,15 @@ import dev.brgr.outspoke.ui.theme.MyIcons
 import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
 
 /**
- * Crossfades between six distinct visual states driven by [uiState].
+ * Crossfades between the visual states driven by [uiState].
  *
- * - [KeyboardUiState.Idle]          → small grey mic icon (+ diagnostics badge if non-clean)
- * - [KeyboardUiState.Listening]     → pulsing filled circle (accent colour)
- * - [KeyboardUiState.Processing]    → spinner + partial transcript text
- * - [KeyboardUiState.Transcribing]  → spinner + "Transcribing…" label (mic off, engine busy)
+ * - [KeyboardUiState.Idle]          → nothing (diagnostics badge if non-clean)
+ * - [KeyboardUiState.Listening]     → nothing (the talk button and waveform show it)
+ * - [KeyboardUiState.Processing]    → partial transcript text
+ * - [KeyboardUiState.Transcribing]  → "Transcribing…" label (mic off, engine busy)
  * - [KeyboardUiState.Error]         → warning icon + error message + recovery action(s)
- * - [KeyboardUiState.EngineLoading] → spinner + loading message + "Open Outspoke" action
+ * - [KeyboardUiState.EngineLoading] → loading message + "Open Outspoke" action
+ * - [KeyboardUiState.NoSpeech]      → brief "didn't catch that" label
  *
  * For transient errors ([KeyboardUiState.ErrorReason.TranscriptionFailed],
  * [KeyboardUiState.ErrorReason.AudioCaptureFailed], [KeyboardUiState.ErrorReason.MicInitFailed])
@@ -49,7 +40,7 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  * failed) the "Open Outspoke" button is shown instead.
  *
  * @param diagnostics Pipeline counters from the most recent recording session. When non-clean
- *                    a compact summary (e.g. "2T · 1R") is shown next to the idle mic icon,
+ *                    a compact summary (e.g. "2T · 1R") is shown in the idle state,
  *                    giving immediate visibility into whether any trims or alignment recoveries
  *                    fired - without opening logcat.
  * @param onOpenCompanionApp Called when the user taps the "Open Outspoke" action button shown
@@ -74,7 +65,7 @@ fun StatusIndicator(
     ) { state ->
         when (state) {
             is KeyboardUiState.Idle -> IdleIndicator(diagnostics = diagnostics)
-            is KeyboardUiState.Listening -> ListeningIndicator()
+            is KeyboardUiState.Listening -> Unit
             is KeyboardUiState.Processing -> ProcessingIndicator(partial = state.partial)
             is KeyboardUiState.Transcribing -> TranscribingIndicator()
             is KeyboardUiState.Error -> {
@@ -127,62 +118,37 @@ private fun localizedLoadingMessage(state: KeyboardUiState.EngineLoading): Strin
 
 @Composable
 private fun IdleIndicator(diagnostics: PipelineDiagnostics = PipelineDiagnostics()) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        if (!diagnostics.isClean) {
-            Spacer(modifier = Modifier.width(6.dp))
-            Text(
-                text = diagnostics.summary(),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.tertiary,
-                maxLines = 1,
-            )
-        }
+    if (!diagnostics.isClean) {
+        Text(
+            text = diagnostics.summary(),
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.tertiary,
+            maxLines = 1,
+        )
     }
 }
 
 @Composable
-private fun ListeningIndicator() {
-    val infiniteTransition = rememberInfiniteTransition(label = "listeningPulse")
-    val pulseScale by infiniteTransition.animateFloat(
-        initialValue = 1.0f,
-        targetValue = 1.3f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 600, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse,
-        ),
-        label = "pulseScale",
-    )
-}
-
-@Composable
 private fun ProcessingIndicator(partial: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        GradientArcSpinner(modifier = Modifier.size(16.dp))
-        if (partial.isNotEmpty()) {
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = partial,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-            )
-        }
+    if (partial.isNotEmpty()) {
+        Text(
+            text = partial,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 1,
+        )
     }
 }
 
 /** Shown after the mic stops while the engine is still running its final inference pass. */
 @Composable
 private fun TranscribingIndicator() {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        GradientArcSpinner(modifier = Modifier.size(16.dp))
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = stringResource(R.string.status_transcribing),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-        )
-    }
+    Text(
+        text = stringResource(R.string.status_transcribing),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 1,
+    )
 }
 
 /** Shown briefly when the model detected audio but couldn't resolve a word. */
@@ -252,16 +218,12 @@ private fun EngineLoadingIndicator(
     onOpenCompanionApp: (() -> Unit)? = null,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            GradientArcSpinner(modifier = Modifier.size(16.dp))
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = message,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                maxLines = 2,
-            )
-        }
+        Text(
+            text = message,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 2,
+        )
         if (onOpenCompanionApp != null) {
             Spacer(modifier = Modifier.height(2.dp))
             TextButton(
@@ -276,46 +238,6 @@ private fun EngineLoadingIndicator(
             }
         }
     }
-}
-
-/**
- * Indeterminate spinner that draws a 270° arc rotating continuously.
- *
- * The arc is painted with a sweep gradient that fades from transparent at the tail,
- * blends through [MaterialTheme.colorScheme.tertiary] in the middle, and reaches full
- * [MaterialTheme.colorScheme.primary] at the head - giving a comet-tail appearance.
- * Both the gradient colours and the arc react to theme changes at runtime.
- */
-@Composable
-private fun GradientArcSpinner(
-    modifier: Modifier = Modifier,
-    strokeWidth: Dp = 2.dp,
-) {
-    val head = MaterialTheme.colorScheme.primary
-    val mid = MaterialTheme.colorScheme.tertiary
-
-    val infiniteTransition = rememberInfiniteTransition(label = "arcSpinnerRotation")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 900, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart,
-        ),
-        label = "arcSpinnerAngle",
-    )
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF111111)
-@Composable
-private fun StatusIdlePreview() {
-    OutspokeKeyboardTheme { StatusIndicator(uiState = KeyboardUiState.Idle) }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF111111)
-@Composable
-private fun StatusListeningPreview() {
-    OutspokeKeyboardTheme { StatusIndicator(uiState = KeyboardUiState.Listening) }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)

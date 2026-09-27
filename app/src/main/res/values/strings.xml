@@ -36,7 +36,6 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Active model</string>
     <string name="cd_delete_model">Delete model</string>
-    <string name="cd_status_idle">Idle - tap the button to start dictating</string>
     <string name="cd_status_error">Error</string>
 
     <!-- Home screen -->

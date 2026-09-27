@@ -37,7 +37,6 @@
     <string name="cd_action_enter">Eingabe</string>
     <string name="cd_active_model">Aktives Modell</string>
     <string name="cd_delete_model">Modell löschen</string>
-    <string name="cd_status_idle">Bereit - Schaltfläche drücken zum Diktieren</string>
     <string name="cd_status_error">Fehler</string>
 
     <!-- Home screen -->
