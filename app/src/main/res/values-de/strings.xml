@@ -150,9 +150,9 @@
     </string>
     <string name="tutorial_switch_keyboard_title">Tastatur wechseln (oben rechts)</string>
     <string name="tutorial_switch_keyboard_desc">Wechselt zurück zur vorherigen Tastatur.</string>
-    <string name="tutorial_delete_all_title">Alles löschen (ganz links)</string>
+    <string name="tutorial_delete_all_title">Alles löschen (links vom Mikrofon)</string>
     <string name="tutorial_delete_all_desc">Löscht das gesamte Textfeld auf einmal.</string>
-    <string name="tutorial_delete_word_title">Wort löschen (links vom Mikrofon)</string>
+    <string name="tutorial_delete_word_title">Wort löschen (rechts vom Mikrofon)</string>
     <string name="tutorial_delete_word_desc">Entfernt das letzte Wort.</string>
     <string name="tutorial_enter_title">Eingabe / Aktion (ganz rechts)</string>
     <string name="tutorial_enter_desc">Führt die kontextabhängige Aktion aus: Senden, Suchen, Los oder Neue Zeile.

@@ -30,10 +30,10 @@ import dev.brgr.outspoke.ui.theme.OutspokeKeyboardTheme
  *  1. [StatusIndicator] - crossfades between Idle / Listening / Processing / Error states.
  *  2. [WaveformBar]     - animates with real-time amplitude.
  *  3. Bottom row (left → right):
- *       [Delete All] · [Delete Word] · [TalkButton] · [Enter]
- *     Delete All and Enter are pinned to the edges; the TalkButton stays centred with
- *     equal weight on both sides. The Switch Keyboard button sits top-right in the
- *     status row.
+ *       [Delete All] · [TalkButton] · [Delete Word] · [Enter]
+ *     The two delete keys flank the TalkButton; Enter is pinned to the right edge. The
+ *     TalkButton stays centred with equal weight on both sides. The Switch Keyboard
+ *     button sits top-right in the status row.
  *
  * @param uiState                Current UI state collected from [KeyboardViewModel.uiState].
  * @param amplitude              Normalised RMS amplitude [0.0, 1.0].
@@ -199,28 +199,19 @@ fun KeyboardScreen(
                     .align(Alignment.BottomCenter),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Left group: [Delete All]  [Delete Word]
+                // Left group: [Delete All], directly left of the talk button
                 Box(modifier = Modifier.weight(1f)) {
-                    // Far-left: delete all text (mirror of the switch-keyboard button)
                     KeyboardActionButton(
                         icon = MyIcons.DeleteForever,
                         contentDescription = stringResource(R.string.cd_delete_all),
                         onClick = onDeleteAll,
-                        modifier = Modifier
-                            .align(Alignment.CenterStart)
-                            .onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.DELETE_ALL, lc)
-                            },
-                    )
-                    // Adjacent-left: delete last word
-                    KeyboardActionButton(
-                        icon = MyIcons.BackspaceOutlined,
-                        contentDescription = stringResource(R.string.cd_delete_word),
-                        onClick = onDeleteWord,
+                        size = DELETE_KEY_SIZE,
+                        iconSize = DELETE_KEY_ICON_SIZE,
+                        shape = KEY_SHAPE,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .onGloballyPositioned { lc ->
-                                tutorialPositions?.record(TutorialButtonId.DELETE_WORD, lc)
+                                tutorialPositions?.record(TutorialButtonId.DELETE_ALL, lc)
                             },
                     )
                 }
@@ -247,9 +238,23 @@ fun KeyboardScreen(
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Right group: [Enter]
+                // Right group: [Delete Word] directly right of the talk button, [Enter] far right
                 Box(modifier = Modifier.weight(1f)) {
-                    // Far-right: context-aware Enter action (mirror of Delete All)
+                    KeyboardActionButton(
+                        icon = MyIcons.BackspaceOutlined,
+                        contentDescription = stringResource(R.string.cd_delete_word),
+                        onClick = onDeleteWord,
+                        size = DELETE_KEY_SIZE,
+                        iconSize = DELETE_KEY_ICON_SIZE,
+                        shape = KEY_SHAPE,
+                        modifier = Modifier
+                            .align(Alignment.CenterStart)
+                            .onGloballyPositioned { lc ->
+                                tutorialPositions?.record(TutorialButtonId.DELETE_WORD, lc)
+                            },
+                    )
+
+                    // Far-right: context-aware Enter action
                     val (enterIcon, enterDescription) = when (enterAction) {
                         EnterAction.SEARCH -> MyIcons.Search to stringResource(R.string.cd_action_search)
                         EnterAction.GO -> MyIcons.ArrowForward to stringResource(R.string.cd_action_go)
@@ -271,7 +276,7 @@ fun KeyboardScreen(
                         iconSize = 28.dp,
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        shape = RoundedCornerShape(16.dp),
+                        shape = KEY_SHAPE,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .onGloballyPositioned { lc ->
@@ -284,6 +289,15 @@ fun KeyboardScreen(
         } // end main content Box
     } // end outer Box
 }
+
+/**
+ * The delete keys: a larger touch target than the old 40 dp icon buttons but a bit smaller
+ * than the Enter key, with no background — only the ripple (clipped to [KEY_SHAPE]) shows
+ * on touch.
+ */
+private val DELETE_KEY_SIZE = DpSize(52.dp, 48.dp)
+private val DELETE_KEY_ICON_SIZE = 26.dp
+private val KEY_SHAPE = RoundedCornerShape(16.dp)
 
 /**
  * Convenience overload that reads directly from a [KeyboardViewModel]'s state flows.

@@ -144,9 +144,9 @@
     </string>
     <string name="tutorial_switch_keyboard_title">Switch Keyboard (top right)</string>
     <string name="tutorial_switch_keyboard_desc">Returns to your previous keyboard.</string>
-    <string name="tutorial_delete_all_title">Delete All (far left)</string>
+    <string name="tutorial_delete_all_title">Delete All (left of mic)</string>
     <string name="tutorial_delete_all_desc">Clears the entire text field at once.</string>
-    <string name="tutorial_delete_word_title">Delete Word (left of mic)</string>
+    <string name="tutorial_delete_word_title">Delete Word (right of mic)</string>
     <string name="tutorial_delete_word_desc">Removes the last word.</string>
     <string name="tutorial_enter_title">Enter / Action (far right)</string>
     <string name="tutorial_enter_desc">Performs the context-aware action: send, search, go, or insert a newline.

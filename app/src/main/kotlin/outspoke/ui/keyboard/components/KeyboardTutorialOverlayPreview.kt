@@ -259,14 +259,14 @@ private val PREVIEW_STEPS = listOf(
     ),
     TutorialPreviewStep(
         TutorialButtonId.DELETE_ALL,
-        "Delete All (far left)",
+        "Delete All (left of mic)",
         "Clears the entire text field at once.",
         2,
         cardAtBottom = false
     ),
     TutorialPreviewStep(
         TutorialButtonId.DELETE_WORD,
-        "Delete Word (left of mic)",
+        "Delete Word (right of mic)",
         "Removes the last word.",
         3,
         cardAtBottom = false
