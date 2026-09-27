@@ -11,9 +11,11 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 
 
 ## Screenshots
-| ![Screenshot 1](fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg) | ![Screenshot 2](fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg) | ![Screenshot 3](fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg) |
-|--------------------------------------------------------------------------------|--------------------------------------------------------------------------------|--------------------------------------------------------------------------------|
-| ![Screenshot 4](fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg) | ![Screenshot 5](fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg) |  |
+| ![Setup](fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg) | ![Install the model](fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg) | ![Model imported](fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg) |
+|---|---|---|
+| ![Settings](fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg) | ![Keyboard](fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg) | ![Hold to talk, drag left to lock](fastlane/metadata/android/en-US/images/phoneScreenshots/6.jpg) |
+
+![Landscape: keyboard docked to the right](fastlane/metadata/android/en-US/images/phoneScreenshots/7.jpg)
 
 ---
 
@@ -53,6 +55,8 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
    - Grant the microphone permission
    - Install the model: tap *Download in browser* to fetch the single model archive (~700 MB, Wi-Fi recommended), then *Import model file* and pick the downloaded ZIP
 3. **Switch** to the Parakeetype keyboard in any text field and tap the mic button.
+
+> **Keyboard not showing?** With a physical keyboard connected (Bluetooth keyboard, or the Android emulator's virtual hardware keyboard) Android hides on-screen keyboards unless *System Settings → Keyboard → Physical keyboard → Use on-screen keyboard* is enabled.
 
 ---
 
