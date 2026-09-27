@@ -1,12 +1,9 @@
-# Outspoke
+# Parakeetype
 
 <!-- Feature graphic scaled down to 600px width -->
 <p align="start">
   <img src="fastlane/metadata/android/en-US/images/featureGraphic.png" alt="Screenshot 1" width="500" />
 </p>
-
-| [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png" alt="Get it at IzzyOnDroid" height="60">](https://apt.izzysoft.de/packages/dev.brgr.outspoke) | [<img src="https://img.shields.io/endpoint?url=https://apt.izzysoft.de/fdroid/api/v1/shield/dev.brgr.outspoke&label=IzzyOnDroid" alt="Get it at IzzyOnDroid" height="30">](https://apt.izzysoft.de/packages/dev.brgr.outspoke) |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 
 A privacy-focused speech-to-text keyboard(IME) for Android. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
 
@@ -29,7 +26,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets)
-- **Keep model loaded (optional)** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Outspoke needs no reload. Off by default.
+- **Keep model loaded (optional)** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. Off by default.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
 - **No Google Play Services, no telemetry, no analytics**
 
@@ -44,24 +41,24 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 | Free storage | ~750 MB (for ASR model files) |
 | Permissions | `RECORD_AUDIO`, `POST_NOTIFICATIONS` (no `INTERNET`) |
 
-> Outspoke has **no network access**. You download the model archive once in your browser and import it into the app; the keyboard itself never goes online.
+> Parakeetype has **no network access**. You download the model archive once in your browser and import it into the app; the keyboard itself never goes online.
 
 ---
 
 ## Getting Started
 
 1. **Install** the APK from [Releases](../../releases) or build from source (see below).
-2. **Open the Outspoke app** and follow the three setup steps:
-   - Enable Outspoke in *System Settings → Keyboard / Input Methods*
+2. **Open the Parakeetype app** and follow the three setup steps:
+   - Enable Parakeetype in *System Settings → Keyboard / Input Methods*
    - Grant the microphone permission
    - Install the model: tap *Download in browser* to fetch the single model archive (~700 MB, Wi-Fi recommended), then *Import model file* and pick the downloaded ZIP
-3. **Switch** to the Outspoke keyboard in any text field and tap the mic button.
+3. **Switch** to the Parakeetype keyboard in any text field and tap the mic button.
 
 ---
 
 ## Architecture
 
-Outspoke is structured as a clean layered pipeline. The `SpeechEngine` interface decouples all inference code from the service and audio layers - adding a new backend means implementing that one interface and nothing else.
+Parakeetype is structured as a clean layered pipeline. The `SpeechEngine` interface decouples all inference code from the service and audio layers - adding a new backend means implementing that one interface and nothing else.
 
 ```
 ┌─────────────────────────────────┐
@@ -70,7 +67,7 @@ Outspoke is structured as a clean layered pipeline. The `SpeechEngine` interface
 └──────────────┬──────────────────┘
                │  InputConnection API
 ┌──────────────▼──────────────────┐
-│  OutspokeInputMethodService     │  ← Android IME service
+│  ParakeetypeInputMethodService     │  ← Android IME service
 │  (LifecycleOwner + Compose UI)  │
 │  ┌───────────────────────────┐  │
 │  │    KeyboardViewModel      │  │  ← UI state + capture lifecycle
@@ -107,7 +104,7 @@ Outspoke is structured as a clean layered pipeline. The `SpeechEngine` interface
 | `audio` | `VadFilter` | Interface - common contract for VAD implementations (process, flush, isSpeechActive) |
 | `audio` | `SileroVadFilter` | Neural VAD using Silero v4 (ONNX); preserves RNN state across chunks; primary filter when model is available |
 | `audio` | `RMSVadFilter` | Energy-threshold VAD; used as fallback when Silero ONNX model can't load |
-| `ime` | `OutspokeInputMethodService` | Core IME; wires Compose view tree, binds `InferenceService`, drives capture lifecycle |
+| `ime` | `ParakeetypeInputMethodService` | Core IME; wires Compose view tree, binds `InferenceService`, drives capture lifecycle |
 | `ime` | `TextInjector` | Writes partial/final text into the focused field via `InputConnection`; keeps the last 6 words as a mutable composing span (underlined) and permanently freezes earlier words; delegates new-content discovery to `TranscriptAligner.findNewContent`; on `WindowTrimmed` performs a three-step reset (commit composing minus last 2 uncertain tail words, clear `lastPartial`, re-anchor `committedWords` from the actual field content); two-layer alignment recovery (field-scan → composing-commit fallback) prevents silent word drops on complete divergence |
 | `ime` | `TranscriptAligner` | Stateless alignment utilities (`normalizeWord`, `splitToWords`, `findNewContent`); `findNewContent` uses a three-layer overlap search - (1) full prefix match, (2) suffix-prefix overlap ≥ 2 words, (3) interior scan ≥ 2 words - to locate genuinely new content in a fresh partial relative to already-committed words, tolerating Parakeet attention drift and post-trim leading garbage tokens |
 | `ui` | `KeyboardViewModel` | Bridges IME lifecycle, audio capture, and inference results into `KeyboardUiState`; owns `captureJob` |
@@ -155,8 +152,8 @@ The repository and IME layers don't need to change.
 ## Building from Source
 
 ```bash
-git clone https://github.com/minburg/outspoke.git
-cd outspoke
+git clone https://github.com/theScrabi/Parakeetype.git
+cd parakeetype
 ./gradlew assembleRelease
 ```
 

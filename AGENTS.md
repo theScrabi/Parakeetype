@@ -1,4 +1,4 @@
-# Outspoke — Agent Guide
+# Parakeetype — Agent Guide
 
 Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No cloud, no Google Play Services, **no network access at all** (no `INTERNET` permission).
 
@@ -11,23 +11,23 @@ Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No c
 ./gradlew connectedAndroidTest   # instrumented tests (requires device/emulator)
 ```
 
-Target SDK 36, min SDK 31 (Android 12 — required by Material You dynamic colour in `OutspokeTheme`), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
+Target SDK 36, min SDK 31 (Android 12 — required by Material You dynamic colour in `ParakeetypeTheme`), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
 
 ## Package Structure
 
-All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`):
+All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeetype`):
 
 | Package | Key files | Responsibility |
 |---|---|---|
 |`inference`|`SpeechEngine`, `ParakeetEngine`, `ChunkStreamingEngine`, `WhisperEngine`, `VoxtralEngine`, `InferenceRepository`, `InferenceService`, `SpeechEngineFactory`, `TranscriptResult`, `EngineState`, `PipelineDiagnostics`, `NumberNormaliser`, `GrammarCorrector`|ASR pipeline, sliding window, post-processing, foreground service|
 | `audio` | `AudioCaptureManager`, `MicCalibrationManager`, `SileroVadFilter`, `RMSVadFilter`, `VadFilter`, `AudioChunk`, `PermissionHelper` | Mic capture + VAD + optional mic calibration |
-| `ime` | `OutspokeInputMethodService`, `TextInjector`, `TranscriptAligner`, `EnterAction` | Keyboard / text insertion |
+| `ime` | `ParakeetypeInputMethodService`, `TextInjector`, `TranscriptAligner`, `EnterAction` | Keyboard / text insertion |
 | `settings/model` | `ModelRegistry`, `ModelId`, `ModelImporter`, `ModelStorageManager`, `ModelState`, `ModelViewModel` | Model lifecycle: single-archive import from local storage |
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
 | `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `MicCalibrationScreen` | Settings Compose UI |
 | `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
 | `ui/keyboard/components` | `TalkButton`, `StatusIndicator`, `KeyboardActionButton`, `KeyboardTutorialOverlay`, `LanguageSelector` | Keyboard UI sub-components |
-| `ui/theme` | `OutspokeKeyboardTheme` | Compose theming |
+| `ui/theme` | `ParakeetypeKeyboardTheme` | Compose theming |
 
 ## Architecture — What Isn't Obvious from Single Files
 
@@ -53,7 +53,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 **Keyboard keys.** Enter and switch-keyboard are `KeyboardActionButton`s that fire on pointer-down via `detectTapGestures(onPress)`, not from a `LaunchedEffect` on the pressed state — a recomposition-driven trigger drops taps whose press and release land before the next frame. The delete keys (trash, delete word) are regular Material 3 `IconButton`s (`DeleteKey` in `KeyboardScreen`) that fire on release. Every key press gives `HapticFeedbackType.KeyboardTap` (honours the system keyboard-vibration setting); keep that in both components. `TalkButton` buzzes the same way on every finger down and finger up. In HOLD mode, dragging **left** past 56 dp locks continuous recording; the lock hint floats to the left of the button (over the delete-all key). The keyboard's top row shows the `LanguageSelector` only for Whisper models while idle, otherwise the `StatusIndicator`; there is no waveform.
 
-**Keyboard size & position.** `OutspokeInputMethodService` computes the window height (20 % of the screen height, at least 130 dp of content, plus the bottom nav bar) and the side insets on every access — never cache them, the IME service survives rotation. The UI is one layout for all orientations: in landscape it is docked (≤ 400 dp wide) to the right by default or to the left (`keyboard_position_landscape`); in portrait it is centred by default or docked left/right (`keyboard_position_portrait`, for tablets / one-handed use). Left / right are physical (`AbsoluteAlignment`), also in RTL locales. `OutspokeKeyboardTheme` provides `LocalContentColor` — without it ripples are black and invisible on the dark keyboard. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
+**Keyboard size & position.** `ParakeetypeInputMethodService` computes the window height (20 % of the screen height, at least 130 dp of content, plus the bottom nav bar) and the side insets on every access — never cache them, the IME service survives rotation. The UI is one layout for all orientations: in landscape it is docked (≤ 400 dp wide) to the right by default or to the left (`keyboard_position_landscape`); in portrait it is centred by default or docked left/right (`keyboard_position_portrait`, for tablets / one-handed use). Left / right are physical (`AbsoluteAlignment`), also in RTL locales. `ParakeetypeKeyboardTheme` provides `LocalContentColor` — without it ripples are black and invisible on the dark keyboard. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
 
 ## Adding a New Model
 
@@ -72,22 +72,23 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 - **Model files** are stored in `<filesDir>/models/<storageDirName>/` — no external storage permission.
 - **SHA-256** is verified for every model file on import; add hashes to the `ModelFile` entries in `ModelRegistry`.
 - **No network access.** The app has no `INTERNET` / `ACCESS_NETWORK_STATE` permission — the manifest strips the ones `onnxruntime-android` declares via `tools:node="remove"`. Never add HTTP clients, network permissions, or any code that contacts a server.
-- **Models are installed from a single file.** The user downloads one ZIP archive (`ModelInfo.archiveUrl`, a pinned release asset on `github.com/minburg/outspoke-data`, built with `devtools/package-model.sh`) in their **browser** and imports it through the system file picker (`ModelImporter`, SAF `OpenDocument` — no storage permission). Keep it to one file; do not reintroduce multi-file picking or in-app downloads.
+- **Models are installed from a single file.** The user downloads one ZIP archive (`ModelInfo.archiveUrl`, a pinned release asset built with `devtools/package-model.sh` — the URL `MODEL_ARCHIVE_RELEASE` is still a TODO placeholder, no archive is hosted yet) in their **browser** and imports it through the system file picker (`ModelImporter`, SAF `OpenDocument` — no storage permission). Keep it to one file; do not reintroduce multi-file picking or in-app downloads.
 - ABI splits produce per-ABI APKs: `armeabi-v7a` (×1), `arm64-v8a` (×2), universal (×0 offset). `versionCode = defaultVersionCode * 10 + abiOffset`.
-- `dependenciesInfo` is disabled in the APK for F-Droid / IzzyOnDroid reproducibility.
+- `dependenciesInfo` is disabled in the APK for F-Droid reproducibility.
 - Do not add analytics, crash reporters, or any SDK that phones home.
+- **Launcher icon** is generated from `parakeet.svg` (project root): `drawable/ic_launcher_foreground.xml` holds the SVG's visible parakeet paths (coordinates rounded to 3 decimals) scaled into the 66 dp safe zone; the background layer is plain white (the SVG's circle); the monochrome/themed layer reuses the foreground. `fastlane/.../images/icon.png` is the SVG rendered at 512 px.
 - **No word-suggestion / correction system.** It was removed in favour of a lean keyboard (the IME deletes the legacy `<filesDir>/suggestion_files/` on start). Do not reintroduce tap-a-word alternatives, dictionaries or language models.
 
 ## Release Process
 
-Complete checklist for publishing a new version to GitHub Releases and IzzyOnDroid.
+Complete checklist for publishing a new version to GitHub Releases.
 
 ### 1. Bump the version
 
 Edit `app/build.gradle.kts`:
 
 ```kotlin
-versionCode = <previous + 1>      // integer; IzzyOnDroid uses this to detect updates
+versionCode = <previous + 1>      // integer; Android and app stores use this to detect updates
 versionName = "0.x.y"             // shown to users; must match the git tag (without "v")
 ```
 
@@ -99,7 +100,7 @@ Also update `how-to-release.txt` — change the tag command to use the new versi
 git tag v0.x.y && git push origin v0.x.y
 ```
 
-Also update `metadata/dev.brgr.outspoke.yml`:
+Also update `metadata/org.schabi.parakeetype.yml`:
 
 - Set `CurrentVersion` to the new `versionName`.
 - Set `CurrentVersionCode` to the new `versionCode`.
@@ -121,7 +122,7 @@ Create `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
 - File name is the plain integer `versionCode` (e.g. `8.txt` for versionCode 8).
 - First line: `Nth patch (vX.Y.Z).` — keep phrasing consistent with previous entries.
 - Blank line, then a plain-English description of what changed. Focus on user-visible changes; skip internal refactors unless they fix something the user would notice.
-- Keep it under ~500 characters — IzzyOnDroid truncates long changelogs.
+- Keep it under ~500 characters — app stores truncate long changelogs.
 
 ### 3. Update documentation
 
@@ -140,7 +141,7 @@ Stage and commit all changed files together in one commit:
 ```bash
 git add app/build.gradle.kts \
         how-to-release.txt \
-        metadata/dev.brgr.outspoke.yml \
+        metadata/org.schabi.parakeetype.yml \
         fastlane/metadata/android/en-US/changelogs/<versionCode>.txt \
         AGENTS.md README.md docs/architecture.md \
         # …any other changed source files
@@ -159,13 +160,9 @@ git push origin v0.x.y
 
 ### 6. The GitHub Release is created automatically
 
-Pushing the tag triggers the release job in `.github/workflows/release-f-droid.yml`: it decodes the release keystore from repo secrets (never in the source tree), builds the signed release APKs, renames them to `outspoke-<version>.apk` / `outspoke-<version>-<abi>.apk`, writes a `.sha256` checksum next to each, and creates the GitHub Release with all of them attached (release notes are auto-generated from the commits since the previous tag).
+Pushing the tag triggers the release job in `.github/workflows/release-f-droid.yml`: it decodes the release keystore from repo secrets (never in the source tree), builds the signed release APKs, renames them to `parakeetype-<version>.apk` / `parakeetype-<version>-<abi>.apk`, writes a `.sha256` checksum next to each, and creates the GitHub Release with all of them attached (release notes are auto-generated from the commits since the previous tag).
 
 Watch the workflow run on the tag push and confirm it ends green. No local build or manual APK attachment is needed.
-
-### 7. IzzyOnDroid picks it up automatically
-
-IzzyOnDroid polls GitHub Releases for new tags. Once the release is published, it will appear in the IzzyOnDroid repo on the next scan (usually within 24 hours). No manual submission is needed.
 
 ### Version numbering conventions
 

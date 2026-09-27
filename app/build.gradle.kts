@@ -11,11 +11,11 @@ plugins {
 }
 
 configure<ApplicationExtension> {
-    namespace = "dev.brgr.outspoke"
+    namespace = "org.schabi.parakeetype"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "dev.brgr.outspoke"
+        applicationId = "org.schabi.parakeetype"
         minSdk = 31
         targetSdk = 37
         versionCode = 11
@@ -52,16 +52,15 @@ configure<ApplicationExtension> {
         }
     }
     dependenciesInfo {
-        // Disables dependency metadata when building APKs (for IzzyOnDroid/F-Droid)
+        // Disables dependency metadata when building APKs (for F-Droid reproducibility)
         includeInApk = false
         // Disables dependency metadata when building Android App Bundles (for Google Play)
         includeInBundle = false
     }
 
     packaging {
-        // Deflate native libs in the APK (extractNativeLibs=true): IzzyOnDroid
-        // budgets ~30 MB per app, and libonnxruntime.so alone is ~28 MB when
-        // stored uncompressed. Costs ~28 MB extra on-device after install —
+        // Deflate native libs in the APK (extractNativeLibs=true): keeps the APK
+        // small, as libonnxruntime.so alone is ~28 MB when stored uncompressed. Costs ~28 MB extra on-device after install —
         // negligible next to the 700 MB ASR model the app downloads at runtime.
         jniLibs {
             useLegacyPackaging = true

@@ -1,0 +1,120 @@
+Categories:
+  - Multimedia
+  - Keyboard & IME
+
+License: GPL-3.0-only
+
+AuthorName: Schabi
+SourceCode: https://github.com/theScrabi/Parakeetype
+IssueTracker: https://github.com/theScrabi/Parakeetype/issues
+Changelog: https://github.com/theScrabi/Parakeetype/releases
+
+AutoName: Parakeetype
+
+Summary: On-device speech-to-text keyboard using Parakeet ASR
+
+Description: |-
+  Parakeetype is a speech-to-text keyboard (IME) that transcribes your voice
+  entirely on-device using the NVIDIA Parakeet ASR model via ONNX Runtime.
+
+  No audio leaves the device. No account is required. No Google Play Services
+  or any third-party telemetry libraries are used.
+
+  The app has no internet permission. The model file (~700 MB) is downloaded
+  once in your browser and imported into the app, which then stores it locally.
+
+  Requires Android 12 (API 31) or higher.
+
+Repo: https://github.com/theScrabi/Parakeetype.git
+RepoType: git
+
+CurrentVersion: '0.3.1'
+CurrentVersionCode: 11
+
+# SHA-256 fingerprint of the APK signing certificate - no colons, lowercase.
+# Retrieve it with: apksigner verify --print-certs app-release.apk | grep SHA-256
+# TODO(placeholder): the previous value was the original project's signing key.
+AllowedAPKSigningKeys: TODO-your-release-signing-certificate-sha256
+
+# Detects new releases from git tags matching "v<version>" (e.g. v0.2.1).
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+
+Builds:
+  - versionName: '0.1.0'
+    versionCode: 1
+    commit: v0.1.0
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.1.1'
+    versionCode: 2
+    commit: v0.1.1
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.1.2'
+    versionCode: 3
+    commit: v0.1.2
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.1.3'
+    versionCode: 4
+    commit: v0.1.3
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.2.0'
+    versionCode: 5
+    commit: v0.2.0
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.2.1'
+    versionCode: 6
+    commit: v0.2.1
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.2.2'
+    versionCode: 7
+    commit: v0.2.2
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.2.3'
+    versionCode: 8
+    commit: v0.2.3
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.2.4'
+    versionCode: 9
+    commit: v0.2.4
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.3.0'
+    versionCode: 10
+    commit: v0.3.0
+    subdir: app
+    gradle:
+      - release
+
+  - versionName: '0.3.1'
+    versionCode: 11
+    commit: v0.3.1
+    subdir: app
+    gradle:
+      - release
+

@@ -83,13 +83,13 @@ directory is absent. To run them:
 
 ```bash
 # 1. Download the model files (same files the app downloads, SHA-256 verified):
-mkdir -p ~/.cache/outspoke-test-model/parakeet-tdt-0.6b-v3 && cd ~/.cache/outspoke-test-model/parakeet-tdt-0.6b-v3
+mkdir -p ~/.cache/parakeetype-test-model/parakeet-tdt-0.6b-v3 && cd ~/.cache/parakeetype-test-model/parakeet-tdt-0.6b-v3
 BASE=https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main
 for f in vocab.txt config.json nemo128.onnx decoder_joint-model.int8.onnx encoder-model.int8.onnx; do
   curl -sL -O "$BASE/$f"
 done
 
-# 2. Run the tests (model dir resolution: -Dtest.model.dir > $OUTSPOKE_TEST_MODEL_DIR > cache dir)
+# 2. Run the tests (model dir resolution: -Dtest.model.dir > $PARAKEETYPE_TEST_MODEL_DIR > cache dir)
 ./gradlew testDebugUnitTest
 ```
 

@@ -13,9 +13,9 @@
 
 set -euo pipefail
 
-PACKAGE="dev.brgr.outspoke"
+PACKAGE="org.schabi.parakeetype"
 INTERNAL_MODEL_DIR="/data/user/0/${PACKAGE}/files/models/parakeet-v3"
-STAGING_DIR="/sdcard/tmp_outspoke_pull"
+STAGING_DIR="/sdcard/tmp_parakeetype_pull"
 OUTPUT_DIR="${1:-./model_files}"
 
 MODEL_FILES=(

@@ -1,6 +1,6 @@
-# Outspoke — Release Process
+# Parakeetype — Release Process
 
-Complete checklist for publishing a new version to GitHub Releases and IzzyOnDroid.
+Complete checklist for publishing a new version to GitHub Releases.
 Follow every step in order. The fastlane character limit in step 2 is **strict** —
 a previous release shipped with an over-long description; do not repeat that.
 
@@ -17,7 +17,7 @@ a previous release shipped with an over-long description; do not repeat that.
 Edit `app/build.gradle.kts`:
 
 ```kotlin
-versionCode = <previous + 1>      // integer; IzzyOnDroid uses this to detect updates
+versionCode = <previous + 1>      // integer; Android and app stores use this to detect updates
 versionName = "0.x.y"             // shown to users; must match the git tag (without "v")
 ```
 
@@ -34,7 +34,7 @@ Also update:
   git tag v0.x.y && git push origin v0.x.y
   ```
 
-- **`metadata/dev.brgr.outspoke.yml`**:
+- **`metadata/org.schabi.parakeetype.yml`**:
   - `CurrentVersion` → new `versionName`.
   - `CurrentVersionCode` → new `versionCode`.
   - Append a new entry to the `Builds:` list:
@@ -56,7 +56,7 @@ Create `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
 
 1. File name is the plain integer `versionCode` (e.g. `10.txt` for versionCode 10) — not the versionName.
 2. First line: `Nth patch (vX.Y.Z).` — keep the phrasing consistent with the previous entries.
-3. **The whole file must be ≤ 500 characters.** IzzyOnDroid truncates longer changelogs.
+3. **The whole file must be ≤ 500 characters.** App stores truncate longer changelogs.
    Verify before committing:
 
    ```bash
@@ -73,7 +73,7 @@ Stage and commit all changed files together in one commit:
 ```bash
 git add app/build.gradle.kts \
         how-to-release.txt \
-        metadata/dev.brgr.outspoke.yml \
+        metadata/org.schabi.parakeetype.yml \
         fastlane/metadata/android/en-US/changelogs/<versionCode>.txt \
         AGENTS.md README.md docs/architecture.md \
         # …any other changed source files
@@ -96,7 +96,7 @@ Pushing the tag triggers the release job in `.github/workflows/release-f-droid.y
 
 1. Decodes the release keystore from repo secrets (the keystore never touches the source tree).
 2. Builds the signed release APKs (ABI splits + universal).
-3. Renames them to `outspoke-<version>.apk` / `outspoke-<version>-<abi>.apk` and writes a
+3. Renames them to `parakeetype-<version>.apk` / `parakeetype-<version>-<abi>.apk` and writes a
    `.sha256` checksum file next to each.
 4. Creates the GitHub Release with all APKs and checksums attached
    (`softprops/action-gh-release`; release notes are auto-generated from the commits
@@ -105,33 +105,16 @@ Pushing the tag triggers the release job in `.github/workflows/release-f-droid.y
 Watch the workflow run on the tag push and confirm it ends green.
 No local `assembleRelease` and no manual APK attachment is needed.
 
-### APK size budget (IzzyOnDroid)
+### APK size budget
 
-IzzyOnDroid reserves **up to 30 MB per app** — normally spread over at most 3 APKs — and
-that is also the upper size limit for a *single* `.apk` file. The limit is a
-rule-of-thumb: exceptions are made for larger apps, but stay in budget rather than
-relying on an exception (source:
-<https://izzyondroid.org/docs/general/AppInclusionPolicy/>).
+Keep the `arm64-v8a` APK (what modern devices download) at **≤ 30 MB**.
+`libonnxruntime.so` alone is ~28 MB, so the build deflates native libraries
+(`useLegacyPackaging = true` in `app/build.gradle.kts`), which keeps `arm64-v8a` at
+~15 MB. Do not revert that setting. Check the sizes after every `assembleRelease`:
 
-Concretely:
-- The `arm64-v8a` APK — what modern devices actually download — must stay **≤ 30 MB**
-  (a hair over is tolerated as a rule-of-thumb, treat the budget as real).
-- The universal APK may be larger: it carries both ABIs and the repo does not hold it.
-- `libonnxruntime.so` alone is ~28 MB, so the build deflates native libraries
-  (`useLegacyPackaging = true` in `app/build.gradle.kts`), which keeps `arm64-v8a` at
-  ~15 MB. Do not revert that setting.
-- Check the sizes after every `assembleRelease`:
-
-  ```bash
-  ls -la app/build/outputs/apk/release/
-  ```
-
-  If `arm64-v8a` climbs toward 30 MB, find the bloat before tagging.
-
-## 6. IzzyOnDroid picks it up automatically
-
-IzzyOnDroid polls GitHub Releases for new tags. Once the release is published it appears
-in the IzzyOnDroid repo on the next scan (usually within 24 hours). No manual submission.
+```bash
+ls -la app/build/outputs/apk/release/
+```
 
 ## Version numbering conventions
 

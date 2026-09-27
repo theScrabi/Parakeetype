@@ -6,7 +6,7 @@
         uses the light theme, causing a brightness flash on cold launch for
         dark-themed devices.
     -->
-    <style name="Theme.Outspoke" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.Parakeetype" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/splash_background</item>
     </style>
 </resources>

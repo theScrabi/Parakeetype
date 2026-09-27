@@ -1,6 +1,6 @@
-# Outspoke - Architecture Reference
+# Parakeetype - Architecture Reference
 
-> **Scope**: Authoritative technical reference for the Outspoke Android IME codebase.
+> **Scope**: Authoritative technical reference for the Parakeetype Android IME codebase.
 > Intended for developers adding features, new engines, or debugging the inference pipeline.
 > For user-facing information see README.md; for potential future improvements see analysis.md.
 
@@ -29,12 +29,12 @@
 
 ## 1. High-Level Overview
 
-Outspoke is a privacy-first Android Input Method Editor (IME). All speech recognition runs
+Parakeetype is a privacy-first Android Input Method Editor (IME). All speech recognition runs
 on-device via ONNX Runtime; no audio ever leaves the device, and the app has no network access at all (no INTERNET permission).
 
     Active App (Text Field)
          | InputConnection API
-    OutspokeInputMethodService    <- Android IME entry-point (LifecycleOwner + Compose UI)
+    ParakeetypeInputMethodService    <- Android IME entry-point (LifecycleOwner + Compose UI)
          | KeyboardViewModel      <- UI state + capture lifecycle
          | binds to
     InferenceService              <- Foreground LifecycleService
@@ -56,19 +56,19 @@ on-device via ONNX Runtime; no audio ever leaves the device, and the app has no 
 
 ## 2. Module and Package Map
 
-Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (package root dev.brgr.outspoke).
+Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (package root org.schabi.parakeetype).
 
 | Package | Key files | Responsibility |
 |---|---|---|
 | audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, AudioChunk, PermissionHelper | Mic capture, PCM chunking, Voice Activity Detection, optional mic calibration |
 | inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
-| ime | OutspokeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
+| ime | ParakeetypeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
 | settings/model | ModelId, ModelRegistry, ModelImporter, ModelStorageManager, ModelState, ModelViewModel | Model enumeration, single-archive import, SHA-256 verification, on-disk paths |
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
 | ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
 | ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, KeyboardTutorialOverlay, LanguageSelector | Keyboard UI sub-components |
-| ui/theme | OutspokeKeyboardTheme | Compose theming |
+| ui/theme | ParakeetypeKeyboardTheme | Compose theming |
 
 ---
 
@@ -136,7 +136,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 **InferenceService**
 
 - LifecycleService, bound by the IME; optionally a started `specialUse` foreground service (keep-loaded mode).
-- Notification channel: outspoke_inference, notification ID 1001.
+- Notification channel: parakeetype_inference, notification ID 1001.
 - Owns the SpeechEngine instance; reloads on selectedModelId preference change.
 - Uses a Mutex to protect engine swaps.
 - Exposes StateFlow<EngineState> to bound clients.
@@ -147,7 +147,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 ### 3.3 IME and Text Injection
 
-**OutspokeInputMethodService**
+**ParakeetypeInputMethodService**
 
 - Extends InputMethodService; implements LifecycleOwner and SavedStateRegistryOwner to host Compose.
 - Hosts the keyboard UI via ImeComposeView.
@@ -186,9 +186,9 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **ModelStorageManager** stores all files in <filesDir>/models/<storageDirName>/. Checks the requiredFiles list (all ModelFile names) for readiness.
 
-**ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Outspoke itself never downloads anything.
+**ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Parakeetype itself never downloads anything.
 
-**AppPreferences** (DataStore, store name outspoke_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), keyboard_tutorial_shown (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
+**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), keyboard_tutorial_shown (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
 
 ---
 
@@ -350,7 +350,7 @@ If all three layers fail, the entire partial is returned as new content (alignme
 
 ### Install flow (no network access)
 
-1. The model screen's *Download in browser* button opens ModelInfo.archiveUrl (a pinned release asset on github.com/minburg/outspoke-data, built by devtools/package-model.sh from the Hugging Face files) with ACTION_VIEW; the browser downloads the single ZIP.
+1. The model screen's *Download in browser* button opens ModelInfo.archiveUrl (a pinned release asset built by devtools/package-model.sh from the Hugging Face files; MODEL_ARCHIVE_RELEASE is still a TODO placeholder) with ACTION_VIEW; the browser downloads the single ZIP.
 2. *Import model file* opens the SAF picker; the user selects the archive.
 3. ModelImporter streams the ZIP once: entries whose file name (directories ignored) matches a ModelFile are written to models/.import-<storageDirName>/ while their SHA-256 is computed.
 4. Any checksum mismatch, missing file, or non-ZIP input aborts and deletes the staging directory; the previous state is untouched.
@@ -390,10 +390,10 @@ Voxtral-Mini-4B-Realtime ONNX (~4 GB RAM requirement). Same Whisper-compatible l
 
 ### Binding lifecycle
 
-    OutspokeInputMethodService.onCreate()
+    ParakeetypeInputMethodService.onCreate()
         -> bindService(InferenceService, BIND_AUTO_CREATE)
 
-    OutspokeInputMethodService.onDestroy()          (user switched to another keyboard)
+    ParakeetypeInputMethodService.onDestroy()          (user switched to another keyboard)
         -> unbindService(InferenceService)
                default:          last client gone -> service destroyed -> engine closed
                keep-loaded mode: service is started + foreground -> stays alive, engine warm
@@ -469,7 +469,7 @@ InferenceService watches <filesDir>/models/ for CLOSE_WRITE / MOVED_TO events. T
 | arm64-v8a | x2 | defaultVersionCode * 10 + 2 |
 | universal | x0 | defaultVersionCode * 10 + 0 |
 
-dependenciesInfo { includeInApk = false; includeInBundle = false } - required for IzzyOnDroid / F-Droid reproducibility.
+dependenciesInfo { includeInApk = false; includeInBundle = false } - required for F-Droid reproducibility.
 
 Repositories: Google, MavenCentral, Gradle Plugin Portal only.
 
@@ -477,7 +477,7 @@ Repositories: Google, MavenCentral, Gradle Plugin Portal only.
 
 ## 14. Testing Strategy
 
-All unit tests in app/src/test/kotlin/dev/brgr/outspoke/.
+All unit tests in app/src/test/kotlin/org/schabi/parakeetype/.
 testOptions { unitTests.isReturnDefaultValues = true }.
 
 | Test file | What it covers |
@@ -508,7 +508,7 @@ testOptions { unitTests.isReturnDefaultValues = true }.
 
 Test helpers: RealAudioTestUtils (model-dir resolution, WER), WavReader, FakeSpeechEngine, FakeInputConnection.
 
-**CI behaviour:** the real-model tests resolve the model directory (-Dtest.model.dir > $OUTSPOKE_TEST_MODEL_DIR > ~/.cache/outspoke-test-model/parakeet-tdt-0.6b-v3/) and skip themselves (JUnit Assume) when it is absent — so the CI pipeline always runs the model-free suite, while a local machine with the model present runs everything.
+**CI behaviour:** the real-model tests resolve the model directory (-Dtest.model.dir > $PARAKEETYPE_TEST_MODEL_DIR > ~/.cache/parakeetype-test-model/parakeet-tdt-0.6b-v3/) and skip themselves (JUnit Assume) when it is absent — so the CI pipeline always runs the model-free suite, while a local machine with the model present runs everything.
 
 Instrumented tests (device/emulator required) in app/src/androidTest/, run with ./gradlew connectedAndroidTest.
 

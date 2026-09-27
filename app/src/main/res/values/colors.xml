@@ -7,6 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <!-- Material 3 light scheme background, matching OutspokeTheme in light mode. -->
+    <!-- Material 3 light scheme background, matching ParakeetypeTheme in light mode. -->
     <color name="splash_background">#FFFBFE</color>
 </resources>

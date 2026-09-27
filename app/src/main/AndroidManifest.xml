@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-    <!-- Outspoke has no network access. onnxruntime-android declares these in its own
+    <!-- Parakeetype has no network access. onnxruntime-android declares these in its own
          manifest (unused for on-device inference); strip them from the merged manifest.
          Models are downloaded by the user in their browser and imported from storage. -->
     <uses-permission android:name="android.permission.INTERNET" tools:node="remove"/>
@@ -23,26 +23,26 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/Theme.Outspoke">
+            android:theme="@style/Theme.Parakeetype">
         <activity
                 android:name=".settings.SettingsActivity"
                 android:exported="true"
-                android:theme="@style/Theme.Outspoke">
+                android:theme="@style/Theme.Parakeetype">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- Deep-link: outspoke://settings/permissions, outspoke://settings/model, etc. -->
+            <!-- Deep-link: parakeetype://settings/permissions, parakeetype://settings/model, etc. -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="outspoke" android:host="settings"/>
+                <data android:scheme="parakeetype" android:host="settings"/>
             </intent-filter>
         </activity>
 
         <service
-                android:name=".ime.OutspokeInputMethodService"
+                android:name=".ime.ParakeetypeInputMethodService"
                 android:label="@string/ime_name"
                 android:permission="android.permission.BIND_INPUT_METHOD"
                 android:exported="true">

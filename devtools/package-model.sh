@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Builds the single-file Parakeet-V3 model archive that users download in their browser
-# and import in Outspoke (the app itself has no network access).
+# and import in Parakeetype (the app itself has no network access).
 #
 #   devtools/package-model.sh [output-dir]
 #
@@ -9,8 +9,8 @@
 # (stored, not compressed: the int8 ONNX weights do not compress, and stored entries make
 # the on-device import a straight copy).
 #
-# Upload the result as asset of the `model-parakeet-v3` release of
-# github.com/minburg/outspoke-data — that is the URL ModelRegistry.archiveUrl points to.
+# Upload the result as a release asset and point MODEL_ARCHIVE_RELEASE in ModelRegistry.kt
+# at it (currently a TODO placeholder: no archive is hosted yet).
 set -euo pipefail
 
 BASE="https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main"

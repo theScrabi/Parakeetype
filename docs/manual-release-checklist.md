@@ -1,4 +1,4 @@
-# Outspoke — Manual Pre-Release Checklist
+# Parakeetype — Manual Pre-Release Checklist
 
 Run on a **real device** before every release. An agent must walk through every item with
 the developer and get explicit confirmation before the release tag is pushed.
@@ -36,7 +36,7 @@ as a result — each box needs an observed outcome.
 
 ## 4. Privacy audit
 
-- [ ] `adb shell ls -R /sdcard/Android/data/dev.brgr.outspoke/files/`
+- [ ] `adb shell ls -R /sdcard/Android/data/org.schabi.parakeetype/files/`
       → **no audio/WAV files anywhere** (the debug audio-tap was removed in this release;
       any new file here is a regression).
 - [ ] Dictate a sentence containing a distinctive word, then:
@@ -50,14 +50,12 @@ as a result — each box needs an observed outcome.
 ## 5. Release artifacts
 
 - [ ] `./gradlew assembleRelease` builds.
-- [ ] APK sizes within IzzyOnDroid's ~30 MB per-app budget
-      (<https://izzyondroid.org/docs/general/AppInclusionPolicy/>):
-      `arm64-v8a` ≤ 30 MB (the universal may be larger).
+- [ ] APK sizes reasonable: `arm64-v8a` ≤ 30 MB (the universal may be larger).
 - [ ] `./gradlew test` locally (with model) → full suite green.
 - [ ] Changelog file: filename = plain versionCode integer; first line `Nth patch (vX.Y.Z).`;
       `wc -m` ≤ 500 characters (see `docs/release-process.md`).
 - [ ] `app/build.gradle.kts` versionCode/versionName bumped; `how-to-release.txt`
-      tag command updated; `metadata/dev.brgr.outspoke.yml` CurrentVersion /
+      tag command updated; `metadata/org.schabi.parakeetype.yml` CurrentVersion /
       CurrentVersionCode / Builds updated.
 - [ ] `AGENTS.md`, `README.md`, `docs/architecture.md` reflect the new state.
 - [ ] CI green on `main`.

@@ -14,7 +14,7 @@
 #
 #   If no directory is given the script looks in ./model_files/
 #
-# After this runs, open the Outspoke app - ModelStorageManager.isModelReady()
+# After this runs, open the Parakeetype app - ModelStorageManager.isModelReady()
 # will return true immediately, no download required.
 #
 # Why this works across reinstalls:
@@ -24,9 +24,9 @@
 
 set -euo pipefail
 
-PACKAGE="dev.brgr.outspoke"
+PACKAGE="org.schabi.parakeetype"
 INTERNAL_MODEL_DIR="/data/user/0/${PACKAGE}/files/models/parakeet-v3"
-STAGING_DIR="/sdcard/tmp_outspoke_push"
+STAGING_DIR="/sdcard/tmp_parakeetype_push"
 LOCAL_DIR="${1:-./model_files}"
 
 MODEL_FILES=(
@@ -85,5 +85,5 @@ adb shell "rm -rf ${STAGING_DIR}"
 
 echo ""
 echo "✅  All model files installed to ${INTERNAL_MODEL_DIR}"
-echo "    Open the Outspoke app - the model is ready, no download needed."
+echo "    Open the Parakeetype app - the model is ready, no download needed."
 

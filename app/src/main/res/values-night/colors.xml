@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Material 3 dark scheme background, matching OutspokeTheme in dark mode. -->
+    <!-- Material 3 dark scheme background, matching ParakeetypeTheme in dark mode. -->
     <color name="splash_background">#1C1B1F</color>
 </resources>

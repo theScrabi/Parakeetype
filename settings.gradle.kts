@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Outspoke"
+rootProject.name = "Parakeetype"
 include(":app")

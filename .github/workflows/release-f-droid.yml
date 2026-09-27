@@ -1,4 +1,4 @@
-name: Release (F-Droid / IzzyOnDroid)
+name: Release
 
 on:
   push:
@@ -95,7 +95,7 @@ jobs:
             -Pandroid.r8.suppressKotlinVersionCompatibilityCheck=true
 
       # Print the SHA-256 fingerprint of the signing certificate so it can be
-      # copied into the metadata/dev.brgr.outspoke.yml AllowedAPKSigningKeys field.
+      # copied into the metadata/org.schabi.parakeetype.yml AllowedAPKSigningKeys field.
       # keytool is available wherever JDK is - no extra tools needed.
       - name: Print signing certificate SHA-256 fingerprint
         env:
@@ -112,8 +112,8 @@ jobs:
       # ABI splits produce one APK per architecture plus a universal APK, so there
       # is no plain app-release.apk.  Rename every generated APK to a versioned,
       # human-readable filename and generate a SHA-256 checksum alongside each one:
-      #   app-universal-release.apk  → outspoke-<version>.apk
-      #   app-arm64-v8a-release.apk  → outspoke-<version>-arm64-v8a.apk
+      #   app-universal-release.apk  → parakeetype-<version>.apk
+      #   app-arm64-v8a-release.apk  → parakeetype-<version>-arm64-v8a.apk
       #   (same pattern for armeabi-v7a, x86, x86_64)
       - name: Rename APKs & generate checksums
         run: |
@@ -123,9 +123,9 @@ jobs:
           for APK in app/build/outputs/apk/release/app-*-release.apk; do
             SUFFIX=$(basename "$APK" | sed 's/app-\(.*\)-release\.apk/\1/')
             if [ "$SUFFIX" = "universal" ]; then
-              DST="outspoke-${VERSION}.apk"
+              DST="parakeetype-${VERSION}.apk"
             else
-              DST="outspoke-${VERSION}-${SUFFIX}.apk"
+              DST="parakeetype-${VERSION}-${SUFFIX}.apk"
             fi
             mv "$APK" "$DST"
             sha256sum "$DST" > "${DST}.sha256"
@@ -137,12 +137,12 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          name: "Outspoke ${{ steps.version.outputs.name }}"
+          name: "Parakeetype ${{ steps.version.outputs.name }}"
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}  # treat v0.1.0-beta as pre-release
           files: |
-            outspoke-*.apk
-            outspoke-*.apk.sha256
+            parakeetype-*.apk
+            parakeetype-*.apk.sha256
 

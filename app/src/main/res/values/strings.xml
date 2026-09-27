@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">Outspoke</string>
-    <string name="ime_name">Outspoke Voice Keyboard</string>
+    <string name="app_name">Parakeetype</string>
+    <string name="ime_name">Parakeetype Voice Keyboard</string>
     <string name="subtype_en">English (US) - Voice</string>
     <string name="subtype_de">German (DE) - Voice</string>
 
@@ -19,7 +19,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_retry">Retry</string>
     <string name="action_set_as_active">Set as Active</string>
-    <string name="action_open_outspoke">Open Outspoke</string>
+    <string name="action_open_parakeetype">Open Parakeetype</string>
 
     <!-- Common states -->
     <string name="state_enabled">Enabled</string>
@@ -43,8 +43,8 @@
     <string name="home_section_configuration">Configuration</string>
     <string name="home_ime_enabled">Keyboard enabled</string>
     <string name="home_ime_not_enabled">Keyboard not enabled</string>
-    <string name="home_ime_enabled_subtitle">Outspoke is in the keyboard list.</string>
-    <string name="home_ime_not_enabled_subtitle">Add Outspoke in system keyboard settings.</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype is in the keyboard list.</string>
+    <string name="home_ime_not_enabled_subtitle">Add Parakeetype in system keyboard settings.</string>
     <string name="home_mic_granted">Microphone access granted</string>
     <string name="home_mic_required">Microphone permission required</string>
     <string name="home_mic_granted_subtitle">Audio is processed entirely on-device.</string>
@@ -106,7 +106,7 @@
     <!-- Model screen -->
     <string name="model_screen_title">Speech Recognition Models</string>
     <string name="model_screen_subtitle">Install a model and tap \"Set as Active\" to use it for transcription. Only
-        one model is loaded at a time. Outspoke has no internet access: you download the model file in your browser and
+        one model is loaded at a time. Parakeetype has no internet access: you download the model file in your browser and
         import it here.
     </string>
     <string name="model_size_format">~%d MB</string>
@@ -120,32 +120,32 @@
     <string name="model_importing_format">Importing… %d%%</string>
     <string name="model_no_browser">No browser found to open the download link.</string>
     <string name="model_import_success">Model imported. You can now delete the downloaded archive.</string>
-    <string name="model_import_not_archive">The selected file is not an Outspoke model archive.</string>
+    <string name="model_import_not_archive">The selected file is not an Parakeetype model archive.</string>
     <string name="model_import_missing_files">The archive is incomplete. Missing: %s</string>
     <string name="model_import_corrupted">The archive is damaged (checksum mismatch): %s. Download it again.</string>
     <string name="model_import_io_error">Import failed: %s</string>
 
     <!-- Inference service notifications -->
-    <string name="notif_channel_name">Outspoke Voice Transcription</string>
+    <string name="notif_channel_name">Parakeetype Voice Transcription</string>
     <string name="notif_channel_desc">Shown while the voice transcription engine is active</string>
     <string name="notif_engine_loading">Loading transcription engine\u2026</string>
-    <string name="notif_model_not_downloaded">Model not installed - open Outspoke to install it</string>
-    <string name="notif_engine_ready">Outspoke ready (%s)</string>
+    <string name="notif_model_not_downloaded">Model not installed - open Parakeetype to install it</string>
+    <string name="notif_engine_ready">Parakeetype ready (%s)</string>
     <string name="notif_engine_failed">Engine failed to load: %s</string>
 
     <!-- Keyboard status messages -->
     <string name="status_transcribing">Transcribing…</string>
     <string name="status_no_speech">Didn\'t catch that — try again</string>
-    <string name="status_engine_model_missing">Model not installed - open Outspoke to install it</string>
+    <string name="status_engine_model_missing">Model not installed - open Parakeetype to install it</string>
     <string name="status_engine_loading">Loading transcription engine…</string>
-    <string name="status_error_mic_permission">Microphone permission denied - open Outspoke to grant it</string>
+    <string name="status_error_mic_permission">Microphone permission denied - open Parakeetype to grant it</string>
     <string name="status_error_mic_init">Could not open the microphone</string>
     <string name="status_error_transcription">Transcription failed</string>
     <string name="status_error_audio_capture">Audio capture failed</string>
     <string name="status_error_engine_load">Engine failed to load</string>
 
     <!-- First-run keyboard tutorial -->
-    <string name="tutorial_title">How to use Outspoke</string>
+    <string name="tutorial_title">How to use Parakeetype</string>
     <string name="tutorial_talk_button_title">Talk Button (centre)</string>
     <string name="tutorial_talk_button_desc">Hold to record, release to transcribe. In Tap-to-Toggle mode, tap once to
         start and again to stop.

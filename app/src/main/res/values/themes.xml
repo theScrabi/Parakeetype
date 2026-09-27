@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Outspoke" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="Theme.Parakeetype" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Splash window background; matches the Compose light scheme so the
              first frame does not cause a brightness jump. -->
         <item name="android:windowBackground">@color/splash_background</item>
