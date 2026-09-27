@@ -59,8 +59,15 @@ fun StatusIndicator(
 ) {
     AnimatedContent(
         targetState = uiState,
-        transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(150)) },
-        contentAlignment = Alignment.Center,
+        // Pure fade, no size animation: the default SizeTransform grew the width on every
+        // new partial while the content stayed centred, so the transcript appeared to
+        // slide in from the right.
+        transitionSpec = { (fadeIn(tween(200)) togetherWith fadeOut(tween(150))).using(null) },
+        contentAlignment = Alignment.CenterStart,
+        // Key by state type: each new partial transcript is a new Processing(...) value;
+        // without this every partial restarted the transition. The text now updates in
+        // place and only real state changes (listening → processing → transcribing …) fade.
+        contentKey = { it::class },
         label = "statusIndicatorContent",
         modifier = modifier,
     ) { state ->
