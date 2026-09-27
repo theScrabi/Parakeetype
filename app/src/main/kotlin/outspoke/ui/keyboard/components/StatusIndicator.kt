@@ -122,7 +122,7 @@ private fun IdleIndicator(diagnostics: PipelineDiagnostics = PipelineDiagnostics
     if (!diagnostics.isClean) {
         Text(
             text = diagnostics.summary(),
-            style = MaterialTheme.typography.labelSmall,
+            style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.tertiary,
             maxLines = 1,
         )
@@ -134,7 +134,7 @@ private fun ProcessingIndicator(partial: String) {
     if (partial.isNotEmpty()) {
         Text(
             text = partial,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
         )
@@ -146,7 +146,7 @@ private fun ProcessingIndicator(partial: String) {
 private fun TranscribingIndicator() {
     Text(
         text = stringResource(R.string.status_transcribing),
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
     )
@@ -157,7 +157,7 @@ private fun TranscribingIndicator() {
 private fun NoSpeechIndicator() {
     Text(
         text = stringResource(R.string.status_no_speech),
-        style = MaterialTheme.typography.bodySmall,
+        style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 1,
     )
@@ -175,12 +175,12 @@ private fun ErrorIndicator(
                 imageVector = Icons.Rounded.Warning,
                 contentDescription = stringResource(R.string.cd_status_error),
                 tint = MaterialTheme.colorScheme.error,
-                modifier = Modifier.size(16.dp),
+                modifier = Modifier.size(20.dp),
             )
             Spacer(modifier = Modifier.width(6.dp))
             Text(
                 text = message,
-                style = MaterialTheme.typography.bodySmall,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.error,
                 maxLines = 2,
             )
@@ -193,7 +193,7 @@ private fun ErrorIndicator(
             ) {
                 Text(
                     text = stringResource(R.string.action_retry),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
@@ -205,7 +205,7 @@ private fun ErrorIndicator(
             ) {
                 Text(
                     text = stringResource(R.string.action_open_outspoke),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
@@ -221,7 +221,7 @@ private fun EngineLoadingIndicator(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = message,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 2,
         )
@@ -233,7 +233,7 @@ private fun EngineLoadingIndicator(
             ) {
                 Text(
                     text = stringResource(R.string.action_open_outspoke),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
