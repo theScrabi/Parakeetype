@@ -155,7 +155,7 @@ fun MicCalibrationScreen(
                     Text(
                         text = stringResource(R.string.calib_saved),
                         style = MaterialTheme.typography.bodySmall,
-                        color = RecordGreen,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
                 Box(
@@ -234,7 +234,7 @@ private fun MicRow(
                 isBest -> Text(
                     text = stringResource(R.string.calib_best),
                     style = MaterialTheme.typography.labelLarge,
-                    color = RecordGreen,
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 isCurrent -> Text(
                     text = stringResource(R.string.calib_current),

@@ -43,8 +43,6 @@ fun ParakeetypeTheme(
 
 // Keyboard colour schemes - one for each system theme setting.
 private val KeyboardDarkColorScheme = darkColorScheme(
-    primary = KeyboardAccent,
-    onPrimary = KeyboardOnAccent,
     background = KeyboardBackground,
     onBackground = KeyboardOnSurface,
     surface = KeyboardSurface,
@@ -55,8 +53,6 @@ private val KeyboardDarkColorScheme = darkColorScheme(
 )
 
 private val KeyboardLightColorScheme = lightColorScheme(
-    primary = KeyboardLightAccent,
-    onPrimary = KeyboardLightOnAccent,
     background = KeyboardLightBackground,
     onBackground = KeyboardLightOnSurface,
     surface = KeyboardLightSurface,
