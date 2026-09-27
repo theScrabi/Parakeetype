@@ -3,6 +3,7 @@ package dev.brgr.outspoke.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
@@ -68,6 +69,11 @@ private val KeyboardLightColorScheme = lightColorScheme(
 /**
  * Theme wrapper for the keyboard UI. Follows the system dark/light mode setting so the
  * keyboard blends naturally on both dark and light-themed devices.
+ *
+ * Also provides [LocalContentColor]: the keyboard is drawn on a plain background, not a
+ * [Surface], so nothing else sets it and it would stay at its default (black). Ripples and
+ * [IconButton] colours derive from it, which made every ripple black and therefore
+ * invisible on the dark keyboard.
  */
 @Composable
 fun OutspokeKeyboardTheme(content: @Composable () -> Unit) {
@@ -75,8 +81,9 @@ fun OutspokeKeyboardTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
-        content = content,
-    )
+    ) {
+        CompositionLocalProvider(LocalContentColor provides colorScheme.onBackground, content = content)
+    }
 }
 
 

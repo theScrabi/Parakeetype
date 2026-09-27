@@ -3,6 +3,9 @@ package dev.brgr.outspoke.ui.keyboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -10,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -201,13 +205,10 @@ fun KeyboardScreen(
             ) {
                 // Left group: [Delete All], directly left of the talk button
                 Box(modifier = Modifier.weight(1f)) {
-                    KeyboardActionButton(
+                    DeleteKey(
                         icon = MyIcons.DeleteForever,
                         contentDescription = stringResource(R.string.cd_delete_all),
                         onClick = onDeleteAll,
-                        size = DELETE_KEY_SIZE,
-                        iconSize = DELETE_KEY_ICON_SIZE,
-                        shape = KEY_SHAPE,
                         modifier = Modifier
                             .align(Alignment.CenterEnd)
                             .onGloballyPositioned { lc ->
@@ -240,13 +241,10 @@ fun KeyboardScreen(
 
                 // Right group: [Delete Word] directly right of the talk button, [Enter] far right
                 Box(modifier = Modifier.weight(1f)) {
-                    KeyboardActionButton(
+                    DeleteKey(
                         icon = MyIcons.BackspaceOutlined,
                         contentDescription = stringResource(R.string.cd_delete_word),
                         onClick = onDeleteWord,
-                        size = DELETE_KEY_SIZE,
-                        iconSize = DELETE_KEY_ICON_SIZE,
-                        shape = KEY_SHAPE,
                         modifier = Modifier
                             .align(Alignment.CenterStart)
                             .onGloballyPositioned { lc ->
@@ -290,14 +288,35 @@ fun KeyboardScreen(
     } // end outer Box
 }
 
-/**
- * The delete keys: a larger touch target than the old 40 dp icon buttons but a bit smaller
- * than the Enter key, with no background — only the ripple (clipped to [KEY_SHAPE]) shows
- * on touch.
- */
-private val DELETE_KEY_SIZE = DpSize(52.dp, 48.dp)
-private val DELETE_KEY_ICON_SIZE = 26.dp
 private val KEY_SHAPE = RoundedCornerShape(16.dp)
+
+/**
+ * A delete key (trash / delete word): a regular Material 3 [IconButton] — fires on release
+ * like any button, standard ripple clipped to [KEY_SHAPE], no background. 52×48 dp: a
+ * larger target than a default icon button, a bit smaller than the Enter key.
+ */
+@Composable
+private fun DeleteKey(
+    icon: ImageVector,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier.size(DpSize(52.dp, 48.dp)),
+        colors = IconButtonDefaults.iconButtonColors(
+            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        ),
+        shape = KEY_SHAPE,
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            modifier = Modifier.size(26.dp),
+        )
+    }
+}
 
 /**
  * Convenience overload that reads directly from a [KeyboardViewModel]'s state flows.
