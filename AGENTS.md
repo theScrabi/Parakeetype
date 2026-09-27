@@ -51,7 +51,7 @@ All source lives under `app/src/main/kotlin/` (package root `dev.brgr.outspoke`)
 
 **VAD is dual-layer:** `SileroVadFilter` (Silero v4 ONNX) is primary; `RMSVadFilter` (energy threshold) is the automatic fallback if the ONNX VAD model fails to load.
 
-**Keyboard keys fire on pointer-down.** `KeyboardActionButton` triggers its action from `detectTapGestures(onPress)`, not from a `LaunchedEffect` on the pressed state — a recomposition-driven trigger drops taps whose press and release land before the next frame. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
+**Keyboard keys.** Enter and switch-keyboard are `KeyboardActionButton`s that fire on pointer-down via `detectTapGestures(onPress)`, not from a `LaunchedEffect` on the pressed state — a recomposition-driven trigger drops taps whose press and release land before the next frame. The delete keys (trash, delete word) are regular Material 3 `IconButton`s (`DeleteKey` in `KeyboardScreen`) that fire on release. Every key press gives `HapticFeedbackType.KeyboardTap` (honours the system keyboard-vibration setting); keep that in both components. `OutspokeKeyboardTheme` provides `LocalContentColor` — without it ripples are black and invisible on the dark keyboard. The Enter key (`EnterAction`): multi-line → newline; explicit SEARCH/SEND/GO/NEXT/DONE → `performEditorAction`; no action, `IME_FLAG_NO_ENTER_ACTION`, or `TYPE_NULL` → raw `KEYCODE_ENTER` (`ENTER_KEY`).
 
 ## Adding a New Model
 

@@ -22,7 +22,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.role
@@ -47,6 +49,9 @@ import kotlin.time.Duration.Companion.milliseconds
  * frame — a quick tap, or any tap while the main thread was busy injecting text — was
  * silently dropped.)
  *
+ * Every firing also triggers the standard keyboard key vibration
+ * ([HapticFeedbackType.KeyboardTap]).
+ *
  * @param repeatEnabled When `true` the action auto-repeats while held (500 ms initial
  *                      delay, then every 60 ms). When `false` it fires exactly once per press.
  * @param size          Visual size and touch target of the key.
@@ -70,6 +75,13 @@ fun KeyboardActionButton(
     val interactionSource = remember { MutableInteractionSource() }
     val currentOnClick by rememberUpdatedState(onClick)
     val scope = rememberCoroutineScope()
+    val haptics = LocalHapticFeedback.current
+    // Every firing (including auto-repeats) gives the standard keyboard key vibration,
+    // which honours the system's keyboard-vibration setting.
+    val fire = {
+        haptics.performHapticFeedback(HapticFeedbackType.KeyboardTap)
+        currentOnClick()
+    }
 
     Box(
         modifier = modifier
@@ -82,12 +94,12 @@ fun KeyboardActionButton(
                     onPress = { offset ->
                         val press = PressInteraction.Press(offset)
                         interactionSource.emit(press)
-                        currentOnClick()
+                        fire()
                         val repeatJob = if (repeatEnabled) {
                             scope.launch {
                                 delay(500.milliseconds)
                                 while (isActive) {
-                                    currentOnClick()
+                                    fire()
                                     delay(60.milliseconds)
                                 }
                             }
@@ -103,7 +115,7 @@ fun KeyboardActionButton(
             .semantics(mergeDescendants = true) {
                 role = Role.Button
                 onClick {
-                    currentOnClick()
+                    fire()
                     true
                 }
             },

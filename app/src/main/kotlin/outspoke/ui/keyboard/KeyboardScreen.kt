@@ -266,16 +266,10 @@ fun KeyboardScreen(
                     }
                     // A filled, larger key: the old 40 dp icon-only button was easy to miss
                     // and looked like the delete buttons.
-                    val haptics = LocalHapticFeedback.current
                     KeyboardActionButton(
                         icon = enterIcon,
                         contentDescription = enterDescription,
-                        onClick = {
-                            // Standard keyboard key vibration; honours the system's
-                            // keyboard-vibration setting.
-                            haptics.performHapticFeedback(HapticFeedbackType.KeyboardTap)
-                            onEnterAction()
-                        },
+                        onClick = onEnterAction,
                         // Disable auto-repeat for action buttons - search/send/go should only fire once.
                         repeatEnabled = enterAction == EnterAction.NEWLINE,
                         size = DpSize(64.dp, 52.dp),
@@ -301,7 +295,8 @@ private val KEY_SHAPE = RoundedCornerShape(16.dp)
 /**
  * A delete key (trash / delete word): a regular Material 3 [IconButton] — fires on release
  * like any button, standard ripple clipped to [KEY_SHAPE], no background. 52×48 dp: a
- * larger target than a default icon button, a bit smaller than the Enter key.
+ * larger target than a default icon button, a bit smaller than the Enter key. Each click
+ * gives the standard keyboard key vibration, like [KeyboardActionButton].
  */
 @Composable
 private fun DeleteKey(
@@ -310,8 +305,12 @@ private fun DeleteKey(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val haptics = LocalHapticFeedback.current
     IconButton(
-        onClick = onClick,
+        onClick = {
+            haptics.performHapticFeedback(HapticFeedbackType.KeyboardTap)
+            onClick()
+        },
         modifier = modifier.size(DpSize(52.dp, 48.dp)),
         colors = IconButtonDefaults.iconButtonColors(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
