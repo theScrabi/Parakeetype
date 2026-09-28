@@ -5,6 +5,7 @@ import android.app.Activity
 import android.app.ActivityOptions
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -54,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
@@ -380,5 +382,86 @@ private fun MicIndicator(state: VoiceInputUiState, onClick: () -> Unit) {
                 modifier = Modifier.size(36.dp),
             )
         }
+    }
+}
+
+//  Previews
+
+@Composable
+private fun VoiceInputSheetPreview(state: VoiceInputUiState, prompt: String? = null) {
+    ParakeetypeTheme {
+        VoiceInputSheet(
+            state = state,
+            prompt = prompt,
+            onDone = {}, onClose = {}, onRetry = {}, onOpenApp = {},
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Listening")
+@Composable
+private fun VoiceInputSheetListeningPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Listening())
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Listening (prompt, partial text)")
+@Composable
+private fun VoiceInputSheetListeningTextPreview() {
+    VoiceInputSheetPreview(
+        VoiceInputUiState.Listening(text = "Remind me to buy milk on the way home", level = 0.6f),
+        prompt = "What should I remind you of?",
+    )
+}
+
+@Preview(
+    showBackground = true, backgroundColor = 0xFF202020, widthDp = 360, heightDp = 480,
+    uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Sheet · Listening (dark)",
+)
+@Composable
+private fun VoiceInputSheetListeningDarkPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Listening(text = "Remind me to buy milk", level = 0.4f))
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Transcribing")
+@Composable
+private fun VoiceInputSheetTranscribingPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Transcribing(text = "Remind me to buy milk on the way home"))
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Failed (retry)")
+@Composable
+private fun VoiceInputSheetFailedRetryPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Failed(R.string.status_no_speech, canRetry = true, openApp = false))
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Failed (no model)")
+@Composable
+private fun VoiceInputSheetFailedNoModelPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Failed(R.string.voice_input_error_no_model, canRetry = false, openApp = true))
+}
+
+@Preview(showBackground = true, name = "Mic · Listening (quiet)")
+@Composable
+private fun MicIndicatorQuietPreview() {
+    ParakeetypeTheme { MicIndicator(state = VoiceInputUiState.Listening(level = 0f), onClick = {}) }
+}
+
+@Preview(showBackground = true, name = "Mic · Listening (loud)")
+@Composable
+private fun MicIndicatorLoudPreview() {
+    ParakeetypeTheme { MicIndicator(state = VoiceInputUiState.Listening(level = 1f), onClick = {}) }
+}
+
+@Preview(showBackground = true, name = "Mic · Transcribing")
+@Composable
+private fun MicIndicatorTranscribingPreview() {
+    ParakeetypeTheme { MicIndicator(state = VoiceInputUiState.Transcribing(text = ""), onClick = {}) }
+}
+
+@Preview(showBackground = true, name = "Mic · Failed")
+@Composable
+private fun MicIndicatorFailedPreview() {
+    ParakeetypeTheme {
+        MicIndicator(state = VoiceInputUiState.Failed(R.string.voice_input_error_audio, canRetry = true, openApp = false), onClick = {})
     }
 }
