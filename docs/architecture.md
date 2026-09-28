@@ -50,7 +50,7 @@ on-device via ONNX Runtime; no audio ever leaves the device, and the app has no 
 - SpeechEngine is the *only* seam for adding a new ASR model. Nothing in the IME or service layer changes.
 - InferenceService keeps the engine alive across keyboard hide/show cycles. It is bound-only by default (destroyed — model unloaded — when the user switches to another IME and the IME unbinds); with the opt-in *Keep model loaded* setting (`keep_model_loaded`) it also starts itself as a `specialUse` foreground service, which survives the unbind and keeps the model warm across keyboard switches.
 - Constructor injection only throughout; no field injection.
-- No external SDKs that phone home (no analytics, no crash reporters).
+- No external SDKs that phone home (no analytics, no crash-reporting services). Crashes are logged locally only and shared by the user on request (`crash` package).
 
 ---
 
@@ -69,6 +69,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
 | ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, LanguageSelector | Keyboard UI sub-components |
 | ui/theme | ParakeetypeKeyboardTheme | Compose theming |
+| crash | ParakeetypeApplication, CrashReporter, CrashReportDialog, CrashReportFormatter, LogcatReader | Local crash log: JVM uncaught-exception handler + ApplicationExitInfo (native crashes, ANRs), notification, Share dialog |
 
 ---
 
@@ -531,7 +532,7 @@ No changes required in InferenceRepository, InferenceService, TextInjector, or a
 |---|---|
 | No field injection | Constructor injection only throughout |
 | val over var | Avoid nullable types unless genuinely optional |
-| No external telemetry | No analytics, crash reporters, or SDKs that phone home |
+| No external telemetry | No analytics, crash-reporting SDKs, or SDKs that phone home; the local crash log is only shared by the user |
 | Model storage | <filesDir>/models/<storageDirName>/ - no external storage permission |
 | SHA-256 verification | Required for all model files on import; add hashes to ModelFile entries |
 | No network access | No INTERNET / ACCESS_NETWORK_STATE permission (stripped from onnxruntime's manifest via tools:node="remove"); models come from a single user-downloaded ZIP |

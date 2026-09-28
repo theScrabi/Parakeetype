@@ -171,4 +171,15 @@
     <string name="calib_run_again">Erneut ausführen</string>
     <string name="calib_no_mics">Keine Mikrofone gefunden.</string>
     <string name="calib_current">Aktuell</string>
+
+    <!-- Absturzberichte (nur lokal, Teilen auf Wunsch) -->
+    <string name="crash_channel_name">Absturzberichte</string>
+    <string name="crash_channel_desc">Wird nach einem Absturz von Parakeetype angezeigt, um das Absturzprotokoll zu teilen</string>
+    <string name="crash_notif_title">Parakeetype ist abgestürzt</string>
+    <string name="crash_notif_text">Tippen, um das Absturzprotokoll zu teilen</string>
+    <string name="crash_dialog_title">Parakeetype ist abgestürzt</string>
+    <string name="crash_dialog_message">Ein Protokoll des Absturzes wurde auf diesem Gerät gespeichert. Wenn du es mit dem Entwickler teilst, hilft das, das Problem zu beheben.\n\nDas Protokoll enthält nur Parakeetypes eigene Log-Zeilen, diese können aber diktierten Text enthalten. Es wird nirgendwohin gesendet, außer du teilst es.</string>
+    <string name="crash_action_share">Teilen</string>
+    <string name="crash_action_dismiss">Verwerfen</string>
+    <string name="crash_share_title">Absturzprotokoll teilen</string>
 </resources>

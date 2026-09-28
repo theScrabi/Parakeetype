@@ -167,4 +167,15 @@
     <string name="calib_run_again">Run again</string>
     <string name="calib_no_mics">No microphones found.</string>
     <string name="calib_current">Current</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Crash reports</string>
+    <string name="crash_channel_desc">Shown after Parakeetype crashed, to share the crash log</string>
+    <string name="crash_notif_title">Parakeetype crashed</string>
+    <string name="crash_notif_text">Tap to share the crash log</string>
+    <string name="crash_dialog_title">Parakeetype crashed</string>
+    <string name="crash_dialog_message">A log of the crash was saved on this device. Sharing it with the developer helps to fix the problem.\n\nThe log only contains Parakeetype\'s own log lines, but these may include text you dictated. It is never sent anywhere unless you share it.</string>
+    <string name="crash_action_share">Share</string>
+    <string name="crash_action_dismiss">Dismiss</string>
+    <string name="crash_share_title">Share crash log</string>
 </resources>

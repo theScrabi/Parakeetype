@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,6 +23,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
+import org.schabi.parakeetype.crash.CrashReportDialog
+import org.schabi.parakeetype.crash.CrashReporter
 import org.schabi.parakeetype.inference.InferenceService
 import org.schabi.parakeetype.settings.model.ModelStorageManager
 import org.schabi.parakeetype.settings.screens.HomeScreen
@@ -47,6 +50,8 @@ class SettingsActivity : ComponentActivity() {
             ParakeetypeTheme {
                 val navController = rememberNavController()
                 SettingsNavHost(navController = navController)
+                val hasCrashReport by CrashReporter.hasPendingReport.collectAsState()
+                if (hasCrashReport) CrashReportDialog()
             }
         }
     }

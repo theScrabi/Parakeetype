@@ -28,6 +28,7 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 | `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
 | `ui/keyboard/components` | `TalkButton`, `StatusIndicator`, `KeyboardActionButton`, `LanguageSelector` | Keyboard UI sub-components |
 | `ui/theme` | `ParakeetypeKeyboardTheme` | Compose theming |
+| `crash` | `ParakeetypeApplication`, `CrashReporter`, `CrashReportDialog`, `CrashReportFormatter`, `LogcatReader` | Local-only crash log: capture, notification, share dialog |
 
 ## Architecture — What Isn't Obvious from Single Files
 
@@ -48,6 +49,8 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 **`InferenceRepository` sliding window:** partials fire every ~1 s once ≥ 2 s of audio is buffered; hard ceiling 30 s. Stable-prefix trims, silence-trims (2 blank strides), and force-trims (window > 12 s, no stable prefix) all emit `WindowTrimmed`. Every raw transcript passes an 8-step post-processing pipeline (filler removal → stutter collapse → phrase dedup → spurious-period removal → leading-dot strip → leading-punct strip → multi-dot normalisation → missing sentence-space repair → sentence-boundary capitalisation) before emission. **Short utterances** (< 2.5 s) use a decode-context retry at final flush: the TDT decoder is extremely context-sensitive on short clips, so the primary attempt re-decodes from frame 0 with 600 ms of lead silence prepended, and a low-confidence/blank result retries once without the lead; the best non-empty attempt wins, and a "Low confidence" failure is emitted only when a non-blank result fails the 0.55 gate in every context.
 
 **Parakeet uses the chunked-TDT streaming path (active since v0.3.0):** audio is buffered and decoded in 2 s chunks with the TDT decoder's LSTM state carried across chunks (`ChunkStreamingEngine` — the capability interface `ParakeetEngine` implements; non-Parakeet engines fall back to the legacy sliding-window path above). Every chunk re-runs the post-processing pipeline over the entire accumulated utterance, so the per-chunk cost must stay bounded: `collapseRepeatedPhrases` (phrase dedup) caps candidate phrase length at 8 words to keep the scan near-linear (v0.3.1) — an unbounded scan grows cubic in utterance length and breaks the streaming path's real-time budget within a few minutes of dictation.
+
+**Crash reports are local-only.** `ParakeetypeApplication` installs `CrashReporter` in every process. JVM crashes are written by an uncaught-exception handler (stack trace + the app's own logcat) to `<filesDir>/crash/pending.log`. Native crashes and ANRs never reach that handler, so the next process start reads them from `ApplicationExitInfo` (`last_exit_ts` tracks what was already seen) while logcat still holds the pre-crash lines. A new crash posts a notification that opens `SettingsActivity`, which shows `CrashReportDialog` (Share via `FileProvider` share sheet / Dismiss — both discard the pending report). Nothing is uploaded; `crash/` is excluded from backups. Release builds use `-dontobfuscate` so stack traces stay readable.
 
 **VAD is dual-layer:** `SileroVadFilter` (Silero v4 ONNX) is primary; `RMSVadFilter` (energy threshold) is the automatic fallback if the ONNX VAD model fails to load.
 
@@ -75,7 +78,7 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 - **Models are installed from a single file.** The user downloads one ZIP archive (`ModelInfo.archiveUrl`, a pinned release asset built with `devtools/package-model.sh` — the URL `MODEL_ARCHIVE_RELEASE` is still a TODO placeholder, no archive is hosted yet) in their **browser** and imports it through the system file picker (`ModelImporter`, SAF `OpenDocument` — no storage permission). Keep it to one file; do not reintroduce multi-file picking or in-app downloads.
 - ABI splits produce per-ABI APKs: `armeabi-v7a` (×1), `arm64-v8a` (×2), universal (×0 offset). `versionCode = defaultVersionCode * 10 + abiOffset`.
 - `dependenciesInfo` is disabled in the APK for F-Droid reproducibility.
-- Do not add analytics, crash reporters, or any SDK that phones home.
+- Do not add analytics, crash-reporting SDKs, or anything that phones home. The built-in `crash` package only writes a local log that the user can share themselves; never make it upload anything.
 - **Launcher icon** is generated from `parakeet.svg` (project root): `drawable/ic_launcher_foreground.xml` holds the SVG's visible parakeet paths (coordinates rounded to 3 decimals) scaled into the 66 dp safe zone; the background layer is plain white (the SVG's circle); the monochrome/themed layer reuses the foreground. `fastlane/.../images/icon.png` is the SVG rendered at 512 px.
 - **No word-suggestion / correction system.** It was removed in favour of a lean keyboard (the IME deletes the legacy `<filesDir>/suggestion_files/` on start). Do not reintroduce tap-a-word alternatives, dictionaries or language models.
 

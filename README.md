@@ -187,7 +187,8 @@ No permission is used for any purpose beyond what is listed above.
 ## Privacy
 
 - Audio stays on your device - all recognition runs locally via ONNX Runtime.
-- No analytics, crash reporters, or third-party SDKs are included.
+- No analytics, crash-reporting services, or third-party SDKs are included.
+- If Parakeetype crashes, a crash log (only Parakeetype's own log lines, which may include dictated text) is saved on the device and you are offered to share it. It is never sent anywhere unless you share it yourself.
 - No accounts or sign-in of any kind.
 - No network access at all: the app has no `INTERNET` permission. The model archive is downloaded by you in your browser (or copied from a computer) and imported from local storage.
 

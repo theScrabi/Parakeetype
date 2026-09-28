@@ -12,9 +12,11 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep class/method names and line numbers so stack traces in crash reports
+# (crash/CrashReporter) are readable without a mapping file. The code is open
+# source, so obfuscation protects nothing; shrinking and optimisation stay on.
+-dontobfuscate
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.

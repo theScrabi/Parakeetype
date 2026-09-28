@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Only the copy CrashReporter.shareIntent puts into the share cache is exposed. -->
+<paths>
+    <cache-path name="crash" path="crash_share/"/>
+</paths>

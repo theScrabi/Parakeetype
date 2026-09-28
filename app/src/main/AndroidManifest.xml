@@ -16,6 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove"/>
 
     <application
+            android:name=".crash.ParakeetypeApplication"
             android:allowBackup="true"
             android:dataExtractionRules="@xml/data_extraction_rules"
             android:fullBackupContent="@xml/backup_rules"
@@ -68,6 +69,17 @@
                     android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                     android:value="Keeps the on-device speech recognition model loaded in memory between keyboard sessions (opt-in setting) so dictation is available instantly after switching keyboards."/>
         </service>
+
+        <!-- Serves the crash report to the share sheet (CrashReporter.shareIntent). -->
+        <provider
+                android:name="androidx.core.content.FileProvider"
+                android:authorities="${applicationId}.crashlog"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data
+                    android:name="android.support.FILE_PROVIDER_PATHS"
+                    android:resource="@xml/crash_log_paths"/>
+        </provider>
 
     </application>
 
