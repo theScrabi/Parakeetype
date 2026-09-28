@@ -267,11 +267,6 @@ class KeyboardViewModel(
         }
     }
 
-    /** Insert a newline at the current cursor position, replacing any active selection. */
-    fun newline() {
-        textInjector?.sendNewline()
-    }
-
     /**
      * Perform the context-aware Enter action for the currently focused editor.
      * Inserts a newline for multi-line fields; otherwise triggers the editor's IME action
