@@ -1,8 +1,7 @@
 # Parakeetype
 
-<!-- Feature graphic scaled down to 600px width -->
-<p align="start">
-  <img src="fastlane/metadata/android/en-US/images/featureGraphic.png" alt="Parakeetype icon" width="500" />
+<p align="center">
+  <img src="parakeet.svg" alt="Parakeetype icon" width="200" />
 </p>
 
 A privacy-focused speech-to-text keyboard(IME) for Android. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
