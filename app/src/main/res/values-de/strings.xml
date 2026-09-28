@@ -182,4 +182,15 @@
     <string name="crash_action_share">Teilen</string>
     <string name="crash_action_dismiss">Verwerfen</string>
     <string name="crash_share_title">Absturzprotokoll teilen</string>
+
+    <!-- Spracherkennung für andere Apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Parakeetype Spracheingabe</string>
+    <string name="voice_input_speak_now">Jetzt sprechen</string>
+    <string name="voice_input_transcribing">Wird transkribiert…</string>
+    <string name="voice_input_done">Fertig</string>
+    <string name="voice_input_retry">Noch einmal</string>
+    <string name="voice_input_error_no_model">Kein Sprachmodell installiert. Öffne Parakeetype, um eines zu installieren.</string>
+    <string name="voice_input_error_permission">Parakeetype benötigt Zugriff auf das Mikrofon.</string>
+    <string name="voice_input_error_audio">Das Mikrofon konnte nicht geöffnet werden.</string>
+    <string name="voice_input_error_generic">Spracherkennung fehlgeschlagen.</string>
 </resources>

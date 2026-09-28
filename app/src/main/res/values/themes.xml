@@ -5,4 +5,12 @@
              first frame does not cause a brightness jump. -->
         <item name="android:windowBackground">@color/splash_background</item>
     </style>
+
+    <!-- VoiceInputActivity: transparent window, the Compose sheet draws its own scrim.
+         Inherits Theme.Parakeetype (incl. its night variant) by name. -->
+    <style name="Theme.Parakeetype.VoiceInput">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 </resources>

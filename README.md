@@ -4,7 +4,7 @@
   <img src="parakeet.svg" alt="Parakeetype icon" width="200" />
 </p>
 
-A privacy-focused speech-to-text keyboard(IME) for Android. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
+A privacy-focused speech-to-text keyboard (IME) and system speech recognizer for Android — other apps can use it for voice input through Android's standard `SpeechRecognizer` / `RecognizerIntent` APIs. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
 
 It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) automatic speech recognition model, quantized to INT8 and run via [ONNX Runtime](https://onnxruntime.ai/) for efficient on-device inference. Voice activity detection uses [Silero VAD v4](https://github.com/snakers4/silero-vad) (also ONNX, also fully on-device) to suppress silence before it ever reaches the ASR model.
 
@@ -23,6 +23,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Fully offline after setup** - audio is never transmitted anywhere
 - **Real-time transcription** - progressive partial results while you speak
 - **Works in any app** - injects text via Android's standard `InputConnection` API
+- **Speech recognizer for other apps** - implements Android's `RecognitionService` (for apps using `SpeechRecognizer`, and selectable as the system's voice-input service) and handles `RecognizerIntent.ACTION_RECOGNIZE_SPEECH` (the "tap the mic" voice input other apps launch), all on-device with the same model as the keyboard
 - **Parakeet-TDT 0.6B v3** - INT8 quantized, ~700 MB, runs on mid-range hardware
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
@@ -108,6 +109,7 @@ Parakeetype is structured as a clean layered pipeline. The `SpeechEngine` interf
 | `audio` | `SileroVadFilter` | Neural VAD using Silero v4 (ONNX); preserves RNN state across chunks; primary filter when model is available |
 | `audio` | `RMSVadFilter` | Energy-threshold VAD; used as fallback when Silero ONNX model can't load |
 | `ime` | `ParakeetypeInputMethodService` | Core IME; wires Compose view tree, binds `InferenceService`, drives capture lifecycle |
+| `recognition` | `ParakeetypeRecognitionService`, `VoiceInputActivity` | Speech recognizer for other apps (`SpeechRecognizer` / `ACTION_RECOGNIZE_SPEECH`); both run a `RecognitionSession` against the shared `InferenceService` |
 | `ime` | `TextInjector` | Writes partial/final text into the focused field via `InputConnection`; keeps the last 6 words as a mutable composing span (underlined) and permanently freezes earlier words; delegates new-content discovery to `TranscriptAligner.findNewContent`; on `WindowTrimmed` performs a three-step reset (commit composing minus last 2 uncertain tail words, clear `lastPartial`, re-anchor `committedWords` from the actual field content); two-layer alignment recovery (field-scan → composing-commit fallback) prevents silent word drops on complete divergence |
 | `ime` | `TranscriptAligner` | Stateless alignment utilities (`normalizeWord`, `splitToWords`, `findNewContent`); `findNewContent` uses a three-layer overlap search - (1) full prefix match, (2) suffix-prefix overlap ≥ 2 words, (3) interior scan ≥ 2 words - to locate genuinely new content in a fresh partial relative to already-committed words, tolerating Parakeet attention drift and post-trim leading garbage tokens |
 | `ui` | `KeyboardViewModel` | Bridges IME lifecycle, audio capture, and inference results into `KeyboardUiState`; owns `captureJob` |

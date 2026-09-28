@@ -94,12 +94,23 @@ class AudioCaptureManager(private val context: Context) {
      * The flow is cold - a new [AudioRecord] is created per collection. The [AudioRecord]
      * is always released in the `finally` block, even if the collector cancels mid-stream.
      *
+     * The [AudioRecord] is built on [context], so a recognition-service session that passes an
+     * attribution context (see [android.content.ContextParams.Builder.setNextAttributionSource])
+     * attributes the microphone use to the calling app as well.
+     *
+     * @param onLevel Optional observer of the raw microphone level: called on the capture
+     *   thread with the normalised RMS in [0.0, 1.0] of every chunk read from the hardware,
+     *   before VAD filtering (so it also reports silence).
      * @throws SecurityException if [android.Manifest.permission.RECORD_AUDIO] is not granted.
      * @throws IllegalStateException if [AudioRecord] fails to initialise.
      */
     // Permission is checked manually via PermissionHelper before AudioRecord is created.
     @SuppressLint("MissingPermission")
-    fun startCapture(vadEnabled: Boolean = true, rawSource: Boolean = false): Flow<AudioChunk> =
+    fun startCapture(
+        vadEnabled: Boolean = true,
+        rawSource: Boolean = false,
+        onLevel: ((Float) -> Unit)? = null,
+    ): Flow<AudioChunk> =
         channelFlow {
             if (!PermissionHelper.hasRecordPermission(context)) {
                 throw SecurityException(
@@ -132,13 +143,24 @@ class AudioCaptureManager(private val context: Context) {
             val source = if (rawSource) MediaRecorder.AudioSource.UNPROCESSED
             else MediaRecorder.AudioSource.DEFAULT
 
-            val recorder = AudioRecord(
-                source,
-                SAMPLE_RATE,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                bufferBytes,
-            )
+            val recorder = try {
+                AudioRecord.Builder()
+                    .setContext(context)
+                    .setAudioSource(source)
+                    .setAudioFormat(
+                        AudioFormat.Builder()
+                            .setSampleRate(SAMPLE_RATE)
+                            .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
+                            .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                            .build()
+                    )
+                    .setBufferSizeInBytes(bufferBytes)
+                    .build()
+            } catch (e: UnsupportedOperationException) {
+                // Builder.build() reports an initialisation failure this way; callers handle
+                // IllegalStateException (see the check below).
+                throw IllegalStateException("AudioRecord failed to initialise: ${e.message}", e)
+            }
 
             check(recorder.state == AudioRecord.STATE_INITIALIZED) {
                 "AudioRecord failed to initialise (state=${recorder.state})"
@@ -160,6 +182,7 @@ class AudioCaptureManager(private val context: Context) {
                             val samples = buffer.copyOf(read)
                             val chunk = AudioChunk(samples = samples)
                             val rms = calculateRms(chunk.samples)
+                            onLevel?.invoke(rms)
 
                             val toSend = vad?.process(chunk, rms) ?: listOf(chunk)
                             for (c in toSend) {

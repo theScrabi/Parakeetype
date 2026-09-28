@@ -63,6 +63,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, AudioChunk, PermissionHelper | Mic capture, PCM chunking, Voice Activity Detection, optional mic calibration |
 | inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
 | ime | ParakeetypeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
+| recognition | ParakeetypeRecognitionService, VoiceInputActivity, RecognitionSession, InferenceConnection, TranscriptAccumulator | Speech recognizer for other apps: android.speech RecognitionService and RecognizerIntent.ACTION_RECOGNIZE_SPEECH |
 | settings/model | ModelId, ModelRegistry, ModelImporter, ModelStorageManager, ModelState, ModelViewModel | Model enumeration, single-archive import, SHA-256 verification, on-disk paths |
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
@@ -419,6 +420,26 @@ Memory pressure: by default RUNNING_LOW / RUNNING_CRITICAL / MODERATE / COMPLETE
 ### FileObserver integration
 
 InferenceService watches <filesDir>/models/ for CLOSE_WRITE / MOVED_TO events. The observer only watches the models/ root (not subdirectories); ModelImporter's final directory rename (MOVED_TO) is what triggers the reload check, so a new model loads without an app restart.
+
+### Speech recognizer for other apps (recognition package)
+
+Two entry points bind the same InferenceService as the IME (via InferenceConnection), so all of them share one loaded model:
+
+    ParakeetypeRecognitionService (android.speech.RecognitionService, exported, meta-data @xml/recognition_service)
+        client SpeechRecognizer created   -> onCreate -> bind InferenceService (model starts loading)
+        startListening(intent)            -> RecognitionSession on an attribution context built from
+                                             Callback.getCallingAttributionSource (mic use is attributed
+                                             to the calling app; the platform already checked its RECORD_AUDIO)
+        stopListening / cancel            -> RecognitionSession.stop() / cancel()
+        checkRecognitionSupport (API 33+) -> the 25 Parakeet v3 languages, installed or supported
+
+    VoiceInputActivity (RecognizerIntent.ACTION_RECOGNIZE_SPEECH, translucent Compose sheet)
+        -> requests RECORD_AUDIO if needed -> RecognitionSession -> EXTRA_RESULTS / EXTRA_CONFIDENCE_SCORES
+           (or EXTRA_RESULTS_PENDINGINTENT); leaving the activity cancels
+
+RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE). VAD is always on: the first utterance boundary ends a normal session (end of speech ≈ 1 s of silence; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS extend it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied audio) is rejected with ERROR_CLIENT; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
+
+AudioCaptureManager builds its AudioRecord with AudioRecord.Builder.setContext(context) — that is what carries the attribution — and reports the raw level of every chunk through the optional onLevel callback (used for rmsChanged).
 
 ---
 

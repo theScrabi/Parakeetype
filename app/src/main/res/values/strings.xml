@@ -178,4 +178,15 @@
     <string name="crash_action_share">Share</string>
     <string name="crash_action_dismiss">Dismiss</string>
     <string name="crash_share_title">Share crash log</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Parakeetype voice input</string>
+    <string name="voice_input_speak_now">Speak now</string>
+    <string name="voice_input_transcribing">Transcribing…</string>
+    <string name="voice_input_done">Done</string>
+    <string name="voice_input_retry">Try again</string>
+    <string name="voice_input_error_no_model">No speech model installed. Open Parakeetype to install one.</string>
+    <string name="voice_input_error_permission">Parakeetype needs microphone access.</string>
+    <string name="voice_input_error_audio">The microphone could not be opened.</string>
+    <string name="voice_input_error_generic">Speech recognition failed.</string>
 </resources>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Metadata of ParakeetypeRecognitionService (android.speech RecognitionService). -->
+<recognition-service xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:settingsActivity="org.schabi.parakeetype.settings.SettingsActivity"/>
