@@ -69,8 +69,8 @@ private const val TAG = "VoiceInputActivity"
 
 private sealed class VoiceInputUiState {
     /** [level] is the microphone level in [0, 1]. */
-    data class Listening(val text: String = "", val level: Float = 0f) : VoiceInputUiState()
-    data class Transcribing(val text: String) : VoiceInputUiState()
+    data class Listening(val level: Float = 0f) : VoiceInputUiState()
+    data object Transcribing : VoiceInputUiState()
     data class Failed(@StringRes val message: Int, val canRetry: Boolean, val openApp: Boolean) : VoiceInputUiState()
 }
 
@@ -150,7 +150,8 @@ class VoiceInputActivity : ComponentActivity() {
         session = RecognitionSession(
             audioContext = this,
             inference = inference,
-            options = RecognitionOptions.from(intent).copy(partialResults = true, segmented = false),
+            // The sheet closes as soon as the result is in, so partial text is never shown.
+            options = RecognitionOptions.from(intent).copy(partialResults = false, segmented = false),
             listener = SessionListener(),
             scope = lifecycleScope,
         ).also { it.start() }
@@ -165,19 +166,11 @@ class VoiceInputActivity : ComponentActivity() {
             uiState = listening.copy(level = ((rmsdB + 2f) / 12f).coerceIn(0f, 1f))
         }
 
-        override fun onPartialResult(text: String) {
-            uiState = when (val s = uiState) {
-                is VoiceInputUiState.Listening -> s.copy(text = text)
-                is VoiceInputUiState.Transcribing -> s.copy(text = text)
-                is VoiceInputUiState.Failed -> s
-            }
-        }
-
+        override fun onPartialResult(text: String) = Unit
         override fun onSegmentResult(text: String, confidence: Float) = Unit
 
         override fun onEndOfSpeech() {
-            val listening = uiState as? VoiceInputUiState.Listening ?: return
-            uiState = VoiceInputUiState.Transcribing(listening.text)
+            if (uiState is VoiceInputUiState.Listening) uiState = VoiceInputUiState.Transcribing
         }
 
         override fun onResult(text: String, confidence: Float) {
@@ -300,10 +293,12 @@ private fun VoiceInputSheet(
             Column(
                 modifier = Modifier
                     .navigationBarsPadding()
-                    .padding(horizontal = 24.dp, vertical = 20.dp),
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
+                // Title, mic and buttons only: the sheet closes as soon as the result is in,
+                // so recognised text would never be seen.
                 val title = when (state) {
                     is VoiceInputUiState.Listening -> prompt ?: stringResource(R.string.voice_input_speak_now)
                     is VoiceInputUiState.Transcribing -> stringResource(R.string.voice_input_transcribing)
@@ -312,19 +307,6 @@ private fun VoiceInputSheet(
                 Text(title, style = MaterialTheme.typography.titleMedium, textAlign = TextAlign.Center)
 
                 MicIndicator(state = state, onClick = onDone)
-
-                val text = when (state) {
-                    is VoiceInputUiState.Listening -> state.text
-                    is VoiceInputUiState.Transcribing -> state.text
-                    is VoiceInputUiState.Failed -> ""
-                }
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Center,
-                    minLines = 2,
-                    maxLines = 6,
-                )
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -404,13 +386,10 @@ private fun VoiceInputSheetListeningPreview() {
     VoiceInputSheetPreview(VoiceInputUiState.Listening())
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Listening (prompt, partial text)")
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Listening (prompt, speaking)")
 @Composable
-private fun VoiceInputSheetListeningTextPreview() {
-    VoiceInputSheetPreview(
-        VoiceInputUiState.Listening(text = "Remind me to buy milk on the way home", level = 0.6f),
-        prompt = "What should I remind you of?",
-    )
+private fun VoiceInputSheetListeningPromptPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Listening(level = 0.6f), prompt = "What should I remind you of?")
 }
 
 @Preview(
@@ -419,13 +398,13 @@ private fun VoiceInputSheetListeningTextPreview() {
 )
 @Composable
 private fun VoiceInputSheetListeningDarkPreview() {
-    VoiceInputSheetPreview(VoiceInputUiState.Listening(text = "Remind me to buy milk", level = 0.4f))
+    VoiceInputSheetPreview(VoiceInputUiState.Listening(level = 0.4f))
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Transcribing")
 @Composable
 private fun VoiceInputSheetTranscribingPreview() {
-    VoiceInputSheetPreview(VoiceInputUiState.Transcribing(text = "Remind me to buy milk on the way home"))
+    VoiceInputSheetPreview(VoiceInputUiState.Transcribing)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Failed (retry)")
@@ -455,7 +434,7 @@ private fun MicIndicatorLoudPreview() {
 @Preview(showBackground = true, name = "Mic · Transcribing")
 @Composable
 private fun MicIndicatorTranscribingPreview() {
-    ParakeetypeTheme { MicIndicator(state = VoiceInputUiState.Transcribing(text = ""), onClick = {}) }
+    ParakeetypeTheme { MicIndicator(state = VoiceInputUiState.Transcribing, onClick = {}) }
 }
 
 @Preview(showBackground = true, name = "Mic · Failed")
