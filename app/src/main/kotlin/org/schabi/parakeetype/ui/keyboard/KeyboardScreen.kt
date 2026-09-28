@@ -15,10 +15,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -54,6 +57,8 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  *       [Delete All] · [TalkButton] · [Delete Word] · [Enter]
  *     The two delete keys flank the TalkButton; Enter is pinned to the right edge. The
  *     TalkButton stays centred with equal weight on both sides.
+ *     While no model is installed the whole row is replaced by a single centred
+ *     "Open Parakeetype" key: dictation, delete and Enter are useless until then.
  *
  * @param uiState                Current UI state collected from [KeyboardViewModel.uiState].
  * @param isContinuous           `true` when continuous (locked) recording mode is active.
@@ -216,14 +221,21 @@ fun KeyboardScreen(
             // button's middle). Only on very short keyboards, where the centred row would
             // run into the top row, is it pushed down just far enough to clear it.
             val centredTop = (maxHeight - BUTTON_ROW_HEIGHT) / 2
+            val buttonRowModifier = Modifier
+                .fillMaxWidth()
+                .height(BUTTON_ROW_HEIGHT)
+                .align(Alignment.TopCenter)
+                .offset(y = centredTop.coerceAtLeast(TOP_ROW_CLEARANCE))
+            val modelMissing = uiState is KeyboardUiState.EngineLoading &&
+                uiState.reason == KeyboardUiState.LoadingReason.ModelNotDownloaded
             // True while the talk button shows its lock hint over the delete-all key.
             var lockHintVisible by remember { mutableStateOf(false) }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(BUTTON_ROW_HEIGHT)
-                    .align(Alignment.TopCenter)
-                    .offset(y = centredTop.coerceAtLeast(TOP_ROW_CLEARANCE)),
+            if (modelMissing) {
+                Box(modifier = buttonRowModifier, contentAlignment = Alignment.Center) {
+                    OpenCompanionAppKey(onClick = onOpenCompanionApp)
+                }
+            } else Row(
+                modifier = buttonRowModifier,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // Left group: [Delete All], directly left of the talk button. Hidden while the
@@ -356,6 +368,34 @@ private fun DeleteKey(
             imageVector = icon,
             contentDescription = contentDescription,
             modifier = Modifier.size(26.dp),
+        )
+    }
+}
+
+/**
+ * The only key shown while no model is installed: opens the companion app to install one.
+ * A filled key in the Enter key's colours, shape and height, so it reads as the keyboard's
+ * primary action. Gives the standard keyboard key vibration like the other keys.
+ */
+@Composable
+private fun OpenCompanionAppKey(onClick: () -> Unit) {
+    val haptics = LocalHapticFeedback.current
+    FilledTonalButton(
+        onClick = {
+            haptics.performHapticFeedback(HapticFeedbackType.KeyboardTap)
+            onClick()
+        },
+        modifier = Modifier.height(52.dp),
+        shape = KEY_SHAPE,
+        colors = ButtonDefaults.filledTonalButtonColors(
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+        ),
+        contentPadding = PaddingValues(horizontal = 24.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.action_open_parakeetype),
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }
@@ -519,6 +559,14 @@ private fun KeyboardScreenErrorPreview() {
     KeyboardScreenPreviewScaffold(
         uiState = KeyboardUiState.Error(KeyboardUiState.ErrorReason.MicPermissionDenied),
         showLockHint = false
+    )
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF111111)
+@Composable
+private fun KeyboardScreenModelMissingPreview() {
+    KeyboardScreenPreviewScaffold(
+        uiState = KeyboardUiState.EngineLoading(KeyboardUiState.LoadingReason.ModelNotDownloaded)
     )
 }
 

@@ -31,7 +31,8 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  * - [KeyboardUiState.Processing]    → partial transcript text
  * - [KeyboardUiState.Transcribing]  → "Transcribing…" label (mic off, engine busy)
  * - [KeyboardUiState.Error]         → warning icon + error message + recovery action(s)
- * - [KeyboardUiState.EngineLoading] → loading message + "Open Parakeetype" action
+ * - [KeyboardUiState.EngineLoading] → loading / model-missing message (the "Open Parakeetype"
+ *                                     key for a missing model lives in the keyboard's button row)
  * - [KeyboardUiState.NoSpeech]      → brief "didn't catch that" label
  *
  * For transient errors ([KeyboardUiState.ErrorReason.TranscriptionFailed],
@@ -45,7 +46,7 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  *                    giving immediate visibility into whether any trims or alignment recoveries
  *                    fired - without opening logcat.
  * @param onOpenCompanionApp Called when the user taps the "Open Parakeetype" action button shown
- *                           in [KeyboardUiState.Error] and [KeyboardUiState.EngineLoading] states.
+ *                           in [KeyboardUiState.Error] states.
  * @param onRetry Called when the user taps "Try again" for transient errors. Should trigger
  *                a new recording attempt and transition the UI back to [KeyboardUiState.Listening].
  */
@@ -89,10 +90,7 @@ fun StatusIndicator(
                 )
             }
 
-            is KeyboardUiState.EngineLoading -> EngineLoadingIndicator(
-                message = localizedLoadingMessage(state),
-                onOpenCompanionApp = onOpenCompanionApp,
-            )
+            is KeyboardUiState.EngineLoading -> EngineLoadingIndicator(message = localizedLoadingMessage(state))
 
             is KeyboardUiState.NoSpeech -> NoSpeechIndicator()
         }
@@ -221,31 +219,13 @@ private fun ErrorIndicator(
 }
 
 @Composable
-private fun EngineLoadingIndicator(
-    message: String,
-    onOpenCompanionApp: (() -> Unit)? = null,
-) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 2,
-        )
-        if (onOpenCompanionApp != null) {
-            Spacer(modifier = Modifier.height(2.dp))
-            TextButton(
-                onClick = onOpenCompanionApp,
-                modifier = Modifier.height(36.dp),
-            ) {
-                Text(
-                    text = stringResource(R.string.action_open_parakeetype),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-    }
+private fun EngineLoadingIndicator(message: String) {
+    Text(
+        text = message,
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        maxLines = 2,
+    )
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)
