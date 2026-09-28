@@ -48,10 +48,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
@@ -247,7 +250,7 @@ class VoiceInputActivity : ComponentActivity() {
     }
 }
 
-/** Bottom sheet over a scrim; tapping the scrim closes it. */
+/** Bottom sheet over the calling app (not dimmed); tapping outside the sheet closes it. */
 @Composable
 private fun VoiceInputSheet(
     state: VoiceInputUiState,
@@ -257,10 +260,10 @@ private fun VoiceInputSheet(
     onRetry: () -> Unit,
     onOpenApp: () -> Unit,
 ) {
+    val sheetShape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp)
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.32f))
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
@@ -272,13 +275,24 @@ private fun VoiceInputSheet(
             modifier = Modifier
                 .widthIn(max = 560.dp)
                 .fillMaxWidth()
-                // Swallow taps so they do not reach the scrim.
+                // Nothing dims the app behind, so a shadow cast upwards marks the sheet's top
+                // edge (an elevation shadow falls mostly below a bottom-anchored sheet).
+                .dropShadow(
+                    shape = sheetShape,
+                    shadow = Shadow(
+                        radius = 8.dp,
+                        color = Color.Black,
+                        offset = DpOffset(0.dp, (-2).dp),
+                        alpha = 0.35f,
+                    ),
+                )
+                // Swallow taps so they do not reach the close-on-tap area behind the sheet.
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = null,
                     onClick = {},
                 ),
-            shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+            shape = sheetShape,
             tonalElevation = 3.dp,
         ) {
             Column(
