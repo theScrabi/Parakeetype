@@ -68,8 +68,6 @@
     <string name="pref_trigger_mode_subtitle">Πώς ξεκινά και σταματά η φωνητική εγγραφή.</string>
     <string name="pref_trigger_hold">Κρατήστε πατημένο για ομιλία</string>
     <string name="pref_trigger_tap_toggle">Πάτημα για εναλλαγή</string>
-    <string name="pref_instant_mode_title">Άμεση λειτουργία</string>
-    <string name="pref_instant_mode_subtitle">Ξεκινά να ακούει μόλις μεταβείτε στο Parakeetype, π.χ. με το πλήκτρο μικροφώνου άλλου πληκτρολογίου, και σταματά μόλις σταματήσετε να μιλάτε. Το πληκτρολόγιο παραμένει ανοιχτό, ώστε να συνεχίσετε την επεξεργασία ή την υπαγόρευση.</string>
     <string name="pref_delete_title">Κουμπί διαγραφής</string>
     <string name="pref_delete_subtitle">Τι διαγράφει το κουμπί κάδου στο πληκτρολόγιο. Η επιλογή «Τελευταία πρόταση» αφαιρεί μόνο την πιο πρόσφατη πρόταση πριν από τον δρομέα, ώστε ένα μεγάλο έγγραφο να μη διαγράφεται ποτέ κατά λάθος.</string>
     <string name="pref_delete_all">Όλο το κείμενο</string>

@@ -68,8 +68,6 @@
     <string name="pref_trigger_mode_subtitle">Як починати й зупиняти голосовий запис.</string>
     <string name="pref_trigger_hold">Утримувати й говорити</string>
     <string name="pref_trigger_tap_toggle">Вмикати торканням</string>
-    <string name="pref_instant_mode_title">Миттєвий режим</string>
-    <string name="pref_instant_mode_subtitle">Починає слухати одразу після перемикання на Parakeetype, наприклад клавішею мікрофона іншої клавіатури, і зупиняється, коли ви замовкаєте. Клавіатура залишається відкритою, тож можна далі редагувати або диктувати.</string>
     <string name="pref_delete_title">Кнопка видалення</string>
     <string name="pref_delete_subtitle">Що видаляє кнопка з кошиком на клавіатурі. «Останнє речення» видаляє лише останнє речення перед курсором, тож довгий документ ніколи не буде стерто випадково.</string>
     <string name="pref_delete_all">Весь текст</string>

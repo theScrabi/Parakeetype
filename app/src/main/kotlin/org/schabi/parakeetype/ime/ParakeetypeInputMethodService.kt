@@ -6,7 +6,6 @@ import android.content.ServiceConnection
 import android.content.res.Resources
 import android.inputmethodservice.InputMethodService
 import android.os.IBinder
-import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
@@ -43,14 +42,6 @@ private const val TAG = "ParakeetypeIME"
 private const val MIN_KEYBOARD_CONTENT_HEIGHT_DP = 130
 
 /**
- * Instant mode treats the first input view shown within this long after [InputMethodService.onCreate]
- * as "the user just switched to Parakeetype". The system creates a new IME service on every
- * switch and shows it right away; when Parakeetype is the default keyboard it is created at
- * boot (or after its process was killed) long before a text field is focused.
- */
-private const val INSTANT_SWITCH_WINDOW_MS = 3_000L
-
-/**
  * The core IME service. Implements [LifecycleOwner], [ViewModelStoreOwner], and
  * [SavedStateRegistryOwner] so that [ImeComposeView] can wire them onto the view tree,
  * allowing Compose to function correctly inside a Service context.
@@ -72,12 +63,6 @@ class ParakeetypeInputMethodService :
         get() = savedStateRegistryController.savedStateRegistry
 
     private lateinit var keyboardViewModel: KeyboardViewModel
-
-    /** [SystemClock.elapsedRealtime] of [onCreate], for [INSTANT_SWITCH_WINDOW_MS]. */
-    private var createdAtMs = 0L
-
-    /** `true` until the first [onStartInputView] of this service instance. */
-    private var firstInputView = true
 
     /**
      * Cached reference to the current input view so the window height can be re-applied
@@ -175,8 +160,6 @@ class ParakeetypeInputMethodService :
         // no InferenceRepository is bound (a binder desync), let the VM nudge us so we can
         // request a reload of the (still-present) model instead of silently opening the
         // mic with no transcription.
-        createdAtMs = SystemClock.elapsedRealtime()
-
         keyboardViewModel.onMissingRepo = {
             inferenceBinder?.reloadIfNeeded()
             if (!isBound) {
@@ -437,18 +420,6 @@ class ParakeetypeInputMethodService :
      * Never enter fullscreen (extract-text) mode - the keyboard panel is always compact.
      */
     override fun onEvaluateFullscreenMode(): Boolean = false
-
-    override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
-        super.onStartInputView(editorInfo, restarting)
-        if (firstInputView) {
-            firstInputView = false
-            if (SystemClock.elapsedRealtime() - createdAtMs < INSTANT_SWITCH_WINDOW_MS) {
-                // The user just switched to this keyboard (e.g. with another keyboard's
-                // microphone key); the VM checks whether instant mode is enabled.
-                keyboardViewModel.requestInstantStart()
-            }
-        }
-    }
 
     override fun onFinishInputView(finishingInput: Boolean) {
         Log.d(TAG, "onFinishInputView finishingInput=$finishingInput")

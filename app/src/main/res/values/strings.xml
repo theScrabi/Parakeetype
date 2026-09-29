@@ -67,8 +67,6 @@
     <string name="pref_trigger_mode_subtitle">How to start and stop voice recording.</string>
     <string name="pref_trigger_hold">Hold to Talk</string>
     <string name="pref_trigger_tap_toggle">Tap to Toggle</string>
-    <string name="pref_instant_mode_title">Instant Mode</string>
-    <string name="pref_instant_mode_subtitle">Starts listening as soon as you switch to Parakeetype, e.g. with the microphone key of another keyboard, and stops once you stop speaking. The keyboard stays open, so you can go on editing or dictating.</string>
     <string name="pref_delete_title">Delete Button</string>
     <string name="pref_delete_subtitle">What the trash button on the keyboard deletes. \"Last Sentence\" removes only the
         most recent sentence before the cursor, so a long document is never wiped by accident.

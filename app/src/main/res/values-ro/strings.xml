@@ -68,8 +68,6 @@
     <string name="pref_trigger_mode_subtitle">Cum porniți și opriți înregistrarea vocală.</string>
     <string name="pref_trigger_hold">Țineți apăsat pentru a vorbi</string>
     <string name="pref_trigger_tap_toggle">Atingeți pentru a comuta</string>
-    <string name="pref_instant_mode_title">Mod instant</string>
-    <string name="pref_instant_mode_subtitle">Începe să asculte imediat ce comutați la Parakeetype, de ex. cu tasta de microfon a altei tastaturi, și se oprește când nu mai vorbiți. Tastatura rămâne deschisă, ca să puteți continua să editați sau să dictați.</string>
     <string name="pref_delete_title">Butonul Ștergeți</string>
     <string name="pref_delete_subtitle">Ce șterge butonul coș de gunoi de pe tastatură. „Ultima propoziție” elimină doar cea mai recentă propoziție dinaintea cursorului, astfel încât un document lung să nu fie niciodată șters din greșeală.</string>
     <string name="pref_delete_all">Tot textul</string>

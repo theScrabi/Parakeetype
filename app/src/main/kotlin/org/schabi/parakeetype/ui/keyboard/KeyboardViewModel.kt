@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import org.schabi.parakeetype.audio.AudioCaptureManager
-import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.ime.EnterAction
 import org.schabi.parakeetype.ime.TextInjector
 import org.schabi.parakeetype.inference.EngineState
@@ -21,12 +20,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 private const val TAG = "KeyboardViewModel"
-
-/** Silence after speech that ends an instant-mode session. */
-private const val INSTANT_END_OF_SPEECH_SILENCE_MS = 2_000L
-
-/** Without any speech for this long an instant-mode session ends on its own. */
-private const val INSTANT_NO_SPEECH_TIMEOUT_MS = 8_000L
 
 /**
  * Bridges the IME lifecycle, audio capture, and inference pipeline into a stream of
@@ -178,7 +171,6 @@ class KeyboardViewModel(
                 ) {
                     _uiState.value = KeyboardUiState.Idle
                 }
-                startPendingInstantSession()
             }
 
             is EngineState.Error -> _uiState.value = KeyboardUiState.Error(
@@ -201,7 +193,6 @@ class KeyboardViewModel(
         repo?.setLanguageConstraints(
             WHISPER_LANGUAGE_OPTIONS.filter { (tag, _) -> tag != "auto" }.map { (tag, _) -> tag }
         )
-        startPendingInstantSession()
     }
 
     private var textInjector: TextInjector? = null
@@ -254,7 +245,6 @@ class KeyboardViewModel(
         captureJob?.cancel()
         captureJob = null
         audioCaptureManager.stopCapture()
-        cancelInstantSession()
         _isContinuousMode.value = false
         _uiState.value = KeyboardUiState.Idle
     }
@@ -289,47 +279,6 @@ class KeyboardViewModel(
     private var captureJob: Job? = null
 
     /**
-     * Instant mode: the [requestInstantStart] coroutine that reads the preference, and
-     * whether a session is waiting for the engine ([instantPending]) or recording without a
-     * finger on the talk button ([instantSession]).
-     */
-    private var instantRequest: Job? = null
-    private var instantPending = false
-    private var instantSession = false
-
-    /**
-     * Called by the IME when the user just switched to it. With instant mode enabled, starts
-     * recording right away (or as soon as the engine is ready) without a press of the talk
-     * button; the session ends on its own after the user stops speaking ([SpeechEndpointer]).
-     * The keyboard stays open afterwards.
-     */
-    fun requestInstantStart() {
-        instantRequest?.cancel()
-        instantRequest = viewModelScope.launch {
-            if (!appPreferences.instantMode.first()) return@launch
-            Log.d(TAG, "Instant mode - starting to listen once the engine is ready")
-            instantPending = true
-            startPendingInstantSession()
-        }
-    }
-
-    private fun startPendingInstantSession() {
-        if (!instantPending) return
-        if (_engineState.value !is EngineState.Ready || inferenceRepository == null) return
-        instantPending = false
-        instantSession = true
-        onRecordStart()
-    }
-
-    /** Drops a pending or running instant-mode session. */
-    private fun cancelInstantSession() {
-        instantRequest?.cancel()
-        instantRequest = null
-        instantPending = false
-        instantSession = false
-    }
-
-    /**
      * Set by [org.schabi.parakeetype.ime.ParakeetypeInputMethodService] to a lambda that requests
      * the inference service to reload its (still-present) model and re-establish the
      * repository binding.
@@ -340,23 +289,6 @@ class KeyboardViewModel(
      * instead of the VM silently doing nothing.
      */
     var onMissingRepo: (() -> Unit)? = null
-
-    /**
-     * The talk button asks to start recording. A press while an instant-mode session records
-     * takes that session over instead of starting a new one: recording goes on as if the
-     * button had been held from the start (release stops it, drag left locks it) and the
-     * endpointer no longer stops it.
-     */
-    fun onTalkPress() {
-        if (instantSession && captureJob != null &&
-            (_uiState.value is KeyboardUiState.Listening || _uiState.value is KeyboardUiState.Processing)
-        ) {
-            Log.d(TAG, "Instant mode - talk button pressed, handing the session over")
-            instantSession = false
-            return
-        }
-        onRecordStart()
-    }
 
     /**
      * Start microphone capture and pipe audio through the inference engine.
@@ -389,11 +321,6 @@ class KeyboardViewModel(
         _uiState.value = KeyboardUiState.Listening
         _diagnostics.value = PipelineDiagnostics()
 
-        // An instant-mode session runs without a finger on the talk button: it looks like a
-        // held button and the endpointer stops it. The endpointer needs the VAD's speech
-        // probability, so VAD is on for this session whatever the setting says.
-        val instant = instantSession
-
         captureJob = viewModelScope.launch {
             // Capture this coroutine's Job reference so the collect lambda can detect
             // whether it belongs to the currently active session.  If onRecordStart() is
@@ -420,30 +347,10 @@ class KeyboardViewModel(
 
                 // Pipe audio through the inference engine on Dispatchers.Default.
                 // TranscriptResult emissions drive both the UI and text injection.
-                // Fed on the capture thread; its terminal event stops this session like a tap
-                // on the talk button (unless the session was replaced meanwhile).
-                val endpointer = if (instant) {
-                    SpeechEndpointer(
-                        silenceMs = INSTANT_END_OF_SPEECH_SILENCE_MS,
-                        noSpeechTimeoutMs = INSTANT_NO_SPEECH_TIMEOUT_MS,
-                    )
-                } else null
                 repo.transcribe(
                     audio = audioCaptureManager.startCapture(
-                        vadEnabled = vadSensitivity.value || instant,
+                        vadEnabled = vadSensitivity.value,
                         rawSource = rawMicCapture.value,
-                        onSpeechProbability = endpointer?.let { e ->
-                            { probability ->
-                                val event = e.onFrame(probability)
-                                if (event == SpeechEndpointer.Event.EndOfSpeech ||
-                                    event == SpeechEndpointer.Event.NoSpeech
-                                ) viewModelScope.launch {
-                                    if (captureJob != myJob || !instantSession) return@launch
-                                    Log.d(TAG, "Instant mode - $event, stopping")
-                                    onRecordStop()
-                                }
-                            }
-                        },
                     ),
                     postprocessingEnabled = postprocessingEnabled.value,
                     formatNumbersAsDigits = formatNumbersAsDigits.value,
@@ -524,7 +431,6 @@ class KeyboardViewModel(
                 // The flow completed normally. If still in Transcribing (or Listening), it
                 // means VAD filtered out all audio (nothing was said) so InferenceRepository
                 // emitted no Final result. Reset to Idle so the button becomes usable again.
-                if (instant && (captureJob == null || captureJob == myJob)) instantSession = false
                 if (_uiState.value == KeyboardUiState.Transcribing ||
                     _uiState.value == KeyboardUiState.Listening
                 ) {
@@ -538,14 +444,12 @@ class KeyboardViewModel(
             } catch (e: SecurityException) {
                 Log.e(TAG, "Microphone permission denied", e)
                 _isContinuousMode.value = false
-                if (instant) cancelInstantSession()
                 _uiState.value = KeyboardUiState.Error(
                     reason = KeyboardUiState.ErrorReason.MicPermissionDenied,
                 )
             } catch (e: IllegalStateException) {
                 Log.e(TAG, "AudioRecord failed to initialise", e)
                 _isContinuousMode.value = false
-                if (instant) cancelInstantSession()
                 _uiState.value = KeyboardUiState.Error(
                     reason = KeyboardUiState.ErrorReason.MicInitFailed,
                     detail = e.message,
@@ -553,7 +457,6 @@ class KeyboardViewModel(
             } catch (e: Exception) {
                 Log.e(TAG, "Unexpected audio capture error", e)
                 _isContinuousMode.value = false
-                if (instant) cancelInstantSession()
                 _uiState.value = KeyboardUiState.Error(
                     reason = KeyboardUiState.ErrorReason.AudioCaptureFailed,
                     detail = e.message,
@@ -565,8 +468,6 @@ class KeyboardViewModel(
     fun onRecordStop() {
         // Always reset continuous mode when recording stops from any code path.
         _isContinuousMode.value = false
-        // A manual stop also ends an instant-mode session early.
-        instantSession = false
 
         // Stop the microphone - this terminates the upstream audio flow, which causes
         // InferenceRepository to finish collecting audio and run its definitive final
@@ -635,7 +536,6 @@ class KeyboardViewModel(
                 // The result is no longer needed (field was just cleared), so cancel it.
                 captureJob?.cancel()
                 captureJob = null
-                cancelInstantSession()
                 _isContinuousMode.value = false
                 _uiState.value = KeyboardUiState.Idle
             }
@@ -662,7 +562,6 @@ class KeyboardViewModel(
         // Cancel the capture coroutine immediately - don't wait for the audio loop to drain.
         captureJob?.cancel()
         captureJob = null
-        cancelInstantSession()
         _isContinuousMode.value = false
         audioCaptureManager.stopCapture()
         _uiState.value = KeyboardUiState.Idle
@@ -671,7 +570,6 @@ class KeyboardViewModel(
     override fun onCleared() {
         super.onCleared()
         captureJob?.cancel()
-        cancelInstantSession()
         _isContinuousMode.value = false
         textInjector = null
         inferenceRepository = null

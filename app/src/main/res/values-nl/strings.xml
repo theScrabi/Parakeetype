@@ -68,8 +68,6 @@
     <string name="pref_trigger_mode_subtitle">Hoe de spraakopname wordt gestart en gestopt.</string>
     <string name="pref_trigger_hold">Vasthouden om te praten</string>
     <string name="pref_trigger_tap_toggle">Tikken om te schakelen</string>
-    <string name="pref_instant_mode_title">Directe modus</string>
-    <string name="pref_instant_mode_subtitle">Begint meteen te luisteren zodra je naar Parakeetype overschakelt, bijv. met de microfoontoets van een ander toetsenbord, en stopt zodra je stopt met praten. Het toetsenbord blijft open, zodat je verder kunt bewerken of dicteren.</string>
     <string name="pref_delete_title">Verwijderknop</string>
     <string name="pref_delete_subtitle">Wat de prullenbakknop op het toetsenbord verwijdert. ‘Laatste zin’ verwijdert alleen de laatste zin vóór de cursor, zodat een lang document nooit per ongeluk wordt gewist.</string>
     <string name="pref_delete_all">Alle tekst</string>

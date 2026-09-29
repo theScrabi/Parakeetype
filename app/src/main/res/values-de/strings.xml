@@ -70,8 +70,6 @@
     <string name="pref_trigger_mode_subtitle">Wie die Sprachaufnahme gestartet und gestoppt wird.</string>
     <string name="pref_trigger_hold">Halten zum Sprechen</string>
     <string name="pref_trigger_tap_toggle">Tippen zum Umschalten</string>
-    <string name="pref_instant_mode_title">Sofortmodus</string>
-    <string name="pref_instant_mode_subtitle">Beginnt sofort zuzuhören, wenn du zu Parakeetype wechselst, z. B. mit der Mikrofontaste einer anderen Tastatur, und hört auf, sobald du aufhörst zu sprechen. Die Tastatur bleibt geöffnet, sodass du weiter bearbeiten oder diktieren kannst.</string>
     <string name="pref_delete_title">Löschen-Button</string>
     <string name="pref_delete_subtitle">Was der Müll-Button auf der Tastatur löscht. \"Letzter Satz\" entfernt nur den
         letzten Satz vor dem Cursor, damit ein langes Dokument nie versehentlich gelöscht wird.

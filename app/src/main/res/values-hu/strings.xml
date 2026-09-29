@@ -68,8 +68,6 @@
     <string name="pref_trigger_mode_subtitle">A hangfelvétel indításának és leállításának módja.</string>
     <string name="pref_trigger_hold">Nyomva tartás beszédhez</string>
     <string name="pref_trigger_tap_toggle">Koppintás a váltáshoz</string>
-    <string name="pref_instant_mode_title">Azonnali mód</string>
-    <string name="pref_instant_mode_subtitle">Azonnal elkezd figyelni, amint átvált a Parakeetype-ra, pl. egy másik billentyűzet mikrofon gombjával, és leáll, amikor abbahagyja a beszédet. A billentyűzet nyitva marad, így folytathatja a szerkesztést vagy a diktálást.</string>
     <string name="pref_delete_title">Törlés gomb</string>
     <string name="pref_delete_subtitle">Mit töröl a billentyűzet kuka gombja. Az „Utolsó mondat” csak a kurzor előtti legutóbbi mondatot távolítja el, így egy hosszú dokumentum sosem törlődik véletlenül.</string>
     <string name="pref_delete_all">Teljes szöveg</string>

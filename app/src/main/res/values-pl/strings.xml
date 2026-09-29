@@ -68,8 +68,6 @@
     <string name="pref_trigger_mode_subtitle">Jak rozpoczynać i kończyć nagrywanie głosu.</string>
     <string name="pref_trigger_hold">Przytrzymaj, aby mówić</string>
     <string name="pref_trigger_tap_toggle">Dotknij, aby przełączyć</string>
-    <string name="pref_instant_mode_title">Tryb natychmiastowy</string>
-    <string name="pref_instant_mode_subtitle">Zaczyna słuchać, gdy tylko przełączysz się na Parakeetype, np. klawiszem mikrofonu innej klawiatury, i przestaje, gdy przestaniesz mówić. Klawiatura pozostaje otwarta, więc możesz dalej edytować lub dyktować.</string>
     <string name="pref_delete_title">Przycisk usuwania</string>
     <string name="pref_delete_subtitle">Co usuwa przycisk kosza na klawiaturze. „Ostatnie zdanie” usuwa tylko ostatnie zdanie przed kursorem, dzięki czemu długi dokument nigdy nie zostanie przypadkowo wymazany.</string>
     <string name="pref_delete_all">Cały tekst</string>

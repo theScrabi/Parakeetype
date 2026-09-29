@@ -27,7 +27,6 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Parakeet-TDT 0.6B v3** - INT8 quantized, ~700 MB, runs on mid-range hardware
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
-- **Instant mode** - when you switch to Parakeetype (e.g. with the microphone key of another keyboard) it starts listening right away and stops once you stop speaking; the keyboard stays open for editing or more dictation. Opt-in; off by default.
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets)
 - **Keep model loaded** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. On by default; can be turned off in the settings.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
