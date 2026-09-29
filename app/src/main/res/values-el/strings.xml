@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Διαγραφή μοντέλου</string>
     <string name="cd_status_error">Σφάλμα</string>
     <string name="cd_talk_disabled">Το κουμπί ομιλίας είναι απενεργοποιημένο – η μηχανή δεν είναι έτοιμη</string>
+    <string name="cd_talk_recording_stopped">Η εγγραφή σταμάτησε – μεταγραφή σε εξέλιξη</string>
     <string name="cd_talk_stop_continuous">Διακοπή συνεχούς εγγραφής</string>
     <string name="cd_talk_tap_stop">Πατήστε για διακοπή της εγγραφής</string>
     <string name="cd_talk_stop">Διακοπή εγγραφής</string>

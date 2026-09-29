@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Izbriši model</string>
     <string name="cd_status_error">Napaka</string>
     <string name="cd_talk_disabled">Gumb za govor je onemogočen – pogon ni pripravljen</string>
+    <string name="cd_talk_recording_stopped">Snemanje ustavljeno – prepisovanje</string>
     <string name="cd_talk_stop_continuous">Ustavi neprekinjeno snemanje</string>
     <string name="cd_talk_tap_stop">Dotaknite se, da ustavite snemanje</string>
     <string name="cd_talk_stop">Ustavi snemanje</string>

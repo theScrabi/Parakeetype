@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Dzēst modeli</string>
     <string name="cd_status_error">Kļūda</string>
     <string name="cd_talk_disabled">Runāšanas poga atspējota — dzinējs nav gatavs</string>
+    <string name="cd_talk_recording_stopped">Ierakstīšana apturēta – notiek transkribēšana</string>
     <string name="cd_talk_stop_continuous">Apturēt nepārtraukto ierakstīšanu</string>
     <string name="cd_talk_tap_stop">Pieskarieties, lai apturētu ierakstīšanu</string>
     <string name="cd_talk_stop">Apturēt ierakstīšanu</string>

@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Izbriši model</string>
     <string name="cd_status_error">Pogreška</string>
     <string name="cd_talk_disabled">Gumb za govor onemogućen – modul nije spreman</string>
+    <string name="cd_talk_recording_stopped">Snimanje zaustavljeno – transkribiranje</string>
     <string name="cd_talk_stop_continuous">Zaustavi neprekidno snimanje</string>
     <string name="cd_talk_tap_stop">Dodirnite za zaustavljanje snimanja</string>
     <string name="cd_talk_stop">Zaustavi snimanje</string>

@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Elimina modello</string>
     <string name="cd_status_error">Errore</string>
     <string name="cd_talk_disabled">Pulsante Parla disattivato – motore non pronto</string>
+    <string name="cd_talk_recording_stopped">Registrazione interrotta - trascrizione in corso</string>
     <string name="cd_talk_stop_continuous">Interrompi registrazione continua</string>
     <string name="cd_talk_tap_stop">Tocca per interrompere la registrazione</string>
     <string name="cd_talk_stop">Interrompi registrazione</string>

@@ -5,6 +5,7 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material.icons.rounded.Mic
+import androidx.compose.material.icons.rounded.MicOff
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -64,6 +65,8 @@ private const val LOCK_HINT_GAP_DP = 8
  * @param onContinuousModeEnabled Callback fired when the drag-left threshold is crossed (HOLD mode only).
  * @param onLockHintVisibleChange Called whenever the lock hint (left of the button) appears or
  *                                disappears, so the caller can hide what it would cover.
+ * @param micOff               Shows a crossed-out microphone: recording has stopped and the text
+ *                             is being finished (immediate mode, before switching back).
  */
 @Composable
 fun TalkButton(
@@ -77,6 +80,7 @@ fun TalkButton(
     enabled: Boolean = true,
     previewForceLockHint: Boolean = false, // For previews: force lock hint visible
     onLockHintVisibleChange: (Boolean) -> Unit = {},
+    micOff: Boolean = false,
 ) {
     val effectiveListening = isListening && enabled
     val isContinuousActive = isContinuous && effectiveListening
@@ -259,8 +263,13 @@ fun TalkButton(
                 .background(backgroundColor),
         ) {
             Icon(
-                imageVector = if (isContinuousActive) Icons.Rounded.Stop else Icons.Rounded.Mic,
+                imageVector = when {
+                    micOff -> Icons.Rounded.MicOff
+                    isContinuousActive -> Icons.Rounded.Stop
+                    else -> Icons.Rounded.Mic
+                },
                 contentDescription = when {
+                    micOff -> stringResource(R.string.cd_talk_recording_stopped)
                     !enabled -> stringResource(R.string.cd_talk_disabled)
                     isContinuousActive -> stringResource(R.string.cd_talk_stop_continuous)
                     isListening && triggerMode == "TAP_TOGGLE" -> stringResource(R.string.cd_talk_tap_stop)

@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Видалити модель</string>
     <string name="cd_status_error">Помилка</string>
     <string name="cd_talk_disabled">Кнопку запису вимкнено – рушій не готовий</string>
+    <string name="cd_talk_recording_stopped">Запис зупинено – триває розшифрування</string>
     <string name="cd_talk_stop_continuous">Зупинити безперервний запис</string>
     <string name="cd_talk_tap_stop">Торкніться, щоб зупинити запис</string>
     <string name="cd_talk_stop">Зупинити запис</string>

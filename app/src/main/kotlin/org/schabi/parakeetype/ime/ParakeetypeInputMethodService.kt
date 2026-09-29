@@ -181,8 +181,8 @@ class ParakeetypeInputMethodService :
         // text — return to the keyboard the user came from, like the switch-keyboard key.
         // Without a previous keyboard (none recorded) stay here instead of opening the picker.
         keyboardViewModel.onImmediateSessionFinished = {
-            if (!switchToPreviousInputMethod()) {
-                Log.d(TAG, "Immediate mode - no previous keyboard to switch back to")
+            switchToPreviousInputMethod().also { switched ->
+                if (!switched) Log.d(TAG, "Immediate mode - no previous keyboard to switch back to")
             }
         }
 

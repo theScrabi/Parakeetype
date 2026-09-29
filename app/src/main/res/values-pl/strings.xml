@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Usuń model</string>
     <string name="cd_status_error">Błąd</string>
     <string name="cd_talk_disabled">Przycisk mówienia nieaktywny – silnik nie jest gotowy</string>
+    <string name="cd_talk_recording_stopped">Nagrywanie zatrzymane – trwa transkrypcja</string>
     <string name="cd_talk_stop_continuous">Zatrzymaj ciągłe nagrywanie</string>
     <string name="cd_talk_tap_stop">Dotknij, aby zatrzymać nagrywanie</string>
     <string name="cd_talk_stop">Zatrzymaj nagrywanie</string>

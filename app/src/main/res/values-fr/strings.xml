@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Supprimer le modèle</string>
     <string name="cd_status_error">Erreur</string>
     <string name="cd_talk_disabled">Bouton Parler désactivé – moteur non prêt</string>
+    <string name="cd_talk_recording_stopped">Enregistrement arrêté - transcription en cours</string>
     <string name="cd_talk_stop_continuous">Arrêter l\'enregistrement continu</string>
     <string name="cd_talk_tap_stop">Appuyez pour arrêter l\'enregistrement</string>
     <string name="cd_talk_stop">Arrêter l\'enregistrement</string>

@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Изтриване на модела</string>
     <string name="cd_status_error">Грешка</string>
     <string name="cd_talk_disabled">Бутонът за запис е деактивиран – механизмът за разпознаване не е готов</string>
+    <string name="cd_talk_recording_stopped">Записът е спрян – транскрибиране</string>
     <string name="cd_talk_stop_continuous">Спиране на непрекъснатия запис</string>
     <string name="cd_talk_tap_stop">Докоснете, за да спрете записа</string>
     <string name="cd_talk_stop">Спиране на записа</string>

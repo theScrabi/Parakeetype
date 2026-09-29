@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Modell löschen</string>
     <string name="cd_status_error">Fehler</string>
     <string name="cd_talk_disabled">Sprechtaste deaktiviert – Engine nicht bereit</string>
+    <string name="cd_talk_recording_stopped">Aufnahme beendet - wird transkribiert</string>
     <string name="cd_talk_stop_continuous">Daueraufnahme beenden</string>
     <string name="cd_talk_tap_stop">Tippen, um die Aufnahme zu beenden</string>
     <string name="cd_talk_stop">Aufnahme beenden</string>

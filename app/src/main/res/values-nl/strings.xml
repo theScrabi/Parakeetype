@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Model verwijderen</string>
     <string name="cd_status_error">Fout</string>
     <string name="cd_talk_disabled">Spreekknop uitgeschakeld - engine niet gereed</string>
+    <string name="cd_talk_recording_stopped">Opname gestopt - bezig met transcriberen</string>
     <string name="cd_talk_stop_continuous">Doorlopende opname stoppen</string>
     <string name="cd_talk_tap_stop">Tik om de opname te stoppen</string>
     <string name="cd_talk_stop">Opname stoppen</string>

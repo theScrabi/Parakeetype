@@ -8,6 +8,14 @@ interface VadFilter {
     val isSpeechActive: Boolean
 
     /**
+     * Speech probability in [0.0, 1.0] of the last chunk passed to [process], before the
+     * onset / hangover smoothing. End-of-speech detection uses it: the smoothed output
+     * opens on a single frame above a low threshold, so a breath or click would count as
+     * speech.
+     */
+    val lastSpeechProbability: Float
+
+    /**
      * Processes a single chunk of audio and returns a list of chunks to forward to inference.
      * Returns an empty list during silence, and buffers leading audio to emit on speech onset.
      */

@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Eliminar modelo</string>
     <string name="cd_status_error">Erro</string>
     <string name="cd_talk_disabled">Botão de falar desativado – motor não está pronto</string>
+    <string name="cd_talk_recording_stopped">Gravação parada - a transcrever</string>
     <string name="cd_talk_stop_continuous">Parar gravação contínua</string>
     <string name="cd_talk_tap_stop">Toque para parar a gravação</string>
     <string name="cd_talk_stop">Parar gravação</string>

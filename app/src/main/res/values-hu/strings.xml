@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Modell törlése</string>
     <string name="cd_status_error">Hiba</string>
     <string name="cd_talk_disabled">Beszéd gomb letiltva – a motor nem áll készen</string>
+    <string name="cd_talk_recording_stopped">A felvétel leállt – átírás folyamatban</string>
     <string name="cd_talk_stop_continuous">Folyamatos felvétel leállítása</string>
     <string name="cd_talk_tap_stop">Koppintson a felvétel leállításához</string>
     <string name="cd_talk_stop">Felvétel leállítása</string>

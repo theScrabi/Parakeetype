@@ -59,6 +59,8 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  *     TalkButton stays centred with equal weight on both sides.
  *     While no model is installed the whole row is replaced by a single centred
  *     "Open Parakeetype" key: dictation, delete and Enter are useless until then.
+ *     In immediate mode ([showEditingKeys] = `false`) only the TalkButton is shown: the
+ *     keyboard returns to the previous one after dictating, so there is nothing to edit.
  *
  * @param uiState                Current UI state collected from [KeyboardViewModel.uiState].
  * @param isContinuous           `true` when continuous (locked) recording mode is active.
@@ -77,6 +79,7 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  * @param onSwitchKeyboard       Switches the active IME back to the previous keyboard.
  * @param onOpenCompanionApp     Opens the Parakeetype companion app (e.g. to grant permission or download the model).
  * @param diagnostics            Pipeline counters from the most recent recording session.
+ * @param showEditingKeys        `false` hides the delete keys and Enter (immediate mode).
  */
 @Composable
 fun KeyboardScreen(
@@ -98,6 +101,7 @@ fun KeyboardScreen(
     onOpenCompanionApp: () -> Unit,
     modifier: Modifier = Modifier,
     diagnostics: PipelineDiagnostics = PipelineDiagnostics(),
+    showEditingKeys: Boolean = true,
     previewForceLockHint: Boolean = false,
     /**
      * Fixed height in pixels for the main keyboard content area (buttons, status row).
@@ -242,7 +246,7 @@ fun KeyboardScreen(
                 // talk button's lock hint is shown, since the hint floats over this spot.
                 Box(modifier = Modifier.weight(1f)) {
                     // Fully qualified: the enclosing Row's RowScope overload isn't usable here.
-                    androidx.compose.animation.AnimatedVisibility(
+                    if (showEditingKeys) androidx.compose.animation.AnimatedVisibility(
                         visible = !lockHintVisible,
                         enter = fadeIn(tween(150)),
                         exit = fadeOut(tween(120)),
@@ -272,12 +276,15 @@ fun KeyboardScreen(
                     enabled = uiState !is KeyboardUiState.EngineLoading && uiState !is KeyboardUiState.Error && uiState !is KeyboardUiState.Transcribing,
                     previewForceLockHint = previewForceLockHint,
                     onLockHintVisibleChange = { lockHintVisible = it },
+                    // Immediate mode: make the end of recording visible until the switch back.
+                    micOff = !showEditingKeys && uiState is KeyboardUiState.Transcribing,
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
                 // Right group: [Delete Word] directly right of the talk button, [Enter] far right
                 Box(modifier = Modifier.weight(1f)) {
+                    if (!showEditingKeys) return@Box
                     DeleteKey(
                         icon = Icons.AutoMirrored.Rounded.Backspace,
                         contentDescription = stringResource(R.string.cd_delete_word),
@@ -431,6 +438,7 @@ fun KeyboardScreen(
     val enterAction by viewModel.enterAction.collectAsState()
     val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
     val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
+    val immediateMode by viewModel.immediateMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     // Only surface real diagnostics counters when the user has enabled the badge in settings.
@@ -454,6 +462,7 @@ fun KeyboardScreen(
         onSwitchKeyboard = onSwitchKeyboard,
         onOpenCompanionApp = onOpenCompanionApp,
         diagnostics = diagnostics,
+        showEditingKeys = !immediateMode,
         keyboardContentHeightPx = keyboardContentHeightPx,
         navBarHeightPx = navBarHeightPx,
         keyboardPosition = if (isLandscape) positionLandscape else positionPortrait,
@@ -472,6 +481,7 @@ private fun KeyboardScreenPreviewScaffold(
     enterAction: EnterAction = EnterAction.DONE,
     keyboardPosition: String = "CENTER",
     height: Int = 220,
+    showEditingKeys: Boolean = true,
 ) {
     ParakeetypeKeyboardTheme {
         Box(modifier = Modifier.height(height.dp)) {
@@ -493,9 +503,22 @@ private fun KeyboardScreenPreviewScaffold(
                 onOpenCompanionApp = {},
                 previewForceLockHint = showLockHint,
                 keyboardPosition = keyboardPosition,
+                showEditingKeys = showEditingKeys,
             )
         }
     }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF111111, name = "Immediate mode · listening")
+@Composable
+private fun KeyboardScreenImmediateModePreview() {
+    KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Listening, isContinuous = true, showEditingKeys = false)
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF111111, name = "Immediate mode · stopped, transcribing")
+@Composable
+private fun KeyboardScreenImmediateModeStoppedPreview() {
+    KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Transcribing, showEditingKeys = false)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111, widthDp = 800, name = "Landscape · docked right")

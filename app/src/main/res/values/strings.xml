@@ -37,6 +37,7 @@
     <string name="cd_delete_model">Delete model</string>
     <string name="cd_status_error">Error</string>
     <string name="cd_talk_disabled">Talk button disabled - engine not ready</string>
+    <string name="cd_talk_recording_stopped">Recording stopped - transcribing</string>
     <string name="cd_talk_stop_continuous">Stop continuous recording</string>
     <string name="cd_talk_tap_stop">Tap to stop recording</string>
     <string name="cd_talk_stop">Stop recording</string>

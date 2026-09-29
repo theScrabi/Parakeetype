@@ -43,6 +43,9 @@ class SileroVadFilter(
 
     override val isSpeechActive: Boolean get() = state == State.SPEECH
 
+    override var lastSpeechProbability: Float = 0f
+        private set
+
     init {
         try {
             env = OrtEnvironment.getEnvironment()
@@ -109,6 +112,7 @@ class SileroVadFilter(
             speechProb = if (rms > 0.01f) 1.0f else 0.0f
         }
 
+        lastSpeechProbability = speechProb
         return applySmoothing(chunk, speechProb)
     }
 

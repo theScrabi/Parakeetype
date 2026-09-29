@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Ištrinti modelį</string>
     <string name="cd_status_error">Klaida</string>
     <string name="cd_talk_disabled">Kalbėjimo mygtukas išjungtas – variklis neparuoštas</string>
+    <string name="cd_talk_recording_stopped">Įrašymas sustabdytas – transkribuojama</string>
     <string name="cd_talk_stop_continuous">Sustabdyti nepertraukiamą įrašymą</string>
     <string name="cd_talk_tap_stop">Palieskite, kad sustabdytumėte įrašymą</string>
     <string name="cd_talk_stop">Sustabdyti įrašymą</string>

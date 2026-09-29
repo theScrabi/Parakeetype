@@ -3,7 +3,6 @@ package org.schabi.parakeetype.recognition
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.SystemClock
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
@@ -12,12 +11,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.schabi.parakeetype.audio.AudioCaptureManager
 import org.schabi.parakeetype.audio.AudioChunk
+import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.inference.TranscriptResult
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import kotlin.math.log10
@@ -27,11 +26,8 @@ private const val TAG = "RecognitionSession"
 /** Without any speech for this long the session ends with [SpeechRecognizer.ERROR_SPEECH_TIMEOUT]. */
 private const val NO_SPEECH_TIMEOUT_MS = 8_000L
 
-/**
- * Silence between the end of speech and the VAD's utterance boundary marker: the Silero VAD's
- * 450 ms hangover plus its 600 ms boundary window (see `SileroVadFilter`).
- */
-private const val VAD_BOUNDARY_DELAY_MS = 1_050L
+/** Silence after speech that ends the session when the client asks for no length. */
+private const val DEFAULT_COMPLETE_SILENCE_MS = 1_000L
 
 /** Report the microphone level every 3rd 30 ms chunk (~11 updates per second). */
 private const val LEVEL_REPORT_INTERVAL_CHUNKS = 3
@@ -126,9 +122,6 @@ class RecognitionSession(
     private val capture = AudioCaptureManager(audioContext)
 
     private var job: Job? = null
-    private var noSpeechTimeout: Job? = null
-    private var endpoint: Job? = null
-    private var startedAt = 0L
     private var speechStarted = false
 
     /** Read on the capture thread (see [onLevel]). */
@@ -140,7 +133,7 @@ class RecognitionSession(
 
     fun start() {
         check(job == null) { "session already started" }
-        startedAt = SystemClock.elapsedRealtime()
+        Log.d(TAG, "Starting session: $options")
         job = scope.launch {
             try {
                 run()
@@ -157,8 +150,6 @@ class RecognitionSession(
     fun stop() {
         if (stopRequested || finished) return
         stopRequested = true
-        noSpeechTimeout?.cancel()
-        endpoint?.cancel()
         capture.stopCapture()
         if (speechStarted) listener.onEndOfSpeech()
     }
@@ -180,10 +171,14 @@ class RecognitionSession(
         val audio = Channel<AudioChunk>(Channel.UNLIMITED)
         var levelChunks = 0
         var readyReported = false
+        val endpointer = endpointer()
         launch {
             try {
-                // VAD is always on: its utterance boundaries are the end-of-speech detection.
-                capture.startCapture(vadEnabled = true, rawSource = rawSource, onLevel = { level ->
+                // VAD is always on: its speech probability drives the end-of-speech detection.
+                capture.startCapture(vadEnabled = true, rawSource = rawSource, onSpeechProbability = { probability ->
+                    val event = endpointer?.onFrame(probability)
+                    if (event != null) launch { onEndpointerEvent(event) }
+                }, onLevel = { level ->
                     // A stop() that raced the start of capture was lost: startCapture resets
                     // the manager's stop flag when the AudioRecord starts.
                     if (stopRequested) capture.stopCapture()
@@ -195,10 +190,7 @@ class RecognitionSession(
                         }
                         listener.onRmsChanged(rmsToDb(level))
                     }
-                }).collect { chunk ->
-                    onChunk(chunk)
-                    audio.send(chunk)
-                }
+                }).collect { chunk -> audio.send(chunk) }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: SecurityException) {
@@ -209,16 +201,6 @@ class RecognitionSession(
                 fail(SpeechRecognizer.ERROR_AUDIO)
             } finally {
                 audio.close()
-            }
-        }
-
-        if (!options.segmented) {
-            noSpeechTimeout = launch {
-                delay(NO_SPEECH_TIMEOUT_MS)
-                if (!speechStarted) {
-                    Log.d(TAG, "No speech within ${NO_SPEECH_TIMEOUT_MS}ms")
-                    fail(SpeechRecognizer.ERROR_SPEECH_TIMEOUT)
-                }
             }
         }
 
@@ -275,7 +257,6 @@ class RecognitionSession(
         // The transcription flow ends once capture has ended and the final flush is done.
         if (finished) return@coroutineScope
         finished = true
-        noSpeechTimeout?.cancel()
         if (options.segmented) {
             listener.onEndOfSegmentedSession()
         } else {
@@ -285,35 +266,40 @@ class RecognitionSession(
         }
     }
 
-    /** Tracks speech start / end from the VAD-filtered audio (runs on the main thread). */
-    private fun CoroutineScope.onChunk(chunk: AudioChunk) {
-        if (stopRequested) return  // hangover drained after stop()
-        if (chunk.isSilenceBoundary) {
-            if (speechStarted && endpointingEnabled()) {
-                val minimumLeft = options.minimumLengthMs - (SystemClock.elapsedRealtime() - startedAt)
-                val wait = maxOf(options.completeSilenceMs - VAD_BOUNDARY_DELAY_MS, minimumLeft, 0L)
-                endpoint?.cancel()
-                endpoint = launch {
-                    delay(wait)
-                    Log.d(TAG, "End of speech detected")
-                    stop()
-                }
-            }
-        } else if (chunk.samples.isNotEmpty()) {
-            // Speech (resumed): a pending endpoint no longer applies.
-            endpoint?.cancel()
-            endpoint = null
-            if (!speechStarted) {
+    /**
+     * The end-of-speech detection for [options], or `null` when the session only ends on
+     * [stop]: a segmented session runs until stopped unless the client asked for a silence /
+     * length limit.
+     */
+    private fun endpointer(): SpeechEndpointer? {
+        if (options.segmented && options.completeSilenceMs <= 0 && options.minimumLengthMs <= 0) return null
+        return SpeechEndpointer(
+            silenceMs = options.completeSilenceMs.takeIf { it > 0 } ?: DEFAULT_COMPLETE_SILENCE_MS,
+            noSpeechTimeoutMs = NO_SPEECH_TIMEOUT_MS.takeUnless { options.segmented },
+            minimumLengthMs = options.minimumLengthMs,
+        )
+    }
+
+    /** Runs on the main thread. */
+    private fun onEndpointerEvent(event: SpeechEndpointer.Event) {
+        if (finished || stopRequested) return
+        when (event) {
+            SpeechEndpointer.Event.SpeechStart -> {
                 speechStarted = true
-                noSpeechTimeout?.cancel()
                 listener.onBeginningOfSpeech()
+            }
+
+            SpeechEndpointer.Event.EndOfSpeech -> {
+                Log.d(TAG, "End of speech detected")
+                stop()
+            }
+
+            SpeechEndpointer.Event.NoSpeech -> {
+                Log.d(TAG, "No speech within ${NO_SPEECH_TIMEOUT_MS}ms")
+                fail(SpeechRecognizer.ERROR_SPEECH_TIMEOUT)
             }
         }
     }
-
-    /** Segmented sessions run until stopped unless the client asked for a silence / length limit. */
-    private fun endpointingEnabled(): Boolean =
-        !options.segmented || options.completeSilenceMs > 0 || options.minimumLengthMs > 0
 
     private fun fail(error: Int) {
         if (finished) return

@@ -68,7 +68,12 @@ class RMSVadFilter(sensitivity: Float = 0.5f) : VadFilter {
     /** `true` while outputting speech frames (including during the hangover window). */
     override val isSpeechActive: Boolean get() = state == State.SPEECH
 
+    /** Energy has no probability: 1 above the threshold, 0 below. */
+    override var lastSpeechProbability: Float = 0f
+        private set
+
     override fun process(chunk: AudioChunk, rms: Float): List<AudioChunk> {
+        lastSpeechProbability = if (rms >= threshold) 1f else 0f
         return when (state) {
             State.SILENCE -> {
                 // Always maintain the pre-roll ring buffer during silence so that

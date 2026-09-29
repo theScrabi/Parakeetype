@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Odstrániť model</string>
     <string name="cd_status_error">Chyba</string>
     <string name="cd_talk_disabled">Tlačidlo hovorenia je vypnuté – modul nie je pripravený</string>
+    <string name="cd_talk_recording_stopped">Nahrávanie zastavené – prepisuje sa</string>
     <string name="cd_talk_stop_continuous">Zastaviť nepretržité nahrávanie</string>
     <string name="cd_talk_tap_stop">Klepnutím zastavíte nahrávanie</string>
     <string name="cd_talk_stop">Zastaviť nahrávanie</string>

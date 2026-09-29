@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Ħassar il-mudell</string>
     <string name="cd_status_error">Żball</string>
     <string name="cd_talk_disabled">Buttuna tat-taħdit diżattivata – il-magna mhijiex lesta</string>
+    <string name="cd_talk_recording_stopped">Ir-reġistrazzjoni waqfet - qed tiġi traskritta</string>
     <string name="cd_talk_stop_continuous">Waqqaf ir-reġistrazzjoni kontinwa</string>
     <string name="cd_talk_tap_stop">Agħfas biex twaqqaf ir-reġistrazzjoni</string>
     <string name="cd_talk_stop">Waqqaf ir-reġistrazzjoni</string>

@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Kustuta mudel</string>
     <string name="cd_status_error">Viga</string>
     <string name="cd_talk_disabled">Rääkimisnupp on keelatud - mootor pole valmis</string>
+    <string name="cd_talk_recording_stopped">Salvestamine peatatud – transkribeerimine</string>
     <string name="cd_talk_stop_continuous">Peata pidev salvestamine</string>
     <string name="cd_talk_tap_stop">Puudutage salvestamise peatamiseks</string>
     <string name="cd_talk_stop">Peata salvestamine</string>

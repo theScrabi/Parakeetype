@@ -60,14 +60,14 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 | Package | Key files | Responsibility |
 |---|---|---|
-| audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, AudioChunk, PermissionHelper | Mic capture, PCM chunking, Voice Activity Detection, optional mic calibration |
+| audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, SpeechEndpointer, AudioChunk, PermissionHelper | Mic capture, PCM chunking, Voice Activity Detection, end-of-speech detection, optional mic calibration |
 | inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
 | ime | ParakeetypeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
 | recognition | ParakeetypeRecognitionService, VoiceInputActivity, RecognitionSession, InferenceConnection, TranscriptAccumulator | Speech recognizer for other apps: android.speech RecognitionService and RecognizerIntent.ACTION_RECOGNIZE_SPEECH |
 | settings/model | ModelId, ModelRegistry, ModelImporter, ModelStorageManager, ModelState, ModelViewModel | Model enumeration, single-archive import, SHA-256 verification, on-disk paths |
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
-| ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView, ImmediateEndpointer | IME Compose hosting, UI state, immediate-mode end-of-speech detection |
+| ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
 | ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, LanguageSelector | Keyboard UI sub-components |
 | ui/theme | ParakeetypeKeyboardTheme | Compose theming |
 | crash | ParakeetypeApplication, CrashReporter, CrashReportDialog, CrashReportFormatter, LogcatReader | Local crash log: JVM uncaught-exception handler + ApplicationExitInfo (native crashes, ANRs), notification, Share dialog |
@@ -155,7 +155,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 - Hosts the keyboard UI via ImeComposeView.
 - Binds to InferenceService in onCreate and stays bound for the IME's lifetime (unbinds in onDestroy, i.e. when another keyboard is selected).
 - Forwards InputConnection changes to TextInjector and KeyboardViewModel.
-- Immediate mode (`immediate_mode`, opt-in): the system creates a new IME service on every switch to Parakeetype, so the first onStartInputView within 3 s of onCreate means "the user just switched here" (e.g. with another keyboard's microphone key; a default keyboard created at boot is shown much later). KeyboardViewModel.requestImmediateStart then records as soon as the engine is ready — VAD forced on, talk button shown locked — and ImmediateEndpointer stops capture after 2 s of silence following speech (VAD boundary + remaining silence) or 8 s without speech. Once the final text is committed the IME calls switchToPreviousInputMethod(); a session that ends in an error stays on the keyboard.
+- Immediate mode (`immediate_mode`, opt-in): the system creates a new IME service on every switch to Parakeetype, so the first onStartInputView within 3 s of onCreate means "the user just switched here" (e.g. with another keyboard's microphone key; a default keyboard created at boot is shown much later). KeyboardViewModel.requestImmediateStart then records as soon as the engine is ready — VAD forced on, talk button shown locked — and a SpeechEndpointer stops capture after 2 s of silence following speech or 8 s without speech. Once the final text is committed the IME calls switchToPreviousInputMethod(); a session that ends in an error stays on the keyboard. While the setting is on, the keyboard shows only the talk button (no delete keys, no Enter).
 
 **TextInjector**
 
@@ -286,6 +286,8 @@ Key constants in InferenceRepository:
 1. Stable-prefix trim: last 3 partials share a common leading-word prefix -> trim audio corresponding to stable words, retain MIN_CONTEXT_SAMPLES tail.
 2. Silence trim: 2 consecutive blank strides -> proactive trim regardless of prefix agreement.
 3. Force trim: window > FORCE_TRIM_WINDOW_SAMPLES with no stable prefix -> unconditional trim.
+
+**End of speech** (ending a recognizer or immediate-mode session) is not taken from these boundaries but from SpeechEndpointer, fed with the VAD's raw per-frame speech probability (VadFilter.lastSpeechProbability via AudioCaptureManager.startCapture(onSpeechProbability)). The VAD's filtered output opens on one frame ≥ 0.3 and replays its 600 ms lead-in, so a breath or a tap on the phone looked like resumed speech and postponed an endpoint that waited past the boundary forever. SpeechEndpointer counts only 4 consecutive frames (120 ms) at ≥ 0.5 as speech (the shortest words reach 7+, breaths and taps 0–2) and measures the silence in frames from the last such run.
 
 **Mid-session final**: when isSilenceBoundary is set on an AudioChunk, the repository emits Final(isUtteranceBoundary = true) without stopping capture (useful for long continuous dictation).
 
@@ -443,7 +445,7 @@ Two entry points bind the same InferenceService as the IME (via InferenceConnect
            (or EXTRA_RESULTS_PENDINGINTENT); leaving the activity cancels; while the model loads the
            sheet's title shows the keyboard's "Loading transcription engine…" text
 
-RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE); when an installed model has to load first, Listener.onModelLoading(true / false) brackets the wait. VAD is always on: the first utterance boundary ends a normal session (end of speech ≈ 1 s of silence; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS extend it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied audio) is rejected with ERROR_CLIENT; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
+RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE); when an installed model has to load first, Listener.onModelLoading(true / false) brackets the wait. VAD is always on and feeds a SpeechEndpointer, which ends a normal session (end of speech = 1 s of silence after sustained speech; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS change it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied audio) is rejected with ERROR_CLIENT; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
 
 AudioCaptureManager builds its AudioRecord with AudioRecord.Builder.setContext(context) — that is what carries the attribution — and reports the raw level of every chunk through the optional onLevel callback (used for rmsChanged).
 

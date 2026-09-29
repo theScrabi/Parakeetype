@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Удалить модель</string>
     <string name="cd_status_error">Ошибка</string>
     <string name="cd_talk_disabled">Кнопка записи отключена – движок не готов</string>
+    <string name="cd_talk_recording_stopped">Запись остановлена – идёт расшифровка</string>
     <string name="cd_talk_stop_continuous">Остановить непрерывную запись</string>
     <string name="cd_talk_tap_stop">Нажмите, чтобы остановить запись</string>
     <string name="cd_talk_stop">Остановить запись</string>

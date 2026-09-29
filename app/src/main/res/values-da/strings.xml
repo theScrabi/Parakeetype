@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Slet model</string>
     <string name="cd_status_error">Fejl</string>
     <string name="cd_talk_disabled">Taleknap deaktiveret - motoren er ikke klar</string>
+    <string name="cd_talk_recording_stopped">Optagelsen er stoppet - transskriberer</string>
     <string name="cd_talk_stop_continuous">Stop kontinuerlig optagelse</string>
     <string name="cd_talk_tap_stop">Tryk for at stoppe optagelsen</string>
     <string name="cd_talk_stop">Stop optagelsen</string>

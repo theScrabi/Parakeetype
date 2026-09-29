@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Ștergeți modelul</string>
     <string name="cd_status_error">Eroare</string>
     <string name="cd_talk_disabled">Butonul de vorbire este dezactivat – motorul nu este pregătit</string>
+    <string name="cd_talk_recording_stopped">Înregistrarea s-a oprit – se transcrie</string>
     <string name="cd_talk_stop_continuous">Opriți înregistrarea continuă</string>
     <string name="cd_talk_tap_stop">Atingeți pentru a opri înregistrarea</string>
     <string name="cd_talk_stop">Opriți înregistrarea</string>

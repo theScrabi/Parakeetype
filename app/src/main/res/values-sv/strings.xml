@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Radera modell</string>
     <string name="cd_status_error">Fel</string>
     <string name="cd_talk_disabled">Talknappen är inaktiverad - motorn är inte redo</string>
+    <string name="cd_talk_recording_stopped">Inspelningen har stoppats - transkriberar</string>
     <string name="cd_talk_stop_continuous">Stoppa kontinuerlig inspelning</string>
     <string name="cd_talk_tap_stop">Tryck för att stoppa inspelningen</string>
     <string name="cd_talk_stop">Stoppa inspelningen</string>

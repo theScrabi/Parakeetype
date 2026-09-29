@@ -38,6 +38,7 @@
     <string name="cd_delete_model">Poista malli</string>
     <string name="cd_status_error">Virhe</string>
     <string name="cd_talk_disabled">Puhepainike ei käytössä - moottori ei ole valmis</string>
+    <string name="cd_talk_recording_stopped">Tallennus pysäytetty – litteroidaan</string>
     <string name="cd_talk_stop_continuous">Lopeta jatkuva tallennus</string>
     <string name="cd_talk_tap_stop">Lopeta tallennus napauttamalla</string>
     <string name="cd_talk_stop">Lopeta tallennus</string>
