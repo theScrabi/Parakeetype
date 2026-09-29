@@ -9,10 +9,16 @@
 # (stored, not compressed: the int8 ONNX weights do not compress, and stored entries make
 # the on-device import a straight copy).
 #
+# The model is licensed CC BY 4.0, which only allows redistribution together with the
+# licence and an attribution notice, so the archive also contains LICENSE.txt (the full
+# licence text) and NOTICE.txt (creator, source, changes) from devtools/licenses/.
+# ModelImporter skips entries that are not model files.
+#
 # Upload the result as a release asset and point MODEL_ARCHIVE_RELEASE in ModelRegistry.kt
 # at it (currently a TODO placeholder: no archive is hosted yet).
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BASE="https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main"
 OUT_DIR="${1:-.}"
 ARCHIVE="parakeet-tdt-0.6b-v3-int8.zip"
@@ -37,6 +43,10 @@ for entry in "${FILES[@]}"; do
   echo "$sha  $WORK/$name" | sha256sum -c --quiet -
   names+=("$name")
 done
+
+cp "$SCRIPT_DIR/licenses/CC-BY-4.0.txt" "$WORK/LICENSE.txt"
+cp "$SCRIPT_DIR/licenses/parakeet-tdt-0.6b-v3-NOTICE.txt" "$WORK/NOTICE.txt"
+names+=(LICENSE.txt NOTICE.txt)
 
 mkdir -p "$OUT_DIR"
 rm -f "$OUT_DIR/$ARCHIVE"

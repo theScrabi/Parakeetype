@@ -1,0 +1,27 @@
+Parakeet TDT 0.6B V3 (multilingual) — ONNX, int8
+=================================================
+
+This archive contains the NVIDIA Parakeet TDT 0.6B V3 speech recognition model,
+packaged for import into the Parakeetype Android keyboard.
+
+Original work
+  "parakeet-tdt-0.6b-v3" by NVIDIA
+  https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3
+
+Licence
+  Creative Commons Attribution 4.0 International (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/legalcode
+  The full licence text is included in this archive as LICENSE.txt.
+
+Changes made to the original work
+  - Exported from NeMo to ONNX (encoder, decoder/joint network and the
+    nemo128 preprocessor) and quantised to int8; vocabulary extracted to
+    vocab.txt. Conversion by istupakov:
+    https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx
+  - Repackaged, without further modification, into this single ZIP archive
+    by the Parakeetype project.
+
+Disclaimer
+  The model is provided "as-is", without warranties of any kind, as stated in
+  Section 5 of the licence. NVIDIA and the other licensors do not endorse
+  Parakeetype or its use of the model.
