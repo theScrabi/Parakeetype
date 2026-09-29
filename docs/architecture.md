@@ -67,7 +67,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | settings/model | ModelId, ModelRegistry, ModelImporter, ModelStorageManager, ModelState, ModelViewModel | Model enumeration, single-archive import, SHA-256 verification, on-disk paths |
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
 | settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
-| ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
+| ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView, ImmediateEndpointer | IME Compose hosting, UI state, immediate-mode end-of-speech detection |
 | ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, LanguageSelector | Keyboard UI sub-components |
 | ui/theme | ParakeetypeKeyboardTheme | Compose theming |
 | crash | ParakeetypeApplication, CrashReporter, CrashReportDialog, CrashReportFormatter, LogcatReader | Local crash log: JVM uncaught-exception handler + ApplicationExitInfo (native crashes, ANRs), notification, Share dialog |
@@ -155,6 +155,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 - Hosts the keyboard UI via ImeComposeView.
 - Binds to InferenceService in onCreate and stays bound for the IME's lifetime (unbinds in onDestroy, i.e. when another keyboard is selected).
 - Forwards InputConnection changes to TextInjector and KeyboardViewModel.
+- Immediate mode (`immediate_mode`, opt-in): the system creates a new IME service on every switch to Parakeetype, so the first onStartInputView within 3 s of onCreate means "the user just switched here" (e.g. with another keyboard's microphone key; a default keyboard created at boot is shown much later). KeyboardViewModel.requestImmediateStart then records as soon as the engine is ready — VAD forced on, talk button shown locked — and ImmediateEndpointer stops capture after 2 s of silence following speech (VAD boundary + remaining silence) or 8 s without speech. Once the final text is committed the IME calls switchToPreviousInputMethod(); a session that ends in an error stays on the keyboard.
 
 **TextInjector**
 
@@ -190,7 +191,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Parakeetype itself never downloads anything.
 
-**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default true — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
+**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), immediate_mode (Boolean, default false — listen on switching to the keyboard, switch back after the end of speech), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default true — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
 
 ---
 

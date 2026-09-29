@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kuidas häälsalvestust alustatakse ja peatatakse.</string>
     <string name="pref_trigger_hold">Hoidke all ja rääkige</string>
     <string name="pref_trigger_tap_toggle">Puudutage sisse/välja</string>
+    <string name="pref_immediate_mode_title">Kohene režiim</string>
+    <string name="pref_immediate_mode_subtitle">Hakkab kuulama kohe, kui lülitute ümber klaviatuurile Parakeetype, nt teise klaviatuuri mikrofoniklahviga. Kui lõpetate rääkimise, sisestatakse tekst ja lülitutakse tagasi sellele klaviatuurile.</string>
     <string name="pref_delete_title">Kustutamisnupp</string>
     <string name="pref_delete_subtitle">Mida klaviatuuri prügikastinupp kustutab. „Viimane lause“ eemaldab ainult kursori ees oleva viimase lause, nii et pikka dokumenti ei kustutata kunagi kogemata.</string>
     <string name="pref_delete_all">Kogu tekst</string>

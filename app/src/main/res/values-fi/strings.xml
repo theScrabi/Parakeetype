@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Miten puheen tallennus aloitetaan ja lopetetaan.</string>
     <string name="pref_trigger_hold">Puhu pitämällä painettuna</string>
     <string name="pref_trigger_tap_toggle">Vaihda napauttamalla</string>
+    <string name="pref_immediate_mode_title">Välitön tila</string>
+    <string name="pref_immediate_mode_subtitle">Alkaa kuunnella heti, kun vaihdat Parakeetype-näppäimistöön, esim. toisen näppäimistön mikrofonipainikkeella. Kun lopetat puhumisen, teksti kirjoitetaan ja palaat siihen näppäimistöön.</string>
     <string name="pref_delete_title">Poistopainike</string>
     <string name="pref_delete_subtitle">Mitä näppäimistön roskakoripainike poistaa. ”Viimeinen lause” poistaa vain kohdistinta edeltävän viimeisimmän lauseen, joten pitkä asiakirja ei koskaan pyyhkiydy vahingossa.</string>
     <string name="pref_delete_all">Kaikki teksti</string>

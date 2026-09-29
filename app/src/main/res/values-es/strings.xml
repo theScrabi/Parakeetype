@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Cómo iniciar y detener la grabación de voz.</string>
     <string name="pref_trigger_hold">Mantener pulsado para hablar</string>
     <string name="pref_trigger_tap_toggle">Tocar para activar/desactivar</string>
+    <string name="pref_immediate_mode_title">Modo inmediato</string>
+    <string name="pref_immediate_mode_subtitle">Empieza a escuchar en cuanto cambias a Parakeetype, p. ej. con la tecla del micrófono de otro teclado. Cuando dejas de hablar, se escribe el texto y vuelves a ese teclado.</string>
     <string name="pref_delete_title">Botón de eliminar</string>
     <string name="pref_delete_subtitle">Qué elimina el botón de la papelera del teclado. «Última frase» solo quita la frase más reciente antes del cursor, así nunca se borra un documento largo por accidente.</string>
     <string name="pref_delete_all">Todo el texto</string>

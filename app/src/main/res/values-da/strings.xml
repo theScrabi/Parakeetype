@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Hvordan taleoptagelsen startes og stoppes.</string>
     <string name="pref_trigger_hold">Hold for at tale</string>
     <string name="pref_trigger_tap_toggle">Tryk for at slå til/fra</string>
+    <string name="pref_immediate_mode_title">Øjeblikkelig tilstand</string>
+    <string name="pref_immediate_mode_subtitle">Begynder at lytte, så snart du skifter til Parakeetype, f.eks. med mikrofontasten på et andet tastatur. Når du holder op med at tale, bliver teksten skrevet, og du skiftes tilbage til det tastatur.</string>
     <string name="pref_delete_title">Sletknap</string>
     <string name="pref_delete_subtitle">Hvad papirkurvsknappen på tastaturet sletter. \"Sidste sætning\" fjerner kun den seneste sætning før markøren, så et langt dokument aldrig slettes ved et uheld.</string>
     <string name="pref_delete_all">Al tekst</string>

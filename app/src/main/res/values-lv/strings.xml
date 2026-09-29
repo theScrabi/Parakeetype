@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kā sākt un apturēt balss ierakstīšanu.</string>
     <string name="pref_trigger_hold">Turēt, lai runātu</string>
     <string name="pref_trigger_tap_toggle">Pieskarties, lai pārslēgtu</string>
+    <string name="pref_immediate_mode_title">Tūlītējais režīms</string>
+    <string name="pref_immediate_mode_subtitle">Sāk klausīties, tiklīdz pārslēdzaties uz Parakeetype, piem., ar citas tastatūras mikrofona taustiņu. Kad beidzat runāt, teksts tiek ievadīts un notiek pārslēgšanās atpakaļ uz šo tastatūru.</string>
     <string name="pref_delete_title">Dzēšanas poga</string>
     <string name="pref_delete_subtitle">Ko dzēš tastatūras atkritnes poga. „Pēdējais teikums“ noņem tikai pēdējo teikumu pirms kursora, lai garš dokuments nekad netiktu nejauši izdzēsts.</string>
     <string name="pref_delete_all">Viss teksts</string>

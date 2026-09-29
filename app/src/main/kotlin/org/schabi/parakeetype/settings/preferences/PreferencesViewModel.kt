@@ -21,6 +21,16 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch { prefs.setTriggerMode(mode) }
     }
 
+    val immediateMode: StateFlow<Boolean> = prefs.immediateMode.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = false,
+    )
+
+    fun setImmediateMode(enabled: Boolean) {
+        viewModelScope.launch { prefs.setImmediateMode(enabled) }
+    }
+
     val deleteButtonMode: StateFlow<String> = prefs.deleteButtonMode.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),

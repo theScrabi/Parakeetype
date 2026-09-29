@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Как да се стартира и спира гласовият запис.</string>
     <string name="pref_trigger_hold">Задържане за говорене</string>
     <string name="pref_trigger_tap_toggle">Докосване за вкл./изкл.</string>
+    <string name="pref_immediate_mode_title">Незабавен режим</string>
+    <string name="pref_immediate_mode_subtitle">Започва да слуша веднага щом превключите към Parakeetype, напр. с клавиша за микрофон на друга клавиатура. Когато спрете да говорите, текстът се въвежда и се връщате към тази клавиатура.</string>
     <string name="pref_delete_title">Бутон за изтриване</string>
     <string name="pref_delete_subtitle">Какво изтрива бутонът с кошче на клавиатурата. «Последно изречение» премахва само последното изречение преди курсора, така че дълъг документ никога да не бъде изтрит по невнимание.</string>
     <string name="pref_delete_all">Целият текст</string>
