@@ -432,12 +432,17 @@ Two entry points bind the same InferenceService as the IME (via InferenceConnect
                                              to the calling app; the platform already checked its RECORD_AUDIO)
         stopListening / cancel            -> RecognitionSession.stop() / cancel()
         checkRecognitionSupport (API 33+) -> the 25 Parakeet v3 languages, installed or supported
+        model not loaded yet              -> toast "Loading transcription engine…" (the service has no UI)
+        no model installed                -> toast "Open Parakeetype to install one" + ERROR_LANGUAGE_UNAVAILABLE
+                                             (a background service may not start a dialog activity)
+        (Android suppresses both toasts while Parakeetype's notifications are disabled)
 
     VoiceInputActivity (RecognizerIntent.ACTION_RECOGNIZE_SPEECH, translucent Compose sheet)
         -> requests RECORD_AUDIO if needed -> RecognitionSession -> EXTRA_RESULTS / EXTRA_CONFIDENCE_SCORES
-           (or EXTRA_RESULTS_PENDINGINTENT); leaving the activity cancels
+           (or EXTRA_RESULTS_PENDINGINTENT); leaving the activity cancels; while the model loads the
+           sheet's title shows the keyboard's "Loading transcription engine…" text
 
-RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE). VAD is always on: the first utterance boundary ends a normal session (end of speech ≈ 1 s of silence; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS extend it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied audio) is rejected with ERROR_CLIENT; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
+RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE); when an installed model has to load first, Listener.onModelLoading(true / false) brackets the wait. VAD is always on: the first utterance boundary ends a normal session (end of speech ≈ 1 s of silence; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS extend it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied audio) is rejected with ERROR_CLIENT; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
 
 AudioCaptureManager builds its AudioRecord with AudioRecord.Builder.setContext(context) — that is what carries the attribution — and reports the raw level of every chunk through the optional onLevel callback (used for rmsChanged).
 

@@ -73,21 +73,34 @@ class InferenceConnection(private val context: Context) {
         binder.value = null
     }
 
-    /** Suspends until the engine is [EngineState.Ready], it failed, or no model is installed. */
-    suspend fun awaitRepository(): Result {
+    /**
+     * Suspends until the engine is [EngineState.Ready], it failed, or no model is installed.
+     *
+     * [onLoading] is called (at most once) when an installed model is not loaded yet, i.e.
+     * the caller has to wait for it to load.
+     */
+    suspend fun awaitRepository(onLoading: () -> Unit = {}): Result {
         bind()
         return withTimeoutOrNull(ENGINE_READY_TIMEOUT_MS) {
             val b = binder.filterNotNull().first()
             // Reload a model that was closed under memory pressure (no-op otherwise).
             b.reloadIfNeeded()
+            var loadingReported = false
             val state = b.getEngineState().first { state ->
-                when (state) {
+                val done = when (state) {
                     EngineState.Ready, is EngineState.Error -> true
                     // Unloaded with the model files present means a memory-pressure unload
                     // that reloadIfNeeded() is reversing — keep waiting.
                     EngineState.Unloaded -> !isSelectedModelInstalled()
                     EngineState.Loading -> false
                 }
+                // A freshly created service starts in Loading before it notices that no model
+                // is installed, so only an installed model counts as loading.
+                if (!done && !loadingReported && isSelectedModelInstalled()) {
+                    loadingReported = true
+                    onLoading()
+                }
+                done
             }
             when (state) {
                 EngineState.Ready -> b.getRepository()?.let { Result.Ready(it) }

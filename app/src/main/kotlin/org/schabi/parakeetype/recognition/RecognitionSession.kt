@@ -91,8 +91,17 @@ class RecognitionSession(
     private val scope: CoroutineScope,
 ) {
 
-    /** Mirrors [android.speech.RecognitionListener]. Called on the main thread. */
+    /**
+     * Mirrors [android.speech.RecognitionListener], plus [onModelLoading]. Called on the main
+     * thread.
+     */
     interface Listener {
+        /**
+         * The installed model is not loaded yet ([loading] = `true`) or has finished loading
+         * (`false`, only after a `true`). Audio is captured and buffered meanwhile.
+         */
+        fun onModelLoading(loading: Boolean)
+
         fun onReadyForSpeech()
         fun onBeginningOfSpeech()
         fun onRmsChanged(rmsdB: Float)
@@ -213,8 +222,18 @@ class RecognitionSession(
             }
         }
 
-        val repository = when (val result = inference.awaitRepository()) {
-            is InferenceConnection.Result.Ready -> result.repository
+        var modelLoading = false
+        val result = inference.awaitRepository(onLoading = {
+            if (!finished) {
+                modelLoading = true
+                listener.onModelLoading(true)
+            }
+        })
+        val repository = when (result) {
+            is InferenceConnection.Result.Ready -> {
+                if (modelLoading && !finished) listener.onModelLoading(false)
+                result.repository
+            }
             is InferenceConnection.Result.Unavailable -> {
                 Log.w(TAG, "Engine unavailable: ${result.reason}")
                 fail(result.error)

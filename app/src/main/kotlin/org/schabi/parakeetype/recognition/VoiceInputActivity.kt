@@ -68,8 +68,11 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
 private const val TAG = "VoiceInputActivity"
 
 private sealed class VoiceInputUiState {
-    /** [level] is the microphone level in [0, 1]. */
-    data class Listening(val level: Float = 0f) : VoiceInputUiState()
+    /**
+     * [level] is the microphone level in [0, 1]. While [modelLoading] the audio is buffered
+     * until the model has loaded.
+     */
+    data class Listening(val level: Float = 0f, val modelLoading: Boolean = false) : VoiceInputUiState()
     data object Transcribing : VoiceInputUiState()
     data class Failed(@StringRes val message: Int, val canRetry: Boolean, val openApp: Boolean) : VoiceInputUiState()
 }
@@ -158,6 +161,11 @@ class VoiceInputActivity : ComponentActivity() {
     }
 
     private inner class SessionListener : RecognitionSession.Listener {
+        override fun onModelLoading(loading: Boolean) {
+            val listening = uiState as? VoiceInputUiState.Listening ?: return
+            uiState = listening.copy(modelLoading = loading)
+        }
+
         override fun onReadyForSpeech() = Unit
         override fun onBeginningOfSpeech() = Unit
 
@@ -300,7 +308,10 @@ private fun VoiceInputSheet(
                 // Title, mic and buttons only: the sheet closes as soon as the result is in,
                 // so recognised text would never be seen.
                 val title = when (state) {
-                    is VoiceInputUiState.Listening -> prompt ?: stringResource(R.string.voice_input_speak_now)
+                    is VoiceInputUiState.Listening -> when {
+                        state.modelLoading -> stringResource(R.string.status_engine_loading)
+                        else -> prompt ?: stringResource(R.string.voice_input_speak_now)
+                    }
                     is VoiceInputUiState.Transcribing -> stringResource(R.string.voice_input_transcribing)
                     is VoiceInputUiState.Failed -> stringResource(state.message)
                 }
@@ -399,6 +410,12 @@ private fun VoiceInputSheetListeningPromptPreview() {
 @Composable
 private fun VoiceInputSheetListeningDarkPreview() {
     VoiceInputSheetPreview(VoiceInputUiState.Listening(level = 0.4f))
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Listening (model loading)")
+@Composable
+private fun VoiceInputSheetModelLoadingPreview() {
+    VoiceInputSheetPreview(VoiceInputUiState.Listening(modelLoading = true))
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFFEEEEEE, widthDp = 360, heightDp = 480, name = "Sheet · Transcribing")

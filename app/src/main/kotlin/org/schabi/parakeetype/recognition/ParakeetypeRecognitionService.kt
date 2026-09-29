@@ -10,9 +10,13 @@ import android.speech.RecognitionSupport
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
+import androidx.core.app.NotificationManagerCompat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
 import org.schabi.parakeetype.settings.model.ModelStorageManager
 
@@ -39,6 +43,11 @@ internal val PARAKEET_LANGUAGES = listOf(
  * The platform already checked that the caller holds `RECORD_AUDIO`. Audio is recorded on an
  * attribution context built from the caller's [Callback.getCallingAttributionSource], so the
  * microphone use is attributed to (and shown for) the calling app as well.
+ *
+ * The service has no UI, so it tells the user directly when a recognition has to wait for the
+ * model to load or fails because no model is installed — with a toast, as a service in the
+ * background may not start an activity. Android suppresses those toasts while Parakeetype's
+ * notifications are disabled; that is accepted.
  */
 class ParakeetypeRecognitionService : RecognitionService() {
 
@@ -119,6 +128,10 @@ class ParakeetypeRecognitionService : RecognitionService() {
 
     /** Forwards the session events to the client; a terminal event ends the session. */
     private inner class CallbackListener(private val callback: Callback) : RecognitionSession.Listener {
+        override fun onModelLoading(loading: Boolean) {
+            if (loading) showToast(R.string.status_engine_loading, Toast.LENGTH_SHORT)
+        }
+
         override fun onReadyForSpeech() = callback.send { readyForSpeech(Bundle()) }
         override fun onBeginningOfSpeech() = callback.send { beginningOfSpeech() }
         override fun onRmsChanged(rmsdB: Float) = callback.send { rmsChanged(rmsdB) }
@@ -144,11 +157,23 @@ class ParakeetypeRecognitionService : RecognitionService() {
 
         override fun onError(error: Int) {
             endSession()
+            // Only reported when no model is installed (see InferenceConnection).
+            if (error == SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE) {
+                showToast(R.string.voice_input_error_no_model, Toast.LENGTH_LONG)
+            }
             callback.send { error(error) }
         }
 
         private fun endSession() {
             session = null
+        }
+
+        private fun showToast(@StringRes text: Int, duration: Int) {
+            val context = this@ParakeetypeRecognitionService
+            if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+                Log.w(TAG, "Notifications are disabled - Android suppresses this toast: ${getString(text)}")
+            }
+            Toast.makeText(context, text, duration).show()
         }
     }
 }
