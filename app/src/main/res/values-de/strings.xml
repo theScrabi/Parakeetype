@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Parakeetype</string>
-    <string name="ime_name">Parakeetype Voice Keyboard</string>
+    <string name="service_name">Parakeetype Spracherkennung</string>
     <string name="subtype_en">Englisch (US) - Sprache</string>
     <string name="subtype_de">Deutsch (DE) - Sprache</string>
 

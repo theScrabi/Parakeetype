@@ -44,7 +44,7 @@
 
         <service
                 android:name=".ime.ParakeetypeInputMethodService"
-                android:label="@string/ime_name"
+                android:label="@string/service_name"
                 android:permission="android.permission.BIND_INPUT_METHOD"
                 android:exported="true">
             <intent-filter>
@@ -76,7 +76,7 @@
              platform's RecognitionService checks that callers hold RECORD_AUDIO. -->
         <service
                 android:name=".recognition.ParakeetypeRecognitionService"
-                android:label="@string/app_name"
+                android:label="@string/service_name"
                 android:exported="true"
                 tools:ignore="ExportedService">
             <intent-filter>
