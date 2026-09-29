@@ -48,7 +48,7 @@ on-device via ONNX Runtime; no audio ever leaves the device, and the app has no 
 **Core design principles:**
 
 - SpeechEngine is the *only* seam for adding a new ASR model. Nothing in the IME or service layer changes.
-- InferenceService keeps the engine alive across keyboard hide/show cycles. It is bound-only by default (destroyed — model unloaded — when the user switches to another IME and the IME unbinds); with the opt-in *Keep model loaded* setting (`keep_model_loaded`) it also starts itself as a `specialUse` foreground service, which survives the unbind and keeps the model warm across keyboard switches.
+- InferenceService keeps the engine alive across keyboard hide/show cycles. With the *Keep model loaded* setting (`keep_model_loaded`, on by default) it also starts itself as a `specialUse` foreground service, which survives the unbind and keeps the model warm across keyboard switches; when the user opts out it is bound-only (destroyed — model unloaded — when the user switches to another IME and the IME unbinds).
 - Constructor injection only throughout; no field injection.
 - No external SDKs that phone home (no analytics, no crash-reporting services). Crashes are logged locally only and shared by the user on request (`crash` package).
 
@@ -190,7 +190,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Parakeetype itself never downloads anything.
 
-**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default false — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
+**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default true — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
 
 ---
 
@@ -397,8 +397,8 @@ Voxtral-Mini-4B-Realtime ONNX (~4 GB RAM requirement). Same Whisper-compatible l
 
     ParakeetypeInputMethodService.onDestroy()          (user switched to another keyboard)
         -> unbindService(InferenceService)
-               default:          last client gone -> service destroyed -> engine closed
-               keep-loaded mode: service is started + foreground -> stays alive, engine warm
+               keep-loaded mode (default): service is started + foreground -> stays alive, engine warm
+               opted out:                  last client gone -> service destroyed -> engine closed
 
     AppPreferences.keepModelLoaded (DataStore Flow, observed in InferenceService.onCreate)
         true  -> startForegroundService(self) -> onStartCommand -> startForeground(SPECIAL_USE), START_STICKY

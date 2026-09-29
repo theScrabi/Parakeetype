@@ -94,7 +94,7 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
     val keepModelLoaded: StateFlow<Boolean> = prefs.keepModelLoaded.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = false,
+        initialValue = true,
     )
 
     /**

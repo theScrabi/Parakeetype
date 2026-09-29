@@ -28,7 +28,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets)
-- **Keep model loaded (optional)** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. Off by default.
+- **Keep model loaded** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. On by default; can be turned off in the settings.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
 - **No Google Play Services, no telemetry, no analytics**
 
@@ -179,7 +179,7 @@ A debug build for sideloading:
 |---|---|
 | `RECORD_AUDIO` | Capturing microphone input for speech recognition |
 | `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MICROPHONE` | Keeping the inference engine alive while the keyboard is in use |
-| `FOREGROUND_SERVICE_SPECIAL_USE` | Optional *Keep model loaded* setting: keeps the model in RAM while another keyboard is active |
+| `FOREGROUND_SERVICE_SPECIAL_USE` | *Keep model loaded* setting (on by default): keeps the model in RAM while another keyboard is active |
 | `POST_NOTIFICATIONS` | Showing the required foreground service notification |
 
 No permission is used for any purpose beyond what is listed above.

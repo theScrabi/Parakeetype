@@ -221,10 +221,10 @@ class AppPreferences(private val context: Context) {
      * foreground service (persistent notification) so the ~700 MB speech model stays in
      * RAM while the user switches to another keyboard. Without it the service is only
      * bound by the IME and is destroyed — model unloaded — as soon as another IME is
-     * picked. Opt-in; defaults to `false`.
+     * picked. Opt-out; defaults to `true`.
      */
     val keepModelLoaded: Flow<Boolean> = context.dataStore.data.map { prefs ->
-        prefs[keyKeepModelLoaded] ?: false
+        prefs[keyKeepModelLoaded] ?: true
     }
 
     suspend fun setKeepModelLoaded(enabled: Boolean) {

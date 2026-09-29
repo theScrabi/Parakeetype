@@ -56,7 +56,8 @@
         </service>
 
         <!-- Service that owns the ParakeetEngine lifecycle. Bound by the IME; additionally
-             started as a specialUse foreground service when "keep model loaded" is enabled. -->
+             started as a specialUse foreground service while "keep model loaded" is enabled
+             (the default). -->
         <service
                 android:name=".inference.InferenceService"
                 android:foregroundServiceType="microphone|specialUse"

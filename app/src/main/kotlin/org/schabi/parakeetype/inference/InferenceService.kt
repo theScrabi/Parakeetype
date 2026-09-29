@@ -41,13 +41,14 @@ private const val NOTIFICATION_ID = 1001
 /**
  * A [LifecycleService] that owns the [SpeechEngine] lifecycle.
  *
- * **Lifetime.** By default the service is only *bound* by the IME, so it lives exactly as
- * long as the IME: when the user switches to another keyboard the system destroys the IME,
- * the last binding goes away, the service is destroyed and the model is unloaded. With the
- * opt-in [AppPreferences.keepModelLoaded] setting the service additionally *starts* itself
- * as a foreground service (see [startKeepLoaded] / [onStartCommand]); a started service
- * survives the unbind and the foreground state protects the process from being reclaimed,
- * so the model stays warm across keyboard switches.
+ * **Lifetime.** With the [AppPreferences.keepModelLoaded] setting (on by default) the
+ * service is bound by the IME and additionally *starts* itself as a foreground service
+ * (see [startKeepLoaded] / [onStartCommand]); a started service survives the unbind and the
+ * foreground state protects the process from being reclaimed, so the model stays warm
+ * across keyboard switches. When the user opts out, the service is only *bound*, so it
+ * lives exactly as long as the IME: when the user switches to another keyboard the system
+ * destroys the IME, the last binding goes away, the service is destroyed and the model is
+ * unloaded.
  *
  * Responsibilities:
  *  - Show a persistent low-priority notification while running in the foreground
@@ -91,7 +92,7 @@ class InferenceService : LifecycleService() {
      * on critical memory pressure (see [registerMemoryCallback]).
      */
     @Volatile
-    private var keepLoaded: Boolean = false
+    private var keepLoaded: Boolean = true
 
     /** `true` while the service is in the started (keep-loaded foreground) state. Main thread only. */
     private var isStarted: Boolean = false
@@ -180,7 +181,7 @@ class InferenceService : LifecycleService() {
             }
         }
 
-        // Opt-in keep-loaded mode: become a started foreground service so the engine
+        // Keep-loaded mode (default, opt-out): become a started foreground service so the engine
         // outlives the IME binding (keyboard switches destroy the IME and unbind us).
         lifecycleScope.launch {
             AppPreferences(applicationContext).keepModelLoaded.distinctUntilChanged().collect { keep ->
