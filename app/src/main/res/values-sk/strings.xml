@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Rozpoznávanie reči Parakeetype</string>
+    <string name="subtype_voice">Hlasový vstup Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Inštalovať model</string>
+    <string name="nav_title_input">Mikrofón, spúšťanie &amp; rozloženie</string>
+    <string name="nav_title_speech">Spracovanie reči</string>
+    <string name="nav_title_tools">Diagnostika</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Otvoriť nastavenia</string>
+    <string name="action_grant_permission">Udeliť povolenie</string>
+    <string name="action_download">Inštalovať</string>
+    <string name="action_manage">Spravovať</string>
+    <string name="action_cancel">Zrušiť</string>
+    <string name="action_delete">Odstrániť</string>
+    <string name="action_retry">Skúsiť znova</string>
+    <string name="action_set_as_active">Nastaviť ako aktívny</string>
+    <string name="action_open_parakeetype">Otvoriť Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Zapnuté</string>
+    <string name="state_disabled">Vypnuté</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Späť</string>
+    <string name="cd_switch_keyboard">Prepnúť klávesnicu</string>
+    <string name="cd_delete_all">Odstrániť celý text</string>
+    <string name="cd_delete_word">Odstrániť posledné slovo</string>
+    <string name="cd_action_search">Hľadať</string>
+    <string name="cd_action_go">Prejsť</string>
+    <string name="cd_action_next">Ďalej</string>
+    <string name="cd_action_enter">Enter</string>
+    <string name="cd_active_model">Aktívny model</string>
+    <string name="cd_delete_model">Odstrániť model</string>
+    <string name="cd_status_error">Chyba</string>
+    <string name="cd_talk_disabled">Tlačidlo hovorenia je vypnuté – modul nie je pripravený</string>
+    <string name="cd_talk_stop_continuous">Zastaviť nepretržité nahrávanie</string>
+    <string name="cd_talk_tap_stop">Klepnutím zastavíte nahrávanie</string>
+    <string name="cd_talk_stop">Zastaviť nahrávanie</string>
+    <string name="cd_talk_tap_start">Klepnutím spustíte nahrávanie</string>
+    <string name="cd_talk_hold_start">Spustiť nahrávanie (podržte) · potiahnutím doľava uzamknete</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Úvodné nastavenie</string>
+    <string name="home_section_configuration">Konfigurácia</string>
+    <string name="home_ime_enabled">Klávesnica je zapnutá</string>
+    <string name="home_ime_not_enabled">Klávesnica nie je zapnutá</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype je v zozname klávesníc.</string>
+    <string name="home_ime_not_enabled_subtitle">Pridajte Parakeetype v systémových nastaveniach klávesnice.</string>
+    <string name="home_mic_granted">Prístup k mikrofónu bol udelený</string>
+    <string name="home_mic_required">Vyžaduje sa povolenie pre mikrofón</string>
+    <string name="home_mic_granted_subtitle">Zvuk sa spracúva výhradne v zariadení.</string>
+    <string name="home_mic_required_subtitle">Klepnutím udelíte prístup k mikrofónu.</string>
+    <string name="home_model_ready">Model je pripravený</string>
+    <string name="home_model_not_downloaded">Model nie je nainštalovaný</string>
+    <string name="home_model_ready_subtitle">Model na prepis je nainštalovaný a pripravený.</string>
+    <string name="home_model_not_downloaded_subtitle">Ak chcete používať klávesnicu, nainštalujte model na prepis.</string>
+    <string name="home_pref_input">Mikrofón, režim spúšťania &amp; rozloženie</string>
+    <string name="home_pref_speech">Detekcia hlasu, následné spracovanie &amp; pamäť modelu</string>
+    <string name="home_pref_tools">Diagnostika</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Režim spúšťania</string>
+    <string name="pref_trigger_mode_subtitle">Ako spustiť a zastaviť hlasové nahrávanie.</string>
+    <string name="pref_trigger_hold">Podržať a hovoriť</string>
+    <string name="pref_trigger_tap_toggle">Prepnúť klepnutím</string>
+    <string name="pref_delete_title">Tlačidlo odstránenia</string>
+    <string name="pref_delete_subtitle">Čo odstráni tlačidlo koša na klávesnici. „Posledná veta“ odstráni iba poslednú vetu pred kurzorom, takže dlhý dokument nikdy omylom nevymažete.</string>
+    <string name="pref_delete_all">Celý text</string>
+    <string name="pref_delete_last_sentence">Posledná veta</string>
+    <string name="pref_position_title">Umiestnenie klávesnice</string>
+    <string name="pref_position_subtitle">Kde sa nachádzajú ovládacie prvky klávesnice. Vľavo alebo vpravo sú na dosah jedného palca – užitočné na šírku, pre ľavákov a na tabletoch.</string>
+    <string name="pref_position_portrait">Na výšku</string>
+    <string name="pref_position_landscape">Na šírku</string>
+    <string name="pref_position_left">Vľavo</string>
+    <string name="pref_position_center">V strede</string>
+    <string name="pref_position_right">Vpravo</string>
+    <string name="pref_vad_title">Detekcia hlasovej aktivity (VAD)</string>
+    <string name="pref_vad_subtitle">Pomocou Silero VAD odfiltruje pred prepisom ticho a hluk v pozadí. Vypnite iba vtedy, ak VAD odrezáva začiatok vašej reči alebo vracia prázdne výsledky.</string>
+    <string name="pref_postprocessing_title">Následné spracovanie prepisu</string>
+    <string name="pref_postprocessing_subtitle">Odstraňuje výplňové slová (ehm, hm, no), zlučuje zajakávanie a čistí opakované frázy, ktoré si model niekedy vymýšľa. Vypnite, ak chcete dostávať presný nespracovaný výstup modelu – užitočné na zistenie, či čistenie nespôsobuje vynechané alebo zmenené slová.</string>
+    <string name="pref_postprocessing_disabled_raw">Vypnuté (nespracovaný výstup)</string>
+    <string name="pref_keep_loaded_title">Ponechať model načítaný</string>
+    <string name="pref_keep_loaded_subtitle">Ponechá model reči v pamäti, kým používate inú klávesnicu, takže diktovanie je po prepnutí späť okamžite pripravené a model sa nemusí znova načítavať. Beží ako služba v popredí s trvalým upozornením a zaberá približne 700 MB pamäte RAM.</string>
+    <string name="pref_diagnostics_title">Diagnostika spracovania</string>
+    <string name="pref_diagnostics_subtitle">Zobrazuje na klávesnici živý odznak s počítadlami skrátení okna, obnovení zarovnania a zahodených prázdnych krokov. Užitočné na diagnostiku problémov so spracovaním; predvolene skryté.</string>
+    <string name="pref_diagnostics_visible">Zobrazené</string>
+    <string name="pref_diagnostics_hidden">Skryté</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Modely rozpoznávania reči</string>
+    <string name="model_screen_subtitle">Nainštalujte model a klepnutím na „Nastaviť ako aktívny“ ho použite na prepis. Naraz je načítaný iba jeden model. Parakeetype nemá prístup na internet: súbor modelu stiahnete v prehliadači a importujete ho sem.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Aktívny model</string>
+    <string name="dialog_delete_title">Potvrdiť odstránenie</string>
+    <string name="dialog_delete_message">Naozaj chcete tento model odstrániť? Túto akciu nie je možné vrátiť späť.</string>
+    <string name="model_install_explanation">1. Stiahnite v prehliadači súbor modelu (~%d MB, jeden archív ZIP).\n2. Klepnite na „Importovať súbor modelu“ a vyberte stiahnutý archív.\nPo importe môžete archív odstrániť z priečinka Stiahnuté súbory.</string>
+    <string name="action_download_in_browser">Stiahnuť v prehliadači</string>
+    <string name="action_import_model_file">Importovať súbor modelu</string>
+    <string name="model_importing_format">Importuje sa… %d%%</string>
+    <string name="model_no_browser">Nenašiel sa žiadny prehliadač, ktorý by otvoril odkaz na stiahnutie.</string>
+    <string name="model_import_success">Model bol importovaný. Teraz môžete stiahnutý archív odstrániť.</string>
+    <string name="model_import_not_archive">Vybraný súbor nie je archív modelu Parakeetype.</string>
+    <string name="model_import_missing_files">Archív je neúplný. Chýba: %s</string>
+    <string name="model_import_corrupted">Archív je poškodený (nezhoda kontrolného súčtu): %s. Stiahnite ho znova.</string>
+    <string name="model_import_io_error">Import zlyhal: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Hlasový prepis Parakeetype</string>
+    <string name="notif_channel_desc">Zobrazuje sa, keď je aktívny modul hlasového prepisu</string>
+    <string name="notif_engine_loading">Načítava sa modul prepisu…</string>
+    <string name="notif_model_not_downloaded">Model nie je nainštalovaný – otvorte Parakeetype a nainštalujte ho</string>
+    <string name="notif_engine_ready">Parakeetype: pripravené (%s)</string>
+    <string name="notif_engine_failed">Modul sa nepodarilo načítať: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Prepisuje sa…</string>
+    <string name="status_no_speech">Nič sa nerozpoznalo – skúste to znova</string>
+    <string name="status_engine_model_missing">Model nie je nainštalovaný – otvorte Parakeetype a nainštalujte ho</string>
+    <string name="status_engine_loading">Načítava sa modul prepisu…</string>
+    <string name="status_error_mic_permission">Povolenie pre mikrofón bolo zamietnuté – otvorte Parakeetype a udeľte ho</string>
+    <string name="status_error_mic_init">Mikrofón sa nepodarilo otvoriť</string>
+    <string name="status_error_transcription">Prepis zlyhal</string>
+    <string name="status_error_audio_capture">Záznam zvuku zlyhal</string>
+    <string name="status_error_engine_load">Modul sa nepodarilo načítať</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofón</string>
+    <string name="pref_mic_subtitle">Kalibráciou vyberiete najzreteľnejší mikrofón pre krátke slová ako „Thanks“.</string>
+    <string name="pref_mic_calibrate">Kalibrovať mikrofóny</string>
+    <string name="pref_raw_mic_title">Nespracovaný mikrofón (bez potlačenia ozveny)</string>
+    <string name="pref_raw_mic_subtitle">Obchádza systémové potlačenie ozveny a šumu. Zapnite, ak prepisujete zvuk prehrávaný z vlastného reproduktora zariadenia (napr. hlasovú schránku cez hlasitý odposluch) – pri predvolenom zdroji sa signál reproduktora z mikrofónu odstráni a prepíše sa ako ticho. V hlučných miestnostiach je záznam o niečo menej čistý.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Vyberte mikrofón, ktorý najzreteľnejšie zachytí vysoké frekvencie. Model reči ich potrebuje na rozpoznanie krátkych slov ako „Thanks“.</string>
+    <string name="calib_instructions">Pri každom mikrofóne počkajte na červený indikátor a potom zreteľne povedzte po anglicky „thanks“. Najzreteľnejší mikrofón sa vyberie automaticky.</string>
+    <string name="calib_start">Spustiť kalibráciu</string>
+    <string name="calib_mic_of">Mikrofón %1$d z %2$d</string>
+    <string name="calib_speak_now">Teraz povedzte „thanks“</string>
+    <string name="calib_get_ready">Pripravte sa povedať „thanks“</string>
+    <string name="calib_done">Kalibrácia dokončená</string>
+    <string name="calib_best">Najlepší mikrofón</string>
+    <string name="calib_hf">Vysoké frekv.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Uložené ako preferovaný mikrofón</string>
+    <string name="calib_run_again">Spustiť znova</string>
+    <string name="calib_no_mics">Nenašli sa žiadne mikrofóny.</string>
+    <string name="calib_current">Aktuálny</string>
+    <string name="mic_builtin">Vstavaný mikrofón</string>
+    <string name="mic_builtin_format">Vstavaný mikrofón (%s)</string>
+    <string name="mic_wired_headset">Káblová náhlavná súprava</string>
+    <string name="mic_type_format">Mikrofón %d</string>
+    <string name="mic_front_back">predný &amp; zadný</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Správy o zlyhaní</string>
+    <string name="crash_channel_desc">Zobrazuje sa po zlyhaní aplikácie Parakeetype, aby ste mohli zdieľať denník zlyhania</string>
+    <string name="crash_notif_title">Aplikácia Parakeetype zlyhala</string>
+    <string name="crash_notif_text">Klepnutím zdieľate denník zlyhania</string>
+    <string name="crash_dialog_title">Aplikácia Parakeetype zlyhala</string>
+    <string name="crash_dialog_message">Denník zlyhania bol uložený v tomto zariadení. Ak ho budete zdieľať s vývojárom, pomôžete problém opraviť.\n\nDenník obsahuje iba vlastné záznamy aplikácie Parakeetype, tie však môžu obsahovať nadiktovaný text. Nikam sa neodosiela, pokiaľ ho sami nezdieľate.</string>
+    <string name="crash_action_share">Zdieľať</string>
+    <string name="crash_action_dismiss">Zavrieť</string>
+    <string name="crash_share_title">Zdieľať denník zlyhania</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Hlasový vstup Parakeetype</string>
+    <string name="voice_input_speak_now">Hovorte</string>
+    <string name="voice_input_transcribing">Prepisuje sa…</string>
+    <string name="voice_input_done">Hotovo</string>
+    <string name="voice_input_retry">Skúsiť znova</string>
+    <string name="voice_input_error_no_model">Nie je nainštalovaný žiadny model reči. Otvorte Parakeetype a nainštalujte ho.</string>
+    <string name="voice_input_error_permission">Parakeetype potrebuje prístup k mikrofónu.</string>
+    <string name="voice_input_error_audio">Mikrofón sa nepodarilo otvoriť.</string>
+    <string name="voice_input_error_generic">Rozpoznávanie reči zlyhalo.</string>
+</resources>

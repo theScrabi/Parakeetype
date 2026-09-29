@@ -36,6 +36,12 @@
     <string name="cd_active_model">Active model</string>
     <string name="cd_delete_model">Delete model</string>
     <string name="cd_status_error">Error</string>
+    <string name="cd_talk_disabled">Talk button disabled - engine not ready</string>
+    <string name="cd_talk_stop_continuous">Stop continuous recording</string>
+    <string name="cd_talk_tap_stop">Tap to stop recording</string>
+    <string name="cd_talk_stop">Stop recording</string>
+    <string name="cd_talk_tap_start">Tap to start recording</string>
+    <string name="cd_talk_hold_start">Start recording (hold) · swipe left to lock</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Setup</string>
@@ -115,7 +121,7 @@
     <string name="model_importing_format">Importing… %d%%</string>
     <string name="model_no_browser">No browser found to open the download link.</string>
     <string name="model_import_success">Model imported. You can now delete the downloaded archive.</string>
-    <string name="model_import_not_archive">The selected file is not an Parakeetype model archive.</string>
+    <string name="model_import_not_archive">The selected file is not a Parakeetype model archive.</string>
     <string name="model_import_missing_files">The archive is incomplete. Missing: %s</string>
     <string name="model_import_corrupted">The archive is damaged (checksum mismatch): %s. Download it again.</string>
     <string name="model_import_io_error">Import failed: %s</string>
@@ -166,6 +172,13 @@
     <string name="calib_run_again">Run again</string>
     <string name="calib_no_mics">No microphones found.</string>
     <string name="calib_current">Current</string>
+    <string name="mic_builtin">Built-in mic</string>
+    <string name="mic_builtin_format">Built-in mic (%s)</string>
+    <string name="mic_wired_headset">Wired headset</string>
+    <string name="mic_type_format">Mic %d</string>
+    <string name="mic_front_back">front &amp; back</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
 
     <!-- Crash reports (local only, shared on request) -->
     <string name="crash_channel_name">Crash reports</string>

@@ -42,6 +42,11 @@ configure<ApplicationExtension> {
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+    androidResources {
+        // Lists every values-<lang>/ folder in the manifest's localeConfig, so Android 13+
+        // offers Parakeetype's languages in the per-app language setting.
+        generateLocaleConfig = true
+    }
 
     splits {
         abi {

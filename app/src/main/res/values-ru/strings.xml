@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Распознавание речи Parakeetype</string>
+    <string name="subtype_voice">Голосовой ввод Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Установка модели</string>
+    <string name="nav_title_input">Микрофон, запуск и расположение</string>
+    <string name="nav_title_speech">Обработка речи</string>
+    <string name="nav_title_tools">Диагностика</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Открыть настройки</string>
+    <string name="action_grant_permission">Предоставить разрешение</string>
+    <string name="action_download">Установить</string>
+    <string name="action_manage">Управление</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_retry">Повторить</string>
+    <string name="action_set_as_active">Сделать активной</string>
+    <string name="action_open_parakeetype">Открыть Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Включено</string>
+    <string name="state_disabled">Отключено</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Назад</string>
+    <string name="cd_switch_keyboard">Сменить клавиатуру</string>
+    <string name="cd_delete_all">Удалить весь текст</string>
+    <string name="cd_delete_word">Удалить последнее слово</string>
+    <string name="cd_action_search">Поиск</string>
+    <string name="cd_action_go">Перейти</string>
+    <string name="cd_action_next">Далее</string>
+    <string name="cd_action_enter">Ввод</string>
+    <string name="cd_active_model">Активная модель</string>
+    <string name="cd_delete_model">Удалить модель</string>
+    <string name="cd_status_error">Ошибка</string>
+    <string name="cd_talk_disabled">Кнопка записи отключена – движок не готов</string>
+    <string name="cd_talk_stop_continuous">Остановить непрерывную запись</string>
+    <string name="cd_talk_tap_stop">Нажмите, чтобы остановить запись</string>
+    <string name="cd_talk_stop">Остановить запись</string>
+    <string name="cd_talk_tap_start">Нажмите, чтобы начать запись</string>
+    <string name="cd_talk_hold_start">Начать запись (удерживайте) · проведите влево, чтобы зафиксировать</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Настройка</string>
+    <string name="home_section_configuration">Параметры</string>
+    <string name="home_ime_enabled">Клавиатура включена</string>
+    <string name="home_ime_not_enabled">Клавиатура не включена</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype есть в списке клавиатур.</string>
+    <string name="home_ime_not_enabled_subtitle">Добавьте Parakeetype в системных настройках клавиатуры.</string>
+    <string name="home_mic_granted">Доступ к микрофону предоставлен</string>
+    <string name="home_mic_required">Требуется разрешение на доступ к микрофону</string>
+    <string name="home_mic_granted_subtitle">Звук обрабатывается только на устройстве.</string>
+    <string name="home_mic_required_subtitle">Нажмите, чтобы предоставить доступ к микрофону.</string>
+    <string name="home_model_ready">Модель готова</string>
+    <string name="home_model_not_downloaded">Модель не установлена</string>
+    <string name="home_model_ready_subtitle">Модель распознавания речи установлена и готова к работе.</string>
+    <string name="home_model_not_downloaded_subtitle">Установите модель распознавания речи, чтобы пользоваться клавиатурой.</string>
+    <string name="home_pref_input">Микрофон, режим запуска и расположение</string>
+    <string name="home_pref_speech">Голосовая активность, постобработка и память модели</string>
+    <string name="home_pref_tools">Диагностика</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Режим запуска</string>
+    <string name="pref_trigger_mode_subtitle">Как начинать и останавливать голосовую запись.</string>
+    <string name="pref_trigger_hold">Удерживать и говорить</string>
+    <string name="pref_trigger_tap_toggle">Включать нажатием</string>
+    <string name="pref_delete_title">Кнопка удаления</string>
+    <string name="pref_delete_subtitle">Что удаляет кнопка с корзиной на клавиатуре. «Последнее предложение» удаляет только последнее предложение перед курсором, поэтому длинный документ никогда не будет стёрт случайно.</string>
+    <string name="pref_delete_all">Весь текст</string>
+    <string name="pref_delete_last_sentence">Последнее предложение</string>
+    <string name="pref_position_title">Положение клавиатуры</string>
+    <string name="pref_position_subtitle">Где располагаются элементы управления клавиатуры. Слева или справа до них легко дотянуться одним большим пальцем – удобно в альбомной ориентации, для левшей и на планшетах.</string>
+    <string name="pref_position_portrait">В портретной ориентации</string>
+    <string name="pref_position_landscape">В альбомной ориентации</string>
+    <string name="pref_position_left">Слева</string>
+    <string name="pref_position_center">По центру</string>
+    <string name="pref_position_right">Справа</string>
+    <string name="pref_vad_title">Обнаружение голосовой активности (VAD)</string>
+    <string name="pref_vad_subtitle">Использует Silero VAD, чтобы отфильтровывать тишину и фоновый шум перед распознаванием. Отключайте, только если VAD обрезает начало вашей речи или выдаёт пустые результаты.</string>
+    <string name="pref_postprocessing_title">Постобработка текста</string>
+    <string name="pref_postprocessing_subtitle">Удаляет слова-паразиты (э, эм, хм), убирает запинки и повторяющиеся фразы, которые модель иногда выдумывает. Отключите, чтобы получать необработанный вывод модели – это помогает понять, не очистка ли пропускает или искажает слова.</string>
+    <string name="pref_postprocessing_disabled_raw">Отключено (необработанный вывод)</string>
+    <string name="pref_keep_loaded_title">Не выгружать модель</string>
+    <string name="pref_keep_loaded_subtitle">Хранит речевую модель в памяти, пока вы пользуетесь другой клавиатурой, чтобы диктовка была доступна сразу после возврата, без повторной загрузки модели. Запускает службу с постоянным уведомлением и занимает около 700 МБ оперативной памяти.</string>
+    <string name="pref_diagnostics_title">Диагностика конвейера</string>
+    <string name="pref_diagnostics_subtitle">Показывает на клавиатуре значок со счётчиками обрезок окна, восстановлений выравнивания и отброшенных пустых шагов. Полезно для диагностики проблем конвейера; по умолчанию скрыт.</string>
+    <string name="pref_diagnostics_visible">Виден</string>
+    <string name="pref_diagnostics_hidden">Скрыт</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Модели распознавания речи</string>
+    <string name="model_screen_subtitle">Установите модель и нажмите «Сделать активной», чтобы использовать её для распознавания. Одновременно загружается только одна модель. У приложения Parakeetype нет доступа к интернету: вы скачиваете файл модели в браузере и импортируете его здесь.</string>
+    <string name="model_size_format">~%d МБ</string>
+    <string name="model_active_label">Активная модель</string>
+    <string name="dialog_delete_title">Подтвердите удаление</string>
+    <string name="dialog_delete_message">Удалить эту модель? Это действие нельзя отменить.</string>
+    <string name="model_install_explanation">1. Скачайте файл модели (~%d МБ, один ZIP-архив) в браузере.\n2. Нажмите «Импортировать файл модели» и выберите скачанный архив.\nПосле импорта архив можно удалить из папки «Загрузки».</string>
+    <string name="action_download_in_browser">Скачать в браузере</string>
+    <string name="action_import_model_file">Импортировать файл модели</string>
+    <string name="model_importing_format">Импорт… %d%%</string>
+    <string name="model_no_browser">Не найден браузер, чтобы открыть ссылку для скачивания.</string>
+    <string name="model_import_success">Модель импортирована. Теперь скачанный архив можно удалить.</string>
+    <string name="model_import_not_archive">Выбранный файл не является архивом модели Parakeetype.</string>
+    <string name="model_import_missing_files">Архив неполный. Отсутствует: %s</string>
+    <string name="model_import_corrupted">Архив повреждён (контрольная сумма не совпадает): %s. Скачайте его заново.</string>
+    <string name="model_import_io_error">Ошибка импорта: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Расшифровка речи Parakeetype</string>
+    <string name="notif_channel_desc">Показывается, пока работает движок распознавания речи</string>
+    <string name="notif_engine_loading">Загрузка движка распознавания…</string>
+    <string name="notif_model_not_downloaded">Модель не установлена – откройте Parakeetype, чтобы установить её</string>
+    <string name="notif_engine_ready">Parakeetype готов (%s)</string>
+    <string name="notif_engine_failed">Не удалось загрузить движок: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Распознавание…</string>
+    <string name="status_no_speech">Не удалось разобрать – попробуйте ещё раз</string>
+    <string name="status_engine_model_missing">Модель не установлена – откройте Parakeetype, чтобы установить её</string>
+    <string name="status_engine_loading">Загрузка движка распознавания…</string>
+    <string name="status_error_mic_permission">Нет доступа к микрофону – откройте Parakeetype, чтобы предоставить его</string>
+    <string name="status_error_mic_init">Не удалось открыть микрофон</string>
+    <string name="status_error_transcription">Ошибка распознавания</string>
+    <string name="status_error_audio_capture">Ошибка записи звука</string>
+    <string name="status_error_engine_load">Не удалось загрузить движок</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Микрофон</string>
+    <string name="pref_mic_subtitle">Откалибруйте, чтобы выбрать микрофон, который чётче всего записывает короткие слова вроде «Thanks».</string>
+    <string name="pref_mic_calibrate">Откалибровать микрофоны</string>
+    <string name="pref_raw_mic_title">Необработанный звук (без эхоподавления)</string>
+    <string name="pref_raw_mic_subtitle">Обходит системное эхоподавление и шумоподавление. Включите, если распознаёте звук, который воспроизводится через динамик самого устройства (например, голосовое сообщение на громкой связи) – при стандартном источнике сигнал динамика вычитается из сигнала микрофона и распознаётся как тишина. В шумных помещениях запись немного менее чистая.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Выберите микрофон, который чётче всего передаёт высокие частоты. Они нужны речевой модели, чтобы распознавать короткие слова вроде «Thanks».</string>
+    <string name="calib_instructions">Дождитесь красного индикатора у каждого микрофона, затем чётко скажите «thanks». Самый чёткий микрофон будет выбран автоматически.</string>
+    <string name="calib_start">Начать калибровку</string>
+    <string name="calib_mic_of">Микрофон %1$d из %2$d</string>
+    <string name="calib_speak_now">Скажите «thanks»</string>
+    <string name="calib_get_ready">Приготовьтесь сказать «thanks»</string>
+    <string name="calib_done">Калибровка завершена</string>
+    <string name="calib_best">Лучший микрофон</string>
+    <string name="calib_hf">ВЧ</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Сохранён как основной микрофон</string>
+    <string name="calib_run_again">Повторить</string>
+    <string name="calib_no_mics">Микрофоны не найдены.</string>
+    <string name="calib_current">Текущий</string>
+    <string name="mic_builtin">Встроенный микрофон</string>
+    <string name="mic_builtin_format">Встроенный микрофон (%s)</string>
+    <string name="mic_wired_headset">Проводная гарнитура</string>
+    <string name="mic_type_format">Микрофон %d</string>
+    <string name="mic_front_back">передний и задний</string>
+    <string name="mic_stereo">стерео</string>
+    <string name="mic_mono">моно</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Отчёты о сбоях</string>
+    <string name="crash_channel_desc">Показывается после сбоя Parakeetype, чтобы можно было поделиться журналом сбоя</string>
+    <string name="crash_notif_title">В приложении Parakeetype произошёл сбой</string>
+    <string name="crash_notif_text">Нажмите, чтобы поделиться журналом сбоя</string>
+    <string name="crash_dialog_title">В приложении Parakeetype произошёл сбой</string>
+    <string name="crash_dialog_message">Журнал сбоя сохранён на этом устройстве. Если вы поделитесь им с разработчиком, это поможет устранить проблему.\n\nЖурнал содержит только собственные записи приложения Parakeetype, но в них может попасть продиктованный вами текст. Он никуда не отправляется, пока вы сами им не поделитесь.</string>
+    <string name="crash_action_share">Поделиться</string>
+    <string name="crash_action_dismiss">Закрыть</string>
+    <string name="crash_share_title">Поделиться журналом сбоя</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Голосовой ввод Parakeetype</string>
+    <string name="voice_input_speak_now">Говорите</string>
+    <string name="voice_input_transcribing">Распознавание…</string>
+    <string name="voice_input_done">Готово</string>
+    <string name="voice_input_retry">Повторить</string>
+    <string name="voice_input_error_no_model">Речевая модель не установлена. Откройте Parakeetype, чтобы установить её.</string>
+    <string name="voice_input_error_permission">Приложению Parakeetype нужен доступ к микрофону.</string>
+    <string name="voice_input_error_audio">Не удалось открыть микрофон.</string>
+    <string name="voice_input_error_generic">Ошибка распознавания речи.</string>
+</resources>

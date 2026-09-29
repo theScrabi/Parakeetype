@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Parakeetype runas atpazīšana</string>
+    <string name="subtype_voice">Parakeetype balss ievade</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Instalēt modeli</string>
+    <string name="nav_title_input">Mikrofons, aktivizēšana &amp; izkārtojums</string>
+    <string name="nav_title_speech">Runas apstrāde</string>
+    <string name="nav_title_tools">Diagnostika</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Atvērt iestatījumus</string>
+    <string name="action_grant_permission">Piešķirt atļauju</string>
+    <string name="action_download">Instalēt</string>
+    <string name="action_manage">Pārvaldīt</string>
+    <string name="action_cancel">Atcelt</string>
+    <string name="action_delete">Dzēst</string>
+    <string name="action_retry">Mēģināt vēlreiz</string>
+    <string name="action_set_as_active">Iestatīt kā aktīvu</string>
+    <string name="action_open_parakeetype">Atvērt Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Iespējots</string>
+    <string name="state_disabled">Atspējots</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Atpakaļ</string>
+    <string name="cd_switch_keyboard">Pārslēgt tastatūru</string>
+    <string name="cd_delete_all">Dzēst visu tekstu</string>
+    <string name="cd_delete_word">Dzēst pēdējo vārdu</string>
+    <string name="cd_action_search">Meklēt</string>
+    <string name="cd_action_go">Aiziet</string>
+    <string name="cd_action_next">Tālāk</string>
+    <string name="cd_action_enter">Ievadīt</string>
+    <string name="cd_active_model">Aktīvais modelis</string>
+    <string name="cd_delete_model">Dzēst modeli</string>
+    <string name="cd_status_error">Kļūda</string>
+    <string name="cd_talk_disabled">Runāšanas poga atspējota — dzinējs nav gatavs</string>
+    <string name="cd_talk_stop_continuous">Apturēt nepārtraukto ierakstīšanu</string>
+    <string name="cd_talk_tap_stop">Pieskarieties, lai apturētu ierakstīšanu</string>
+    <string name="cd_talk_stop">Apturēt ierakstīšanu</string>
+    <string name="cd_talk_tap_start">Pieskarieties, lai sāktu ierakstīšanu</string>
+    <string name="cd_talk_hold_start">Sākt ierakstīšanu (turēt) · velciet pa kreisi, lai fiksētu</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Iestatīšana</string>
+    <string name="home_section_configuration">Konfigurācija</string>
+    <string name="home_ime_enabled">Tastatūra iespējota</string>
+    <string name="home_ime_not_enabled">Tastatūra nav iespējota</string>
+    <string name="home_ime_enabled_subtitle">Lietotne Parakeetype ir tastatūru sarakstā.</string>
+    <string name="home_ime_not_enabled_subtitle">Pievienojiet lietotni Parakeetype sistēmas tastatūras iestatījumos.</string>
+    <string name="home_mic_granted">Piekļuve mikrofonam piešķirta</string>
+    <string name="home_mic_required">Nepieciešama mikrofona atļauja</string>
+    <string name="home_mic_granted_subtitle">Audio tiek apstrādāts tikai ierīcē.</string>
+    <string name="home_mic_required_subtitle">Pieskarieties, lai piešķirtu piekļuvi mikrofonam.</string>
+    <string name="home_model_ready">Modelis gatavs</string>
+    <string name="home_model_not_downloaded">Modelis nav instalēts</string>
+    <string name="home_model_ready_subtitle">Transkripcijas modelis ir instalēts un gatavs.</string>
+    <string name="home_model_not_downloaded_subtitle">Instalējiet transkripcijas modeli, lai izmantotu tastatūru.</string>
+    <string name="home_pref_input">Mikrofons, aktivizēšanas režīms &amp; izkārtojums</string>
+    <string name="home_pref_speech">Balss aktivitāte, pēcapstrāde &amp; modeļa atmiņa</string>
+    <string name="home_pref_tools">Diagnostika</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Aktivizēšanas režīms</string>
+    <string name="pref_trigger_mode_subtitle">Kā sākt un apturēt balss ierakstīšanu.</string>
+    <string name="pref_trigger_hold">Turēt, lai runātu</string>
+    <string name="pref_trigger_tap_toggle">Pieskarties, lai pārslēgtu</string>
+    <string name="pref_delete_title">Dzēšanas poga</string>
+    <string name="pref_delete_subtitle">Ko dzēš tastatūras atkritnes poga. „Pēdējais teikums“ noņem tikai pēdējo teikumu pirms kursora, lai garš dokuments nekad netiktu nejauši izdzēsts.</string>
+    <string name="pref_delete_all">Viss teksts</string>
+    <string name="pref_delete_last_sentence">Pēdējais teikums</string>
+    <string name="pref_position_title">Tastatūras novietojums</string>
+    <string name="pref_position_subtitle">Kur atrodas tastatūras vadīklas. Pa kreisi vai pa labi tās var sasniegt ar vienu īkšķi — noderīgi ainavas orientācijā, kreiļiem un planšetdatoros.</string>
+    <string name="pref_position_portrait">Portreta orientācijā</string>
+    <string name="pref_position_landscape">Ainavas orientācijā</string>
+    <string name="pref_position_left">Pa kreisi</string>
+    <string name="pref_position_center">Centrā</string>
+    <string name="pref_position_right">Pa labi</string>
+    <string name="pref_vad_title">Balss aktivitātes noteikšana (VAD)</string>
+    <string name="pref_vad_subtitle">Izmanto Silero VAD, lai pirms transkripcijas atfiltrētu klusumu un fona troksni. Atspējojiet tikai tad, ja VAD nogriež jūsu runas sākumu vai sniedz tukšus rezultātus.</string>
+    <string name="pref_postprocessing_title">Transkripta pēcapstrāde</string>
+    <string name="pref_postprocessing_subtitle">Noņem pildvārdus (ē, ēm, hmm), apvieno stostīšanos un notīra atkārtotas frāzes, ko modelis dažkārt halucinē. Atspējojiet, lai saņemtu precīzu, neapstrādātu modeļa izvadi — noderīgi, lai noskaidrotu, vai tīrīšana ir vainojama izlaistos vai mainītos vārdos.</string>
+    <string name="pref_postprocessing_disabled_raw">Atspējota (neapstrādāta izvade)</string>
+    <string name="pref_keep_loaded_title">Paturēt modeli ielādētu</string>
+    <string name="pref_keep_loaded_subtitle">Patur runas modeli atmiņā, kamēr izmantojat citu tastatūru, lai diktēšana būtu uzreiz gatava, kad pārslēdzaties atpakaļ, un modelis nebūtu jāielādē no jauna. Darbojas kā priekšplāna pakalpojums ar pastāvīgu paziņojumu un aizņem aptuveni 700 MB RAM.</string>
+    <string name="pref_diagnostics_title">Konveijera diagnostika</string>
+    <string name="pref_diagnostics_subtitle">Rāda tastatūrā tiešraides emblēmu ar loga apgriešanas, līdzinājuma atkopšanas un atmesto tukšo soļu skaitītājiem. Noderīgi konveijera problēmu diagnosticēšanai; pēc noklusējuma izslēgta.</string>
+    <string name="pref_diagnostics_visible">Redzama</string>
+    <string name="pref_diagnostics_hidden">Paslēpta</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Runas atpazīšanas modeļi</string>
+    <string name="model_screen_subtitle">Instalējiet modeli un pieskarieties „Iestatīt kā aktīvu“, lai to izmantotu transkripcijai. Vienlaikus tiek ielādēts tikai viens modelis. Lietotnei Parakeetype nav piekļuves internetam: modeļa failu lejupielādējiet pārlūkā un importējiet šeit.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Aktīvais modelis</string>
+    <string name="dialog_delete_title">Apstiprināt dzēšanu</string>
+    <string name="dialog_delete_message">Vai tiešām vēlaties dzēst šo modeli? Šo darbību nevar atsaukt.</string>
+    <string name="model_install_explanation">1. Lejupielādējiet modeļa failu (~%d MB, viens ZIP arhīvs) pārlūkā.\n2. Pieskarieties „Importēt modeļa failu“ un atlasiet lejupielādēto arhīvu.\nPēc importēšanas arhīvu varat izdzēst no mapes Lejupielādes.</string>
+    <string name="action_download_in_browser">Lejupielādēt pārlūkā</string>
+    <string name="action_import_model_file">Importēt modeļa failu</string>
+    <string name="model_importing_format">Notiek importēšana… %d%%</string>
+    <string name="model_no_browser">Netika atrasts pārlūks, ar ko atvērt lejupielādes saiti.</string>
+    <string name="model_import_success">Modelis importēts. Tagad varat izdzēst lejupielādēto arhīvu.</string>
+    <string name="model_import_not_archive">Atlasītais fails nav Parakeetype modeļa arhīvs.</string>
+    <string name="model_import_missing_files">Arhīvs nav pilnīgs. Trūkst: %s</string>
+    <string name="model_import_corrupted">Arhīvs ir bojāts (kontrolsummas neatbilstība): %s. Lejupielādējiet to vēlreiz.</string>
+    <string name="model_import_io_error">Importēšana neizdevās: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Parakeetype balss transkripcija</string>
+    <string name="notif_channel_desc">Tiek rādīts, kamēr darbojas balss transkripcijas dzinējs</string>
+    <string name="notif_engine_loading">Notiek transkripcijas dzinēja ielāde…</string>
+    <string name="notif_model_not_downloaded">Modelis nav instalēts — atveriet lietotni Parakeetype, lai to instalētu</string>
+    <string name="notif_engine_ready">Parakeetype ir gatava (%s)</string>
+    <string name="notif_engine_failed">Dzinēju neizdevās ielādēt: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Notiek transkribēšana…</string>
+    <string name="status_no_speech">Neizdevās sadzirdēt — mēģiniet vēlreiz</string>
+    <string name="status_engine_model_missing">Modelis nav instalēts — atveriet lietotni Parakeetype, lai to instalētu</string>
+    <string name="status_engine_loading">Notiek transkripcijas dzinēja ielāde…</string>
+    <string name="status_error_mic_permission">Mikrofona atļauja liegta — atveriet lietotni Parakeetype, lai to piešķirtu</string>
+    <string name="status_error_mic_init">Neizdevās atvērt mikrofonu</string>
+    <string name="status_error_transcription">Transkripcija neizdevās</string>
+    <string name="status_error_audio_capture">Audio ierakstīšana neizdevās</string>
+    <string name="status_error_engine_load">Dzinēju neizdevās ielādēt</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofons</string>
+    <string name="pref_mic_subtitle">Kalibrējiet, lai izvēlētos skaidrāko mikrofonu īsiem vārdiem, piemēram, „Thanks“.</string>
+    <string name="pref_mic_calibrate">Kalibrēt mikrofonus</string>
+    <string name="pref_raw_mic_title">Neapstrādāts mikrofons (bez atbalss slāpēšanas)</string>
+    <string name="pref_raw_mic_subtitle">Apiet platformas atbalss slāpēšanu un trokšņu slāpēšanu. Iespējojiet šo, ja transkribējat audio, kas tiek atskaņots no ierīces skaļruņa (piem., balss pasta ziņojumu skaļrunī) — ar noklusējuma avotu skaļruņa signāls tiek izslēgts no mikrofona signāla un tiek transkribēts kā klusums. Trokšņainās telpās ieraksts ir nedaudz mazāk tīrs.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Izvēlieties mikrofonu, kas visskaidrāk uztver augstfrekvences detaļas. Runas modelim tās ir nepieciešamas, lai atpazītu īsus vārdus, piemēram, „Thanks“.</string>
+    <string name="calib_instructions">Katram mikrofonam gaidiet sarkano indikatoru, tad skaidri pasakiet \'thanks\'. Skaidrākais mikrofons tiek izvēlēts automātiski.</string>
+    <string name="calib_start">Sākt kalibrēšanu</string>
+    <string name="calib_mic_of">Mikrofons %1$d no %2$d</string>
+    <string name="calib_speak_now">Tagad pasakiet \'thanks\'</string>
+    <string name="calib_get_ready">Gatavojieties pateikt \'thanks\'</string>
+    <string name="calib_done">Kalibrēšana pabeigta</string>
+    <string name="calib_best">Labākais mikrofons</string>
+    <string name="calib_hf">Augstās frekv.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Saglabāts kā vēlamais mikrofons</string>
+    <string name="calib_run_again">Palaist vēlreiz</string>
+    <string name="calib_no_mics">Netika atrasts neviens mikrofons.</string>
+    <string name="calib_current">Pašreizējais</string>
+    <string name="mic_builtin">Iebūvētais mikrofons</string>
+    <string name="mic_builtin_format">Iebūvētais mikrofons (%s)</string>
+    <string name="mic_wired_headset">Vadu austiņas</string>
+    <string name="mic_type_format">Mikrofons %d</string>
+    <string name="mic_front_back">priekšā &amp; aizmugurē</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Avāriju pārskati</string>
+    <string name="crash_channel_desc">Tiek rādīts pēc lietotnes Parakeetype avārijas, lai varētu kopīgot avārijas žurnālu</string>
+    <string name="crash_notif_title">Lietotne Parakeetype avarēja</string>
+    <string name="crash_notif_text">Pieskarieties, lai kopīgotu avārijas žurnālu</string>
+    <string name="crash_dialog_title">Lietotne Parakeetype avarēja</string>
+    <string name="crash_dialog_message">Šajā ierīcē tika saglabāts avārijas žurnāls. Kopīgojot to ar izstrādātāju, jūs palīdzat novērst problēmu.\n\nŽurnālā ir tikai lietotnes Parakeetype žurnāla rindas, taču tajās var būt jūsu diktētais teksts. Tas nekur netiek nosūtīts, ja vien jūs to nekopīgojat.</string>
+    <string name="crash_action_share">Kopīgot</string>
+    <string name="crash_action_dismiss">Noraidīt</string>
+    <string name="crash_share_title">Kopīgot avārijas žurnālu</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Parakeetype balss ievade</string>
+    <string name="voice_input_speak_now">Runājiet tagad</string>
+    <string name="voice_input_transcribing">Notiek transkribēšana…</string>
+    <string name="voice_input_done">Gatavs</string>
+    <string name="voice_input_retry">Mēģināt vēlreiz</string>
+    <string name="voice_input_error_no_model">Nav instalēts neviens runas modelis. Atveriet lietotni Parakeetype, lai to instalētu.</string>
+    <string name="voice_input_error_permission">Lietotnei Parakeetype ir nepieciešama piekļuve mikrofonam.</string>
+    <string name="voice_input_error_audio">Mikrofonu neizdevās atvērt.</string>
+    <string name="voice_input_error_generic">Runas atpazīšana neizdevās.</string>
+</resources>

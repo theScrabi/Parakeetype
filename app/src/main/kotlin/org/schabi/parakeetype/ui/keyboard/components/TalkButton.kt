@@ -27,10 +27,12 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import org.schabi.parakeetype.R
 import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
 
 /** How many dp to the left the user must drag to engage continuous mode. */
@@ -259,12 +261,12 @@ fun TalkButton(
             Icon(
                 imageVector = if (isContinuousActive) Icons.Rounded.Stop else Icons.Rounded.Mic,
                 contentDescription = when {
-                    !enabled -> "Talk button disabled - engine not ready"
-                    isContinuousActive -> "Stop continuous recording"
-                    isListening && triggerMode == "TAP_TOGGLE" -> "Tap to stop recording"
-                    isListening -> "Stop recording"
-                    triggerMode == "TAP_TOGGLE" -> "Tap to start recording"
-                    else -> "Start recording (hold) · swipe left to lock"
+                    !enabled -> stringResource(R.string.cd_talk_disabled)
+                    isContinuousActive -> stringResource(R.string.cd_talk_stop_continuous)
+                    isListening && triggerMode == "TAP_TOGGLE" -> stringResource(R.string.cd_talk_tap_stop)
+                    isListening -> stringResource(R.string.cd_talk_stop)
+                    triggerMode == "TAP_TOGGLE" -> stringResource(R.string.cd_talk_tap_start)
+                    else -> stringResource(R.string.cd_talk_hold_start)
                 },
                 tint = iconTint,
                 modifier = Modifier.size(32.dp),

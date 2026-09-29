@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Parakeetype kõnetuvastus</string>
+    <string name="subtype_voice">Parakeetype häälsisestus</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Mudeli installimine</string>
+    <string name="nav_title_input">Mikrofon, käivitus &amp; paigutus</string>
+    <string name="nav_title_speech">Kõnetöötlus</string>
+    <string name="nav_title_tools">Diagnostika</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Ava seaded</string>
+    <string name="action_grant_permission">Anna luba</string>
+    <string name="action_download">Installi</string>
+    <string name="action_manage">Halda</string>
+    <string name="action_cancel">Tühista</string>
+    <string name="action_delete">Kustuta</string>
+    <string name="action_retry">Proovi uuesti</string>
+    <string name="action_set_as_active">Määra aktiivseks</string>
+    <string name="action_open_parakeetype">Ava Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Lubatud</string>
+    <string name="state_disabled">Keelatud</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Tagasi</string>
+    <string name="cd_switch_keyboard">Vaheta klaviatuuri</string>
+    <string name="cd_delete_all">Kustuta kogu tekst</string>
+    <string name="cd_delete_word">Kustuta viimane sõna</string>
+    <string name="cd_action_search">Otsi</string>
+    <string name="cd_action_go">Mine</string>
+    <string name="cd_action_next">Järgmine</string>
+    <string name="cd_action_enter">Sisesta</string>
+    <string name="cd_active_model">Aktiivne mudel</string>
+    <string name="cd_delete_model">Kustuta mudel</string>
+    <string name="cd_status_error">Viga</string>
+    <string name="cd_talk_disabled">Rääkimisnupp on keelatud - mootor pole valmis</string>
+    <string name="cd_talk_stop_continuous">Peata pidev salvestamine</string>
+    <string name="cd_talk_tap_stop">Puudutage salvestamise peatamiseks</string>
+    <string name="cd_talk_stop">Peata salvestamine</string>
+    <string name="cd_talk_tap_start">Puudutage salvestamise alustamiseks</string>
+    <string name="cd_talk_hold_start">Alusta salvestamist (hoidke all) · lukustamiseks pühkige vasakule</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Seadistamine</string>
+    <string name="home_section_configuration">Konfiguratsioon</string>
+    <string name="home_ime_enabled">Klaviatuur on lubatud</string>
+    <string name="home_ime_not_enabled">Klaviatuur pole lubatud</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype on klaviatuuride loendis.</string>
+    <string name="home_ime_not_enabled_subtitle">Lisage Parakeetype süsteemi klaviatuuriseadetes.</string>
+    <string name="home_mic_granted">Mikrofoni juurdepääs on antud</string>
+    <string name="home_mic_required">Mikrofoni luba on nõutav</string>
+    <string name="home_mic_granted_subtitle">Heli töödeldakse täielikult seadmes.</string>
+    <string name="home_mic_required_subtitle">Puudutage mikrofoni juurdepääsu andmiseks.</string>
+    <string name="home_model_ready">Mudel on valmis</string>
+    <string name="home_model_not_downloaded">Mudel pole installitud</string>
+    <string name="home_model_ready_subtitle">Transkribeerimismudel on installitud ja valmis.</string>
+    <string name="home_model_not_downloaded_subtitle">Klaviatuuri kasutamiseks installige transkribeerimismudel.</string>
+    <string name="home_pref_input">Mikrofon, käivitusrežiim &amp; paigutus</string>
+    <string name="home_pref_speech">Kõnetegevus, järeltöötlus &amp; mudeli mälu</string>
+    <string name="home_pref_tools">Diagnostika</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Käivitusrežiim</string>
+    <string name="pref_trigger_mode_subtitle">Kuidas häälsalvestust alustatakse ja peatatakse.</string>
+    <string name="pref_trigger_hold">Hoidke all ja rääkige</string>
+    <string name="pref_trigger_tap_toggle">Puudutage sisse/välja</string>
+    <string name="pref_delete_title">Kustutamisnupp</string>
+    <string name="pref_delete_subtitle">Mida klaviatuuri prügikastinupp kustutab. „Viimane lause“ eemaldab ainult kursori ees oleva viimase lause, nii et pikka dokumenti ei kustutata kunagi kogemata.</string>
+    <string name="pref_delete_all">Kogu tekst</string>
+    <string name="pref_delete_last_sentence">Viimane lause</string>
+    <string name="pref_position_title">Klaviatuuri asukoht</string>
+    <string name="pref_position_subtitle">Kus klaviatuuri nupud asuvad. Vasakul või paremal on need ühe pöidla ulatuses – kasulik horisontaalpaigutuses, vasakukäelistele ja tahvelarvutites.</string>
+    <string name="pref_position_portrait">Vertikaalpaigutuses</string>
+    <string name="pref_position_landscape">Horisontaalpaigutuses</string>
+    <string name="pref_position_left">Vasakul</string>
+    <string name="pref_position_center">Keskel</string>
+    <string name="pref_position_right">Paremal</string>
+    <string name="pref_vad_title">Kõnetegevuse tuvastus (VAD)</string>
+    <string name="pref_vad_subtitle">Kasutab Silero VAD-i, et vaikus ja taustamüra enne transkribeerimist välja filtreerida. Keelake see ainult siis, kui VAD lõikab teie kõne alguse ära või annab tühje tulemusi.</string>
+    <string name="pref_postprocessing_title">Transkriptsiooni järeltöötlus</string>
+    <string name="pref_postprocessing_subtitle">Eemaldab täitesõnad (ee, õõ, hmm), ühendab kogelemise ja puhastab korduvad fraasid, mida mudel vahel hallutsineerib. Keelake, et saada mudeli täpne töötlemata väljund - kasulik, et selgitada, kas puhastamine põhjustab sõnade kadumist või muutumist.</string>
+    <string name="pref_postprocessing_disabled_raw">Keelatud (töötlemata väljund)</string>
+    <string name="pref_keep_loaded_title">Hoia mudel laaditud</string>
+    <string name="pref_keep_loaded_subtitle">Hoiab kõnemudelit mälus, kui kasutate teist klaviatuuri, nii et dikteerimine on tagasi lülitudes kohe valmis ja mudelit ei pea uuesti laadima. Käitab püsiva märguandega esiplaanil olevat teenust ja hoiab kasutuses umbes 700 MB muutmälu.</string>
+    <string name="pref_diagnostics_title">Konveieri diagnostika</string>
+    <string name="pref_diagnostics_subtitle">Kuvab klaviatuuril reaalajas märgi, millel on loendurid akna kärpimiste, joonduse taastamiste ja kõrvale jäetud tühjade sammude kohta. Kasulik konveieri probleemide diagnoosimiseks; vaikimisi peidetud.</string>
+    <string name="pref_diagnostics_visible">Nähtav</string>
+    <string name="pref_diagnostics_hidden">Peidetud</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Kõnetuvastusmudelid</string>
+    <string name="model_screen_subtitle">Installige mudel ja puudutage valikut „Määra aktiivseks“, et seda transkribeerimiseks kasutada. Korraga laaditakse ainult üks mudel. Rakendusel Parakeetype pole internetiühendust: laadite mudelifaili brauseris alla ja impordite selle siin.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Aktiivne mudel</string>
+    <string name="dialog_delete_title">Kustutamise kinnitamine</string>
+    <string name="dialog_delete_message">Kas soovite kindlasti selle mudeli kustutada? Seda toimingut ei saa tagasi võtta.</string>
+    <string name="model_install_explanation">1. Laadige mudelifail (~%d MB, üks ZIP-arhiiv) brauseris alla.\n2. Puudutage valikut „Impordi mudelifail“ ja valige allalaaditud arhiiv.\nPärast importimist võite arhiivi kaustast Allalaadimised kustutada.</string>
+    <string name="action_download_in_browser">Laadi alla brauseris</string>
+    <string name="action_import_model_file">Impordi mudelifail</string>
+    <string name="model_importing_format">Importimine… %d%%</string>
+    <string name="model_no_browser">Allalaadimislingi avamiseks ei leitud brauserit.</string>
+    <string name="model_import_success">Mudel on imporditud. Nüüd võite allalaaditud arhiivi kustutada.</string>
+    <string name="model_import_not_archive">Valitud fail pole Parakeetype\'i mudeliarhiiv.</string>
+    <string name="model_import_missing_files">Arhiiv on puudulik. Puudu: %s</string>
+    <string name="model_import_corrupted">Arhiiv on rikutud (kontrollsumma ei klapi): %s. Laadige see uuesti alla.</string>
+    <string name="model_import_io_error">Importimine ebaõnnestus: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Parakeetype häältranskriptsioon</string>
+    <string name="notif_channel_desc">Kuvatakse, kui häältranskriptsiooni mootor on aktiivne</string>
+    <string name="notif_engine_loading">Transkribeerimismootori laadimine…</string>
+    <string name="notif_model_not_downloaded">Mudel pole installitud - avage installimiseks Parakeetype</string>
+    <string name="notif_engine_ready">Parakeetype on valmis (%s)</string>
+    <string name="notif_engine_failed">Mootori laadimine ebaõnnestus: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Transkribeerimine…</string>
+    <string name="status_no_speech">Ei saanud aru — proovige uuesti</string>
+    <string name="status_engine_model_missing">Mudel pole installitud - avage installimiseks Parakeetype</string>
+    <string name="status_engine_loading">Transkribeerimismootori laadimine…</string>
+    <string name="status_error_mic_permission">Mikrofoni luba keelati - avage loa andmiseks Parakeetype</string>
+    <string name="status_error_mic_init">Mikrofoni ei saanud avada</string>
+    <string name="status_error_transcription">Transkribeerimine ebaõnnestus</string>
+    <string name="status_error_audio_capture">Heli salvestamine ebaõnnestus</string>
+    <string name="status_error_engine_load">Mootori laadimine ebaõnnestus</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofon</string>
+    <string name="pref_mic_subtitle">Kalibreerige, et valida lühikeste sõnade (nt „Thanks“) jaoks kõige selgem mikrofon.</string>
+    <string name="pref_mic_calibrate">Kalibreeri mikrofonid</string>
+    <string name="pref_raw_mic_title">Töötlemata mikrofon (kajasummutuseta)</string>
+    <string name="pref_raw_mic_subtitle">Möödub platvormi kajasummutusest ja müra vähendamisest. Lubage see, kui transkribeerite heli, mida esitatakse seadme enda kõlarist (nt kõneposti sõnum valjuhääldil) - vaikeallika puhul eemaldatakse kõlari signaal mikrofonist ja see transkribeeritakse vaikusena. Mürarikastes ruumides veidi vähem puhas salvestus.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Valige mikrofon, mis salvestab kõrgeid sagedusi kõige selgemalt. Kõnemudel vajab neid, et eristada lühikesi sõnu, nagu „Thanks“.</string>
+    <string name="calib_instructions">Oodake iga mikrofoni puhul punast indikaatorit ja öelge siis selgelt \'thanks\'. Kõige selgem mikrofon valitakse automaatselt.</string>
+    <string name="calib_start">Alusta kalibreerimist</string>
+    <string name="calib_mic_of">Mikrofon %1$d / %2$d</string>
+    <string name="calib_speak_now">Öelge nüüd \'thanks\'</string>
+    <string name="calib_get_ready">Valmistuge ütlema \'thanks\'</string>
+    <string name="calib_done">Kalibreerimine on lõpetatud</string>
+    <string name="calib_best">Parim mikrofon</string>
+    <string name="calib_hf">Kõrgsagedus</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Salvestati eelistatud mikrofonina</string>
+    <string name="calib_run_again">Käivita uuesti</string>
+    <string name="calib_no_mics">Mikrofone ei leitud.</string>
+    <string name="calib_current">Praegune</string>
+    <string name="mic_builtin">Sisseehitatud mikrofon</string>
+    <string name="mic_builtin_format">Sisseehitatud mikrofon (%s)</string>
+    <string name="mic_wired_headset">Juhtmega peakomplekt</string>
+    <string name="mic_type_format">Mikrofon %d</string>
+    <string name="mic_front_back">eest &amp; tagant</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Kokkujooksmise aruanded</string>
+    <string name="crash_channel_desc">Kuvatakse pärast Parakeetype\'i kokkujooksmist, et saaksite logi jagada</string>
+    <string name="crash_notif_title">Parakeetype jooksis kokku</string>
+    <string name="crash_notif_text">Puudutage kokkujooksmise logi jagamiseks</string>
+    <string name="crash_dialog_title">Parakeetype jooksis kokku</string>
+    <string name="crash_dialog_message">Kokkujooksmise logi salvestati sellesse seadmesse. Kui jagate seda arendajaga, aitab see probleemi lahendada.\n\nLogi sisaldab ainult Parakeetype\'i enda logiridu, kuid need võivad sisaldada teie dikteeritud teksti. Seda ei saadeta kuhugi, kui te seda ise ei jaga.</string>
+    <string name="crash_action_share">Jaga</string>
+    <string name="crash_action_dismiss">Loobu</string>
+    <string name="crash_share_title">Jaga kokkujooksmise logi</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Parakeetype häälsisestus</string>
+    <string name="voice_input_speak_now">Rääkige nüüd</string>
+    <string name="voice_input_transcribing">Transkribeerimine…</string>
+    <string name="voice_input_done">Valmis</string>
+    <string name="voice_input_retry">Proovi uuesti</string>
+    <string name="voice_input_error_no_model">Kõnemudelit pole installitud. Avage Parakeetype, et see installida.</string>
+    <string name="voice_input_error_permission">Parakeetype vajab juurdepääsu mikrofonile.</string>
+    <string name="voice_input_error_audio">Mikrofoni ei saanud avada.</string>
+    <string name="voice_input_error_generic">Kõnetuvastus ebaõnnestus.</string>
+</resources>

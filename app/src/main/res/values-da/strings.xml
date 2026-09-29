@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Parakeetype-talegenkendelse</string>
+    <string name="subtype_voice">Parakeetype-taleinput</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Installer model</string>
+    <string name="nav_title_input">Mikrofon, udløser &amp; layout</string>
+    <string name="nav_title_speech">Talebehandling</string>
+    <string name="nav_title_tools">Diagnosticering</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Åbn Indstillinger</string>
+    <string name="action_grant_permission">Giv tilladelse</string>
+    <string name="action_download">Installer</string>
+    <string name="action_manage">Administrer</string>
+    <string name="action_cancel">Annuller</string>
+    <string name="action_delete">Slet</string>
+    <string name="action_retry">Prøv igen</string>
+    <string name="action_set_as_active">Angiv som aktiv</string>
+    <string name="action_open_parakeetype">Åbn Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Aktiveret</string>
+    <string name="state_disabled">Deaktiveret</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Tilbage</string>
+    <string name="cd_switch_keyboard">Skift tastatur</string>
+    <string name="cd_delete_all">Slet al tekst</string>
+    <string name="cd_delete_word">Slet sidste ord</string>
+    <string name="cd_action_search">Søg</string>
+    <string name="cd_action_go">Gå</string>
+    <string name="cd_action_next">Næste</string>
+    <string name="cd_action_enter">Enter</string>
+    <string name="cd_active_model">Aktiv model</string>
+    <string name="cd_delete_model">Slet model</string>
+    <string name="cd_status_error">Fejl</string>
+    <string name="cd_talk_disabled">Taleknap deaktiveret - motoren er ikke klar</string>
+    <string name="cd_talk_stop_continuous">Stop kontinuerlig optagelse</string>
+    <string name="cd_talk_tap_stop">Tryk for at stoppe optagelsen</string>
+    <string name="cd_talk_stop">Stop optagelsen</string>
+    <string name="cd_talk_tap_start">Tryk for at starte optagelsen</string>
+    <string name="cd_talk_hold_start">Start optagelse (hold) · stryg til venstre for at låse</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Opsætning</string>
+    <string name="home_section_configuration">Konfiguration</string>
+    <string name="home_ime_enabled">Tastatur aktiveret</string>
+    <string name="home_ime_not_enabled">Tastatur ikke aktiveret</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype er på listen over tastaturer.</string>
+    <string name="home_ime_not_enabled_subtitle">Tilføj Parakeetype i systemets tastaturindstillinger.</string>
+    <string name="home_mic_granted">Mikrofonadgang givet</string>
+    <string name="home_mic_required">Mikrofontilladelse kræves</string>
+    <string name="home_mic_granted_subtitle">Lyd behandles udelukkende på enheden.</string>
+    <string name="home_mic_required_subtitle">Tryk for at give adgang til mikrofonen.</string>
+    <string name="home_model_ready">Model klar</string>
+    <string name="home_model_not_downloaded">Model ikke installeret</string>
+    <string name="home_model_ready_subtitle">En transskriptionsmodel er installeret og klar.</string>
+    <string name="home_model_not_downloaded_subtitle">Installer en transskriptionsmodel for at bruge tastaturet.</string>
+    <string name="home_pref_input">Mikrofon, udløsertilstand &amp; layout</string>
+    <string name="home_pref_speech">Taleaktivitet, efterbehandling &amp; modelhukommelse</string>
+    <string name="home_pref_tools">Diagnosticering</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Udløsertilstand</string>
+    <string name="pref_trigger_mode_subtitle">Hvordan taleoptagelsen startes og stoppes.</string>
+    <string name="pref_trigger_hold">Hold for at tale</string>
+    <string name="pref_trigger_tap_toggle">Tryk for at slå til/fra</string>
+    <string name="pref_delete_title">Sletknap</string>
+    <string name="pref_delete_subtitle">Hvad papirkurvsknappen på tastaturet sletter. \"Sidste sætning\" fjerner kun den seneste sætning før markøren, så et langt dokument aldrig slettes ved et uheld.</string>
+    <string name="pref_delete_all">Al tekst</string>
+    <string name="pref_delete_last_sentence">Sidste sætning</string>
+    <string name="pref_position_title">Tastaturets placering</string>
+    <string name="pref_position_subtitle">Hvor tastaturets knapper sidder. Til venstre eller højre er de inden for rækkevidde af én tommelfinger – praktisk i liggende format, for venstrehåndede og på tablets.</string>
+    <string name="pref_position_portrait">I stående format</string>
+    <string name="pref_position_landscape">I liggende format</string>
+    <string name="pref_position_left">Venstre</string>
+    <string name="pref_position_center">Midten</string>
+    <string name="pref_position_right">Højre</string>
+    <string name="pref_vad_title">Registrering af taleaktivitet (VAD)</string>
+    <string name="pref_vad_subtitle">Bruger Silero VAD til at filtrere stilhed og baggrundsstøj fra før transskriptionen. Deaktiver kun, hvis VAD skærer begyndelsen af din tale af eller giver tomme resultater.</string>
+    <string name="pref_postprocessing_title">Efterbehandling af transskription</string>
+    <string name="pref_postprocessing_subtitle">Fjerner fyldord (øh, øhm, hmm), samler stammen og rydder op i gentagne sætninger, som modellen nogle gange hallucinerer. Deaktiver for at få modellens præcise, rå output - nyttigt til at finde ud af, om oprydningen er skyld i manglende eller ændrede ord.</string>
+    <string name="pref_postprocessing_disabled_raw">Deaktiveret (råt output)</string>
+    <string name="pref_keep_loaded_title">Hold modellen indlæst</string>
+    <string name="pref_keep_loaded_subtitle">Holder talemodellen i hukommelsen, mens du bruger et andet tastatur, så diktering er klar med det samme, når du skifter tilbage, i stedet for at modellen skal indlæses igen. Kører en forgrundstjeneste med en vedvarende notifikation og optager ca. 700 MB RAM.</string>
+    <string name="pref_diagnostics_title">Pipelinediagnosticering</string>
+    <string name="pref_diagnostics_subtitle">Viser et live-badge på tastaturet med tællere for vinduesbeskæringer, gendannelser af justering og kasserede tomme skridt. Nyttigt til at diagnosticere pipelineproblemer; skjult som standard.</string>
+    <string name="pref_diagnostics_visible">Synlig</string>
+    <string name="pref_diagnostics_hidden">Skjult</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Talegenkendelsesmodeller</string>
+    <string name="model_screen_subtitle">Installer en model, og tryk på \"Angiv som aktiv\" for at bruge den til transskription. Der indlæses kun én model ad gangen. Parakeetype har ingen internetadgang: Du downloader modelfilen i din browser og importerer den her.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Aktiv model</string>
+    <string name="dialog_delete_title">Bekræft sletning</string>
+    <string name="dialog_delete_message">Er du sikker på, at du vil slette denne model? Handlingen kan ikke fortrydes.</string>
+    <string name="model_install_explanation">1. Download modelfilen (~%d MB, ét ZIP-arkiv) i din browser.\n2. Tryk på \"Importér modelfil\", og vælg det downloadede arkiv.\nEfter importen kan du slette arkivet fra mappen Downloads.</string>
+    <string name="action_download_in_browser">Download i browser</string>
+    <string name="action_import_model_file">Importér modelfil</string>
+    <string name="model_importing_format">Importerer… %d%%</string>
+    <string name="model_no_browser">Der blev ikke fundet nogen browser til at åbne downloadlinket.</string>
+    <string name="model_import_success">Modellen er importeret. Du kan nu slette det downloadede arkiv.</string>
+    <string name="model_import_not_archive">Den valgte fil er ikke et Parakeetype-modelarkiv.</string>
+    <string name="model_import_missing_files">Arkivet er ufuldstændigt. Mangler: %s</string>
+    <string name="model_import_corrupted">Arkivet er beskadiget (kontrolsummen stemmer ikke): %s. Download det igen.</string>
+    <string name="model_import_io_error">Importen mislykkedes: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Parakeetype-taletransskription</string>
+    <string name="notif_channel_desc">Vises, mens taletransskriptionsmotoren er aktiv</string>
+    <string name="notif_engine_loading">Indlæser transskriptionsmotor…</string>
+    <string name="notif_model_not_downloaded">Model ikke installeret - åbn Parakeetype for at installere den</string>
+    <string name="notif_engine_ready">Parakeetype er klar (%s)</string>
+    <string name="notif_engine_failed">Motoren kunne ikke indlæses: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Transskriberer…</string>
+    <string name="status_no_speech">Det blev ikke opfattet — prøv igen</string>
+    <string name="status_engine_model_missing">Model ikke installeret - åbn Parakeetype for at installere den</string>
+    <string name="status_engine_loading">Indlæser transskriptionsmotor…</string>
+    <string name="status_error_mic_permission">Mikrofontilladelse afvist - åbn Parakeetype for at give den</string>
+    <string name="status_error_mic_init">Mikrofonen kunne ikke åbnes</string>
+    <string name="status_error_transcription">Transskriptionen mislykkedes</string>
+    <string name="status_error_audio_capture">Lydoptagelsen mislykkedes</string>
+    <string name="status_error_engine_load">Motoren kunne ikke indlæses</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofon</string>
+    <string name="pref_mic_subtitle">Kalibrer for at vælge den tydeligste mikrofon til korte ord som \"Thanks\".</string>
+    <string name="pref_mic_calibrate">Kalibrer mikrofoner</string>
+    <string name="pref_raw_mic_title">Rå mikrofon (ingen ekkoannullering)</string>
+    <string name="pref_raw_mic_subtitle">Omgår platformens ekkoannullering og støjreduktion. Aktivér dette, når du transskriberer lyd, der afspilles fra enhedens egen højttaler (f.eks. en telefonsvarerbesked på højttaler) - med standardkilden fjernes højttalersignalet fra mikrofonen, og det transskriberes som stilhed. Lidt mindre ren optagelse i støjende rum.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Vælg den mikrofon, der opfanger høje frekvenser tydeligst. Talemodellen har brug for dem til at skelne korte ord som \"Thanks\".</string>
+    <string name="calib_instructions">Vent på den røde indikator ved hver mikrofon, og sig derefter \'thanks\' tydeligt. Den tydeligste mikrofon vælges automatisk.</string>
+    <string name="calib_start">Start kalibrering</string>
+    <string name="calib_mic_of">Mikrofon %1$d af %2$d</string>
+    <string name="calib_speak_now">Sig \'thanks\' nu</string>
+    <string name="calib_get_ready">Gør dig klar til at sige \'thanks\'</string>
+    <string name="calib_done">Kalibreringen er fuldført</string>
+    <string name="calib_best">Bedste mikrofon</string>
+    <string name="calib_hf">Højfrekvens</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Gemt som foretrukken mikrofon</string>
+    <string name="calib_run_again">Kør igen</string>
+    <string name="calib_no_mics">Der blev ikke fundet nogen mikrofoner.</string>
+    <string name="calib_current">Aktuel</string>
+    <string name="mic_builtin">Indbygget mikrofon</string>
+    <string name="mic_builtin_format">Indbygget mikrofon (%s)</string>
+    <string name="mic_wired_headset">Headset med ledning</string>
+    <string name="mic_type_format">Mikrofon %d</string>
+    <string name="mic_front_back">for &amp; bag</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Nedbrudsrapporter</string>
+    <string name="crash_channel_desc">Vises, når Parakeetype er gået ned, så du kan dele nedbrudsloggen</string>
+    <string name="crash_notif_title">Parakeetype er gået ned</string>
+    <string name="crash_notif_text">Tryk for at dele nedbrudsloggen</string>
+    <string name="crash_dialog_title">Parakeetype er gået ned</string>
+    <string name="crash_dialog_message">En log over nedbruddet er gemt på denne enhed. Hvis du deler den med udvikleren, hjælper det med at løse problemet.\n\nLoggen indeholder kun Parakeetypes egne loglinjer, men de kan indeholde tekst, du har dikteret. Den sendes aldrig nogen steder hen, medmindre du deler den.</string>
+    <string name="crash_action_share">Del</string>
+    <string name="crash_action_dismiss">Afvis</string>
+    <string name="crash_share_title">Del nedbrudslog</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Parakeetype-taleinput</string>
+    <string name="voice_input_speak_now">Tal nu</string>
+    <string name="voice_input_transcribing">Transskriberer…</string>
+    <string name="voice_input_done">Udført</string>
+    <string name="voice_input_retry">Prøv igen</string>
+    <string name="voice_input_error_no_model">Der er ikke installeret nogen talemodel. Åbn Parakeetype for at installere en.</string>
+    <string name="voice_input_error_permission">Parakeetype skal have adgang til mikrofonen.</string>
+    <string name="voice_input_error_audio">Mikrofonen kunne ikke åbnes.</string>
+    <string name="voice_input_error_generic">Talegenkendelsen mislykkedes.</string>
+</resources>

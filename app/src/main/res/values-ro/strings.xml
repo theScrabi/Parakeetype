@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Recunoaștere vocală Parakeetype</string>
+    <string name="subtype_voice">Introducere vocală Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Instalați modelul</string>
+    <string name="nav_title_input">Microfon, declanșare &amp; aspect</string>
+    <string name="nav_title_speech">Procesarea vorbirii</string>
+    <string name="nav_title_tools">Diagnosticare</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Deschideți setările</string>
+    <string name="action_grant_permission">Acordați permisiunea</string>
+    <string name="action_download">Instalați</string>
+    <string name="action_manage">Gestionați</string>
+    <string name="action_cancel">Anulați</string>
+    <string name="action_delete">Ștergeți</string>
+    <string name="action_retry">Reîncercați</string>
+    <string name="action_set_as_active">Setați ca activ</string>
+    <string name="action_open_parakeetype">Deschideți Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Activat</string>
+    <string name="state_disabled">Dezactivat</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Înapoi</string>
+    <string name="cd_switch_keyboard">Schimbați tastatura</string>
+    <string name="cd_delete_all">Ștergeți tot textul</string>
+    <string name="cd_delete_word">Ștergeți ultimul cuvânt</string>
+    <string name="cd_action_search">Căutați</string>
+    <string name="cd_action_go">Accesați</string>
+    <string name="cd_action_next">Înainte</string>
+    <string name="cd_action_enter">Enter</string>
+    <string name="cd_active_model">Model activ</string>
+    <string name="cd_delete_model">Ștergeți modelul</string>
+    <string name="cd_status_error">Eroare</string>
+    <string name="cd_talk_disabled">Butonul de vorbire este dezactivat – motorul nu este pregătit</string>
+    <string name="cd_talk_stop_continuous">Opriți înregistrarea continuă</string>
+    <string name="cd_talk_tap_stop">Atingeți pentru a opri înregistrarea</string>
+    <string name="cd_talk_stop">Opriți înregistrarea</string>
+    <string name="cd_talk_tap_start">Atingeți pentru a începe înregistrarea</string>
+    <string name="cd_talk_hold_start">Începeți înregistrarea (țineți apăsat) · glisați spre stânga pentru a bloca</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Configurare inițială</string>
+    <string name="home_section_configuration">Configurare</string>
+    <string name="home_ime_enabled">Tastatură activată</string>
+    <string name="home_ime_not_enabled">Tastatură neactivată</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype se află în lista de tastaturi.</string>
+    <string name="home_ime_not_enabled_subtitle">Adăugați Parakeetype în setările de tastatură ale sistemului.</string>
+    <string name="home_mic_granted">Acces la microfon acordat</string>
+    <string name="home_mic_required">Este necesară permisiunea pentru microfon</string>
+    <string name="home_mic_granted_subtitle">Sunetul este procesat în întregime pe dispozitiv.</string>
+    <string name="home_mic_required_subtitle">Atingeți pentru a acorda accesul la microfon.</string>
+    <string name="home_model_ready">Model pregătit</string>
+    <string name="home_model_not_downloaded">Model neinstalat</string>
+    <string name="home_model_ready_subtitle">Un model de transcriere este instalat și pregătit.</string>
+    <string name="home_model_not_downloaded_subtitle">Instalați un model de transcriere pentru a folosi tastatura.</string>
+    <string name="home_pref_input">Microfon, mod de declanșare &amp; aspect</string>
+    <string name="home_pref_speech">Activitate vocală, post-procesare &amp; memoria modelului</string>
+    <string name="home_pref_tools">Diagnosticare</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Mod de declanșare</string>
+    <string name="pref_trigger_mode_subtitle">Cum porniți și opriți înregistrarea vocală.</string>
+    <string name="pref_trigger_hold">Țineți apăsat pentru a vorbi</string>
+    <string name="pref_trigger_tap_toggle">Atingeți pentru a comuta</string>
+    <string name="pref_delete_title">Butonul Ștergeți</string>
+    <string name="pref_delete_subtitle">Ce șterge butonul coș de gunoi de pe tastatură. „Ultima propoziție” elimină doar cea mai recentă propoziție dinaintea cursorului, astfel încât un document lung să nu fie niciodată șters din greșeală.</string>
+    <string name="pref_delete_all">Tot textul</string>
+    <string name="pref_delete_last_sentence">Ultima propoziție</string>
+    <string name="pref_position_title">Poziția tastaturii</string>
+    <string name="pref_position_subtitle">Unde se află comenzile tastaturii. În stânga sau în dreapta rămân la îndemâna unui singur deget mare – util în modul peisaj, pentru stângaci și pe tablete.</string>
+    <string name="pref_position_portrait">În modul portret</string>
+    <string name="pref_position_landscape">În modul peisaj</string>
+    <string name="pref_position_left">Stânga</string>
+    <string name="pref_position_center">Centru</string>
+    <string name="pref_position_right">Dreapta</string>
+    <string name="pref_vad_title">Detectarea activității vocale (VAD)</string>
+    <string name="pref_vad_subtitle">Folosește Silero VAD pentru a filtra liniștea și zgomotul de fundal înainte de transcriere. Dezactivați doar dacă VAD taie începutul vorbirii sau produce rezultate goale.</string>
+    <string name="pref_postprocessing_title">Post-procesarea transcrierii</string>
+    <string name="pref_postprocessing_subtitle">Elimină cuvintele de umplutură (ă, îm, hmm), comprimă bâlbâielile și curăță frazele repetate pe care modelul le halucinează uneori. Dezactivați pentru a primi exact rezultatul brut al modelului – util pentru a afla dacă curățarea este responsabilă pentru cuvinte omise sau modificate.</string>
+    <string name="pref_postprocessing_disabled_raw">Dezactivat (rezultat brut)</string>
+    <string name="pref_keep_loaded_title">Păstrați modelul încărcat</string>
+    <string name="pref_keep_loaded_subtitle">Păstrează modelul vocal în memorie cât timp folosiți altă tastatură, astfel încât dictarea este gata imediat când reveniți, fără a reîncărca modelul. Rulează un serviciu în prim-plan cu o notificare permanentă și ocupă aproximativ 700 MB de RAM.</string>
+    <string name="pref_diagnostics_title">Diagnosticarea pipeline-ului</string>
+    <string name="pref_diagnostics_subtitle">Afișează pe tastatură o insignă în timp real cu contoare pentru tăierile ferestrei, recuperările de aliniere și pașii goi eliminați. Util pentru diagnosticarea problemelor pipeline-ului; ascunsă în mod prestabilit.</string>
+    <string name="pref_diagnostics_visible">Vizibilă</string>
+    <string name="pref_diagnostics_hidden">Ascunsă</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Modele de recunoaștere vocală</string>
+    <string name="model_screen_subtitle">Instalați un model și atingeți „Setați ca activ” pentru a-l folosi la transcriere. Se încarcă un singur model odată. Parakeetype nu are acces la internet: descărcați fișierul modelului în browser și îl importați aici.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Model activ</string>
+    <string name="dialog_delete_title">Confirmați ștergerea</string>
+    <string name="dialog_delete_message">Sigur doriți să ștergeți acest model? Acțiunea nu poate fi anulată.</string>
+    <string name="model_install_explanation">1. Descărcați fișierul modelului (~%d MB, o arhivă ZIP) în browser.\n2. Atingeți „Importați fișierul modelului” și alegeți arhiva descărcată.\nDupă import, puteți șterge arhiva din dosarul Descărcări.</string>
+    <string name="action_download_in_browser">Descărcați în browser</string>
+    <string name="action_import_model_file">Importați fișierul modelului</string>
+    <string name="model_importing_format">Se importă… %d%%</string>
+    <string name="model_no_browser">Nu s-a găsit niciun browser pentru a deschide linkul de descărcare.</string>
+    <string name="model_import_success">Model importat. Acum puteți șterge arhiva descărcată.</string>
+    <string name="model_import_not_archive">Fișierul selectat nu este o arhivă de model Parakeetype.</string>
+    <string name="model_import_missing_files">Arhiva este incompletă. Lipsesc: %s</string>
+    <string name="model_import_corrupted">Arhiva este deteriorată (suma de control nu corespunde): %s. Descărcați-o din nou.</string>
+    <string name="model_import_io_error">Importul nu a reușit: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Transcriere vocală Parakeetype</string>
+    <string name="notif_channel_desc">Afișată cât timp motorul de transcriere vocală este activ</string>
+    <string name="notif_engine_loading">Se încarcă motorul de transcriere…</string>
+    <string name="notif_model_not_downloaded">Model neinstalat – deschideți Parakeetype pentru a-l instala</string>
+    <string name="notif_engine_ready">Parakeetype este pregătit (%s)</string>
+    <string name="notif_engine_failed">Motorul nu s-a putut încărca: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Se transcrie…</string>
+    <string name="status_no_speech">Nu am înțeles – încercați din nou</string>
+    <string name="status_engine_model_missing">Model neinstalat – deschideți Parakeetype pentru a-l instala</string>
+    <string name="status_engine_loading">Se încarcă motorul de transcriere…</string>
+    <string name="status_error_mic_permission">Permisiunea pentru microfon a fost refuzată – deschideți Parakeetype pentru a o acorda</string>
+    <string name="status_error_mic_init">Microfonul nu a putut fi deschis</string>
+    <string name="status_error_transcription">Transcrierea nu a reușit</string>
+    <string name="status_error_audio_capture">Captarea audio nu a reușit</string>
+    <string name="status_error_engine_load">Motorul nu s-a putut încărca</string>
+
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Microfon</string>
+    <string name="pref_mic_subtitle">Calibrați pentru a alege cel mai clar microfon pentru cuvinte scurte precum „Thanks”.</string>
+    <string name="pref_mic_calibrate">Calibrați microfoanele</string>
+    <string name="pref_raw_mic_title">Microfon brut (fără anularea ecoului)</string>
+    <string name="pref_raw_mic_subtitle">Ocolește anularea ecoului și reducerea zgomotului oferite de platformă. Activați această opțiune când transcrieți sunet redat de difuzorul dispozitivului (de ex., un mesaj vocal pe difuzor) – cu sursa prestabilită, semnalul difuzorului este eliminat din microfon și transcris ca liniște. Captare puțin mai puțin curată în încăperi zgomotoase.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Alegeți microfonul care captează cel mai clar detaliile de înaltă frecvență. Modelul vocal are nevoie de ele pentru a distinge cuvinte scurte precum „Thanks”.</string>
+    <string name="calib_instructions">Așteptați indicatorul roșu la fiecare microfon, apoi spuneți clar „thanks”. Cel mai clar microfon este ales automat.</string>
+    <string name="calib_start">Începeți calibrarea</string>
+    <string name="calib_mic_of">Microfonul %1$d din %2$d</string>
+    <string name="calib_speak_now">Spuneți „thanks” acum</string>
+    <string name="calib_get_ready">Pregătiți-vă să spuneți „thanks”</string>
+    <string name="calib_done">Calibrare finalizată</string>
+    <string name="calib_best">Cel mai bun microfon</string>
+    <string name="calib_hf">Înaltă frecv.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Salvat ca microfon preferat</string>
+    <string name="calib_run_again">Rulați din nou</string>
+    <string name="calib_no_mics">Nu s-au găsit microfoane.</string>
+    <string name="calib_current">Actual</string>
+    <string name="mic_builtin">Microfon încorporat</string>
+    <string name="mic_builtin_format">Microfon încorporat (%s)</string>
+    <string name="mic_wired_headset">Căști cu fir</string>
+    <string name="mic_type_format">Microfon %d</string>
+    <string name="mic_front_back">față &amp; spate</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Rapoarte de blocare</string>
+    <string name="crash_channel_desc">Afișată după ce Parakeetype s-a blocat, pentru a trimite jurnalul blocării</string>
+    <string name="crash_notif_title">Parakeetype s-a blocat</string>
+    <string name="crash_notif_text">Atingeți pentru a trimite jurnalul blocării</string>
+    <string name="crash_dialog_title">Parakeetype s-a blocat</string>
+    <string name="crash_dialog_message">Un jurnal al blocării a fost salvat pe acest dispozitiv. Trimiterea lui către dezvoltator ajută la remedierea problemei.\n\nJurnalul conține doar rândurile de jurnal ale Parakeetype, dar acestea pot include text pe care l-ați dictat. Nu este trimis nicăieri decât dacă îl trimiteți dvs.</string>
+    <string name="crash_action_share">Trimiteți</string>
+    <string name="crash_action_dismiss">Închideți</string>
+    <string name="crash_share_title">Trimiteți jurnalul blocării</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Introducere vocală Parakeetype</string>
+    <string name="voice_input_speak_now">Vorbiți acum</string>
+    <string name="voice_input_transcribing">Se transcrie…</string>
+    <string name="voice_input_done">Gata</string>
+    <string name="voice_input_retry">Încercați din nou</string>
+    <string name="voice_input_error_no_model">Niciun model vocal instalat. Deschideți Parakeetype pentru a instala unul.</string>
+    <string name="voice_input_error_permission">Parakeetype are nevoie de acces la microfon.</string>
+    <string name="voice_input_error_audio">Microfonul nu a putut fi deschis.</string>
+    <string name="voice_input_error_generic">Recunoașterea vocală nu a reușit.</string>
+</resources>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Rozpoznawanie mowy Parakeetype</string>
+    <string name="subtype_voice">Pisanie głosowe Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Zainstaluj model</string>
+    <string name="nav_title_input">Mikrofon, wyzwalanie &amp; układ</string>
+    <string name="nav_title_speech">Przetwarzanie mowy</string>
+    <string name="nav_title_tools">Diagnostyka</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Otwórz ustawienia</string>
+    <string name="action_grant_permission">Przyznaj uprawnienia</string>
+    <string name="action_download">Zainstaluj</string>
+    <string name="action_manage">Zarządzaj</string>
+    <string name="action_cancel">Anuluj</string>
+    <string name="action_delete">Usuń</string>
+    <string name="action_retry">Spróbuj ponownie</string>
+    <string name="action_set_as_active">Ustaw jako aktywny</string>
+    <string name="action_open_parakeetype">Otwórz Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Włączone</string>
+    <string name="state_disabled">Wyłączone</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Wstecz</string>
+    <string name="cd_switch_keyboard">Przełącz klawiaturę</string>
+    <string name="cd_delete_all">Usuń cały tekst</string>
+    <string name="cd_delete_word">Usuń ostatnie słowo</string>
+    <string name="cd_action_search">Szukaj</string>
+    <string name="cd_action_go">Przejdź</string>
+    <string name="cd_action_next">Dalej</string>
+    <string name="cd_action_enter">Enter</string>
+    <string name="cd_active_model">Aktywny model</string>
+    <string name="cd_delete_model">Usuń model</string>
+    <string name="cd_status_error">Błąd</string>
+    <string name="cd_talk_disabled">Przycisk mówienia nieaktywny – silnik nie jest gotowy</string>
+    <string name="cd_talk_stop_continuous">Zatrzymaj ciągłe nagrywanie</string>
+    <string name="cd_talk_tap_stop">Dotknij, aby zatrzymać nagrywanie</string>
+    <string name="cd_talk_stop">Zatrzymaj nagrywanie</string>
+    <string name="cd_talk_tap_start">Dotknij, aby rozpocząć nagrywanie</string>
+    <string name="cd_talk_hold_start">Rozpocznij nagrywanie (przytrzymaj) · przesuń w lewo, aby zablokować</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Przygotowanie</string>
+    <string name="home_section_configuration">Konfiguracja</string>
+    <string name="home_ime_enabled">Klawiatura włączona</string>
+    <string name="home_ime_not_enabled">Klawiatura nie jest włączona</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype jest na liście klawiatur.</string>
+    <string name="home_ime_not_enabled_subtitle">Dodaj Parakeetype w systemowych ustawieniach klawiatury.</string>
+    <string name="home_mic_granted">Przyznano dostęp do mikrofonu</string>
+    <string name="home_mic_required">Wymagane uprawnienie do mikrofonu</string>
+    <string name="home_mic_granted_subtitle">Dźwięk jest przetwarzany wyłącznie na urządzeniu.</string>
+    <string name="home_mic_required_subtitle">Dotknij, aby przyznać dostęp do mikrofonu.</string>
+    <string name="home_model_ready">Model gotowy</string>
+    <string name="home_model_not_downloaded">Model nie jest zainstalowany</string>
+    <string name="home_model_ready_subtitle">Model transkrypcji jest zainstalowany i gotowy.</string>
+    <string name="home_model_not_downloaded_subtitle">Zainstaluj model transkrypcji, aby korzystać z klawiatury.</string>
+    <string name="home_pref_input">Mikrofon, tryb wyzwalania &amp; układ</string>
+    <string name="home_pref_speech">Wykrywanie mowy, przetwarzanie końcowe &amp; pamięć modelu</string>
+    <string name="home_pref_tools">Diagnostyka</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Tryb wyzwalania</string>
+    <string name="pref_trigger_mode_subtitle">Jak rozpoczynać i kończyć nagrywanie głosu.</string>
+    <string name="pref_trigger_hold">Przytrzymaj, aby mówić</string>
+    <string name="pref_trigger_tap_toggle">Dotknij, aby przełączyć</string>
+    <string name="pref_delete_title">Przycisk usuwania</string>
+    <string name="pref_delete_subtitle">Co usuwa przycisk kosza na klawiaturze. „Ostatnie zdanie” usuwa tylko ostatnie zdanie przed kursorem, dzięki czemu długi dokument nigdy nie zostanie przypadkowo wymazany.</string>
+    <string name="pref_delete_all">Cały tekst</string>
+    <string name="pref_delete_last_sentence">Ostatnie zdanie</string>
+    <string name="pref_position_title">Położenie klawiatury</string>
+    <string name="pref_position_subtitle">Gdzie znajdują się elementy sterujące klawiatury. Po lewej lub prawej stronie są w zasięgu jednego kciuka – przydatne w orientacji poziomej, dla osób leworęcznych i na tabletach.</string>
+    <string name="pref_position_portrait">W orientacji pionowej</string>
+    <string name="pref_position_landscape">W orientacji poziomej</string>
+    <string name="pref_position_left">Po lewej</string>
+    <string name="pref_position_center">Na środku</string>
+    <string name="pref_position_right">Po prawej</string>
+    <string name="pref_vad_title">Wykrywanie aktywności głosowej (VAD)</string>
+    <string name="pref_vad_subtitle">Używa Silero VAD do odfiltrowania ciszy i szumów tła przed transkrypcją. Wyłącz tylko wtedy, gdy VAD obcina początek wypowiedzi lub daje puste wyniki.</string>
+    <string name="pref_postprocessing_title">Przetwarzanie końcowe transkrypcji</string>
+    <string name="pref_postprocessing_subtitle">Usuwa słowa wypełniające (yyy, eee, hmm), scala zająknięcia i usuwa powtórzone frazy, które model czasem halucynuje. Wyłącz, aby otrzymywać dokładny, surowy wynik modelu – przydatne do sprawdzenia, czy to czyszczenie odpowiada za pominięte lub zmienione słowa.</string>
+    <string name="pref_postprocessing_disabled_raw">Wyłączone (surowy wynik)</string>
+    <string name="pref_keep_loaded_title">Utrzymuj model w pamięci</string>
+    <string name="pref_keep_loaded_subtitle">Utrzymuje model mowy w pamięci, gdy używasz innej klawiatury, dzięki czemu dyktowanie jest od razu gotowe po powrocie, bez ponownego wczytywania modelu. Działa jako usługa na pierwszym planie ze stałym powiadomieniem i zajmuje około 700 MB pamięci RAM.</string>
+    <string name="pref_diagnostics_title">Diagnostyka potoku</string>
+    <string name="pref_diagnostics_subtitle">Wyświetla na klawiaturze plakietkę na żywo z licznikami przycięć okna, odzyskań wyrównania i odrzuconych pustych kroków. Przydatne do diagnozowania problemów z potokiem; domyślnie ukryte.</string>
+    <string name="pref_diagnostics_visible">Widoczna</string>
+    <string name="pref_diagnostics_hidden">Ukryta</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Modele rozpoznawania mowy</string>
+    <string name="model_screen_subtitle">Zainstaluj model i dotknij „Ustaw jako aktywny”, aby używać go do transkrypcji. Jednocześnie wczytany jest tylko jeden model. Parakeetype nie ma dostępu do internetu: plik modelu pobierasz w przeglądarce i importujesz tutaj.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Aktywny model</string>
+    <string name="dialog_delete_title">Potwierdź usunięcie</string>
+    <string name="dialog_delete_message">Czy na pewno chcesz usunąć ten model? Tej operacji nie można cofnąć.</string>
+    <string name="model_install_explanation">1. Pobierz plik modelu (~%d MB, jedno archiwum ZIP) w przeglądarce.\n2. Dotknij „Importuj plik modelu” i wybierz pobrane archiwum.\nPo zaimportowaniu możesz usunąć archiwum z folderu Pobrane.</string>
+    <string name="action_download_in_browser">Pobierz w przeglądarce</string>
+    <string name="action_import_model_file">Importuj plik modelu</string>
+    <string name="model_importing_format">Importowanie… %d%%</string>
+    <string name="model_no_browser">Nie znaleziono przeglądarki, aby otworzyć link do pobrania.</string>
+    <string name="model_import_success">Zaimportowano model. Możesz teraz usunąć pobrane archiwum.</string>
+    <string name="model_import_not_archive">Wybrany plik nie jest archiwum modelu Parakeetype.</string>
+    <string name="model_import_missing_files">Archiwum jest niekompletne. Brakuje: %s</string>
+    <string name="model_import_corrupted">Archiwum jest uszkodzone (niezgodna suma kontrolna): %s. Pobierz je ponownie.</string>
+    <string name="model_import_io_error">Import nie powiódł się: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Transkrypcja głosu Parakeetype</string>
+    <string name="notif_channel_desc">Wyświetlane, gdy silnik transkrypcji głosu jest aktywny</string>
+    <string name="notif_engine_loading">Wczytywanie silnika transkrypcji…</string>
+    <string name="notif_model_not_downloaded">Model nie jest zainstalowany – otwórz Parakeetype, aby go zainstalować</string>
+    <string name="notif_engine_ready">Parakeetype: gotowe (%s)</string>
+    <string name="notif_engine_failed">Nie udało się wczytać silnika: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Transkrypcja…</string>
+    <string name="status_no_speech">Nie udało się rozpoznać – spróbuj ponownie</string>
+    <string name="status_engine_model_missing">Model nie jest zainstalowany – otwórz Parakeetype, aby go zainstalować</string>
+    <string name="status_engine_loading">Wczytywanie silnika transkrypcji…</string>
+    <string name="status_error_mic_permission">Brak uprawnienia do mikrofonu – otwórz Parakeetype, aby je przyznać</string>
+    <string name="status_error_mic_init">Nie udało się otworzyć mikrofonu</string>
+    <string name="status_error_transcription">Transkrypcja nie powiodła się</string>
+    <string name="status_error_audio_capture">Nagrywanie dźwięku nie powiodło się</string>
+    <string name="status_error_engine_load">Nie udało się wczytać silnika</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofon</string>
+    <string name="pref_mic_subtitle">Skalibruj, aby wybrać najwyraźniejszy mikrofon dla krótkich słów, takich jak „Thanks”.</string>
+    <string name="pref_mic_calibrate">Kalibruj mikrofony</string>
+    <string name="pref_raw_mic_title">Surowy mikrofon (bez usuwania echa)</string>
+    <string name="pref_raw_mic_subtitle">Pomija systemowe usuwanie echa i tłumienie szumów. Włącz, gdy transkrybujesz dźwięk odtwarzany z głośnika tego urządzenia (np. pocztę głosową na głośniku) – przy domyślnym źródle sygnał głośnika jest usuwany z mikrofonu i transkrybowany jako cisza. W głośnych pomieszczeniach nagranie jest nieco mniej czyste.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Wybierz mikrofon, który najwyraźniej rejestruje wysokie częstotliwości. Model mowy potrzebuje ich, aby rozpoznawać krótkie słowa, takie jak „Thanks”.</string>
+    <string name="calib_instructions">Poczekaj na czerwony wskaźnik przy każdym mikrofonie, a następnie wyraźnie powiedz po angielsku „thanks”. Najwyraźniejszy mikrofon zostanie wybrany automatycznie.</string>
+    <string name="calib_start">Rozpocznij kalibrację</string>
+    <string name="calib_mic_of">Mikrofon %1$d z %2$d</string>
+    <string name="calib_speak_now">Powiedz teraz „thanks”</string>
+    <string name="calib_get_ready">Przygotuj się, aby powiedzieć „thanks”</string>
+    <string name="calib_done">Kalibracja zakończona</string>
+    <string name="calib_best">Najlepszy mikrofon</string>
+    <string name="calib_hf">Wys. częst.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Zapisano jako preferowany mikrofon</string>
+    <string name="calib_run_again">Uruchom ponownie</string>
+    <string name="calib_no_mics">Nie znaleziono mikrofonów.</string>
+    <string name="calib_current">Bieżący</string>
+    <string name="mic_builtin">Wbudowany mikrofon</string>
+    <string name="mic_builtin_format">Wbudowany mikrofon (%s)</string>
+    <string name="mic_wired_headset">Przewodowy zestaw słuchawkowy</string>
+    <string name="mic_type_format">Mikrofon %d</string>
+    <string name="mic_front_back">przód &amp; tył</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Raporty o awariach</string>
+    <string name="crash_channel_desc">Wyświetlane po awarii aplikacji Parakeetype, aby udostępnić dziennik awarii</string>
+    <string name="crash_notif_title">Aplikacja Parakeetype uległa awarii</string>
+    <string name="crash_notif_text">Dotknij, aby udostępnić dziennik awarii</string>
+    <string name="crash_dialog_title">Aplikacja Parakeetype uległa awarii</string>
+    <string name="crash_dialog_message">Dziennik awarii został zapisany na tym urządzeniu. Udostępnienie go deweloperowi pomoże naprawić problem.\n\nDziennik zawiera tylko własne wpisy aplikacji Parakeetype, ale mogą one zawierać podyktowany tekst. Nigdy nie jest nigdzie wysyłany, chyba że sam go udostępnisz.</string>
+    <string name="crash_action_share">Udostępnij</string>
+    <string name="crash_action_dismiss">Odrzuć</string>
+    <string name="crash_share_title">Udostępnij dziennik awarii</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Pisanie głosowe Parakeetype</string>
+    <string name="voice_input_speak_now">Mów teraz</string>
+    <string name="voice_input_transcribing">Transkrypcja…</string>
+    <string name="voice_input_done">Gotowe</string>
+    <string name="voice_input_retry">Spróbuj ponownie</string>
+    <string name="voice_input_error_no_model">Nie zainstalowano modelu mowy. Otwórz Parakeetype, aby go zainstalować.</string>
+    <string name="voice_input_error_permission">Parakeetype potrzebuje dostępu do mikrofonu.</string>
+    <string name="voice_input_error_audio">Nie udało się otworzyć mikrofonu.</string>
+    <string name="voice_input_error_generic">Rozpoznawanie mowy nie powiodło się.</string>
+</resources>

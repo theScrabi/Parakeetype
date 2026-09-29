@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Αναγνώριση ομιλίας Parakeetype</string>
+    <string name="subtype_voice">Φωνητική πληκτρολόγηση Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Εγκατάσταση μοντέλου</string>
+    <string name="nav_title_input">Μικρόφωνο, ενεργοποίηση και διάταξη</string>
+    <string name="nav_title_speech">Επεξεργασία ομιλίας</string>
+    <string name="nav_title_tools">Διαγνωστικά</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Άνοιγμα ρυθμίσεων</string>
+    <string name="action_grant_permission">Παραχώρηση άδειας</string>
+    <string name="action_download">Εγκατάσταση</string>
+    <string name="action_manage">Διαχείριση</string>
+    <string name="action_cancel">Ακύρωση</string>
+    <string name="action_delete">Διαγραφή</string>
+    <string name="action_retry">Επανάληψη</string>
+    <string name="action_set_as_active">Ορισμός ως ενεργού</string>
+    <string name="action_open_parakeetype">Άνοιγμα Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Ενεργοποιημένο</string>
+    <string name="state_disabled">Απενεργοποιημένο</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Πίσω</string>
+    <string name="cd_switch_keyboard">Εναλλαγή πληκτρολογίου</string>
+    <string name="cd_delete_all">Διαγραφή όλου του κειμένου</string>
+    <string name="cd_delete_word">Διαγραφή τελευταίας λέξης</string>
+    <string name="cd_action_search">Αναζήτηση</string>
+    <string name="cd_action_go">Μετάβαση</string>
+    <string name="cd_action_next">Επόμενο</string>
+    <string name="cd_action_enter">Εισαγωγή</string>
+    <string name="cd_active_model">Ενεργό μοντέλο</string>
+    <string name="cd_delete_model">Διαγραφή μοντέλου</string>
+    <string name="cd_status_error">Σφάλμα</string>
+    <string name="cd_talk_disabled">Το κουμπί ομιλίας είναι απενεργοποιημένο – η μηχανή δεν είναι έτοιμη</string>
+    <string name="cd_talk_stop_continuous">Διακοπή συνεχούς εγγραφής</string>
+    <string name="cd_talk_tap_stop">Πατήστε για διακοπή της εγγραφής</string>
+    <string name="cd_talk_stop">Διακοπή εγγραφής</string>
+    <string name="cd_talk_tap_start">Πατήστε για έναρξη εγγραφής</string>
+    <string name="cd_talk_hold_start">Έναρξη εγγραφής (παρατεταμένο πάτημα) · σύρετε αριστερά για κλείδωμα</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Ρύθμιση</string>
+    <string name="home_section_configuration">Διαμόρφωση</string>
+    <string name="home_ime_enabled">Το πληκτρολόγιο είναι ενεργοποιημένο</string>
+    <string name="home_ime_not_enabled">Το πληκτρολόγιο δεν είναι ενεργοποιημένο</string>
+    <string name="home_ime_enabled_subtitle">Το Parakeetype βρίσκεται στη λίστα πληκτρολογίων.</string>
+    <string name="home_ime_not_enabled_subtitle">Προσθέστε το Parakeetype στις ρυθμίσεις πληκτρολογίου του συστήματος.</string>
+    <string name="home_mic_granted">Παραχωρήθηκε πρόσβαση στο μικρόφωνο</string>
+    <string name="home_mic_required">Απαιτείται άδεια μικροφώνου</string>
+    <string name="home_mic_granted_subtitle">Ο ήχος επεξεργάζεται αποκλειστικά στη συσκευή.</string>
+    <string name="home_mic_required_subtitle">Πατήστε για να παραχωρήσετε πρόσβαση στο μικρόφωνο.</string>
+    <string name="home_model_ready">Το μοντέλο είναι έτοιμο</string>
+    <string name="home_model_not_downloaded">Το μοντέλο δεν έχει εγκατασταθεί</string>
+    <string name="home_model_ready_subtitle">Ένα μοντέλο μεταγραφής είναι εγκατεστημένο και έτοιμο.</string>
+    <string name="home_model_not_downloaded_subtitle">Εγκαταστήστε ένα μοντέλο μεταγραφής για να χρησιμοποιήσετε το πληκτρολόγιο.</string>
+    <string name="home_pref_input">Μικρόφωνο, λειτουργία ενεργοποίησης και διάταξη</string>
+    <string name="home_pref_speech">Φωνητική δραστηριότητα, μεταεπεξεργασία και μνήμη μοντέλου</string>
+    <string name="home_pref_tools">Διαγνωστικά</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Λειτουργία ενεργοποίησης</string>
+    <string name="pref_trigger_mode_subtitle">Πώς ξεκινά και σταματά η φωνητική εγγραφή.</string>
+    <string name="pref_trigger_hold">Κρατήστε πατημένο για ομιλία</string>
+    <string name="pref_trigger_tap_toggle">Πάτημα για εναλλαγή</string>
+    <string name="pref_delete_title">Κουμπί διαγραφής</string>
+    <string name="pref_delete_subtitle">Τι διαγράφει το κουμπί κάδου στο πληκτρολόγιο. Η επιλογή «Τελευταία πρόταση» αφαιρεί μόνο την πιο πρόσφατη πρόταση πριν από τον δρομέα, ώστε ένα μεγάλο έγγραφο να μη διαγράφεται ποτέ κατά λάθος.</string>
+    <string name="pref_delete_all">Όλο το κείμενο</string>
+    <string name="pref_delete_last_sentence">Τελευταία πρόταση</string>
+    <string name="pref_position_title">Θέση πληκτρολογίου</string>
+    <string name="pref_position_subtitle">Πού βρίσκονται τα στοιχεία ελέγχου του πληκτρολογίου. Αριστερά ή δεξιά παραμένουν προσβάσιμα με έναν αντίχειρα – χρήσιμο σε οριζόντιο προσανατολισμό, για αριστερόχειρες και σε tablet.</string>
+    <string name="pref_position_portrait">Σε κατακόρυφο προσανατολισμό</string>
+    <string name="pref_position_landscape">Σε οριζόντιο προσανατολισμό</string>
+    <string name="pref_position_left">Αριστερά</string>
+    <string name="pref_position_center">Κέντρο</string>
+    <string name="pref_position_right">Δεξιά</string>
+    <string name="pref_vad_title">Ανίχνευση φωνητικής δραστηριότητας (VAD)</string>
+    <string name="pref_vad_subtitle">Χρησιμοποιεί το Silero VAD για να φιλτράρει τη σιωπή και τον θόρυβο περιβάλλοντος πριν από τη μεταγραφή. Απενεργοποιήστε το μόνο αν το VAD κόβει την αρχή της ομιλίας σας ή δίνει κενά αποτελέσματα.</string>
+    <string name="pref_postprocessing_title">Μεταεπεξεργασία κειμένου</string>
+    <string name="pref_postprocessing_subtitle">Αφαιρεί λέξεις γεμίσματος (εεε, εμ, χμ), συμπτύσσει τους δισταγμούς και καθαρίζει επαναλαμβανόμενες φράσεις που μερικές φορές επινοεί το μοντέλο. Απενεργοποιήστε το για να λαμβάνετε την ακατέργαστη έξοδο του μοντέλου – χρήσιμο για να διαπιστώσετε αν ο καθαρισμός ευθύνεται για λέξεις που λείπουν ή έχουν αλλοιωθεί.</string>
+    <string name="pref_postprocessing_disabled_raw">Απενεργοποιημένο (ακατέργαστη έξοδος)</string>
+    <string name="pref_keep_loaded_title">Διατήρηση φορτωμένου μοντέλου</string>
+    <string name="pref_keep_loaded_subtitle">Διατηρεί το μοντέλο ομιλίας στη μνήμη ενώ χρησιμοποιείτε άλλο πληκτρολόγιο, ώστε η υπαγόρευση να είναι αμέσως διαθέσιμη όταν επιστρέψετε, χωρίς επαναφόρτωση του μοντέλου. Εκτελεί υπηρεσία προσκηνίου με μόνιμη ειδοποίηση και δεσμεύει περίπου 700 MB μνήμης RAM.</string>
+    <string name="pref_diagnostics_title">Διαγνωστικά ροής επεξεργασίας</string>
+    <string name="pref_diagnostics_subtitle">Εμφανίζει στο πληκτρολόγιο μια ένδειξη σε πραγματικό χρόνο με μετρητές για περικοπές παραθύρου, ανακτήσεις στοίχισης και απορριφθέντα κενά βήματα. Χρήσιμο για τη διάγνωση προβλημάτων της ροής επεξεργασίας. Είναι κρυφή από προεπιλογή.</string>
+    <string name="pref_diagnostics_visible">Ορατή</string>
+    <string name="pref_diagnostics_hidden">Κρυφή</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Μοντέλα αναγνώρισης ομιλίας</string>
+    <string name="model_screen_subtitle">Εγκαταστήστε ένα μοντέλο και πατήστε «Ορισμός ως ενεργού» για να το χρησιμοποιήσετε για μεταγραφή. Φορτώνεται μόνο ένα μοντέλο κάθε φορά. Το Parakeetype δεν έχει πρόσβαση στο διαδίκτυο: κατεβάζετε το αρχείο του μοντέλου στο πρόγραμμα περιήγησης και το εισάγετε εδώ.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Ενεργό μοντέλο</string>
+    <string name="dialog_delete_title">Επιβεβαίωση διαγραφής</string>
+    <string name="dialog_delete_message">Θέλετε σίγουρα να διαγράψετε αυτό το μοντέλο; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.</string>
+    <string name="model_install_explanation">1. Κατεβάστε το αρχείο του μοντέλου (~%d MB, ένα αρχείο ZIP) στο πρόγραμμα περιήγησης.\n2. Πατήστε «Εισαγωγή αρχείου μοντέλου» και επιλέξτε το αρχείο που κατεβάσατε.\nΜετά την εισαγωγή μπορείτε να διαγράψετε το αρχείο από τον φάκελο «Λήψεις».</string>
+    <string name="action_download_in_browser">Λήψη στο πρόγραμμα περιήγησης</string>
+    <string name="action_import_model_file">Εισαγωγή αρχείου μοντέλου</string>
+    <string name="model_importing_format">Εισαγωγή… %d%%</string>
+    <string name="model_no_browser">Δεν βρέθηκε πρόγραμμα περιήγησης για το άνοιγμα του συνδέσμου λήψης.</string>
+    <string name="model_import_success">Το μοντέλο εισήχθη. Μπορείτε τώρα να διαγράψετε το αρχείο που κατεβάσατε.</string>
+    <string name="model_import_not_archive">Το επιλεγμένο αρχείο δεν είναι αρχείο μοντέλου του Parakeetype.</string>
+    <string name="model_import_missing_files">Το αρχείο είναι ελλιπές. Λείπουν: %s</string>
+    <string name="model_import_corrupted">Το αρχείο είναι κατεστραμμένο (αναντιστοιχία αθροίσματος ελέγχου): %s. Κατεβάστε το ξανά.</string>
+    <string name="model_import_io_error">Η εισαγωγή απέτυχε: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Φωνητική μεταγραφή Parakeetype</string>
+    <string name="notif_channel_desc">Εμφανίζεται όσο η μηχανή φωνητικής μεταγραφής είναι ενεργή</string>
+    <string name="notif_engine_loading">Φόρτωση μηχανής μεταγραφής…</string>
+    <string name="notif_model_not_downloaded">Το μοντέλο δεν έχει εγκατασταθεί – ανοίξτε το Parakeetype για να το εγκαταστήσετε</string>
+    <string name="notif_engine_ready">Το Parakeetype είναι έτοιμο (%s)</string>
+    <string name="notif_engine_failed">Η φόρτωση της μηχανής απέτυχε: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Μεταγραφή…</string>
+    <string name="status_no_speech">Δεν έγινε κατανοητό – δοκιμάστε ξανά</string>
+    <string name="status_engine_model_missing">Το μοντέλο δεν έχει εγκατασταθεί – ανοίξτε το Parakeetype για να το εγκαταστήσετε</string>
+    <string name="status_engine_loading">Φόρτωση μηχανής μεταγραφής…</string>
+    <string name="status_error_mic_permission">Δεν δόθηκε άδεια μικροφώνου – ανοίξτε το Parakeetype για να την παραχωρήσετε</string>
+    <string name="status_error_mic_init">Δεν ήταν δυνατό το άνοιγμα του μικροφώνου</string>
+    <string name="status_error_transcription">Η μεταγραφή απέτυχε</string>
+    <string name="status_error_audio_capture">Η εγγραφή ήχου απέτυχε</string>
+    <string name="status_error_engine_load">Η φόρτωση της μηχανής απέτυχε</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Μικρόφωνο</string>
+    <string name="pref_mic_subtitle">Βαθμονομήστε για να επιλέξετε το πιο καθαρό μικρόφωνο για σύντομες λέξεις όπως «Thanks».</string>
+    <string name="pref_mic_calibrate">Βαθμονόμηση μικροφώνων</string>
+    <string name="pref_raw_mic_title">Ακατέργαστο μικρόφωνο (χωρίς ακύρωση ηχούς)</string>
+    <string name="pref_raw_mic_subtitle">Παρακάμπτει την ακύρωση ηχούς και τη μείωση θορύβου της πλατφόρμας. Ενεργοποιήστε το όταν μεταγράφετε ήχο που αναπαράγεται από το ηχείο της ίδιας της συσκευής (π.χ. ένα φωνητικό μήνυμα σε ανοιχτή ακρόαση) – με την προεπιλεγμένη πηγή, το σήμα του ηχείου αφαιρείται από το μικρόφωνο και μεταγράφεται ως σιωπή. Ελαφρώς λιγότερο καθαρή εγγραφή σε θορυβώδεις χώρους.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Επιλέξτε το μικρόφωνο που καταγράφει πιο καθαρά τις υψηλές συχνότητες. Το μοντέλο ομιλίας τις χρειάζεται για να αναγνωρίζει σύντομες λέξεις όπως «Thanks».</string>
+    <string name="calib_instructions">Περιμένετε την κόκκινη ένδειξη σε κάθε μικρόφωνο και μετά πείτε καθαρά «thanks». Το πιο καθαρό μικρόφωνο επιλέγεται αυτόματα.</string>
+    <string name="calib_start">Έναρξη βαθμονόμησης</string>
+    <string name="calib_mic_of">Μικρόφωνο %1$d από %2$d</string>
+    <string name="calib_speak_now">Πείτε «thanks» τώρα</string>
+    <string name="calib_get_ready">Ετοιμαστείτε να πείτε «thanks»</string>
+    <string name="calib_done">Η βαθμονόμηση ολοκληρώθηκε</string>
+    <string name="calib_best">Καλύτερο μικρόφωνο</string>
+    <string name="calib_hf">Υψηλές συχν.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Αποθηκεύτηκε ως προτιμώμενο μικρόφωνο</string>
+    <string name="calib_run_again">Επανάληψη</string>
+    <string name="calib_no_mics">Δεν βρέθηκαν μικρόφωνα.</string>
+    <string name="calib_current">Τρέχον</string>
+    <string name="mic_builtin">Ενσωματωμένο μικρόφωνο</string>
+    <string name="mic_builtin_format">Ενσωματωμένο μικρόφωνο (%s)</string>
+    <string name="mic_wired_headset">Ενσύρματα ακουστικά</string>
+    <string name="mic_type_format">Μικρόφωνο %d</string>
+    <string name="mic_front_back">εμπρός και πίσω</string>
+    <string name="mic_stereo">στερεοφωνικό</string>
+    <string name="mic_mono">μονοφωνικό</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Αναφορές κατάρρευσης</string>
+    <string name="crash_channel_desc">Εμφανίζεται μετά από κατάρρευση του Parakeetype, για κοινοποίηση του αρχείου καταγραφής κατάρρευσης</string>
+    <string name="crash_notif_title">Το Parakeetype σταμάτησε απροσδόκητα</string>
+    <string name="crash_notif_text">Πατήστε για κοινοποίηση του αρχείου καταγραφής κατάρρευσης</string>
+    <string name="crash_dialog_title">Το Parakeetype σταμάτησε απροσδόκητα</string>
+    <string name="crash_dialog_message">Ένα αρχείο καταγραφής της κατάρρευσης αποθηκεύτηκε σε αυτήν τη συσκευή. Αν το κοινοποιήσετε στον προγραμματιστή, θα βοηθήσετε στην επίλυση του προβλήματος.\n\nΤο αρχείο περιέχει μόνο τις γραμμές καταγραφής του ίδιου του Parakeetype, οι οποίες όμως μπορεί να περιλαμβάνουν κείμενο που υπαγορεύσατε. Δεν αποστέλλεται πουθενά, εκτός αν το κοινοποιήσετε εσείς.</string>
+    <string name="crash_action_share">Κοινοποίηση</string>
+    <string name="crash_action_dismiss">Παράβλεψη</string>
+    <string name="crash_share_title">Κοινοποίηση αρχείου καταγραφής κατάρρευσης</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Φωνητική πληκτρολόγηση Parakeetype</string>
+    <string name="voice_input_speak_now">Μιλήστε τώρα</string>
+    <string name="voice_input_transcribing">Μεταγραφή…</string>
+    <string name="voice_input_done">Τέλος</string>
+    <string name="voice_input_retry">Δοκιμάστε ξανά</string>
+    <string name="voice_input_error_no_model">Δεν έχει εγκατασταθεί μοντέλο ομιλίας. Ανοίξτε το Parakeetype για να εγκαταστήσετε ένα.</string>
+    <string name="voice_input_error_permission">Το Parakeetype χρειάζεται πρόσβαση στο μικρόφωνο.</string>
+    <string name="voice_input_error_audio">Δεν ήταν δυνατό το άνοιγμα του μικροφώνου.</string>
+    <string name="voice_input_error_generic">Η αναγνώριση ομιλίας απέτυχε.</string>
+</resources>

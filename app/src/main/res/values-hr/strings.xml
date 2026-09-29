@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Prepoznavanje govora Parakeetype</string>
+    <string name="subtype_voice">Glasovni unos Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Instaliraj model</string>
+    <string name="nav_title_input">Mikrofon, okidanje &amp; raspored</string>
+    <string name="nav_title_speech">Obrada govora</string>
+    <string name="nav_title_tools">Dijagnostika</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Otvori postavke</string>
+    <string name="action_grant_permission">Dodijeli dopuštenje</string>
+    <string name="action_download">Instaliraj</string>
+    <string name="action_manage">Upravljaj</string>
+    <string name="action_cancel">Odustani</string>
+    <string name="action_delete">Izbriši</string>
+    <string name="action_retry">Pokušaj ponovno</string>
+    <string name="action_set_as_active">Postavi kao aktivni</string>
+    <string name="action_open_parakeetype">Otvori Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Omogućeno</string>
+    <string name="state_disabled">Onemogućeno</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Natrag</string>
+    <string name="cd_switch_keyboard">Promijeni tipkovnicu</string>
+    <string name="cd_delete_all">Izbriši sav tekst</string>
+    <string name="cd_delete_word">Izbriši zadnju riječ</string>
+    <string name="cd_action_search">Traži</string>
+    <string name="cd_action_go">Idi</string>
+    <string name="cd_action_next">Dalje</string>
+    <string name="cd_action_enter">Unos</string>
+    <string name="cd_active_model">Aktivni model</string>
+    <string name="cd_delete_model">Izbriši model</string>
+    <string name="cd_status_error">Pogreška</string>
+    <string name="cd_talk_disabled">Gumb za govor onemogućen – modul nije spreman</string>
+    <string name="cd_talk_stop_continuous">Zaustavi neprekidno snimanje</string>
+    <string name="cd_talk_tap_stop">Dodirnite za zaustavljanje snimanja</string>
+    <string name="cd_talk_stop">Zaustavi snimanje</string>
+    <string name="cd_talk_tap_start">Dodirnite za početak snimanja</string>
+    <string name="cd_talk_hold_start">Započni snimanje (držite) · prijeđite prstom ulijevo za zaključavanje</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Postavljanje</string>
+    <string name="home_section_configuration">Konfiguracija</string>
+    <string name="home_ime_enabled">Tipkovnica je omogućena</string>
+    <string name="home_ime_not_enabled">Tipkovnica nije omogućena</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype je na popisu tipkovnica.</string>
+    <string name="home_ime_not_enabled_subtitle">Dodajte Parakeetype u postavkama tipkovnice sustava.</string>
+    <string name="home_mic_granted">Pristup mikrofonu odobren</string>
+    <string name="home_mic_required">Potrebno je dopuštenje za mikrofon</string>
+    <string name="home_mic_granted_subtitle">Zvuk se obrađuje isključivo na uređaju.</string>
+    <string name="home_mic_required_subtitle">Dodirnite za odobravanje pristupa mikrofonu.</string>
+    <string name="home_model_ready">Model je spreman</string>
+    <string name="home_model_not_downloaded">Model nije instaliran</string>
+    <string name="home_model_ready_subtitle">Model za transkripciju instaliran je i spreman.</string>
+    <string name="home_model_not_downloaded_subtitle">Instalirajte model za transkripciju da biste mogli upotrebljavati tipkovnicu.</string>
+    <string name="home_pref_input">Mikrofon, način okidanja &amp; raspored</string>
+    <string name="home_pref_speech">Detekcija glasa, naknadna obrada &amp; memorija modela</string>
+    <string name="home_pref_tools">Dijagnostika</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Način okidanja</string>
+    <string name="pref_trigger_mode_subtitle">Kako pokrenuti i zaustaviti snimanje glasa.</string>
+    <string name="pref_trigger_hold">Držite za govor</string>
+    <string name="pref_trigger_tap_toggle">Uključi/isključi dodirom</string>
+    <string name="pref_delete_title">Gumb za brisanje</string>
+    <string name="pref_delete_subtitle">Što briše gumb s kantom za smeće na tipkovnici. „Zadnja rečenica“ uklanja samo posljednju rečenicu ispred pokazivača, tako da dugačak dokument nikad ne izbrišete slučajno.</string>
+    <string name="pref_delete_all">Sav tekst</string>
+    <string name="pref_delete_last_sentence">Zadnja rečenica</string>
+    <string name="pref_position_title">Položaj tipkovnice</string>
+    <string name="pref_position_subtitle">Gdje se nalaze kontrole tipkovnice. Lijevo ili desno ostaju na dohvat jednog palca – korisno u pejzažnom načinu, za ljevake i na tabletima.</string>
+    <string name="pref_position_portrait">U portretnom načinu</string>
+    <string name="pref_position_landscape">U pejzažnom načinu</string>
+    <string name="pref_position_left">Lijevo</string>
+    <string name="pref_position_center">Sredina</string>
+    <string name="pref_position_right">Desno</string>
+    <string name="pref_vad_title">Detekcija glasovne aktivnosti (VAD)</string>
+    <string name="pref_vad_subtitle">Upotrebljava Silero VAD za uklanjanje tišine i pozadinske buke prije transkripcije. Onemogućite samo ako VAD odsijeca početak vašeg govora ili daje prazne rezultate.</string>
+    <string name="pref_postprocessing_title">Naknadna obrada transkripta</string>
+    <string name="pref_postprocessing_subtitle">Uklanja poštapalice (ovaj, hm, mhm), sažima mucanje i čisti ponovljene fraze koje model ponekad izmisli. Onemogućite da biste dobili točan sirovi izlaz modela – korisno za utvrđivanje je li čišćenje odgovorno za izostavljene ili izmijenjene riječi.</string>
+    <string name="pref_postprocessing_disabled_raw">Onemogućeno (sirovi izlaz)</string>
+    <string name="pref_keep_loaded_title">Zadrži model učitan</string>
+    <string name="pref_keep_loaded_subtitle">Zadržava model govora u memoriji dok upotrebljavate drugu tipkovnicu, tako da je diktiranje odmah spremno kad se vratite, bez ponovnog učitavanja modela. Radi kao usluga u prednjem planu sa stalnom obavijesti i zauzima oko 700 MB RAM-a.</string>
+    <string name="pref_diagnostics_title">Dijagnostika obrade</string>
+    <string name="pref_diagnostics_subtitle">Prikazuje značku uživo na tipkovnici s brojačima skraćivanja prozora, oporavaka poravnanja i odbačenih praznih koraka. Korisno za dijagnosticiranje problema s obradom; prema zadanim postavkama skriveno.</string>
+    <string name="pref_diagnostics_visible">Prikazano</string>
+    <string name="pref_diagnostics_hidden">Skriveno</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Modeli za prepoznavanje govora</string>
+    <string name="model_screen_subtitle">Instalirajte model i dodirnite „Postavi kao aktivni“ da biste ga upotrebljavali za transkripciju. Istodobno je učitan samo jedan model. Parakeetype nema pristup internetu: datoteku modela preuzimate u pregledniku i ovdje je uvozite.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Aktivni model</string>
+    <string name="dialog_delete_title">Potvrdite brisanje</string>
+    <string name="dialog_delete_message">Jeste li sigurni da želite izbrisati ovaj model? Ta se radnja ne može poništiti.</string>
+    <string name="model_install_explanation">1. U pregledniku preuzmite datoteku modela (~%d MB, jedna ZIP arhiva).\n2. Dodirnite „Uvezi datoteku modela“ i odaberite preuzetu arhivu.\nNakon uvoza možete izbrisati arhivu iz mape Preuzimanja.</string>
+    <string name="action_download_in_browser">Preuzmi u pregledniku</string>
+    <string name="action_import_model_file">Uvezi datoteku modela</string>
+    <string name="model_importing_format">Uvoz… %d%%</string>
+    <string name="model_no_browser">Nije pronađen preglednik za otvaranje veze za preuzimanje.</string>
+    <string name="model_import_success">Model je uvezen. Sada možete izbrisati preuzetu arhivu.</string>
+    <string name="model_import_not_archive">Odabrana datoteka nije arhiva modela Parakeetype.</string>
+    <string name="model_import_missing_files">Arhiva je nepotpuna. Nedostaje: %s</string>
+    <string name="model_import_corrupted">Arhiva je oštećena (kontrolni zbroj ne odgovara): %s. Preuzmite je ponovno.</string>
+    <string name="model_import_io_error">Uvoz nije uspio: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Glasovna transkripcija Parakeetype</string>
+    <string name="notif_channel_desc">Prikazuje se dok je modul za glasovnu transkripciju aktivan</string>
+    <string name="notif_engine_loading">Učitavanje modula za transkripciju…</string>
+    <string name="notif_model_not_downloaded">Model nije instaliran – otvorite Parakeetype da biste ga instalirali</string>
+    <string name="notif_engine_ready">Parakeetype: spremno (%s)</string>
+    <string name="notif_engine_failed">Učitavanje modula nije uspjelo: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Transkripcija…</string>
+    <string name="status_no_speech">Ništa nije prepoznato – pokušajte ponovno</string>
+    <string name="status_engine_model_missing">Model nije instaliran – otvorite Parakeetype da biste ga instalirali</string>
+    <string name="status_engine_loading">Učitavanje modula za transkripciju…</string>
+    <string name="status_error_mic_permission">Dopuštenje za mikrofon odbijeno – otvorite Parakeetype da biste ga dodijelili</string>
+    <string name="status_error_mic_init">Mikrofon se nije mogao otvoriti</string>
+    <string name="status_error_transcription">Transkripcija nije uspjela</string>
+    <string name="status_error_audio_capture">Snimanje zvuka nije uspjelo</string>
+    <string name="status_error_engine_load">Učitavanje modula nije uspjelo</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofon</string>
+    <string name="pref_mic_subtitle">Kalibrirajte da biste odabrali najjasniji mikrofon za kratke riječi poput „Thanks“.</string>
+    <string name="pref_mic_calibrate">Kalibriraj mikrofone</string>
+    <string name="pref_raw_mic_title">Sirovi mikrofon (bez poništavanja jeke)</string>
+    <string name="pref_raw_mic_subtitle">Zaobilazi poništavanje jeke i smanjenje šuma sustava. Omogućite kada transkribirate zvuk koji se reproducira iz zvučnika samog uređaja (npr. govornu poštu na zvučniku) – uz zadani izvor signal zvučnika uklanja se iz mikrofona i transkribira kao tišina. U bučnim prostorijama snimka je nešto manje čista.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Odaberite mikrofon koji najjasnije snima visoke frekvencije. Model govora treba ih za prepoznavanje kratkih riječi poput „Thanks“.</string>
+    <string name="calib_instructions">Pričekajte crveni indikator na svakom mikrofonu, a zatim jasno izgovorite englesku riječ „thanks“. Najjasniji mikrofon odabire se automatski.</string>
+    <string name="calib_start">Pokreni kalibraciju</string>
+    <string name="calib_mic_of">Mikrofon %1$d od %2$d</string>
+    <string name="calib_speak_now">Sad izgovorite „thanks“</string>
+    <string name="calib_get_ready">Pripremite se izgovoriti „thanks“</string>
+    <string name="calib_done">Kalibracija je dovršena</string>
+    <string name="calib_best">Najbolji mikrofon</string>
+    <string name="calib_hf">Visoke frekv.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Spremljeno kao željeni mikrofon</string>
+    <string name="calib_run_again">Pokreni ponovno</string>
+    <string name="calib_no_mics">Nije pronađen nijedan mikrofon.</string>
+    <string name="calib_current">Trenutačni</string>
+    <string name="mic_builtin">Ugrađeni mikrofon</string>
+    <string name="mic_builtin_format">Ugrađeni mikrofon (%s)</string>
+    <string name="mic_wired_headset">Žične slušalice s mikrofonom</string>
+    <string name="mic_type_format">Mikrofon %d</string>
+    <string name="mic_front_back">prednji &amp; stražnji</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Izvješća o rušenju</string>
+    <string name="crash_channel_desc">Prikazuje se nakon rušenja aplikacije Parakeetype radi dijeljenja zapisnika o rušenju</string>
+    <string name="crash_notif_title">Aplikacija Parakeetype se srušila</string>
+    <string name="crash_notif_text">Dodirnite za dijeljenje zapisnika o rušenju</string>
+    <string name="crash_dialog_title">Aplikacija Parakeetype se srušila</string>
+    <string name="crash_dialog_message">Zapisnik o rušenju spremljen je na ovom uređaju. Ako ga podijelite s razvojnim programerom, pomoći ćete u rješavanju problema.\n\nZapisnik sadrži samo vlastite retke zapisnika aplikacije Parakeetype, no oni mogu uključivati tekst koji ste diktirali. Nikamo se ne šalje osim ako ga sami ne podijelite.</string>
+    <string name="crash_action_share">Podijeli</string>
+    <string name="crash_action_dismiss">Odbaci</string>
+    <string name="crash_share_title">Podijeli zapisnik o rušenju</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Glasovni unos Parakeetype</string>
+    <string name="voice_input_speak_now">Govorite sada</string>
+    <string name="voice_input_transcribing">Transkripcija…</string>
+    <string name="voice_input_done">Gotovo</string>
+    <string name="voice_input_retry">Pokušaj ponovno</string>
+    <string name="voice_input_error_no_model">Nije instaliran nijedan model govora. Otvorite Parakeetype da biste ga instalirali.</string>
+    <string name="voice_input_error_permission">Parakeetype treba pristup mikrofonu.</string>
+    <string name="voice_input_error_audio">Mikrofon se nije mogao otvoriti.</string>
+    <string name="voice_input_error_generic">Prepoznavanje govora nije uspjelo.</string>
+</resources>

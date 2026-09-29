@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Rikonoxximent tat-Taħdit Parakeetype</string>
+    <string name="subtype_voice">Input bil-Vuċi Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Installa Mudell</string>
+    <string name="nav_title_input">Mikrofonu, Attivazzjoni &amp; Tqassim</string>
+    <string name="nav_title_speech">Proċessar tat-Taħdit</string>
+    <string name="nav_title_tools">Dijanjostika</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Iftaħ l-Issettjar</string>
+    <string name="action_grant_permission">Agħti l-Permess</string>
+    <string name="action_download">Installa</string>
+    <string name="action_manage">Immaniġġja</string>
+    <string name="action_cancel">Ikkanċella</string>
+    <string name="action_delete">Ħassar</string>
+    <string name="action_retry">Erġa\' pprova</string>
+    <string name="action_set_as_active">Issettja bħala Attiv</string>
+    <string name="action_open_parakeetype">Iftaħ Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Attivat</string>
+    <string name="state_disabled">Diżattivat</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Lura</string>
+    <string name="cd_switch_keyboard">Aqleb it-tastiera</string>
+    <string name="cd_delete_all">Ħassar it-test kollu</string>
+    <string name="cd_delete_word">Ħassar l-aħħar kelma</string>
+    <string name="cd_action_search">Fittex</string>
+    <string name="cd_action_go">Mur</string>
+    <string name="cd_action_next">Li jmiss</string>
+    <string name="cd_action_enter">Daħħal</string>
+    <string name="cd_active_model">Mudell attiv</string>
+    <string name="cd_delete_model">Ħassar il-mudell</string>
+    <string name="cd_status_error">Żball</string>
+    <string name="cd_talk_disabled">Buttuna tat-taħdit diżattivata – il-magna mhijiex lesta</string>
+    <string name="cd_talk_stop_continuous">Waqqaf ir-reġistrazzjoni kontinwa</string>
+    <string name="cd_talk_tap_stop">Agħfas biex twaqqaf ir-reġistrazzjoni</string>
+    <string name="cd_talk_stop">Waqqaf ir-reġistrazzjoni</string>
+    <string name="cd_talk_tap_start">Agħfas biex tibda r-reġistrazzjoni</string>
+    <string name="cd_talk_hold_start">Ibda r-reġistrazzjoni (żomm) · żerżaq lejn ix-xellug biex issakkar</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Twaqqif</string>
+    <string name="home_section_configuration">Konfigurazzjoni</string>
+    <string name="home_ime_enabled">Tastiera attivata</string>
+    <string name="home_ime_not_enabled">Tastiera mhux attivata</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype tinsab fil-lista tat-tastieri.</string>
+    <string name="home_ime_not_enabled_subtitle">Żid Parakeetype fl-issettjar tat-tastiera tas-sistema.</string>
+    <string name="home_mic_granted">Aċċess għall-mikrofonu mogħti</string>
+    <string name="home_mic_required">Meħtieġ permess għall-mikrofonu</string>
+    <string name="home_mic_granted_subtitle">L-awdjo jiġi pproċessat kompletament fuq l-apparat.</string>
+    <string name="home_mic_required_subtitle">Agħfas biex tagħti aċċess għall-mikrofonu.</string>
+    <string name="home_model_ready">Mudell lest</string>
+    <string name="home_model_not_downloaded">Mudell mhux installat</string>
+    <string name="home_model_ready_subtitle">Mudell tat-traskrizzjoni huwa installat u lest.</string>
+    <string name="home_model_not_downloaded_subtitle">Installa mudell tat-traskrizzjoni biex tuża t-tastiera.</string>
+    <string name="home_pref_input">Mikrofonu, Mod ta\' Attivazzjoni &amp; Tqassim</string>
+    <string name="home_pref_speech">Attività tal-Vuċi, Post-Proċessar &amp; Memorja tal-Mudell</string>
+    <string name="home_pref_tools">Dijanjostika</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Mod ta\' Attivazzjoni</string>
+    <string name="pref_trigger_mode_subtitle">Kif tibda u twaqqaf ir-reġistrazzjoni tal-vuċi.</string>
+    <string name="pref_trigger_hold">Żomm biex Titkellem</string>
+    <string name="pref_trigger_tap_toggle">Agħfas biex Taqleb</string>
+    <string name="pref_delete_title">Buttuna tat-Tħassir</string>
+    <string name="pref_delete_subtitle">X\'tħassar il-buttuna tal-iskart fuq it-tastiera. “L-Aħħar Sentenza” tneħħi biss l-aħħar sentenza qabel il-cursor, biex dokument twil qatt ma jitħassar bi żball.</string>
+    <string name="pref_delete_all">It-Test Kollu</string>
+    <string name="pref_delete_last_sentence">L-Aħħar Sentenza</string>
+    <string name="pref_position_title">Pożizzjoni tat-Tastiera</string>
+    <string name="pref_position_subtitle">Fejn jinsabu l-kontrolli tat-tastiera. Fuq ix-xellug jew fuq il-lemin jintlaħqu b\'saba\' l-kbir wieħed — utli fl-orjentazzjoni orizzontali, għal min hu xellugi u fuq it-tablets.</string>
+    <string name="pref_position_portrait">Fl-orjentazzjoni vertikali</string>
+    <string name="pref_position_landscape">Fl-orjentazzjoni orizzontali</string>
+    <string name="pref_position_left">Xellug</string>
+    <string name="pref_position_center">Nofs</string>
+    <string name="pref_position_right">Lemin</string>
+    <string name="pref_vad_title">Skoperta tal-Attività tal-Vuċi (VAD)</string>
+    <string name="pref_vad_subtitle">Juża Silero VAD biex jiffiltra s-skiet u l-istorbju fl-isfond qabel it-traskrizzjoni. Iddiżattivah biss jekk il-VAD qed jaqta\' l-bidu tat-taħdit tiegħek jew qed jagħti riżultati vojta.</string>
+    <string name="pref_postprocessing_title">Post-Proċessar tat-Traskrizzjoni</string>
+    <string name="pref_postprocessing_subtitle">Ineħħi l-kliem ta\' mili (uh, um, hmm), jiġbor it-tlagħlim u jnaddaf frażijiet ripetuti li l-mudell kultant jallucina. Iddiżattivah biex tirċievi l-output eżatt u mhux ipproċessat tal-mudell — utli biex tiddijanjostika jekk it-tindif huwiex responsabbli għal kliem li jintilef jew jinbidel.</string>
+    <string name="pref_postprocessing_disabled_raw">Diżattivat (output mhux ipproċessat)</string>
+    <string name="pref_keep_loaded_title">Żomm il-Mudell Mgħobbi</string>
+    <string name="pref_keep_loaded_subtitle">Iżomm il-mudell tat-taħdit fil-memorja waqt li tuża tastiera oħra, biex id-dettatura tkun lesta mill-ewwel meta terġa\' taqleb lura minflok ma jerġa\' jitgħabba l-mudell. Iħaddem servizz fil-quddiem b\'notifika permanenti u juża madwar 700 MB ta\' RAM.</string>
+    <string name="pref_diagnostics_title">Dijanjostika tal-Pipeline</string>
+    <string name="pref_diagnostics_subtitle">Juri badge dirett fuq it-tastiera b\'counters għat-tqaċċit tat-tieqa, l-irkupri tal-allinjament u l-passi vojta mormija. Utli biex jiġu dijanjostikati problemi fil-pipeline; mitfi b\'mod awtomatiku.</string>
+    <string name="pref_diagnostics_visible">Viżibbli</string>
+    <string name="pref_diagnostics_hidden">Moħbi</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Mudelli tar-Rikonoxximent tat-Taħdit</string>
+    <string name="model_screen_subtitle">Installa mudell u agħfas “Issettja bħala Attiv” biex tużah għat-traskrizzjoni. Mudell wieħed biss jitgħabba kull darba. Parakeetype m\'għandhiex aċċess għall-internet: tniżżel il-fajl tal-mudell fil-browser u timportah hawn.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Mudell attiv</string>
+    <string name="dialog_delete_title">Ikkonferma t-Tħassir</string>
+    <string name="dialog_delete_message">Żgur li trid tħassar dan il-mudell? Din l-azzjoni ma tistax titreġġa\' lura.</string>
+    <string name="model_install_explanation">1. Niżżel il-fajl tal-mudell (~%d MB, arkivju ZIP wieħed) fil-browser.\n2. Agħfas “Importa l-fajl tal-mudell” u agħżel l-arkivju mniżżel.\nWara l-importazzjoni tista\' tħassar l-arkivju mill-folder tad-Downloads.</string>
+    <string name="action_download_in_browser">Niżżel fil-browser</string>
+    <string name="action_import_model_file">Importa l-fajl tal-mudell</string>
+    <string name="model_importing_format">Qed jiġi importat… %d%%</string>
+    <string name="model_no_browser">Ma nstab l-ebda browser biex tinfetaħ il-link tat-tniżżil.</string>
+    <string name="model_import_success">Il-mudell ġie importat. Issa tista\' tħassar l-arkivju mniżżel.</string>
+    <string name="model_import_not_archive">Il-fajl magħżul mhuwiex arkivju ta\' mudell Parakeetype.</string>
+    <string name="model_import_missing_files">L-arkivju mhux komplut. Nieqes: %s</string>
+    <string name="model_import_corrupted">L-arkivju għandu ħsara (il-checksum ma jaqbilx): %s. Erġa\' niżżlu.</string>
+    <string name="model_import_io_error">L-importazzjoni falliet: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Traskrizzjoni tal-Vuċi Parakeetype</string>
+    <string name="notif_channel_desc">Tidher waqt li l-magna tat-traskrizzjoni tal-vuċi tkun attiva</string>
+    <string name="notif_engine_loading">Qed titgħabba l-magna tat-traskrizzjoni…</string>
+    <string name="notif_model_not_downloaded">Mudell mhux installat – iftaħ Parakeetype biex tinstallah</string>
+    <string name="notif_engine_ready">Parakeetype lesta (%s)</string>
+    <string name="notif_engine_failed">Il-magna ma setgħetx titgħabba: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Qed jiġi traskritt…</string>
+    <string name="status_no_speech">Ma fhimtx — erġa\' pprova</string>
+    <string name="status_engine_model_missing">Mudell mhux installat – iftaħ Parakeetype biex tinstallah</string>
+    <string name="status_engine_loading">Qed titgħabba l-magna tat-traskrizzjoni…</string>
+    <string name="status_error_mic_permission">Permess għall-mikrofonu miċħud – iftaħ Parakeetype biex tagħtih</string>
+    <string name="status_error_mic_init">Il-mikrofonu ma setax jinfetaħ</string>
+    <string name="status_error_transcription">It-traskrizzjoni falliet</string>
+    <string name="status_error_audio_capture">Ir-reġistrazzjoni tal-awdjo falliet</string>
+    <string name="status_error_engine_load">Il-magna ma setgħetx titgħabba</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Mikrofonu</string>
+    <string name="pref_mic_subtitle">Ikkalibra biex tagħżel l-aktar mikrofonu ċar għal kliem qasir bħal “Thanks”.</string>
+    <string name="pref_mic_calibrate">Ikkalibra l-mikrofoni</string>
+    <string name="pref_raw_mic_title">Mikrofonu mhux ipproċessat (mingħajr kanċellazzjoni tal-eku)</string>
+    <string name="pref_raw_mic_subtitle">Jaqbeż il-kanċellazzjoni tal-eku u t-trażżin tal-istorbju tal-pjattaforma. Attivah meta tittraskrivi awdjo li jindaqq mil-lawdspiker tal-apparat stess (eż. voicemail fuq speakerphone) — bis-sors awtomatiku s-sinjal tal-lawdspiker jitneħħa mill-mikrofonu u jiġi traskritt bħala skiet. F\'kmamar storbjużi r-reġistrazzjoni tkun kemmxejn inqas nadifa.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Agħżel il-mikrofonu li jaqbad bl-aktar mod ċar id-dettall tal-frekwenzi għoljin. Il-mudell tat-taħdit jeħtieġu biex jagħraf kliem qasir bħal “Thanks”.</string>
+    <string name="calib_instructions">Stenna l-indikatur aħmar fuq kull mikrofonu, imbagħad għid \'thanks\' b\'mod ċar. L-aktar mikrofonu ċar jintgħażel awtomatikament.</string>
+    <string name="calib_start">Ibda l-kalibrazzjoni</string>
+    <string name="calib_mic_of">Mikrofonu %1$d minn %2$d</string>
+    <string name="calib_speak_now">Għid \'thanks\' issa</string>
+    <string name="calib_get_ready">Ipprepara biex tgħid \'thanks\'</string>
+    <string name="calib_done">Il-kalibrazzjoni lesta</string>
+    <string name="calib_best">L-aħjar mikrofonu</string>
+    <string name="calib_hf">Frekw. għolja</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Issejvjat bħala l-mikrofonu preferut</string>
+    <string name="calib_run_again">Erġa\' ħaddem</string>
+    <string name="calib_no_mics">Ma nstab l-ebda mikrofonu.</string>
+    <string name="calib_current">Kurrenti</string>
+    <string name="mic_builtin">Mikrofonu integrat</string>
+    <string name="mic_builtin_format">Mikrofonu integrat (%s)</string>
+    <string name="mic_wired_headset">Headset bil-wajer</string>
+    <string name="mic_type_format">Mikrofonu %d</string>
+    <string name="mic_front_back">quddiem &amp; wara</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Rapporti tal-ħabtiet</string>
+    <string name="crash_channel_desc">Tidher wara li Parakeetype tieqaf taħdem, biex taqsam il-log tal-ħabta</string>
+    <string name="crash_notif_title">Parakeetype waqfet taħdem</string>
+    <string name="crash_notif_text">Agħfas biex taqsam il-log tal-ħabta</string>
+    <string name="crash_dialog_title">Parakeetype waqfet taħdem</string>
+    <string name="crash_dialog_message">Ġie ssejvjat log tal-ħabta fuq dan l-apparat. Jekk taqsmu mal-iżviluppatur, tgħin biex tissewwa l-problema.\n\nIl-log fih biss il-linji tal-log ta\' Parakeetype stess, iżda dawn jistgħu jinkludu test li ddettajt. Qatt ma jintbagħat imkien sakemm ma taqsmux int.</string>
+    <string name="crash_action_share">Aqsam</string>
+    <string name="crash_action_dismiss">Warrab</string>
+    <string name="crash_share_title">Aqsam il-log tal-ħabta</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Input bil-vuċi Parakeetype</string>
+    <string name="voice_input_speak_now">Tkellem issa</string>
+    <string name="voice_input_transcribing">Qed jiġi traskritt…</string>
+    <string name="voice_input_done">Lest</string>
+    <string name="voice_input_retry">Erġa\' pprova</string>
+    <string name="voice_input_error_no_model">L-ebda mudell tat-taħdit mhu installat. Iftaħ Parakeetype biex tinstalla wieħed.</string>
+    <string name="voice_input_error_permission">Parakeetype teħtieġ aċċess għall-mikrofonu.</string>
+    <string name="voice_input_error_audio">Il-mikrofonu ma setax jinfetaħ.</string>
+    <string name="voice_input_error_generic">Ir-rikonoxximent tat-taħdit falla.</string>
+</resources>

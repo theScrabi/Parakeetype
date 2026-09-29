@@ -2,8 +2,10 @@ package org.schabi.parakeetype.settings.preferences
 
 import android.app.Application
 import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.MicCalibrationManager
 import org.schabi.parakeetype.audio.MicInfo
 import org.schabi.parakeetype.audio.MicScore
@@ -44,7 +46,7 @@ sealed class CalibrationState {
     data class GetReady(val index: Int, val total: Int) : CalibrationState()
     data class Recording(val index: Int, val total: Int) : CalibrationState()
     data class Done(val results: List<MicResult>, val bestMicId: Int) : CalibrationState()
-    data class Error(val message: String) : CalibrationState()
+    data class Error(@StringRes val messageRes: Int) : CalibrationState()
 }
 
 /**
@@ -86,7 +88,7 @@ class MicCalibrationViewModel(application: Application) : AndroidViewModel(appli
         if (_state.value !is CalibrationState.Idle) return
         val micList = _mics.value
         if (micList.isEmpty()) {
-            _state.value = CalibrationState.Error("No microphones found on this device")
+            _state.value = CalibrationState.Error(R.string.calib_no_mics)
             return
         }
         viewModelScope.launch {

@@ -85,6 +85,7 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 - `dependenciesInfo` is disabled in the APK for F-Droid reproducibility.
 - Do not add analytics, crash-reporting SDKs, or anything that phones home. The built-in `crash` package only writes a local log that the user can share themselves; never make it upload anything.
 - **Launcher icon** is generated from `parakeet.svg` (project root): `drawable/ic_launcher_foreground.xml` holds the SVG's visible parakeet paths (coordinates rounded to 3 decimals) scaled into the 66 dp safe zone; the background layer is plain white (the SVG's circle); the monochrome/themed layer reuses the foreground. `fastlane/.../images/icon.png` is the SVG rendered at 512 px.
+- **UI strings are localized** into the 25 Parakeet-TDT v3 languages (`values-<lang>/strings.xml`: bg, cs, da, de, el, es, et, fi, fr, hr, hu, it, lt, lv, mt, nl, pl, pt, ro, ru, sk, sl, sv, uk; English is the unqualified `values/`). Every user-visible string — including content descriptions — goes through a string resource; when you add or change one, update all locales (same keys, same order, same format args; escape `\'` and `\"`). `generateLocaleConfig` lists the locales for the Android 13+ per-app language setting (`res/resources.properties` declares the default `en-US`).
 - **No word-suggestion / correction system.** It was removed in favour of a lean keyboard (the IME deletes the legacy `<filesDir>/suggestion_files/` on start). Do not reintroduce tap-a-word alternatives, dictionaries or language models.
 
 ## Release Process

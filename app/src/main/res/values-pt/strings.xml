@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Reconhecimento de voz Parakeetype</string>
+    <string name="subtype_voice">Entrada de voz Parakeetype</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Instalar modelo</string>
+    <string name="nav_title_input">Microfone, ativação &amp; esquema</string>
+    <string name="nav_title_speech">Processamento de voz</string>
+    <string name="nav_title_tools">Diagnóstico</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Abrir definições</string>
+    <string name="action_grant_permission">Conceder autorização</string>
+    <string name="action_download">Instalar</string>
+    <string name="action_manage">Gerir</string>
+    <string name="action_cancel">Cancelar</string>
+    <string name="action_delete">Eliminar</string>
+    <string name="action_retry">Tentar novamente</string>
+    <string name="action_set_as_active">Definir como ativo</string>
+    <string name="action_open_parakeetype">Abrir o Parakeetype</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Ativado</string>
+    <string name="state_disabled">Desativado</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Voltar</string>
+    <string name="cd_switch_keyboard">Mudar de teclado</string>
+    <string name="cd_delete_all">Eliminar todo o texto</string>
+    <string name="cd_delete_word">Eliminar a última palavra</string>
+    <string name="cd_action_search">Pesquisar</string>
+    <string name="cd_action_go">Ir</string>
+    <string name="cd_action_next">Seguinte</string>
+    <string name="cd_action_enter">Enter</string>
+    <string name="cd_active_model">Modelo ativo</string>
+    <string name="cd_delete_model">Eliminar modelo</string>
+    <string name="cd_status_error">Erro</string>
+    <string name="cd_talk_disabled">Botão de falar desativado – motor não está pronto</string>
+    <string name="cd_talk_stop_continuous">Parar gravação contínua</string>
+    <string name="cd_talk_tap_stop">Toque para parar a gravação</string>
+    <string name="cd_talk_stop">Parar gravação</string>
+    <string name="cd_talk_tap_start">Toque para iniciar a gravação</string>
+    <string name="cd_talk_hold_start">Iniciar gravação (manter premido) · deslize para a esquerda para bloquear</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Configuração inicial</string>
+    <string name="home_section_configuration">Configuração</string>
+    <string name="home_ime_enabled">Teclado ativado</string>
+    <string name="home_ime_not_enabled">Teclado não ativado</string>
+    <string name="home_ime_enabled_subtitle">O Parakeetype está na lista de teclados.</string>
+    <string name="home_ime_not_enabled_subtitle">Adicione o Parakeetype nas definições de teclado do sistema.</string>
+    <string name="home_mic_granted">Acesso ao microfone concedido</string>
+    <string name="home_mic_required">Autorização do microfone necessária</string>
+    <string name="home_mic_granted_subtitle">O áudio é processado inteiramente no dispositivo.</string>
+    <string name="home_mic_required_subtitle">Toque para conceder acesso ao microfone.</string>
+    <string name="home_model_ready">Modelo pronto</string>
+    <string name="home_model_not_downloaded">Modelo não instalado</string>
+    <string name="home_model_ready_subtitle">Está instalado um modelo de transcrição pronto a usar.</string>
+    <string name="home_model_not_downloaded_subtitle">Instale um modelo de transcrição para utilizar o teclado.</string>
+    <string name="home_pref_input">Microfone, modo de ativação &amp; esquema</string>
+    <string name="home_pref_speech">Atividade de voz, pós-processamento &amp; memória do modelo</string>
+    <string name="home_pref_tools">Diagnóstico</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Modo de ativação</string>
+    <string name="pref_trigger_mode_subtitle">Como iniciar e parar a gravação de voz.</string>
+    <string name="pref_trigger_hold">Manter premido para falar</string>
+    <string name="pref_trigger_tap_toggle">Tocar para alternar</string>
+    <string name="pref_delete_title">Botão Eliminar</string>
+    <string name="pref_delete_subtitle">O que o botão do caixote do lixo no teclado elimina. «Última frase» remove apenas a frase mais recente antes do cursor, para que um documento longo nunca seja apagado por engano.</string>
+    <string name="pref_delete_all">Todo o texto</string>
+    <string name="pref_delete_last_sentence">Última frase</string>
+    <string name="pref_position_title">Posição do teclado</string>
+    <string name="pref_position_subtitle">Onde ficam os controlos do teclado. À esquerda ou à direita ficam ao alcance de um só polegar – útil na horizontal, para canhotos e em tablets.</string>
+    <string name="pref_position_portrait">Na vertical</string>
+    <string name="pref_position_landscape">Na horizontal</string>
+    <string name="pref_position_left">Esquerda</string>
+    <string name="pref_position_center">Centro</string>
+    <string name="pref_position_right">Direita</string>
+    <string name="pref_vad_title">Deteção de atividade de voz (VAD)</string>
+    <string name="pref_vad_subtitle">Utiliza o Silero VAD para filtrar o silêncio e o ruído de fundo antes da transcrição. Desative apenas se o VAD cortar o início da sua fala ou produzir resultados vazios.</string>
+    <string name="pref_postprocessing_title">Pós-processamento da transcrição</string>
+    <string name="pref_postprocessing_subtitle">Remove palavras de preenchimento (hã, hum, hmm), reduz gaguejos e limpa frases repetidas que o modelo por vezes alucina. Desative para receber a saída em bruto exata do modelo – útil para diagnosticar se a limpeza é responsável por palavras omitidas ou alteradas.</string>
+    <string name="pref_postprocessing_disabled_raw">Desativado (saída em bruto)</string>
+    <string name="pref_keep_loaded_title">Manter o modelo carregado</string>
+    <string name="pref_keep_loaded_subtitle">Mantém o modelo de voz na memória enquanto utiliza outro teclado, para que o ditado esteja pronto de imediato quando voltar, em vez de recarregar o modelo. Executa um serviço em primeiro plano com uma notificação persistente e ocupa cerca de 700 MB de RAM.</string>
+    <string name="pref_diagnostics_title">Diagnóstico do pipeline</string>
+    <string name="pref_diagnostics_subtitle">Mostra um distintivo em tempo real no teclado com contadores de cortes de janela, recuperações de alinhamento e passos vazios descartados. Útil para diagnosticar problemas do pipeline; oculto por predefinição.</string>
+    <string name="pref_diagnostics_visible">Visível</string>
+    <string name="pref_diagnostics_hidden">Oculto</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Modelos de reconhecimento de voz</string>
+    <string name="model_screen_subtitle">Instale um modelo e toque em «Definir como ativo» para o utilizar na transcrição. Só é carregado um modelo de cada vez. O Parakeetype não tem acesso à Internet: transfere o ficheiro do modelo no navegador e importa-o aqui.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Modelo ativo</string>
+    <string name="dialog_delete_title">Confirmar eliminação</string>
+    <string name="dialog_delete_message">Tem a certeza de que pretende eliminar este modelo? Esta ação não pode ser anulada.</string>
+    <string name="model_install_explanation">1. Transfira o ficheiro do modelo (~%d MB, um arquivo ZIP) no navegador.\n2. Toque em «Importar ficheiro do modelo» e escolha o arquivo transferido.\nDepois de importar, pode eliminar o arquivo da pasta Transferências.</string>
+    <string name="action_download_in_browser">Transferir no navegador</string>
+    <string name="action_import_model_file">Importar ficheiro do modelo</string>
+    <string name="model_importing_format">A importar… %d%%</string>
+    <string name="model_no_browser">Não foi encontrado nenhum navegador para abrir a ligação de transferência.</string>
+    <string name="model_import_success">Modelo importado. Já pode eliminar o arquivo transferido.</string>
+    <string name="model_import_not_archive">O ficheiro selecionado não é um arquivo de modelo do Parakeetype.</string>
+    <string name="model_import_missing_files">O arquivo está incompleto. Em falta: %s</string>
+    <string name="model_import_corrupted">O arquivo está danificado (a soma de verificação não corresponde): %s. Transfira-o novamente.</string>
+    <string name="model_import_io_error">Falha na importação: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Transcrição de voz Parakeetype</string>
+    <string name="notif_channel_desc">Apresentada enquanto o motor de transcrição de voz está ativo</string>
+    <string name="notif_engine_loading">A carregar o motor de transcrição…</string>
+    <string name="notif_model_not_downloaded">Modelo não instalado – abra o Parakeetype para o instalar</string>
+    <string name="notif_engine_ready">Parakeetype pronto (%s)</string>
+    <string name="notif_engine_failed">Falha ao carregar o motor: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">A transcrever…</string>
+    <string name="status_no_speech">Não percebi – tente novamente</string>
+    <string name="status_engine_model_missing">Modelo não instalado – abra o Parakeetype para o instalar</string>
+    <string name="status_engine_loading">A carregar o motor de transcrição…</string>
+    <string name="status_error_mic_permission">Autorização do microfone recusada – abra o Parakeetype para a conceder</string>
+    <string name="status_error_mic_init">Não foi possível abrir o microfone</string>
+    <string name="status_error_transcription">Falha na transcrição</string>
+    <string name="status_error_audio_capture">Falha na captura de áudio</string>
+    <string name="status_error_engine_load">Falha ao carregar o motor</string>
+
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Microfone</string>
+    <string name="pref_mic_subtitle">Calibre para escolher o microfone mais nítido para palavras curtas como «Thanks».</string>
+    <string name="pref_mic_calibrate">Calibrar microfones</string>
+    <string name="pref_raw_mic_title">Microfone em bruto (sem cancelamento de eco)</string>
+    <string name="pref_raw_mic_subtitle">Ignora o cancelamento de eco e a supressão de ruído da plataforma. Ative quando transcrever áudio reproduzido pelo altifalante do próprio dispositivo (p. ex., uma mensagem de voz em alta voz) – com a fonte predefinida, o sinal do altifalante é cancelado no microfone e transcrito como silêncio. Captação ligeiramente menos limpa em espaços ruidosos.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Escolha o microfone que capta com mais nitidez os detalhes de alta frequência. O modelo de voz precisa deles para distinguir palavras curtas como «Thanks».</string>
+    <string name="calib_instructions">Aguarde pelo indicador vermelho em cada microfone e diga «thanks» com clareza. O microfone mais nítido é escolhido automaticamente.</string>
+    <string name="calib_start">Iniciar calibração</string>
+    <string name="calib_mic_of">Microfone %1$d de %2$d</string>
+    <string name="calib_speak_now">Diga «thanks» agora</string>
+    <string name="calib_get_ready">Prepare-se para dizer «thanks»</string>
+    <string name="calib_done">Calibração concluída</string>
+    <string name="calib_best">Melhor microfone</string>
+    <string name="calib_hf">Alta freq.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Guardado como microfone preferido</string>
+    <string name="calib_run_again">Repetir</string>
+    <string name="calib_no_mics">Nenhum microfone encontrado.</string>
+    <string name="calib_current">Atual</string>
+    <string name="mic_builtin">Microfone integrado</string>
+    <string name="mic_builtin_format">Microfone integrado (%s)</string>
+    <string name="mic_wired_headset">Auscultadores com fios</string>
+    <string name="mic_type_format">Microfone %d</string>
+    <string name="mic_front_back">frontal &amp; traseiro</string>
+    <string name="mic_stereo">estéreo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Relatórios de falhas</string>
+    <string name="crash_channel_desc">Apresentada após uma falha do Parakeetype, para partilhar o registo da falha</string>
+    <string name="crash_notif_title">O Parakeetype falhou</string>
+    <string name="crash_notif_text">Toque para partilhar o registo da falha</string>
+    <string name="crash_dialog_title">O Parakeetype falhou</string>
+    <string name="crash_dialog_message">Foi guardado um registo da falha neste dispositivo. Partilhá-lo com o programador ajuda a resolver o problema.\n\nO registo contém apenas as linhas de registo do próprio Parakeetype, mas estas podem incluir texto que ditou. Nunca é enviado para lado nenhum, a menos que o partilhe.</string>
+    <string name="crash_action_share">Partilhar</string>
+    <string name="crash_action_dismiss">Ignorar</string>
+    <string name="crash_share_title">Partilhar registo da falha</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Entrada de voz Parakeetype</string>
+    <string name="voice_input_speak_now">Fale agora</string>
+    <string name="voice_input_transcribing">A transcrever…</string>
+    <string name="voice_input_done">Concluído</string>
+    <string name="voice_input_retry">Tentar novamente</string>
+    <string name="voice_input_error_no_model">Nenhum modelo de voz instalado. Abra o Parakeetype para instalar um.</string>
+    <string name="voice_input_error_permission">O Parakeetype precisa de acesso ao microfone.</string>
+    <string name="voice_input_error_audio">Não foi possível abrir o microfone.</string>
+    <string name="voice_input_error_generic">Falha no reconhecimento de voz.</string>
+</resources>

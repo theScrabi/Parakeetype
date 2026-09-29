@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Parakeetype</string>
+    <string name="service_name">Parakeetype spraakherkenning</string>
+    <string name="subtype_voice">Parakeetype spraakinvoer</string>
+
+    <!-- Navigation titles -->
+    <string name="nav_title_model">Model installeren</string>
+    <string name="nav_title_input">Microfoon, activering &amp; indeling</string>
+    <string name="nav_title_speech">Spraakverwerking</string>
+    <string name="nav_title_tools">Diagnostiek</string>
+
+    <!-- Common actions -->
+    <string name="action_open_settings">Instellingen openen</string>
+    <string name="action_grant_permission">Toestemming geven</string>
+    <string name="action_download">Installeren</string>
+    <string name="action_manage">Beheren</string>
+    <string name="action_cancel">Annuleren</string>
+    <string name="action_delete">Verwijderen</string>
+    <string name="action_retry">Opnieuw proberen</string>
+    <string name="action_set_as_active">Als actief instellen</string>
+    <string name="action_open_parakeetype">Parakeetype openen</string>
+
+    <!-- Common states -->
+    <string name="state_enabled">Ingeschakeld</string>
+    <string name="state_disabled">Uitgeschakeld</string>
+
+    <!-- Content descriptions -->
+    <string name="cd_back">Terug</string>
+    <string name="cd_switch_keyboard">Toetsenbord wisselen</string>
+    <string name="cd_delete_all">Alle tekst verwijderen</string>
+    <string name="cd_delete_word">Laatste woord verwijderen</string>
+    <string name="cd_action_search">Zoeken</string>
+    <string name="cd_action_go">Ga</string>
+    <string name="cd_action_next">Volgende</string>
+    <string name="cd_action_enter">Enter</string>
+    <string name="cd_active_model">Actief model</string>
+    <string name="cd_delete_model">Model verwijderen</string>
+    <string name="cd_status_error">Fout</string>
+    <string name="cd_talk_disabled">Spreekknop uitgeschakeld - engine niet gereed</string>
+    <string name="cd_talk_stop_continuous">Doorlopende opname stoppen</string>
+    <string name="cd_talk_tap_stop">Tik om de opname te stoppen</string>
+    <string name="cd_talk_stop">Opname stoppen</string>
+    <string name="cd_talk_tap_start">Tik om de opname te starten</string>
+    <string name="cd_talk_hold_start">Opname starten (vasthouden) · veeg naar links om te vergrendelen</string>
+
+    <!-- Home screen -->
+    <string name="home_section_setup">Instellen</string>
+    <string name="home_section_configuration">Configuratie</string>
+    <string name="home_ime_enabled">Toetsenbord ingeschakeld</string>
+    <string name="home_ime_not_enabled">Toetsenbord niet ingeschakeld</string>
+    <string name="home_ime_enabled_subtitle">Parakeetype staat in de lijst met toetsenborden.</string>
+    <string name="home_ime_not_enabled_subtitle">Voeg Parakeetype toe in de toetsenbordinstellingen van het systeem.</string>
+    <string name="home_mic_granted">Microfoontoegang verleend</string>
+    <string name="home_mic_required">Microfoonrechten vereist</string>
+    <string name="home_mic_granted_subtitle">Audio wordt volledig op het apparaat verwerkt.</string>
+    <string name="home_mic_required_subtitle">Tik om microfoontoegang te geven.</string>
+    <string name="home_model_ready">Model gereed</string>
+    <string name="home_model_not_downloaded">Model niet geïnstalleerd</string>
+    <string name="home_model_ready_subtitle">Er is een transcriptiemodel geïnstalleerd en gereed.</string>
+    <string name="home_model_not_downloaded_subtitle">Installeer een transcriptiemodel om het toetsenbord te gebruiken.</string>
+    <string name="home_pref_input">Microfoon, activeringsmodus &amp; indeling</string>
+    <string name="home_pref_speech">Spraakactiviteit, nabewerking &amp; modelgeheugen</string>
+    <string name="home_pref_tools">Diagnostiek</string>
+
+    <!-- Preferences screen -->
+    <string name="pref_trigger_mode_title">Activeringsmodus</string>
+    <string name="pref_trigger_mode_subtitle">Hoe de spraakopname wordt gestart en gestopt.</string>
+    <string name="pref_trigger_hold">Vasthouden om te praten</string>
+    <string name="pref_trigger_tap_toggle">Tikken om te schakelen</string>
+    <string name="pref_delete_title">Verwijderknop</string>
+    <string name="pref_delete_subtitle">Wat de prullenbakknop op het toetsenbord verwijdert. ‘Laatste zin’ verwijdert alleen de laatste zin vóór de cursor, zodat een lang document nooit per ongeluk wordt gewist.</string>
+    <string name="pref_delete_all">Alle tekst</string>
+    <string name="pref_delete_last_sentence">Laatste zin</string>
+    <string name="pref_position_title">Toetsenbordpositie</string>
+    <string name="pref_position_subtitle">Waar de toetsenbordknoppen staan. Links of rechts blijven ze binnen bereik van één duim – handig in liggende stand, voor linkshandig gebruik en op tablets.</string>
+    <string name="pref_position_portrait">In staande stand</string>
+    <string name="pref_position_landscape">In liggende stand</string>
+    <string name="pref_position_left">Links</string>
+    <string name="pref_position_center">Midden</string>
+    <string name="pref_position_right">Rechts</string>
+    <string name="pref_vad_title">Spraakactiviteitsdetectie (VAD)</string>
+    <string name="pref_vad_subtitle">Gebruikt Silero VAD om stilte en achtergrondgeluid weg te filteren vóór de transcriptie. Schakel dit alleen uit als VAD het begin van je spraak afkapt of lege resultaten geeft.</string>
+    <string name="pref_postprocessing_title">Nabewerking van transcript</string>
+    <string name="pref_postprocessing_subtitle">Verwijdert stopwoordjes (eh, uhm, hmm), voegt gestotter samen en ruimt herhaalde zinsdelen op die het model soms hallucineert. Schakel dit uit om de exacte, onbewerkte modeluitvoer te krijgen - handig om na te gaan of het opschonen de oorzaak is van weggevallen of gewijzigde woorden.</string>
+    <string name="pref_postprocessing_disabled_raw">Uitgeschakeld (onbewerkte uitvoer)</string>
+    <string name="pref_keep_loaded_title">Model geladen houden</string>
+    <string name="pref_keep_loaded_subtitle">Houdt het spraakmodel in het geheugen terwijl je een ander toetsenbord gebruikt, zodat dicteren direct klaar is als je terugschakelt, in plaats van dat het model opnieuw wordt geladen. Draait een voorgrondservice met een permanente melding en houdt ongeveer 700 MB RAM bezet.</string>
+    <string name="pref_diagnostics_title">Pipelinediagnostiek</string>
+    <string name="pref_diagnostics_subtitle">Toont een live badge op het toetsenbord met tellers voor venstertrims, uitlijningsherstel en verworpen lege stappen. Handig om pipelineproblemen te diagnosticeren; standaard uit.</string>
+    <string name="pref_diagnostics_visible">Zichtbaar</string>
+    <string name="pref_diagnostics_hidden">Verborgen</string>
+
+    <!-- Model screen -->
+    <string name="model_screen_title">Spraakherkenningsmodellen</string>
+    <string name="model_screen_subtitle">Installeer een model en tik op ‘Als actief instellen’ om het voor transcriptie te gebruiken. Er wordt maar één model tegelijk geladen. Parakeetype heeft geen internettoegang: je downloadt het modelbestand in je browser en importeert het hier.</string>
+    <string name="model_size_format">~%d MB</string>
+    <string name="model_active_label">Actief model</string>
+    <string name="dialog_delete_title">Verwijderen bevestigen</string>
+    <string name="dialog_delete_message">Weet je zeker dat je dit model wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</string>
+    <string name="model_install_explanation">1. Download het modelbestand (~%d MB, één ZIP-archief) in je browser.\n2. Tik op ‘Modelbestand importeren’ en kies het gedownloade archief.\nNa het importeren kun je het archief uit je map Downloads verwijderen.</string>
+    <string name="action_download_in_browser">Downloaden in browser</string>
+    <string name="action_import_model_file">Modelbestand importeren</string>
+    <string name="model_importing_format">Importeren… %d%%</string>
+    <string name="model_no_browser">Geen browser gevonden om de downloadlink te openen.</string>
+    <string name="model_import_success">Model geïmporteerd. Je kunt het gedownloade archief nu verwijderen.</string>
+    <string name="model_import_not_archive">Het gekozen bestand is geen Parakeetype-modelarchief.</string>
+    <string name="model_import_missing_files">Het archief is onvolledig. Ontbreekt: %s</string>
+    <string name="model_import_corrupted">Het archief is beschadigd (checksum komt niet overeen): %s. Download het opnieuw.</string>
+    <string name="model_import_io_error">Importeren mislukt: %s</string>
+
+    <!-- Inference service notifications -->
+    <string name="notif_channel_name">Parakeetype spraaktranscriptie</string>
+    <string name="notif_channel_desc">Wordt getoond zolang de spraaktranscriptie-engine actief is</string>
+    <string name="notif_engine_loading">Transcriptie-engine laden…</string>
+    <string name="notif_model_not_downloaded">Model niet geïnstalleerd - open Parakeetype om het te installeren</string>
+    <string name="notif_engine_ready">Parakeetype gereed (%s)</string>
+    <string name="notif_engine_failed">Engine kan niet worden geladen: %s</string>
+
+    <!-- Keyboard status messages -->
+    <string name="status_transcribing">Transcriberen…</string>
+    <string name="status_no_speech">Niet verstaan — probeer het opnieuw</string>
+    <string name="status_engine_model_missing">Model niet geïnstalleerd - open Parakeetype om het te installeren</string>
+    <string name="status_engine_loading">Transcriptie-engine laden…</string>
+    <string name="status_error_mic_permission">Microfoontoegang geweigerd - open Parakeetype om toegang te geven</string>
+    <string name="status_error_mic_init">Kan de microfoon niet openen</string>
+    <string name="status_error_transcription">Transcriptie mislukt</string>
+    <string name="status_error_audio_capture">Audio-opname mislukt</string>
+    <string name="status_error_engine_load">Engine kan niet worden geladen</string>
+
+    <!-- Preferences · microphone section -->
+    <string name="pref_mic_title">Microfoon</string>
+    <string name="pref_mic_subtitle">Kalibreer om de duidelijkste microfoon te kiezen voor korte woorden zoals ‘Thanks’.</string>
+    <string name="pref_mic_calibrate">Microfoons kalibreren</string>
+    <string name="pref_raw_mic_title">Onbewerkte microfoon (geen echo-onderdrukking)</string>
+    <string name="pref_raw_mic_subtitle">Omzeilt de echo- en ruisonderdrukking van het platform. Schakel dit in als je audio transcribeert die via de eigen speaker van het apparaat wordt afgespeeld (bijv. een voicemail op de luidspreker) - met de standaardbron wordt het speakersignaal uit de microfoon weggefilterd en als stilte getranscribeerd. Iets minder schone opname in lawaaierige ruimtes.</string>
+
+    <!-- Microphone calibration -->
+    <string name="calib_subtitle">Kies de microfoon die hoge frequenties het duidelijkst vastlegt. Het spraakmodel heeft die nodig om korte woorden zoals ‘Thanks’ te herkennen.</string>
+    <string name="calib_instructions">Wacht bij elke microfoon op de rode indicator en zeg dan duidelijk \'thanks\'. De duidelijkste microfoon wordt automatisch gekozen.</string>
+    <string name="calib_start">Kalibratie starten</string>
+    <string name="calib_mic_of">Microfoon %1$d van %2$d</string>
+    <string name="calib_speak_now">Zeg nu \'thanks\'</string>
+    <string name="calib_get_ready">Maak je klaar om \'thanks\' te zeggen</string>
+    <string name="calib_done">Kalibratie voltooid</string>
+    <string name="calib_best">Beste microfoon</string>
+    <string name="calib_hf">Hoge freq.</string>
+    <string name="calib_snr">SNR</string>
+    <string name="calib_saved">Opgeslagen als voorkeursmicrofoon</string>
+    <string name="calib_run_again">Opnieuw uitvoeren</string>
+    <string name="calib_no_mics">Geen microfoons gevonden.</string>
+    <string name="calib_current">Huidig</string>
+    <string name="mic_builtin">Ingebouwde microfoon</string>
+    <string name="mic_builtin_format">Ingebouwde microfoon (%s)</string>
+    <string name="mic_wired_headset">Bedrade headset</string>
+    <string name="mic_type_format">Microfoon %d</string>
+    <string name="mic_front_back">voor &amp; achter</string>
+    <string name="mic_stereo">stereo</string>
+    <string name="mic_mono">mono</string>
+
+    <!-- Crash reports (local only, shared on request) -->
+    <string name="crash_channel_name">Crashrapporten</string>
+    <string name="crash_channel_desc">Wordt getoond nadat Parakeetype is gecrasht, om het crashlogboek te delen</string>
+    <string name="crash_notif_title">Parakeetype is gecrasht</string>
+    <string name="crash_notif_text">Tik om het crashlogboek te delen</string>
+    <string name="crash_dialog_title">Parakeetype is gecrasht</string>
+    <string name="crash_dialog_message">Er is een logboek van de crash op dit apparaat opgeslagen. Als je het met de ontwikkelaar deelt, helpt dat om het probleem op te lossen.\n\nHet logboek bevat alleen de eigen logregels van Parakeetype, maar daarin kan tekst staan die je hebt gedicteerd. Het wordt nergens naartoe gestuurd, tenzij je het deelt.</string>
+    <string name="crash_action_share">Delen</string>
+    <string name="crash_action_dismiss">Sluiten</string>
+    <string name="crash_share_title">Crashlogboek delen</string>
+
+    <!-- Speech recognizer for other apps (RecognitionService / ACTION_RECOGNIZE_SPEECH) -->
+    <string name="voice_input_label">Parakeetype spraakinvoer</string>
+    <string name="voice_input_speak_now">Spreek nu</string>
+    <string name="voice_input_transcribing">Transcriberen…</string>
+    <string name="voice_input_done">Klaar</string>
+    <string name="voice_input_retry">Opnieuw proberen</string>
+    <string name="voice_input_error_no_model">Geen spraakmodel geïnstalleerd. Open Parakeetype om er een te installeren.</string>
+    <string name="voice_input_error_permission">Parakeetype heeft toegang tot de microfoon nodig.</string>
+    <string name="voice_input_error_audio">De microfoon kan niet worden geopend.</string>
+    <string name="voice_input_error_generic">Spraakherkenning mislukt.</string>
+</resources>

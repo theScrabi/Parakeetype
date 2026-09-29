@@ -37,6 +37,12 @@
     <string name="cd_active_model">Aktives Modell</string>
     <string name="cd_delete_model">Modell löschen</string>
     <string name="cd_status_error">Fehler</string>
+    <string name="cd_talk_disabled">Sprechtaste deaktiviert – Engine nicht bereit</string>
+    <string name="cd_talk_stop_continuous">Daueraufnahme beenden</string>
+    <string name="cd_talk_tap_stop">Tippen, um die Aufnahme zu beenden</string>
+    <string name="cd_talk_stop">Aufnahme beenden</string>
+    <string name="cd_talk_tap_start">Tippen, um die Aufnahme zu starten</string>
+    <string name="cd_talk_hold_start">Aufnahme starten (halten) · nach links wischen zum Sperren</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Einrichtung</string>
@@ -170,6 +176,13 @@
     <string name="calib_run_again">Erneut ausführen</string>
     <string name="calib_no_mics">Keine Mikrofone gefunden.</string>
     <string name="calib_current">Aktuell</string>
+    <string name="mic_builtin">Integriertes Mikrofon</string>
+    <string name="mic_builtin_format">Integriertes Mikrofon (%s)</string>
+    <string name="mic_wired_headset">Kabel-Headset</string>
+    <string name="mic_type_format">Mikrofon %d</string>
+    <string name="mic_front_back">vorne &amp; hinten</string>
+    <string name="mic_stereo">Stereo</string>
+    <string name="mic_mono">Mono</string>
 
     <!-- Absturzberichte (nur lokal, Teilen auf Wunsch) -->
     <string name="crash_channel_name">Absturzberichte</string>

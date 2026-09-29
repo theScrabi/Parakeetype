@@ -8,6 +8,7 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
+import org.schabi.parakeetype.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.log10
@@ -247,10 +248,10 @@ class MicCalibrationManager(private val context: Context) {
     )
 
     private fun defaultLabelFor(type: Int): String = when (type) {
-        AudioDeviceInfo.TYPE_BUILTIN_MIC -> "Built-in mic"
-        AudioDeviceInfo.TYPE_WIRED_HEADSET -> "Wired headset"
+        AudioDeviceInfo.TYPE_BUILTIN_MIC -> context.getString(R.string.mic_builtin)
+        AudioDeviceInfo.TYPE_WIRED_HEADSET -> context.getString(R.string.mic_wired_headset)
         AudioDeviceInfo.TYPE_BLUETOOTH_SCO -> "Bluetooth"
-        else -> "Mic $type"
+        else -> context.getString(R.string.mic_type_format, type)
     }
 
     /**
@@ -270,11 +271,11 @@ class MicCalibrationManager(private val context: Context) {
             .takeIf { it.isNotBlank() && it.length <= 12 && it.all(Char::isLetter) }
             ?.let { parts.add(it.lowercase()) }
         when {
-            channelMasks.any { it and AudioFormat.CHANNEL_IN_BACK != 0 } -> parts.add("front & back")
-            channelMasks.any { it and AudioFormat.CHANNEL_IN_STEREO == AudioFormat.CHANNEL_IN_STEREO } -> parts.add("stereo")
-            else -> parts.add("mono")
+            channelMasks.any { it and AudioFormat.CHANNEL_IN_BACK != 0 } -> parts.add(context.getString(R.string.mic_front_back))
+            channelMasks.any { it and AudioFormat.CHANNEL_IN_STEREO == AudioFormat.CHANNEL_IN_STEREO } -> parts.add(context.getString(R.string.mic_stereo))
+            else -> parts.add(context.getString(R.string.mic_mono))
         }
-        return "Built-in mic (${parts.joinToString(", ")})"
+        return context.getString(R.string.mic_builtin_format, parts.joinToString(", "))
     }
 
     /**
