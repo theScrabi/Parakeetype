@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Smazat model</string>
     <string name="cd_status_error">Chyba</string>
     <string name="cd_talk_disabled">Tlačítko mluvení je vypnuté – modul není připraven</string>
-    <string name="cd_talk_recording_stopped">Nahrávání zastaveno – přepisuje se</string>
     <string name="cd_talk_stop_continuous">Zastavit nepřetržité nahrávání</string>
     <string name="cd_talk_tap_stop">Klepnutím zastavíte nahrávání</string>
     <string name="cd_talk_stop">Zastavit nahrávání</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Jak spustit a zastavit hlasové nahrávání.</string>
     <string name="pref_trigger_hold">Podržet a mluvit</string>
     <string name="pref_trigger_tap_toggle">Přepnout klepnutím</string>
-    <string name="pref_immediate_mode_title">Okamžitý režim</string>
-    <string name="pref_immediate_mode_subtitle">Začne poslouchat, jakmile přepnete na Parakeetype, např. klávesou mikrofonu jiné klávesnice. Jakmile přestanete mluvit, text se zapíše a přepne se zpět na tuto klávesnici.</string>
+    <string name="pref_instant_mode_title">Okamžitý režim</string>
+    <string name="pref_instant_mode_subtitle">Začne poslouchat, jakmile přepnete na Parakeetype, např. klávesou mikrofonu jiné klávesnice, a přestane, jakmile přestanete mluvit. Klávesnice zůstane otevřená, takže můžete dál upravovat nebo diktovat.</string>
     <string name="pref_delete_title">Tlačítko mazání</string>
     <string name="pref_delete_subtitle">Co maže tlačítko koše na klávesnici. „Poslední věta“ odstraní jen poslední větu před kurzorem, takže dlouhý dokument nikdy omylem nesmažete.</string>
     <string name="pref_delete_all">Veškerý text</string>

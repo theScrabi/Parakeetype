@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Видалити модель</string>
     <string name="cd_status_error">Помилка</string>
     <string name="cd_talk_disabled">Кнопку запису вимкнено – рушій не готовий</string>
-    <string name="cd_talk_recording_stopped">Запис зупинено – триває розшифрування</string>
     <string name="cd_talk_stop_continuous">Зупинити безперервний запис</string>
     <string name="cd_talk_tap_stop">Торкніться, щоб зупинити запис</string>
     <string name="cd_talk_stop">Зупинити запис</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Як починати й зупиняти голосовий запис.</string>
     <string name="pref_trigger_hold">Утримувати й говорити</string>
     <string name="pref_trigger_tap_toggle">Вмикати торканням</string>
-    <string name="pref_immediate_mode_title">Миттєвий режим</string>
-    <string name="pref_immediate_mode_subtitle">Починає слухати одразу після перемикання на Parakeetype, наприклад клавішею мікрофона іншої клавіатури. Коли ви замовкаєте, текст вводиться й відбувається повернення до тієї клавіатури.</string>
+    <string name="pref_instant_mode_title">Миттєвий режим</string>
+    <string name="pref_instant_mode_subtitle">Починає слухати одразу після перемикання на Parakeetype, наприклад клавішею мікрофона іншої клавіатури, і зупиняється, коли ви замовкаєте. Клавіатура залишається відкритою, тож можна далі редагувати або диктувати.</string>
     <string name="pref_delete_title">Кнопка видалення</string>
     <string name="pref_delete_subtitle">Що видаляє кнопка з кошиком на клавіатурі. «Останнє речення» видаляє лише останнє речення перед курсором, тож довгий документ ніколи не буде стерто випадково.</string>
     <string name="pref_delete_all">Весь текст</string>

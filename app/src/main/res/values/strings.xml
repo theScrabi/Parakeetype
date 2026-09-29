@@ -37,7 +37,6 @@
     <string name="cd_delete_model">Delete model</string>
     <string name="cd_status_error">Error</string>
     <string name="cd_talk_disabled">Talk button disabled - engine not ready</string>
-    <string name="cd_talk_recording_stopped">Recording stopped - transcribing</string>
     <string name="cd_talk_stop_continuous">Stop continuous recording</string>
     <string name="cd_talk_tap_stop">Tap to stop recording</string>
     <string name="cd_talk_stop">Stop recording</string>
@@ -68,10 +67,8 @@
     <string name="pref_trigger_mode_subtitle">How to start and stop voice recording.</string>
     <string name="pref_trigger_hold">Hold to Talk</string>
     <string name="pref_trigger_tap_toggle">Tap to Toggle</string>
-    <string name="pref_immediate_mode_title">Immediate Mode</string>
-    <string name="pref_immediate_mode_subtitle">Starts listening as soon as you switch to Parakeetype, e.g. with the
-        microphone key of another keyboard. Once you stop speaking, the text is typed and you are switched back to that
-        keyboard.</string>
+    <string name="pref_instant_mode_title">Instant Mode</string>
+    <string name="pref_instant_mode_subtitle">Starts listening as soon as you switch to Parakeetype, e.g. with the microphone key of another keyboard, and stops once you stop speaking. The keyboard stays open, so you can go on editing or dictating.</string>
     <string name="pref_delete_title">Delete Button</string>
     <string name="pref_delete_subtitle">What the trash button on the keyboard deletes. \"Last Sentence\" removes only the
         most recent sentence before the cursor, so a long document is never wiped by accident.

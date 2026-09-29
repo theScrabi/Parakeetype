@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Ħassar il-mudell</string>
     <string name="cd_status_error">Żball</string>
     <string name="cd_talk_disabled">Buttuna tat-taħdit diżattivata – il-magna mhijiex lesta</string>
-    <string name="cd_talk_recording_stopped">Ir-reġistrazzjoni waqfet - qed tiġi traskritta</string>
     <string name="cd_talk_stop_continuous">Waqqaf ir-reġistrazzjoni kontinwa</string>
     <string name="cd_talk_tap_stop">Agħfas biex twaqqaf ir-reġistrazzjoni</string>
     <string name="cd_talk_stop">Waqqaf ir-reġistrazzjoni</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kif tibda u twaqqaf ir-reġistrazzjoni tal-vuċi.</string>
     <string name="pref_trigger_hold">Żomm biex Titkellem</string>
     <string name="pref_trigger_tap_toggle">Agħfas biex Taqleb</string>
-    <string name="pref_immediate_mode_title">Mod Immedjat</string>
-    <string name="pref_immediate_mode_subtitle">Jibda jisma\' hekk kif taqleb għal Parakeetype, eż. bil-buttuna tal-mikrofonu ta\' tastiera oħra. Meta tieqaf titkellem, it-test jiġi ttajpjat u terġa\' lura għal dik it-tastiera.</string>
+    <string name="pref_instant_mode_title">Mod Instantanju</string>
+    <string name="pref_instant_mode_subtitle">Jibda jisma\' hekk kif taqleb għal Parakeetype, eż. bil-buttuna tal-mikrofonu ta\' tastiera oħra, u jieqaf meta tieqaf titkellem. It-tastiera tibqa\' miftuħa, biex tkun tista\' tkompli teditja jew tiddetta.</string>
     <string name="pref_delete_title">Buttuna tat-Tħassir</string>
     <string name="pref_delete_subtitle">X\'tħassar il-buttuna tal-iskart fuq it-tastiera. “L-Aħħar Sentenza” tneħħi biss l-aħħar sentenza qabel il-cursor, biex dokument twil qatt ma jitħassar bi żball.</string>
     <string name="pref_delete_all">It-Test Kollu</string>

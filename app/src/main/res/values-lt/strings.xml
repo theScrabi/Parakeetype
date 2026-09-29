@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Ištrinti modelį</string>
     <string name="cd_status_error">Klaida</string>
     <string name="cd_talk_disabled">Kalbėjimo mygtukas išjungtas – variklis neparuoštas</string>
-    <string name="cd_talk_recording_stopped">Įrašymas sustabdytas – transkribuojama</string>
     <string name="cd_talk_stop_continuous">Sustabdyti nepertraukiamą įrašymą</string>
     <string name="cd_talk_tap_stop">Palieskite, kad sustabdytumėte įrašymą</string>
     <string name="cd_talk_stop">Sustabdyti įrašymą</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kaip pradėti ir sustabdyti balso įrašymą.</string>
     <string name="pref_trigger_hold">Laikykite, kad kalbėtumėte</string>
     <string name="pref_trigger_tap_toggle">Palieskite, kad perjungtumėte</string>
-    <string name="pref_immediate_mode_title">Momentinis režimas</string>
-    <string name="pref_immediate_mode_subtitle">Pradeda klausytis vos perjungus į Parakeetype, pvz., kitos klaviatūros mikrofono klavišu. Kai nustojate kalbėti, tekstas įvedamas ir grįžtama į tą klaviatūrą.</string>
+    <string name="pref_instant_mode_title">Momentinis režimas</string>
+    <string name="pref_instant_mode_subtitle">Pradeda klausytis vos perjungus į Parakeetype, pvz., kitos klaviatūros mikrofono klavišu, ir sustoja, kai nustojate kalbėti. Klaviatūra lieka atidaryta, todėl galite toliau redaguoti arba diktuoti.</string>
     <string name="pref_delete_title">Trynimo mygtukas</string>
     <string name="pref_delete_subtitle">Ką ištrina klaviatūros šiukšliadėžės mygtukas. „Paskutinis sakinys“ pašalina tik paskutinį sakinį prieš žymeklį, kad ilgas dokumentas niekada nebūtų ištrintas netyčia.</string>
     <string name="pref_delete_all">Visas tekstas</string>

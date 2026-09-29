@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Supprimer le modèle</string>
     <string name="cd_status_error">Erreur</string>
     <string name="cd_talk_disabled">Bouton Parler désactivé – moteur non prêt</string>
-    <string name="cd_talk_recording_stopped">Enregistrement arrêté - transcription en cours</string>
     <string name="cd_talk_stop_continuous">Arrêter l\'enregistrement continu</string>
     <string name="cd_talk_tap_stop">Appuyez pour arrêter l\'enregistrement</string>
     <string name="cd_talk_stop">Arrêter l\'enregistrement</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Comment démarrer et arrêter l\'enregistrement vocal.</string>
     <string name="pref_trigger_hold">Maintenir pour parler</string>
     <string name="pref_trigger_tap_toggle">Appuyer pour basculer</string>
-    <string name="pref_immediate_mode_title">Mode immédiat</string>
-    <string name="pref_immediate_mode_subtitle">Commence l\'écoute dès que vous passez à Parakeetype, par ex. avec la touche micro d\'un autre clavier. Dès que vous cessez de parler, le texte est saisi et vous revenez à ce clavier.</string>
+    <string name="pref_instant_mode_title">Mode instantané</string>
+    <string name="pref_instant_mode_subtitle">Commence l\'écoute dès que vous passez à Parakeetype, par ex. avec la touche micro d\'un autre clavier, et s\'arrête dès que vous cessez de parler. Le clavier reste ouvert pour que vous puissiez continuer à modifier ou à dicter.</string>
     <string name="pref_delete_title">Bouton Supprimer</string>
     <string name="pref_delete_subtitle">Ce que supprime le bouton Corbeille du clavier. « Dernière phrase » ne supprime que la phrase la plus récente avant le curseur, pour qu\'un long document ne soit jamais effacé par erreur.</string>
     <string name="pref_delete_all">Tout le texte</string>

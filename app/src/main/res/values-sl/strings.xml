@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Izbriši model</string>
     <string name="cd_status_error">Napaka</string>
     <string name="cd_talk_disabled">Gumb za govor je onemogočen – pogon ni pripravljen</string>
-    <string name="cd_talk_recording_stopped">Snemanje ustavljeno – prepisovanje</string>
     <string name="cd_talk_stop_continuous">Ustavi neprekinjeno snemanje</string>
     <string name="cd_talk_tap_stop">Dotaknite se, da ustavite snemanje</string>
     <string name="cd_talk_stop">Ustavi snemanje</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kako začeti in ustaviti glasovno snemanje.</string>
     <string name="pref_trigger_hold">Pridržite za govor</string>
     <string name="pref_trigger_tap_toggle">Dotik za preklop</string>
-    <string name="pref_immediate_mode_title">Takojšnji način</string>
-    <string name="pref_immediate_mode_subtitle">Začne poslušati takoj, ko preklopite na Parakeetype, npr. s tipko za mikrofon druge tipkovnice. Ko nehate govoriti, se besedilo vnese in preklopite nazaj na tisto tipkovnico.</string>
+    <string name="pref_instant_mode_title">Takojšnji način</string>
+    <string name="pref_instant_mode_subtitle">Začne poslušati takoj, ko preklopite na Parakeetype, npr. s tipko za mikrofon druge tipkovnice, in se ustavi, ko nehate govoriti. Tipkovnica ostane odprta, tako da lahko nadaljujete z urejanjem ali nareko.</string>
     <string name="pref_delete_title">Gumb za brisanje</string>
     <string name="pref_delete_subtitle">Kaj izbriše gumb s košem na tipkovnici. „Zadnji stavek“ odstrani samo zadnji stavek pred kazalcem, tako da dolgega dokumenta nikoli ne izbrišete po nesreči.</string>
     <string name="pref_delete_all">Vse besedilo</string>

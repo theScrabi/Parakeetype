@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Usuń model</string>
     <string name="cd_status_error">Błąd</string>
     <string name="cd_talk_disabled">Przycisk mówienia nieaktywny – silnik nie jest gotowy</string>
-    <string name="cd_talk_recording_stopped">Nagrywanie zatrzymane – trwa transkrypcja</string>
     <string name="cd_talk_stop_continuous">Zatrzymaj ciągłe nagrywanie</string>
     <string name="cd_talk_tap_stop">Dotknij, aby zatrzymać nagrywanie</string>
     <string name="cd_talk_stop">Zatrzymaj nagrywanie</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Jak rozpoczynać i kończyć nagrywanie głosu.</string>
     <string name="pref_trigger_hold">Przytrzymaj, aby mówić</string>
     <string name="pref_trigger_tap_toggle">Dotknij, aby przełączyć</string>
-    <string name="pref_immediate_mode_title">Tryb natychmiastowy</string>
-    <string name="pref_immediate_mode_subtitle">Zaczyna słuchać, gdy tylko przełączysz się na Parakeetype, np. klawiszem mikrofonu innej klawiatury. Gdy przestaniesz mówić, tekst zostanie wpisany i nastąpi powrót do tamtej klawiatury.</string>
+    <string name="pref_instant_mode_title">Tryb natychmiastowy</string>
+    <string name="pref_instant_mode_subtitle">Zaczyna słuchać, gdy tylko przełączysz się na Parakeetype, np. klawiszem mikrofonu innej klawiatury, i przestaje, gdy przestaniesz mówić. Klawiatura pozostaje otwarta, więc możesz dalej edytować lub dyktować.</string>
     <string name="pref_delete_title">Przycisk usuwania</string>
     <string name="pref_delete_subtitle">Co usuwa przycisk kosza na klawiaturze. „Ostatnie zdanie” usuwa tylko ostatnie zdanie przed kursorem, dzięki czemu długi dokument nigdy nie zostanie przypadkowo wymazany.</string>
     <string name="pref_delete_all">Cały tekst</string>

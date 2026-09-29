@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Radera modell</string>
     <string name="cd_status_error">Fel</string>
     <string name="cd_talk_disabled">Talknappen är inaktiverad - motorn är inte redo</string>
-    <string name="cd_talk_recording_stopped">Inspelningen har stoppats - transkriberar</string>
     <string name="cd_talk_stop_continuous">Stoppa kontinuerlig inspelning</string>
     <string name="cd_talk_tap_stop">Tryck för att stoppa inspelningen</string>
     <string name="cd_talk_stop">Stoppa inspelningen</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Hur röstinspelningen startas och stoppas.</string>
     <string name="pref_trigger_hold">Håll ned för att tala</string>
     <string name="pref_trigger_tap_toggle">Tryck för att växla</string>
-    <string name="pref_immediate_mode_title">Direktläge</string>
-    <string name="pref_immediate_mode_subtitle">Börjar lyssna så fort du byter till Parakeetype, t.ex. med mikrofonknappen på ett annat tangentbord. När du slutar prata skrivs texten in och du kommer tillbaka till det tangentbordet.</string>
+    <string name="pref_instant_mode_title">Direktläge</string>
+    <string name="pref_instant_mode_subtitle">Börjar lyssna så fort du byter till Parakeetype, t.ex. med mikrofonknappen på ett annat tangentbord, och slutar när du slutar prata. Tangentbordet förblir öppet så att du kan fortsätta redigera eller diktera.</string>
     <string name="pref_delete_title">Raderingsknapp</string>
     <string name="pref_delete_subtitle">Vad papperskorgsknappen på tangentbordet raderar. ”Sista meningen” tar bara bort den senaste meningen före markören, så att ett långt dokument aldrig raderas av misstag.</string>
     <string name="pref_delete_all">All text</string>

@@ -43,12 +43,12 @@ private const val TAG = "ParakeetypeIME"
 private const val MIN_KEYBOARD_CONTENT_HEIGHT_DP = 130
 
 /**
- * Immediate mode treats the first input view shown within this long after [InputMethodService.onCreate]
+ * Instant mode treats the first input view shown within this long after [InputMethodService.onCreate]
  * as "the user just switched to Parakeetype". The system creates a new IME service on every
  * switch and shows it right away; when Parakeetype is the default keyboard it is created at
  * boot (or after its process was killed) long before a text field is focused.
  */
-private const val IMMEDIATE_SWITCH_WINDOW_MS = 3_000L
+private const val INSTANT_SWITCH_WINDOW_MS = 3_000L
 
 /**
  * The core IME service. Implements [LifecycleOwner], [ViewModelStoreOwner], and
@@ -73,7 +73,7 @@ class ParakeetypeInputMethodService :
 
     private lateinit var keyboardViewModel: KeyboardViewModel
 
-    /** [SystemClock.elapsedRealtime] of [onCreate], for [IMMEDIATE_SWITCH_WINDOW_MS]. */
+    /** [SystemClock.elapsedRealtime] of [onCreate], for [INSTANT_SWITCH_WINDOW_MS]. */
     private var createdAtMs = 0L
 
     /** `true` until the first [onStartInputView] of this service instance. */
@@ -176,15 +176,6 @@ class ParakeetypeInputMethodService :
         // request a reload of the (still-present) model instead of silently opening the
         // mic with no transcription.
         createdAtMs = SystemClock.elapsedRealtime()
-
-        // Immediate mode: the session started on the switch to this keyboard has typed its
-        // text — return to the keyboard the user came from, like the switch-keyboard key.
-        // Without a previous keyboard (none recorded) stay here instead of opening the picker.
-        keyboardViewModel.onImmediateSessionFinished = {
-            switchToPreviousInputMethod().also { switched ->
-                if (!switched) Log.d(TAG, "Immediate mode - no previous keyboard to switch back to")
-            }
-        }
 
         keyboardViewModel.onMissingRepo = {
             inferenceBinder?.reloadIfNeeded()
@@ -451,10 +442,10 @@ class ParakeetypeInputMethodService :
         super.onStartInputView(editorInfo, restarting)
         if (firstInputView) {
             firstInputView = false
-            if (SystemClock.elapsedRealtime() - createdAtMs < IMMEDIATE_SWITCH_WINDOW_MS) {
+            if (SystemClock.elapsedRealtime() - createdAtMs < INSTANT_SWITCH_WINDOW_MS) {
                 // The user just switched to this keyboard (e.g. with another keyboard's
-                // microphone key); the VM checks whether immediate mode is enabled.
-                keyboardViewModel.requestImmediateStart()
+                // microphone key); the VM checks whether instant mode is enabled.
+                keyboardViewModel.requestInstantStart()
             }
         }
     }

@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Eliminar modelo</string>
     <string name="cd_status_error">Erro</string>
     <string name="cd_talk_disabled">Botão de falar desativado – motor não está pronto</string>
-    <string name="cd_talk_recording_stopped">Gravação parada - a transcrever</string>
     <string name="cd_talk_stop_continuous">Parar gravação contínua</string>
     <string name="cd_talk_tap_stop">Toque para parar a gravação</string>
     <string name="cd_talk_stop">Parar gravação</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Como iniciar e parar a gravação de voz.</string>
     <string name="pref_trigger_hold">Manter premido para falar</string>
     <string name="pref_trigger_tap_toggle">Tocar para alternar</string>
-    <string name="pref_immediate_mode_title">Modo imediato</string>
-    <string name="pref_immediate_mode_subtitle">Começa a ouvir assim que muda para o Parakeetype, p. ex. com a tecla de microfone de outro teclado. Quando deixa de falar, o texto é escrito e volta a esse teclado.</string>
+    <string name="pref_instant_mode_title">Modo instantâneo</string>
+    <string name="pref_instant_mode_subtitle">Começa a ouvir assim que muda para o Parakeetype, p. ex. com a tecla de microfone de outro teclado, e para quando deixa de falar. O teclado permanece aberto para poder continuar a editar ou ditar.</string>
     <string name="pref_delete_title">Botão Eliminar</string>
     <string name="pref_delete_subtitle">O que o botão do caixote do lixo no teclado elimina. «Última frase» remove apenas a frase mais recente antes do cursor, para que um documento longo nunca seja apagado por engano.</string>
     <string name="pref_delete_all">Todo o texto</string>

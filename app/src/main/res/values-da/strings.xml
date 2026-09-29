@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Slet model</string>
     <string name="cd_status_error">Fejl</string>
     <string name="cd_talk_disabled">Taleknap deaktiveret - motoren er ikke klar</string>
-    <string name="cd_talk_recording_stopped">Optagelsen er stoppet - transskriberer</string>
     <string name="cd_talk_stop_continuous">Stop kontinuerlig optagelse</string>
     <string name="cd_talk_tap_stop">Tryk for at stoppe optagelsen</string>
     <string name="cd_talk_stop">Stop optagelsen</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Hvordan taleoptagelsen startes og stoppes.</string>
     <string name="pref_trigger_hold">Hold for at tale</string>
     <string name="pref_trigger_tap_toggle">Tryk for at slå til/fra</string>
-    <string name="pref_immediate_mode_title">Øjeblikkelig tilstand</string>
-    <string name="pref_immediate_mode_subtitle">Begynder at lytte, så snart du skifter til Parakeetype, f.eks. med mikrofontasten på et andet tastatur. Når du holder op med at tale, bliver teksten skrevet, og du skiftes tilbage til det tastatur.</string>
+    <string name="pref_instant_mode_title">Øjeblikkelig tilstand</string>
+    <string name="pref_instant_mode_subtitle">Begynder at lytte, så snart du skifter til Parakeetype, f.eks. med mikrofontasten på et andet tastatur, og stopper, når du holder op med at tale. Tastaturet forbliver åbent, så du kan fortsætte med at redigere eller diktere.</string>
     <string name="pref_delete_title">Sletknap</string>
     <string name="pref_delete_subtitle">Hvad papirkurvsknappen på tastaturet sletter. \"Sidste sætning\" fjerner kun den seneste sætning før markøren, så et langt dokument aldrig slettes ved et uheld.</string>
     <string name="pref_delete_all">Al tekst</string>

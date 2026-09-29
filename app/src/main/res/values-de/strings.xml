@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Modell löschen</string>
     <string name="cd_status_error">Fehler</string>
     <string name="cd_talk_disabled">Sprechtaste deaktiviert – Engine nicht bereit</string>
-    <string name="cd_talk_recording_stopped">Aufnahme beendet - wird transkribiert</string>
     <string name="cd_talk_stop_continuous">Daueraufnahme beenden</string>
     <string name="cd_talk_tap_stop">Tippen, um die Aufnahme zu beenden</string>
     <string name="cd_talk_stop">Aufnahme beenden</string>
@@ -71,10 +70,8 @@
     <string name="pref_trigger_mode_subtitle">Wie die Sprachaufnahme gestartet und gestoppt wird.</string>
     <string name="pref_trigger_hold">Halten zum Sprechen</string>
     <string name="pref_trigger_tap_toggle">Tippen zum Umschalten</string>
-    <string name="pref_immediate_mode_title">Sofortmodus</string>
-    <string name="pref_immediate_mode_subtitle">Beginnt sofort zuzuhören, wenn du zu Parakeetype wechselst, z. B. mit
-        der Mikrofontaste einer anderen Tastatur. Sobald du aufhörst zu sprechen, wird der Text eingegeben und du kehrst zu
-        dieser Tastatur zurück.</string>
+    <string name="pref_instant_mode_title">Sofortmodus</string>
+    <string name="pref_instant_mode_subtitle">Beginnt sofort zuzuhören, wenn du zu Parakeetype wechselst, z. B. mit der Mikrofontaste einer anderen Tastatur, und hört auf, sobald du aufhörst zu sprechen. Die Tastatur bleibt geöffnet, sodass du weiter bearbeiten oder diktieren kannst.</string>
     <string name="pref_delete_title">Löschen-Button</string>
     <string name="pref_delete_subtitle">Was der Müll-Button auf der Tastatur löscht. \"Letzter Satz\" entfernt nur den
         letzten Satz vor dem Cursor, damit ein langes Dokument nie versehentlich gelöscht wird.

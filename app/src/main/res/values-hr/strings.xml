@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Izbriši model</string>
     <string name="cd_status_error">Pogreška</string>
     <string name="cd_talk_disabled">Gumb za govor onemogućen – modul nije spreman</string>
-    <string name="cd_talk_recording_stopped">Snimanje zaustavljeno – transkribiranje</string>
     <string name="cd_talk_stop_continuous">Zaustavi neprekidno snimanje</string>
     <string name="cd_talk_tap_stop">Dodirnite za zaustavljanje snimanja</string>
     <string name="cd_talk_stop">Zaustavi snimanje</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kako pokrenuti i zaustaviti snimanje glasa.</string>
     <string name="pref_trigger_hold">Držite za govor</string>
     <string name="pref_trigger_tap_toggle">Uključi/isključi dodirom</string>
-    <string name="pref_immediate_mode_title">Trenutačni način</string>
-    <string name="pref_immediate_mode_subtitle">Počinje slušati čim se prebacite na Parakeetype, npr. tipkom mikrofona druge tipkovnice. Kad prestanete govoriti, tekst se upisuje i vraćate se na tu tipkovnicu.</string>
+    <string name="pref_instant_mode_title">Trenutačni način</string>
+    <string name="pref_instant_mode_subtitle">Počinje slušati čim se prebacite na Parakeetype, npr. tipkom mikrofona druge tipkovnice, i prestaje kad prestanete govoriti. Tipkovnica ostaje otvorena pa možete nastaviti uređivati ili diktirati.</string>
     <string name="pref_delete_title">Gumb za brisanje</string>
     <string name="pref_delete_subtitle">Što briše gumb s kantom za smeće na tipkovnici. „Zadnja rečenica“ uklanja samo posljednju rečenicu ispred pokazivača, tako da dugačak dokument nikad ne izbrišete slučajno.</string>
     <string name="pref_delete_all">Sav tekst</string>

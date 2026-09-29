@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Изтриване на модела</string>
     <string name="cd_status_error">Грешка</string>
     <string name="cd_talk_disabled">Бутонът за запис е деактивиран – механизмът за разпознаване не е готов</string>
-    <string name="cd_talk_recording_stopped">Записът е спрян – транскрибиране</string>
     <string name="cd_talk_stop_continuous">Спиране на непрекъснатия запис</string>
     <string name="cd_talk_tap_stop">Докоснете, за да спрете записа</string>
     <string name="cd_talk_stop">Спиране на записа</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Как да се стартира и спира гласовият запис.</string>
     <string name="pref_trigger_hold">Задържане за говорене</string>
     <string name="pref_trigger_tap_toggle">Докосване за вкл./изкл.</string>
-    <string name="pref_immediate_mode_title">Незабавен режим</string>
-    <string name="pref_immediate_mode_subtitle">Започва да слуша веднага щом превключите към Parakeetype, напр. с клавиша за микрофон на друга клавиатура. Когато спрете да говорите, текстът се въвежда и се връщате към тази клавиатура.</string>
+    <string name="pref_instant_mode_title">Мигновен режим</string>
+    <string name="pref_instant_mode_subtitle">Започва да слуша веднага щом превключите към Parakeetype, напр. с клавиша за микрофон на друга клавиатура, и спира, когато спрете да говорите. Клавиатурата остава отворена, така че можете да продължите да редактирате или диктувате.</string>
     <string name="pref_delete_title">Бутон за изтриване</string>
     <string name="pref_delete_subtitle">Какво изтрива бутонът с кошче на клавиатурата. «Последно изречение» премахва само последното изречение преди курсора, така че дълъг документ никога да не бъде изтрит по невнимание.</string>
     <string name="pref_delete_all">Целият текст</string>

@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Kustuta mudel</string>
     <string name="cd_status_error">Viga</string>
     <string name="cd_talk_disabled">Rääkimisnupp on keelatud - mootor pole valmis</string>
-    <string name="cd_talk_recording_stopped">Salvestamine peatatud – transkribeerimine</string>
     <string name="cd_talk_stop_continuous">Peata pidev salvestamine</string>
     <string name="cd_talk_tap_stop">Puudutage salvestamise peatamiseks</string>
     <string name="cd_talk_stop">Peata salvestamine</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Kuidas häälsalvestust alustatakse ja peatatakse.</string>
     <string name="pref_trigger_hold">Hoidke all ja rääkige</string>
     <string name="pref_trigger_tap_toggle">Puudutage sisse/välja</string>
-    <string name="pref_immediate_mode_title">Kohene režiim</string>
-    <string name="pref_immediate_mode_subtitle">Hakkab kuulama kohe, kui lülitute ümber klaviatuurile Parakeetype, nt teise klaviatuuri mikrofoniklahviga. Kui lõpetate rääkimise, sisestatakse tekst ja lülitutakse tagasi sellele klaviatuurile.</string>
+    <string name="pref_instant_mode_title">Kohene režiim</string>
+    <string name="pref_instant_mode_subtitle">Hakkab kuulama kohe, kui lülitute ümber klaviatuurile Parakeetype, nt teise klaviatuuri mikrofoniklahviga, ja lõpetab, kui te enam ei räägi. Klaviatuur jääb avatuks, nii et saate jätkata muutmist või dikteerimist.</string>
     <string name="pref_delete_title">Kustutamisnupp</string>
     <string name="pref_delete_subtitle">Mida klaviatuuri prügikastinupp kustutab. „Viimane lause“ eemaldab ainult kursori ees oleva viimase lause, nii et pikka dokumenti ei kustutata kunagi kogemata.</string>
     <string name="pref_delete_all">Kogu tekst</string>

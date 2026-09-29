@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Διαγραφή μοντέλου</string>
     <string name="cd_status_error">Σφάλμα</string>
     <string name="cd_talk_disabled">Το κουμπί ομιλίας είναι απενεργοποιημένο – η μηχανή δεν είναι έτοιμη</string>
-    <string name="cd_talk_recording_stopped">Η εγγραφή σταμάτησε – μεταγραφή σε εξέλιξη</string>
     <string name="cd_talk_stop_continuous">Διακοπή συνεχούς εγγραφής</string>
     <string name="cd_talk_tap_stop">Πατήστε για διακοπή της εγγραφής</string>
     <string name="cd_talk_stop">Διακοπή εγγραφής</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Πώς ξεκινά και σταματά η φωνητική εγγραφή.</string>
     <string name="pref_trigger_hold">Κρατήστε πατημένο για ομιλία</string>
     <string name="pref_trigger_tap_toggle">Πάτημα για εναλλαγή</string>
-    <string name="pref_immediate_mode_title">Άμεση λειτουργία</string>
-    <string name="pref_immediate_mode_subtitle">Ξεκινά να ακούει μόλις μεταβείτε στο Parakeetype, π.χ. με το πλήκτρο μικροφώνου άλλου πληκτρολογίου. Μόλις σταματήσετε να μιλάτε, το κείμενο πληκτρολογείται και επιστρέφετε σε εκείνο το πληκτρολόγιο.</string>
+    <string name="pref_instant_mode_title">Άμεση λειτουργία</string>
+    <string name="pref_instant_mode_subtitle">Ξεκινά να ακούει μόλις μεταβείτε στο Parakeetype, π.χ. με το πλήκτρο μικροφώνου άλλου πληκτρολογίου, και σταματά μόλις σταματήσετε να μιλάτε. Το πληκτρολόγιο παραμένει ανοιχτό, ώστε να συνεχίσετε την επεξεργασία ή την υπαγόρευση.</string>
     <string name="pref_delete_title">Κουμπί διαγραφής</string>
     <string name="pref_delete_subtitle">Τι διαγράφει το κουμπί κάδου στο πληκτρολόγιο. Η επιλογή «Τελευταία πρόταση» αφαιρεί μόνο την πιο πρόσφατη πρόταση πριν από τον δρομέα, ώστε ένα μεγάλο έγγραφο να μη διαγράφεται ποτέ κατά λάθος.</string>
     <string name="pref_delete_all">Όλο το κείμενο</string>

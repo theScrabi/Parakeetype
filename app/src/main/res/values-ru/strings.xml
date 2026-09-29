@@ -38,7 +38,6 @@
     <string name="cd_delete_model">Удалить модель</string>
     <string name="cd_status_error">Ошибка</string>
     <string name="cd_talk_disabled">Кнопка записи отключена – движок не готов</string>
-    <string name="cd_talk_recording_stopped">Запись остановлена – идёт расшифровка</string>
     <string name="cd_talk_stop_continuous">Остановить непрерывную запись</string>
     <string name="cd_talk_tap_stop">Нажмите, чтобы остановить запись</string>
     <string name="cd_talk_stop">Остановить запись</string>
@@ -69,8 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Как начинать и останавливать голосовую запись.</string>
     <string name="pref_trigger_hold">Удерживать и говорить</string>
     <string name="pref_trigger_tap_toggle">Включать нажатием</string>
-    <string name="pref_immediate_mode_title">Мгновенный режим</string>
-    <string name="pref_immediate_mode_subtitle">Начинает слушать сразу после переключения на Parakeetype, например клавишей микрофона другой клавиатуры. Когда вы замолкаете, текст вводится и происходит возврат к той клавиатуре.</string>
+    <string name="pref_instant_mode_title">Мгновенный режим</string>
+    <string name="pref_instant_mode_subtitle">Начинает слушать сразу после переключения на Parakeetype, например клавишей микрофона другой клавиатуры, и останавливается, когда вы замолкаете. Клавиатура остаётся открытой, так что можно продолжить редактировать или диктовать.</string>
     <string name="pref_delete_title">Кнопка удаления</string>
     <string name="pref_delete_subtitle">Что удаляет кнопка с корзиной на клавиатуре. «Последнее предложение» удаляет только последнее предложение перед курсором, поэтому длинный документ никогда не будет стёрт случайно.</string>
     <string name="pref_delete_all">Весь текст</string>
