@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Parakeetype</string>
     <string name="service_name">Parakeetype Speech Recognition</string>
-    <string name="subtype_en">English (US) - Voice</string>
-    <string name="subtype_de">German (DE) - Voice</string>
+    <string name="subtype_voice">Parakeetype Voice Input</string>
 
     <!-- Navigation titles -->
     <string name="nav_title_model">Install Model</string>

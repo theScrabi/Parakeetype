@@ -2,18 +2,14 @@
 <input-method xmlns:android="http://schemas.android.com/apk/res/android"
               android:settingsActivity="org.schabi.parakeetype.settings.SettingsActivity">
 
-    <!-- English subtype – default for all non-German locales (French, Spanish, etc.) -->
+    <!-- Single language-less voice subtype: the model picks the language (Parakeet detects it,
+         Whisper uses the keyboard's LanguageSelector), so per-locale subtypes would only list the
+         keyboard once per language in the system picker. Not auxiliary — Parakeetype is used as
+         a main keyboard, and auxiliary subtypes are skipped when switching to the next IME. -->
     <subtype
-            android:label="@string/subtype_en"
-            android:imeSubtypeLocale="en_US"
+            android:label="@string/subtype_voice"
+            android:imeSubtypeLocale=""
             android:imeSubtypeMode="voice"
-            android:isDefault="true"/>
-
-    <!-- German subtype – selected when device locale is German -->
-    <subtype
-            android:label="@string/subtype_de"
-            android:imeSubtypeLocale="de_DE"
-            android:imeSubtypeMode="voice"/>
+            android:overridesImplicitlyEnabledSubtype="true"/>
 
 </input-method>
-
