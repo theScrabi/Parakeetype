@@ -484,9 +484,9 @@ AudioCaptureManager builds its AudioRecord with AudioRecord.Builder.setContext(c
 
 ## 13. Build Configuration and ABI Splits
 
-- compileSdk 36, minSdk 31 (Android 12+), targetSdk 36
-- versionCode 11, versionName 0.3.1
-- Kotlin 2.3.20, AGP 8.13.2, JVM target 11
+- compileSdk 37, minSdk 31 (Android 12+), targetSdk 37
+- versionCode 12, versionName 0.4.0
+- Kotlin 2.4.20, AGP 9.4.1, JVM target 11
 - buildFeatures: compose = true, buildConfig = true
 - Release: isMinifyEnabled = true, isShrinkResources = true, ProGuard enabled
 

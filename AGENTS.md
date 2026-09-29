@@ -13,7 +13,7 @@ Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No c
 
 **Never access a physical phone — emulator only.** Do not run `adb` (install, logcat, shell, dumpsys, …) or `connectedAndroidTest` against a physical device, even if one is connected. For on-device debugging, use an emulator and target it explicitly, e.g. `adb -s emulator-5554 …`. **Do not start the emulator yourself — ask the user to spawn it** (it cannot be launched from the agent sandbox) and wait until `adb devices` lists it.
 
-Target SDK 36, min SDK 31 (Android 12 — required by Material You dynamic colour in `ParakeetypeTheme`), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
+Target SDK 37, min SDK 31 (Android 12 — required by Material You dynamic colour in `ParakeetypeTheme`), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
 
 ## Package Structure
 
@@ -111,19 +111,28 @@ Also update `how-to-release.txt` — change the tag command to use the new versi
 git tag v0.x.y && git push origin v0.x.y
 ```
 
-Also update `metadata/org.schabi.parakeetype.yml`:
+Also update `metadata/org.schabi.parakeetype.yml` (a copy of the entry in F-Droid's fdroiddata repo; F-Droid's checkupdates bot updates fdroiddata itself from the new tag):
 
 - Set `CurrentVersion` to the new `versionName`.
-- Set `CurrentVersionCode` to the new `versionCode`.
-- Append a new entry to the `Builds:` list:
+- Set `CurrentVersionCode` to the arm64 split's code (`versionCode * 10 + 2`).
+- Replace the two `Builds:` entries (one per ABI split) with the new version:
 
 ```yaml
-  - versionName: '0.x.y'
-    versionCode: <N>
+  - versionName: 0.x.y
+    versionCode: <N * 10 + 1>
     commit: v0.x.y
     subdir: app
     gradle:
-      - release
+      - yes
+    output: build/outputs/apk/release/app-armeabi-v7a-release-unsigned.apk
+
+  - versionName: 0.x.y
+    versionCode: <N * 10 + 2>
+    commit: v0.x.y
+    subdir: app
+    gradle:
+      - yes
+    output: build/outputs/apk/release/app-arm64-v8a-release-unsigned.apk
 ```
 
 ### 2. Write the fastlane changelog
@@ -131,7 +140,7 @@ Also update `metadata/org.schabi.parakeetype.yml`:
 Create `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt`.
 
 - File name is the plain integer `versionCode` (e.g. `8.txt` for versionCode 8).
-- First line: `Nth patch (vX.Y.Z).` — keep phrasing consistent with previous entries.
+- First line: `Nth patch (vX.Y.Z).` (or `… release (vX.Y.Z).` for a MAJOR bump) — keep phrasing consistent with previous entries.
 - Blank line, then a plain-English description of what changed. Focus on user-visible changes; skip internal refactors unless they fix something the user would notice.
 - Keep it under ~500 characters — app stores truncate long changelogs.
 

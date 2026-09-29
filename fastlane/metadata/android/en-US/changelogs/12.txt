@@ -1,0 +1,3 @@
+First Parakeetype release (v0.4.0).
+
+Outspoke is now Parakeetype, with a new icon and a leaner keyboard. The app has no network access: download the model once in your browser and import it. It also works as the system speech recognizer for other apps. The model stays loaded by default. New: local crash reports, left/right docking, key vibration, and 25 UI languages. Word suggestions were removed.
