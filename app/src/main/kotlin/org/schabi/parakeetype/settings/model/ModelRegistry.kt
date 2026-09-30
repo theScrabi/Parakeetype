@@ -1,15 +1,12 @@
 package org.schabi.parakeetype.settings.model
 
 /**
- * The pinned release that hosts the single-file model archives. The app itself never
- * contacts it (it has no INTERNET permission) - the URL is only handed to the user's
- * browser. Build the archive with `devtools/package-model.sh`.
- *
- * TODO(placeholder): no model archive is hosted yet. Upload the archive as a release asset
- * and replace this URL; until then "Download in browser" leads to a placeholder page.
+ * The pinned release page that hosts the single-file model archives as release assets.
+ * The app itself never contacts it (it has no INTERNET permission) - the URL is only
+ * handed to the user's browser. Build the archive with `devtools/package-model.sh`.
  */
 private const val MODEL_ARCHIVE_RELEASE =
-    "https://example.com/TODO-parakeetype-model-archive"
+    "https://github.com/theScrabi/Parakeetype/releases/tag/v0.4"
 
 /**
  * One file of an installed model.
@@ -71,7 +68,7 @@ private val parakeetV3 = ModelInfo(
             "Very fast and compact - the recommended choice for most devices.",
     approximateSizeMb = 700,
     // Built from https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx by devtools/package-model.sh.
-    archiveUrl = "$MODEL_ARCHIVE_RELEASE/parakeet-tdt-0.6b-v3-int8.zip",
+    archiveUrl = MODEL_ARCHIVE_RELEASE,
     files = listOf(
         ModelFile("encoder-model.int8.onnx", "6139d2fa7e1b086097b277c7149725edbab89cc7c7ae64b23c741be4055aff09"),
         ModelFile("decoder_joint-model.int8.onnx", "eea7483ee3d1a30375daedc8ed83e3960c91b098812127a0d99d1c8977667a70"),

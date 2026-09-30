@@ -14,8 +14,8 @@
 # licence text) and NOTICE.txt (creator, source, changes) from devtools/licenses/.
 # ModelImporter skips entries that are not model files.
 #
-# Upload the result as a release asset and point MODEL_ARCHIVE_RELEASE in ModelRegistry.kt
-# at it (currently a TODO placeholder: no archive is hosted yet).
+# Upload the result as a release asset of the release MODEL_ARCHIVE_RELEASE in
+# ModelRegistry.kt points at (https://github.com/theScrabi/Parakeetype/releases/tag/v0.4).
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

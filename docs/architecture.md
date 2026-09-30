@@ -355,7 +355,7 @@ If all three layers fail, the entire partial is returned as new content (alignme
 
 ### Install flow (no network access)
 
-1. The model screen's *Download in browser* button opens ModelInfo.archiveUrl (a pinned release asset built by devtools/package-model.sh from the Hugging Face files; MODEL_ARCHIVE_RELEASE is still a TODO placeholder) with ACTION_VIEW; the browser downloads the single ZIP.
+1. The model screen's *Download in browser* button opens ModelInfo.archiveUrl (the pinned release page MODEL_ARCHIVE_RELEASE, https://github.com/theScrabi/Parakeetype/releases/tag/v0.4, which hosts the archive built by devtools/package-model.sh from the Hugging Face files) with ACTION_VIEW; the browser downloads the single ZIP.
 2. *Import model file* opens the SAF picker; the user selects the archive.
 3. ModelImporter streams the ZIP once: entries whose file name (directories ignored) matches a ModelFile are written to models/.import-<storageDirName>/ while their SHA-256 is computed.
 4. Any checksum mismatch, missing file, or non-ZIP input aborts and deletes the staging directory; the previous state is untouched.
