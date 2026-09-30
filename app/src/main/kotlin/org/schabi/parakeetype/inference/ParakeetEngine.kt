@@ -146,6 +146,38 @@ interface ChunkStreamingEngine {
 }
 
 /**
+ * Converts token IDs to a string using [vocabulary], handling SentencePiece word-boundary
+ * markers (U+2581 `▁`).
+ *
+ * Digits are single-character tokens without a marker (`"0"` … `"9"`); a number that
+ * starts a new word is preceded by the bare marker token `"▁"`, so "in 2025" decodes as
+ * `▁in ▁ 2 0 2 5`. The bare marker therefore only contributes the word-boundary space.
+ * Blank and control tokens (`<unk>`, `<pad>`, `<|…|>`) are skipped.
+ *
+ * A post-processing pass removes spaces before punctuation and collapses double spaces.
+ */
+internal fun detokenizeSentencePiece(tokenIds: List<Int>, vocabulary: Array<String>, blankId: Int): String {
+    if (tokenIds.isEmpty()) return ""
+    val raw = buildString {
+        for (id in tokenIds) {
+            if (id < 0 || id >= vocabulary.size || id == blankId) continue
+            val token = vocabulary[id]
+            if (token.startsWith("<") && token.endsWith(">")) continue
+            if (token.startsWith("▁")) {
+                if (isNotEmpty()) append(' ')
+                append(token, 1, token.length)
+            } else {
+                append(token)
+            }
+        }
+    }
+    return raw
+        .replace(Regex(" ([.,!?;:])"), "$1")
+        .replace(Regex(" {2,}"), " ")
+        .trim()
+}
+
+/**
  * Result of a streaming [ChunkStreamingEngine.decodeChunk]: the chunk's token IDs, the
  * updated [TdtState], and the chunk's confidence accumulators.
  *
@@ -698,52 +730,9 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
     private fun OnnxTensor.toFloatArray(): FloatArray =
         FloatArray(floatBuffer.remaining()).also { floatBuffer.get(it) }
 
-    /**
-     * Converts token IDs to a string using [vocabulary].
-     * Handles SentencePiece word-boundary markers (U+2581 `▁`).
-     *
-     * NeMo SentencePiece exports fill unused vocabulary slots with their own index as
-     * the token string (e.g. `"7883"`, `"▁1980ess"`, `"▁7880over"`). We handle these
-     * by stripping any leading digit run from the bare token and using only the
-     * alphabetic/punctuation suffix:
-     *   - `"7865"`    → effective = ""     → skip entirely
-     *   - `"▁3402a"`  → effective = "a"    → emit with word-boundary space
-     *   - `"▁7880over"` → effective = "over" → emit with word-boundary space
-     *   - `"1980ess"` → effective = "ess"  → append directly (no space; continues prev word)
-     *
-     * A post-processing pass collapses any double-spaces that arise from removed
-     * digit-only tokens and moves spaces that ended up before punctuation.
-     */
-    private fun detokenize(tokenIds: List<Int>): String {
-        if (tokenIds.isEmpty()) return ""
-        val raw = buildString {
-            for (id in tokenIds) {
-                if (id < 0 || id >= vocabulary.size || id == blankId) continue
-                val token = vocabulary[id]
-                // Remove the SentencePiece word-boundary marker before processing.
-                val bare = token.removePrefix("▁")
-                // Strip any leading digit run - NeMo fills unused slots with their index
-                // (e.g. "▁1980ess" → bare = "1980ess" → effective = "ess").
-                // If nothing meaningful remains after stripping, skip the token entirely.
-                val effective = bare.dropWhile { it.isDigit() }
-                if (effective.isBlank()) continue
-                when {
-                    token.startsWith("▁") -> {
-                        if (isNotEmpty()) append(' ')
-                        append(effective)
-                    }
-
-                    else -> append(effective)
-                }
-            }
-        }
-        // Post-process: remove spaces that ended up before punctuation (artifact of
-        // digit-only tokens being dropped mid-sequence) and collapse any double-spaces.
-        return raw
-            .replace(Regex(" ([.,!?;:])"), "$1")
-            .replace(Regex(" {2,}"), " ")
-            .trim()
-    }
+    /** Converts token IDs to a string using [vocabulary]; see [detokenizeSentencePiece]. */
+    private fun detokenize(tokenIds: List<Int>): String =
+        detokenizeSentencePiece(tokenIds, vocabulary, blankId)
 
     /**
      * Copies [source]'s float data into a new [OnnxTensor] so that the parent

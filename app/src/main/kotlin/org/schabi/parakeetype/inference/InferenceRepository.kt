@@ -570,7 +570,10 @@ internal fun String.applySentenceCapitalization(
             builder.append(c)
         }
 
-        if (c == '.') {
+        // A period between two digits is a decimal separator ("3.5 units"), not a sentence end.
+        val isDecimalPoint = c == '.' && i > 0 && text[i - 1].isDigit() &&
+                i + 1 < text.length && text[i + 1].isDigit()
+        if (c == '.' && !isDecimalPoint) {
             capitalizeNext = true
             capitalizeTriggeredByPeriod = true
         } else if (c == '!' || c == '?') {
