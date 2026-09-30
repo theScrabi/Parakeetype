@@ -6,65 +6,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-)
+/**
+ * Material You colour scheme derived from the system (wallpaper) palette, following the system
+ * dark/light mode. Always available: min SDK is 31. Shared by the keyboard, the companion app
+ * and the voice-input sheet so all three look the same.
+ */
+@Composable
+private fun systemColorScheme(): ColorScheme {
+    val context = LocalContext.current
+    return if (isSystemInDarkTheme()) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+}
 
 @Composable
-fun ParakeetypeTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
-) {
-    val colorScheme = when {
-        dynamicColor -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
+fun ParakeetypeTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = systemColorScheme(),
         typography = Typography,
         content = content
     )
 }
 
-// Keyboard colour schemes - one for each system theme setting.
-private val KeyboardDarkColorScheme = darkColorScheme(
-    background = KeyboardBackground,
-    onBackground = KeyboardOnSurface,
-    surface = KeyboardSurface,
-    onSurface = KeyboardOnSurface,
-    surfaceVariant = KeyboardSurfaceVariant,
-    onSurfaceVariant = KeyboardOnSurfaceVariant,
-    // error / errorContainer: Material 3 baseline defaults (no Material 2 override).
-)
-
-private val KeyboardLightColorScheme = lightColorScheme(
-    background = KeyboardLightBackground,
-    onBackground = KeyboardLightOnSurface,
-    surface = KeyboardLightSurface,
-    onSurface = KeyboardLightOnSurface,
-    surfaceVariant = KeyboardLightSurfaceVariant,
-    onSurfaceVariant = KeyboardLightOnSurfaceVariant,
-    // error / errorContainer: Material 3 baseline defaults (no Material 2 override).
-)
-
 /**
- * Theme wrapper for the keyboard UI. Follows the system dark/light mode setting so the
- * keyboard blends naturally on both dark and light-themed devices.
+ * Theme wrapper for the keyboard UI: the same system colours as [ParakeetypeTheme].
  *
  * Also provides [LocalContentColor]: the keyboard is drawn on a plain background, not a
  * [Surface], so nothing else sets it and it would stay at its default (black). Ripples and
@@ -73,7 +36,7 @@ private val KeyboardLightColorScheme = lightColorScheme(
  */
 @Composable
 fun ParakeetypeKeyboardTheme(content: @Composable () -> Unit) {
-    val colorScheme = if (isSystemInDarkTheme()) KeyboardDarkColorScheme else KeyboardLightColorScheme
+    val colorScheme = systemColorScheme()
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
@@ -81,7 +44,3 @@ fun ParakeetypeKeyboardTheme(content: @Composable () -> Unit) {
         CompositionLocalProvider(LocalContentColor provides colorScheme.onBackground, content = content)
     }
 }
-
-
-
-

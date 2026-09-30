@@ -13,7 +13,7 @@ Android IME (keyboard) that does on-device speech-to-text via ONNX Runtime. No c
 
 **Never access a physical phone — emulator only.** Do not run `adb` (install, logcat, shell, dumpsys, …) or `connectedAndroidTest` against a physical device, even if one is connected. For on-device debugging, use an emulator and target it explicitly, e.g. `adb -s emulator-5554 …`. **Do not start the emulator yourself — ask the user to spawn it** (it cannot be launched from the agent sandbox) and wait until `adb devices` lists it.
 
-Target SDK 37, min SDK 31 (Android 12 — required by Material You dynamic colour in `ParakeetypeTheme`), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
+Target SDK 37, min SDK 31 (Android 12 — required by Material You dynamic colour, which `ParakeetypeTheme` and `ParakeetypeKeyboardTheme` share so the app, the voice-input sheet and the keyboard all use the system palette), JDK 11, Kotlin official code style (`kotlin.code.style=official`).
 
 ## Package Structure
 
