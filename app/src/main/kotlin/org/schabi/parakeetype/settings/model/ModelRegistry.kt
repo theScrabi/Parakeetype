@@ -52,7 +52,7 @@ object ModelRegistry {
 
     //    val all: List<ModelInfo> = listOf(parakeetV3, voxtralMini, whisperLargeV3Turbo)
     val all: List<ModelInfo> =
-        listOf(parakeetV3) // for now removed voxtralMini and whisperLargeV3Turbo as I could not get it to run on-device within reasonable resource limits
+        listOf(parakeetV3, parakeetUltra) // for now removed voxtralMini and whisperLargeV3Turbo as I could not get it to run on-device within reasonable resource limits
 
     private val byId: Map<ModelId, ModelInfo> = all.associateBy { it.id }
 
@@ -74,6 +74,25 @@ private val parakeetV3 = ModelInfo(
         ModelFile("decoder_joint-model.int8.onnx", "eea7483ee3d1a30375daedc8ed83e3960c91b098812127a0d99d1c8977667a70"),
         ModelFile("nemo128.onnx", "a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"),
         ModelFile("config.json", "666903c76b9798caf2c210afd4f6cd60b08a8dbf9800ec8d7a3bc0d2148ac466"),
+        ModelFile("vocab.txt", "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"),
+    ),
+)
+
+// Experimental: Moondream's further-trained Parakeet TDT 0.6B v3 in the sherpa-onnx layout
+// (separate decoder / joiner, 640-dim encoder output); ParakeetEngine detects the layout.
+private val parakeetUltra = ModelInfo(
+    id = ModelId.PARAKEET_ULTRA,
+    displayName = "Parakeet Ultra (Experimental)",
+    description = "Parakeet-V3 further trained by Moondream: lower word error rate, especially " +
+            "with background noise, in the same 25 languages. Same size and speed as Parakeet-V3.",
+    approximateSizeMb = 630,
+    // Built from https://huggingface.co/mldecode/parakeet-ultra-onnx-int8 by devtools/package-ultra-model.sh.
+    archiveUrl = MODEL_ARCHIVE_RELEASE,
+    files = listOf(
+        ModelFile("encoder.int8.onnx", "181382735a719c75076d13658dc4418de4b566aef39935ca0f8f55da16928f4e"),
+        ModelFile("decoder.int8.onnx", "0ba8ace2de04bb2d9a6b20ed2d67138c23df4a385f268438df0ff200502de77a"),
+        ModelFile("joiner.int8.onnx", "20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"),
+        ModelFile("nemo128.onnx", "a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"),
         ModelFile("vocab.txt", "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"),
     ),
 )

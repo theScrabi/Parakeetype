@@ -1,5 +1,6 @@
 package org.schabi.parakeetype.inference
 
+import ai.onnxruntime.OnnxJavaType
 import ai.onnxruntime.OnnxTensor
 import ai.onnxruntime.OrtEnvironment
 import ai.onnxruntime.OrtSession
@@ -14,6 +15,8 @@ import java.nio.LongBuffer
 
 private const val TAG = "ParakeetEngine"
 private const val FALLBACK_BLANK_ID = 1024
+/** Shape of the decoder LSTM hidden / cell state: [layers=2, batch=1, 640]. */
+private val LSTM_STATE_SHAPE = longArrayOf(2L, 1L, 640L)
 
 /**
  * Output of [ParakeetEngine.greedyDecode]: the decoded text plus a per-token geometric-mean
@@ -91,7 +94,47 @@ private object Names {
     //   1 → "prednet_lengths" INT32 [-1]
     //   2 → "output_states_1" FLOAT [2,-1, 640]
     //   3 → "output_states_2" FLOAT [2,-1, 640]
+
+    // Split (sherpa-onnx) layout, e.g. Parakeet Ultra: same encoder names, but the encoder
+    // emits 640-dim frames and INT32 lengths, and the prediction and joint networks are
+    // separate models.
+    // decoder.int8.onnx
+    const val PRED_IN_TARGETS = "targets"          // INT32 [-1, 1]
+    const val PRED_IN_TARGET_LEN = "target_lengths" // INT32 [-1]
+    const val PRED_IN_H = "h"                      // FLOAT [2, -1, 640]
+    const val PRED_IN_C = "c"                      // FLOAT [2, -1, 640]
+    // Outputs accessed by index: 0 → decoder_out [-1, 640, 1], 2 → h_next, 3 → c_next
+    // joiner.int8.onnx
+    const val JOIN_IN_ENC_OUT = "encoder_out"      // FLOAT [-1, 640, 1]
+    const val JOIN_IN_DEC_OUT = "decoder_out"      // FLOAT [-1, 640, 1]
+    // Output 0 → logits FLOAT [-1, 1, 1, 8198]
 }
+
+/** File names of the fused (istupakov) and split (sherpa-onnx) Parakeet ONNX layouts. */
+private object Files {
+    const val FUSED_ENCODER = "encoder-model.int8.onnx"
+    const val FUSED_DECODER_JOINT = "decoder_joint-model.int8.onnx"
+    const val SPLIT_ENCODER = "encoder.int8.onnx"
+    const val SPLIT_DECODER = "decoder.int8.onnx"
+    const val SPLIT_JOINER = "joiner.int8.onnx"
+}
+
+/** One joint evaluation: the logits and the LSTM state after consuming the previous token. */
+private class JointStep(val logits: FloatArray, val state1: FloatArray, val state2: FloatArray)
+
+/**
+ * The prediction network's output for [token] fed with the LSTM state ([inState1],
+ * [inState2]) - cached by the split layout so blank runs, which neither change the token
+ * nor the state, re-run only the joiner.
+ */
+private class PredictorOutput(
+    val token: Int,
+    val inState1: FloatArray,
+    val inState2: FloatArray,
+    val decoderOut: FloatArray,
+    val state1: FloatArray,
+    val state2: FloatArray,
+)
 
 /**
  * The stateful decode primitives the [InferenceRepository] chunked-TDT streaming path
@@ -140,7 +183,11 @@ data class ChunkDecodeResult(
 )
 
 /**
- * Wraps the three Parakeet-V3 ONNX sessions.
+ * Wraps the Parakeet ONNX sessions. Two layouts are supported, detected from the files in
+ * the model directory:
+ *  - fused (Parakeet-V3, istupakov export): `encoder-model` + `decoder_joint-model`;
+ *  - split (Parakeet Ultra, sherpa-onnx export): `encoder` + `decoder` + `joiner`.
+ * Both use nemo128.onnx and vocab.txt.
  *
  * Pipeline (all tensor names verified from device logcat):
  *  1. Normalise PCM  →  float32 in [-1, 1]
@@ -154,7 +201,10 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
     private var env: OrtEnvironment? = null
     private var prepSession: OrtSession? = null
     private var encSession: OrtSession? = null
+    /** `decoder_joint` in the fused layout, the prediction network (`decoder`) in the split one. */
     private var decSession: OrtSession? = null
+    /** The joint network (`joiner`); only set in the split layout. */
+    private var joinSession: OrtSession? = null
 
     private var vocabulary: Array<String> = emptyArray()
     private var blankId: Int = FALLBACK_BLANK_ID
@@ -225,13 +275,19 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             Log.w(TAG, "nemo128.onnx absent - will forward raw audio to encoder (shapes will mismatch)")
         }
 
-        encSession = e.createSession(File(modelDir, "encoder-model.int8.onnx").absolutePath, opts)
-        logSession("encoder", encSession!!)
-
-        decSession = e.createSession(
-            File(modelDir, "decoder_joint-model.int8.onnx").absolutePath, opts
-        )
-        logSession("decoder_joint", decSession!!)
+        if (File(modelDir, Files.SPLIT_DECODER).exists()) {
+            encSession = e.createSession(File(modelDir, Files.SPLIT_ENCODER).absolutePath, opts)
+            logSession("encoder", encSession!!)
+            decSession = e.createSession(File(modelDir, Files.SPLIT_DECODER).absolutePath, opts)
+            logSession("decoder", decSession!!)
+            joinSession = e.createSession(File(modelDir, Files.SPLIT_JOINER).absolutePath, opts)
+            logSession("joiner", joinSession!!)
+        } else {
+            encSession = e.createSession(File(modelDir, Files.FUSED_ENCODER).absolutePath, opts)
+            logSession("encoder", encSession!!)
+            decSession = e.createSession(File(modelDir, Files.FUSED_DECODER_JOINT).absolutePath, opts)
+            logSession("decoder_joint", decSession!!)
+        }
 
         // vocab.txt format: "<token_text> <id>" (e.g. "▁like 2656").
         // Lines are in ID order so line N = token ID N - we just need the first field.
@@ -254,9 +310,9 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         val blankLabel = vocabulary.getOrNull(blankId) ?: "<out-of-range>"
         Log.d(TAG, "Blank id: $blankId  ('$blankLabel')")
 
-        // Derive numDurations from the decoder's first output dimension
-        val decOutNames = decSession!!.outputNames.toList()
-        val jointOutInfo = decSession!!.outputInfo[decOutNames[0]]
+        // Derive numDurations from the joint's first output dimension
+        val jointSession = joinSession ?: decSession!!
+        val jointOutInfo = jointSession.outputInfo[jointSession.outputNames.first()]
         val jointDim = (jointOutInfo?.info as? ai.onnxruntime.TensorInfo)?.shape?.last()?.toInt() ?: 0
         numDurations = if (jointDim > blankId + 1) jointDim - (blankId + 1) else 0
         Log.d(TAG, "Joint output dim: $jointDim  numDurations: $numDurations")
@@ -374,6 +430,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         prepSession?.close(); prepSession = null
         encSession?.close(); encSession = null
         decSession?.close(); decSession = null
+        joinSession?.close(); joinSession = null
         env?.close(); env = null
         isLoaded = false
         Log.d(TAG, "ParakeetEngine closed")
@@ -446,7 +503,8 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             val lenOut = result.get(Names.ENC_OUT_LEN)
                 .orElseThrow { RuntimeException("Encoder output '${Names.ENC_OUT_LEN}' not found") }
                     as OnnxTensor
-            val encLen = lenOut.longBuffer[0].toInt()
+            // INT64 in the fused export, INT32 in the split one
+            val encLen = if (lenOut.info.type == OnnxJavaType.INT32) lenOut.intBuffer[0] else lenOut.longBuffer[0].toInt()
             cloneTensor(env, outTensor) to encLen
         }
     }
@@ -487,7 +545,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
     ): DecodeRangeResult {
         // Encoder layout: [1, D, T]
         val encShape = encoderOut.info.shape
-        val encDim = encShape[1].toInt()   // D = 1024
+        val encDim = encShape[1].toInt()   // D = 1024 (fused) / 640 (split)
 
         val encData = FloatArray(encoderOut.floatBuffer.remaining())
         encoderOut.floatBuffer.rewind()
@@ -496,11 +554,11 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         // LSTM state buffers: [2, 1, 640] = 1280 floats. Seeded from the carried
         // [state] (zero + SOS for a fresh start) so streaming chunks continue where the
         // previous chunk left off.
-        val stateShape = longArrayOf(2L, 1L, 640L)
         var lstmState1 = state.lstmState1.copyOf()
         var lstmState2 = state.lstmState2.copyOf()
 
-        val decOutputNames = session.outputNames.toList()
+        // Split layout: the prediction network's output for the current token and state.
+        var predictor: PredictorOutput? = null
 
         val hypothesis = mutableListOf<Int>()
         // Per-token log-softmax accumulators for confidence scoring. Softmax is computed
@@ -529,34 +587,19 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             val frameTensor = OnnxTensor.createTensor(
                 env, FloatBuffer.wrap(frameData), longArrayOf(1L, encDim.toLong(), 1L)
             )
-            // targets and target_length are INT32 (verified from logcat)
-            val targetTensor = OnnxTensor.createTensor(
-                env, IntBuffer.wrap(intArrayOf(prevToken)), longArrayOf(1L, 1L)
-            )
-            val targetLenTensor = OnnxTensor.createTensor(
-                env, IntBuffer.wrap(intArrayOf(1)), longArrayOf(1L)
-            )
-            val statesTensor1 = OnnxTensor.createTensor(
-                env, FloatBuffer.wrap(lstmState1), stateShape
-            )
-            val statesTensor2 = OnnxTensor.createTensor(
-                env, FloatBuffer.wrap(lstmState2), stateShape
-            )
-
-            val inputs = mapOf(
-                Names.DEC_IN_ENC_OUT to frameTensor,
-                Names.DEC_IN_TARGETS to targetTensor,
-                Names.DEC_IN_TARGET_LEN to targetLenTensor,
-                Names.DEC_IN_STATES_1 to statesTensor1,
-                Names.DEC_IN_STATES_2 to statesTensor2,
-            )
-
             try {
-                session.run(inputs).use { result ->
-                    // Joint logits: [1, 1, 1, 8198] → flat array of 8198 floats
-                    val logitsTensor = result.get(decOutputNames[0]).get() as OnnxTensor
-                    val logits = FloatArray(logitsTensor.floatBuffer.remaining())
-                    logitsTensor.floatBuffer.get(logits)
+                val result = if (joinSession != null) {
+                    val cached = predictor?.takeIf {
+                        it.token == prevToken && it.inState1 === lstmState1 && it.inState2 === lstmState2
+                    }
+                    val pred = cached ?: runPredictor(env, session, prevToken, lstmState1, lstmState2)
+                    predictor = pred
+                    JointStep(runJoiner(env, frameTensor, pred.decoderOut), pred.state1, pred.state2)
+                } else {
+                    runDecoderJoint(env, session, frameTensor, prevToken, lstmState1, lstmState2)
+                }
+                run {
+                    val logits = result.logits
 
                     // Token: argmax over [0..blankId] (inclusive)
                     val predictedToken = (0..blankId).maxByOrNull { logits[it] } ?: blankId
@@ -588,14 +631,8 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
                     // context across blanks. Updating on every step (including blank) lets a
                     // low-margin short word collapse into a degenerate period loop.
                     if (predictedToken != blankId) {
-                        if (decOutputNames.size > 2) {
-                            val s1 = result.get(decOutputNames[2]).get() as OnnxTensor
-                            lstmState1 = FloatArray(s1.floatBuffer.remaining()).also { s1.floatBuffer.get(it) }
-                        }
-                        if (decOutputNames.size > 3) {
-                            val s2 = result.get(decOutputNames[3]).get() as OnnxTensor
-                            lstmState2 = FloatArray(s2.floatBuffer.remaining()).also { s2.floatBuffer.get(it) }
-                        }
+                        lstmState1 = result.state1
+                        lstmState2 = result.state2
                     }
 
                     // TDT advance rule
@@ -621,10 +658,6 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
                 }
             } finally {
                 frameTensor.close()
-                targetTensor.close()
-                targetLenTensor.close()
-                statesTensor1.close()
-                statesTensor2.close()
             }
         }
 
@@ -649,6 +682,105 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             nonBlankEmissions,
         )
     }
+
+    /**
+     * Runs the fused `decoder_joint` on one encoder frame: the joint logits and the LSTM
+     * state after consuming [prevToken] (the input state when the model has no state
+     * outputs).
+     */
+    private fun runDecoderJoint(
+        env: OrtEnvironment,
+        session: OrtSession,
+        frameTensor: OnnxTensor,
+        prevToken: Int,
+        state1: FloatArray,
+        state2: FloatArray,
+    ): JointStep {
+        val outputNames = session.outputNames.toList()
+        // targets and target_length are INT32 (verified from logcat)
+        val targetTensor = OnnxTensor.createTensor(env, IntBuffer.wrap(intArrayOf(prevToken)), longArrayOf(1L, 1L))
+        val targetLenTensor = OnnxTensor.createTensor(env, IntBuffer.wrap(intArrayOf(1)), longArrayOf(1L))
+        val statesTensor1 = OnnxTensor.createTensor(env, FloatBuffer.wrap(state1), LSTM_STATE_SHAPE)
+        val statesTensor2 = OnnxTensor.createTensor(env, FloatBuffer.wrap(state2), LSTM_STATE_SHAPE)
+        val inputs = mapOf(
+            Names.DEC_IN_ENC_OUT to frameTensor,
+            Names.DEC_IN_TARGETS to targetTensor,
+            Names.DEC_IN_TARGET_LEN to targetLenTensor,
+            Names.DEC_IN_STATES_1 to statesTensor1,
+            Names.DEC_IN_STATES_2 to statesTensor2,
+        )
+        try {
+            return session.run(inputs).use { result ->
+                // Joint logits: [1, 1, 1, 8198] → flat array of 8198 floats
+                val logits = (result.get(outputNames[0]).get() as OnnxTensor).toFloatArray()
+                val out1 = if (outputNames.size > 2) (result.get(outputNames[2]).get() as OnnxTensor).toFloatArray() else state1
+                val out2 = if (outputNames.size > 3) (result.get(outputNames[3]).get() as OnnxTensor).toFloatArray() else state2
+                JointStep(logits, out1, out2)
+            }
+        } finally {
+            targetTensor.close()
+            targetLenTensor.close()
+            statesTensor1.close()
+            statesTensor2.close()
+        }
+    }
+
+    /** Runs the split layout's prediction network on [token] from the LSTM state. */
+    private fun runPredictor(
+        env: OrtEnvironment,
+        session: OrtSession,
+        token: Int,
+        state1: FloatArray,
+        state2: FloatArray,
+    ): PredictorOutput {
+        val targetTensor = OnnxTensor.createTensor(env, IntBuffer.wrap(intArrayOf(token)), longArrayOf(1L, 1L))
+        val targetLenTensor = OnnxTensor.createTensor(env, IntBuffer.wrap(intArrayOf(1)), longArrayOf(1L))
+        val hTensor = OnnxTensor.createTensor(env, FloatBuffer.wrap(state1), LSTM_STATE_SHAPE)
+        val cTensor = OnnxTensor.createTensor(env, FloatBuffer.wrap(state2), LSTM_STATE_SHAPE)
+        val inputs = mapOf(
+            Names.PRED_IN_TARGETS to targetTensor,
+            Names.PRED_IN_TARGET_LEN to targetLenTensor,
+            Names.PRED_IN_H to hTensor,
+            Names.PRED_IN_C to cTensor,
+        )
+        val outputNames = session.outputNames.toList()
+        try {
+            return session.run(inputs).use { result ->
+                PredictorOutput(
+                    token = token,
+                    inState1 = state1,
+                    inState2 = state2,
+                    decoderOut = (result.get(outputNames[0]).get() as OnnxTensor).toFloatArray(),
+                    state1 = (result.get(outputNames[2]).get() as OnnxTensor).toFloatArray(),
+                    state2 = (result.get(outputNames[3]).get() as OnnxTensor).toFloatArray(),
+                )
+            }
+        } finally {
+            targetTensor.close()
+            targetLenTensor.close()
+            hTensor.close()
+            cTensor.close()
+        }
+    }
+
+    /** Runs the split layout's joint network on one encoder frame and the predictor output. */
+    private fun runJoiner(env: OrtEnvironment, frameTensor: OnnxTensor, decoderOut: FloatArray): FloatArray {
+        val decTensor = OnnxTensor.createTensor(
+            env, FloatBuffer.wrap(decoderOut), longArrayOf(1L, decoderOut.size.toLong(), 1L)
+        )
+        val joiner = joinSession!!
+        val inputs = mapOf(Names.JOIN_IN_ENC_OUT to frameTensor, Names.JOIN_IN_DEC_OUT to decTensor)
+        try {
+            return joiner.run(inputs).use { result ->
+                (result.get(joiner.outputNames.first()).get() as OnnxTensor).toFloatArray()
+            }
+        } finally {
+            decTensor.close()
+        }
+    }
+
+    private fun OnnxTensor.toFloatArray(): FloatArray =
+        FloatArray(floatBuffer.remaining()).also { floatBuffer.get(it) }
 
     /**
      * Converts token IDs to a string using [vocabulary].
