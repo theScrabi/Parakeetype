@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Jak spustit a zastavit hlasové nahrávání.</string>
     <string name="pref_trigger_hold">Podržet a mluvit</string>
     <string name="pref_trigger_tap_toggle">Přepnout klepnutím</string>
+    <string name="pref_instant_mode_title">Okamžitý režim</string>
+    <string name="pref_instant_mode_subtitle">Začne poslouchat, jakmile přepnete na Parakeetype, např. klávesou mikrofonu jiné klávesnice. Jakmile přestanete mluvit, text se zapíše a přepne se zpět na tuto klávesnici. Dotkněte se během relace tlačítka mluvení, pokud chcete zůstat v Parakeetype.</string>
     <string name="pref_delete_title">Tlačítko mazání</string>
     <string name="pref_delete_subtitle">Co maže tlačítko koše na klávesnici. „Poslední věta“ odstraní jen poslední větu před kurzorem, takže dlouhý dokument nikdy omylem nesmažete.</string>
     <string name="pref_delete_all">Veškerý text</string>

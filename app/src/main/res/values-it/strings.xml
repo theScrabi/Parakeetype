@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Come avviare e interrompere la registrazione vocale.</string>
     <string name="pref_trigger_hold">Tieni premuto per parlare</string>
     <string name="pref_trigger_tap_toggle">Tocca per attivare/disattivare</string>
+    <string name="pref_instant_mode_title">Modalità istantanea</string>
+    <string name="pref_instant_mode_subtitle">Inizia ad ascoltare non appena passi a Parakeetype, ad es. con il tasto microfono di un\'altra tastiera. Quando smetti di parlare, il testo viene digitato e torni a quella tastiera. Tocca il pulsante di dettatura durante la sessione per restare su Parakeetype.</string>
     <string name="pref_delete_title">Pulsante Elimina</string>
     <string name="pref_delete_subtitle">Cosa elimina il pulsante cestino della tastiera. «Ultima frase» rimuove solo la frase più recente prima del cursore, così un documento lungo non viene mai cancellato per errore.</string>
     <string name="pref_delete_all">Tutto il testo</string>

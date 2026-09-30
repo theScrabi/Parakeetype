@@ -68,6 +68,8 @@
     <string name="pref_trigger_mode_subtitle">Как начинать и останавливать голосовую запись.</string>
     <string name="pref_trigger_hold">Удерживать и говорить</string>
     <string name="pref_trigger_tap_toggle">Включать нажатием</string>
+    <string name="pref_instant_mode_title">Мгновенный режим</string>
+    <string name="pref_instant_mode_subtitle">Начинает слушать сразу после переключения на Parakeetype, например клавишей микрофона другой клавиатуры. Когда вы замолкаете, текст вводится и происходит возврат к той клавиатуре. Коснитесь кнопки записи во время сеанса, чтобы остаться в Parakeetype.</string>
     <string name="pref_delete_title">Кнопка удаления</string>
     <string name="pref_delete_subtitle">Что удаляет кнопка с корзиной на клавиатуре. «Последнее предложение» удаляет только последнее предложение перед курсором, поэтому длинный документ никогда не будет стёрт случайно.</string>
     <string name="pref_delete_all">Весь текст</string>

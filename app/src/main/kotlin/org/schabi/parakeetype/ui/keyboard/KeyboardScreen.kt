@@ -443,7 +443,7 @@ fun KeyboardScreen(
         isWhisperEngine = isWhisperEngine,
         whisperLanguage = whisperLanguage,
         onWhisperLanguageSelected = viewModel::setWhisperLanguage,
-        onRecordStart = viewModel::onRecordStart,
+        onRecordStart = viewModel::onTalkPress,
         onRecordStop = viewModel::onRecordStop,
         onContinuousModeEnabled = viewModel::onContinuousModeEnabled,
         onRetry = viewModel::onRetry,

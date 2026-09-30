@@ -53,6 +53,8 @@ private const val LOCK_HINT_GAP_DP = 8
  * The button scales and turns to the error container colour to confirm the lock.
  * Recording continues without the user needing to keep touching the screen.
  *
+ * While listening the button pulses.
+ *
  * **Continuous mode** (HOLD) - button shows a pulsing [Stop] icon.  Tap once to stop recording.
  *
  * **TAP_TOGGLE mode** - single tap starts recording; another tap stops it.  No hold needed.
@@ -122,9 +124,25 @@ fun TalkButton(
         label = "talkButtonPulseScale",
     )
 
-    // Combine base scale with drag-progress grow and continuous pulse.
+    // A quick, clearly visible pulse while listening unlocked (held, or an instant-mode
+    // session), so the button shows that it is recording right now.
+    val listeningPulse by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.12f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 400, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "talkButtonListeningPulseScale",
+    )
+
+    // Combine base scale with drag-progress grow and the pulses.
     val finalScale = baseScale *
-            (if (isContinuousActive) pulse else 1f) +
+            (when {
+                isContinuousActive -> pulse
+                effectiveListening -> listeningPulse
+                else -> 1f
+            }) +
             (if (effectiveListening && !isContinuousActive) dragProgress * 0.05f else 0f)
 
     //  Colours - Material 3 tonal container pairs: listening uses the same

@@ -30,6 +30,21 @@ class AppPreferences(private val context: Context) {
         context.dataStore.edit { prefs -> prefs[keyTriggerMode] = mode }
     }
 
+    private val keyInstantMode = booleanPreferencesKey("instant_mode")
+
+    /**
+     * When `true`, the keyboard starts listening as soon as the user switches to it (e.g. with
+     * another keyboard's microphone key), and switches back to the previous keyboard once the
+     * user stops speaking and the text is typed. Opt-in; defaults to `false`.
+     */
+    val instantMode: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[keyInstantMode] ?: false
+    }
+
+    suspend fun setInstantMode(enabled: Boolean) {
+        context.dataStore.edit { prefs -> prefs[keyInstantMode] = enabled }
+    }
+
     private val keyDeleteButtonMode = stringPreferencesKey("delete_button_mode")
 
     /**

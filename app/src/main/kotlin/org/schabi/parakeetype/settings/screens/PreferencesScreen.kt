@@ -22,9 +22,10 @@ import org.schabi.parakeetype.settings.preferences.PreferencesViewModel
 import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
 
 /**
- * Category 1 — Microphone, Trigger, Delete Button & Keyboard Position.
+ * Category 1 — Microphone, Trigger, Instant Mode, Delete Button & Keyboard Position.
  *
- * Microphone calibration entry point, the recording trigger mode, the
+ * Microphone calibration entry point, the recording trigger mode, instant mode
+ * (listen on switching to the keyboard, switch back afterwards), the
  * behaviour of the keyboard's delete (trash) button, and where the keyboard
  * controls sit in portrait and landscape.
  * Backed by [PreferencesViewModel] / DataStore; settings persist across
@@ -37,6 +38,7 @@ fun InputPreferencesScreen(
     onNavigateToCalibration: () -> Unit = {},
 ) {
     val triggerMode by viewModel.triggerMode.collectAsState()
+    val instantMode by viewModel.instantMode.collectAsState()
     val deleteButtonMode by viewModel.deleteButtonMode.collectAsState()
     val rawMicCapture by viewModel.rawMicCapture.collectAsState()
     val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
@@ -52,6 +54,11 @@ fun InputPreferencesScreen(
         TriggerModeSection(
             triggerMode = triggerMode,
             onTriggerModeChange = viewModel::setTriggerMode,
+        )
+        HorizontalDivider()
+        InstantModeSection(
+            instantMode = instantMode,
+            onInstantModeChange = viewModel::setInstantMode,
         )
         HorizontalDivider()
         DeleteButtonSection(
@@ -228,6 +235,39 @@ private fun TriggerModeSection(
             ) {
                 Text(stringResource(R.string.pref_trigger_tap_toggle))
             }
+        }
+    }
+}
+
+@Composable
+private fun InstantModeSection(
+    instantMode: Boolean,
+    onInstantModeChange: (Boolean) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.pref_instant_mode_title),
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.pref_instant_mode_subtitle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = if (instantMode) stringResource(R.string.state_enabled)
+                else stringResource(R.string.state_disabled),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Switch(
+                checked = instantMode,
+                onCheckedChange = onInstantModeChange,
+            )
         }
     }
 }
@@ -492,6 +532,16 @@ private fun TriggerModeSectionTapTogglePreview() {
     ParakeetypeTheme {
         PreferencesColumn {
             TriggerModeSection(triggerMode = "TAP_TOGGLE", onTriggerModeChange = {})
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Prefs · Instant Mode")
+@Composable
+private fun InstantModeSectionPreview() {
+    ParakeetypeTheme {
+        PreferencesColumn {
+            InstantModeSection(instantMode = true, onInstantModeChange = {})
         }
     }
 }
