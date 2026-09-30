@@ -76,6 +76,8 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  * @param enterAction            The semantic action for the Enter key in the current editor.
  * @param onSwitchKeyboard       Switches the active IME back to the previous keyboard.
  * @param onOpenCompanionApp     Opens the Parakeetype companion app (e.g. to grant permission or download the model).
+ * @param micLevel             Microphone level in [0, 1] while recording (read lazily so only
+ *                               the talk button recomposes on every update).
  * @param diagnostics            Pipeline counters from the most recent recording session.
  */
 @Composable
@@ -97,6 +99,7 @@ fun KeyboardScreen(
     onSwitchKeyboard: () -> Unit,
     onOpenCompanionApp: () -> Unit,
     modifier: Modifier = Modifier,
+    micLevel: () -> Float = { 0f },
     diagnostics: PipelineDiagnostics = PipelineDiagnostics(),
     previewForceLockHint: Boolean = false,
     /**
@@ -270,6 +273,7 @@ fun KeyboardScreen(
                     onRecordStop = onRecordStop,
                     onContinuousModeEnabled = onContinuousModeEnabled,
                     enabled = uiState !is KeyboardUiState.EngineLoading && uiState !is KeyboardUiState.Error && uiState !is KeyboardUiState.Transcribing,
+                    micLevel = micLevel(),
                     previewForceLockHint = previewForceLockHint,
                     onLockHintVisibleChange = { lockHintVisible = it },
                 )
@@ -429,6 +433,7 @@ fun KeyboardScreen(
     val rawDiagnostics by viewModel.diagnostics.collectAsState()
     val showPipelineDiagnostics by viewModel.showPipelineDiagnostics.collectAsState()
     val enterAction by viewModel.enterAction.collectAsState()
+    val micLevel by viewModel.micLevel.collectAsState()
     val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
     val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -453,6 +458,7 @@ fun KeyboardScreen(
         enterAction = enterAction,
         onSwitchKeyboard = onSwitchKeyboard,
         onOpenCompanionApp = onOpenCompanionApp,
+        micLevel = { micLevel },
         diagnostics = diagnostics,
         keyboardContentHeightPx = keyboardContentHeightPx,
         navBarHeightPx = navBarHeightPx,

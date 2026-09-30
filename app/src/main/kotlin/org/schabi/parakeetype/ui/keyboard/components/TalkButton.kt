@@ -53,7 +53,8 @@ private const val LOCK_HINT_GAP_DP = 8
  * The button scales and turns to the error container colour to confirm the lock.
  * Recording continues without the user needing to keep touching the screen.
  *
- * While listening the button pulses.
+ * While listening a tinted halo behind the button follows the microphone level ([micLevel]),
+ * like the voice-input sheet's microphone.
  *
  * **Continuous mode** (HOLD) - button shows a pulsing [Stop] icon.  Tap once to stop recording.
  *
@@ -64,6 +65,7 @@ private const val LOCK_HINT_GAP_DP = 8
  * @param triggerMode          `"HOLD"` (default) or `"TAP_TOGGLE"`.
  * @param isContinuous         `true` when continuous (locked) mode is active (HOLD mode only).
  * @param onContinuousModeEnabled Callback fired when the drag-left threshold is crossed (HOLD mode only).
+ * @param micLevel             Microphone level in [0, 1] while listening.
  * @param onLockHintVisibleChange Called whenever the lock hint (left of the button) appears or
  *                                disappears, so the caller can hide what it would cover.
  */
@@ -77,6 +79,7 @@ fun TalkButton(
     modifier: Modifier = Modifier,
     triggerMode: String = "HOLD",
     enabled: Boolean = true,
+    micLevel: Float = 0f,
     previewForceLockHint: Boolean = false, // For previews: force lock hint visible
     onLockHintVisibleChange: (Boolean) -> Unit = {},
 ) {
@@ -124,26 +127,15 @@ fun TalkButton(
         label = "talkButtonPulseScale",
     )
 
-    // A quick, clearly visible pulse while listening unlocked (held, or an instant-mode
-    // session), so the button shows that it is recording right now.
-    val listeningPulse by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.12f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 400, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse,
-        ),
-        label = "talkButtonListeningPulseScale",
-    )
-
-    // Combine base scale with drag-progress grow and the pulses.
-    val finalScale = baseScale *
-            (when {
-                isContinuousActive -> pulse
-                effectiveListening -> listeningPulse
-                else -> 1f
-            }) +
+    // Combine base scale with drag-progress grow and continuous pulse.
+    val finalScale = baseScale * (if (isContinuousActive) pulse else 1f) +
             (if (effectiveListening && !isContinuousActive) dragProgress * 0.05f else 0f)
+
+    // Halo behind the button that grows with the microphone level while listening.
+    val haloScale by animateFloatAsState(
+        targetValue = if (effectiveListening) finalScale + micLevel * 0.5f else 1f,
+        label = "talkButtonMicLevel",
+    )
 
     //  Colours - Material 3 tonal container pairs: listening uses the same
     //  secondaryContainer as the Enter key, locked (continuous) mode the errorContainer.
@@ -267,6 +259,15 @@ fun TalkButton(
                 } else Modifier
             ),
     ) {
+        if (effectiveListening) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .scale(haloScale)
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.24f), CircleShape),
+            )
+        }
+
         //  Visual circle (scaled independently of the lock hint)
         Box(
             contentAlignment = Alignment.Center,

@@ -12,6 +12,7 @@ import org.schabi.parakeetype.inference.EngineState
 import org.schabi.parakeetype.inference.InferenceRepository
 import org.schabi.parakeetype.inference.PipelineDiagnostics
 import org.schabi.parakeetype.inference.TranscriptResult
+import org.schabi.parakeetype.recognition.RecognitionSession
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import org.schabi.parakeetype.ui.keyboard.components.WHISPER_LANGUAGE_OPTIONS
 import kotlinx.coroutines.CancellationException
@@ -27,6 +28,9 @@ private const val INSTANT_END_OF_SPEECH_SILENCE_MS = 2_000L
 
 /** Without any speech for this long an instant-mode session ends on its own. */
 private const val INSTANT_NO_SPEECH_TIMEOUT_MS = 8_000L
+
+/** Report the microphone level every 3rd 30 ms chunk (~11 updates per second). */
+private const val LEVEL_REPORT_INTERVAL_CHUNKS = 3
 
 /**
  * Bridges the IME lifecycle, audio capture, and inference pipeline into a stream of
@@ -226,6 +230,14 @@ class KeyboardViewModel(
      * dragging the talk button to the left).  Resets to `false` whenever recording stops.
      */
     val isContinuousMode: StateFlow<Boolean> = _isContinuousMode.asStateFlow()
+
+    private val _micLevel = MutableStateFlow(0f)
+
+    /**
+     * Microphone level of the running recording in [0, 1] (the voice-input sheet's scale),
+     * updated ~11 times per second from the capture thread; drives the talk button's halo.
+     */
+    val micLevel: StateFlow<Float> = _micLevel.asStateFlow()
 
     /**
      * Called by the UI when the user drags the talk button past the lock threshold.
@@ -457,10 +469,18 @@ class KeyboardViewModel(
                         noSpeechTimeoutMs = INSTANT_NO_SPEECH_TIMEOUT_MS,
                     )
                 } else null
+                _micLevel.value = 0f
+                var levelChunks = 0
                 repo.transcribe(
                     audio = audioCaptureManager.startCapture(
                         vadEnabled = vadSensitivity.value || instant,
                         rawSource = rawMicCapture.value,
+                        onLevel = { level ->
+                            if (levelChunks++ % LEVEL_REPORT_INTERVAL_CHUNKS == 0) {
+                                _micLevel.value =
+                                    ((RecognitionSession.rmsToDb(level) + 2f) / 12f).coerceIn(0f, 1f)
+                            }
+                        },
                         onSpeechProbability = endpointer?.let { e ->
                             { probability ->
                                 val event = e.onFrame(probability)
