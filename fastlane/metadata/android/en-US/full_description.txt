@@ -13,7 +13,7 @@ All transcription happens entirely on your device using the NVIDIA Parakeet ASR 
 <b>Requirements</b>
 
 • Android 12 (API 31) or higher
-• ~700 MB free storage for the model file
+• ~630 MB free storage for the model file
 
 <b>Open Source</b>
 Parakeetype is licensed under GPL-3.0 license. Source code and build instructions are available on GitHub.

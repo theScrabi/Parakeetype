@@ -6,7 +6,7 @@
 
 A privacy-focused speech-to-text keyboard (IME) and system speech recognizer for Android — other apps can use it for voice input through Android's standard `SpeechRecognizer` / `RecognizerIntent` APIs. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
 
-It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) automatic speech recognition model, quantized to INT8 and run via [ONNX Runtime](https://onnxruntime.ai/) for efficient on-device inference. Voice activity detection uses [Silero VAD v4](https://github.com/snakers4/silero-vad) (also ONNX, also fully on-device) to suppress silence before it ever reaches the ASR model.
+It uses [Parakeet Ultra](https://huggingface.co/moondream/parakeet-ultra), Moondream's further-trained version of NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) automatic speech recognition model, quantized to INT8 and run via [ONNX Runtime](https://onnxruntime.ai/) for efficient on-device inference. Voice activity detection uses [Silero VAD v4](https://github.com/snakers4/silero-vad) (also ONNX, also fully on-device) to suppress silence before it ever reaches the ASR model.
 
 
 ## Screenshots
@@ -24,12 +24,12 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 - **Real-time transcription** - progressive partial results while you speak
 - **Works in any app** - injects text via Android's standard `InputConnection` API
 - **Speech recognizer for other apps** - implements Android's `RecognitionService` (for apps using `SpeechRecognizer`, and selectable as the system's voice-input service) and handles `RecognizerIntent.ACTION_RECOGNIZE_SPEECH` (the "tap the mic" voice input other apps launch), all on-device with the same model as the keyboard
-- **Parakeet-TDT 0.6B v3** - INT8 quantized, ~700 MB, runs on mid-range hardware
+- **Parakeet Ultra** (Parakeet-TDT 0.6B v3, further trained) - INT8 quantized, ~630 MB, robust against background noise, runs on mid-range hardware
 - **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
 - **Instant mode** - when you switch to Parakeetype (e.g. with the microphone key of another keyboard) it starts listening right away, types the text once you stop speaking and switches back to your keyboard (touch the talk button to stay on Parakeetype). Opt-in; off by default.
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets)
-- **Keep model loaded** - keeps the ~700 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. On by default; can be turned off in the settings.
+- **Keep model loaded** - keeps the ~630 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. On by default; can be turned off in the settings.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
 - **Localized UI** - the app is translated into the 25 languages Parakeet-TDT v3 transcribes (Bulgarian, Croatian, Czech, Danish, Dutch, English, Estonian, Finnish, French, German, Greek, Hungarian, Italian, Latvian, Lithuanian, Maltese, Polish, Portuguese, Romanian, Russian, Slovak, Slovenian, Spanish, Swedish, Ukrainian); on Android 13+ the language can be chosen per app in the system settings
 - **No Google Play Services, no telemetry, no analytics**
@@ -55,7 +55,7 @@ It uses NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.
 2. **Open the Parakeetype app** and follow the three setup steps:
    - Enable Parakeetype in *System Settings → Keyboard / Input Methods*
    - Grant the microphone permission
-   - Install the model: tap *Download in browser* to fetch the single model archive (~700 MB, Wi-Fi recommended), then *Import model file* and pick the downloaded ZIP
+   - Install the model: tap *Download in browser* to fetch the single model archive (~630 MB, Wi-Fi recommended), then *Import model file* and pick the downloaded ZIP
 3. **Switch** to the Parakeetype keyboard in any text field and tap the mic button.
 
 > **Keyboard not showing?** With a physical keyboard connected (Bluetooth keyboard, or the Android emulator's virtual hardware keyboard) Android hides on-screen keyboards unless *System Settings → Keyboard → Physical keyboard → Use on-screen keyboard* is enabled.
@@ -118,12 +118,12 @@ Parakeetype is structured as a clean layered pipeline. The `SpeechEngine` interf
 | `settings` | `ModelImporter` | Installs a model from the single ZIP archive the user picked (SAF); verifies every file's SHA-256 and swaps the model in atomically |
 | `settings` | `ModelStorageManager` | Manages model file paths inside `filesDir` (no external storage permission needed) |
 
-### Inference pipeline (Parakeet-TDT v3)
+### Inference pipeline (Parakeet Ultra)
 
 1. Raw PCM (16-bit signed) is normalised to `float32 [-1, 1]`
 2. **`nemo128.onnx`** - computes 128-dim log-mel spectrogram features
-3. **`encoder-model.int8.onnx`** - FastConformer encoder → `[B, 1024, T_enc]`
-4. **`decoder_joint-model.int8.onnx`** - greedy TDT decoding with LSTM state carry-over
+3. **`encoder.int8.onnx`** - FastConformer encoder → `[B, 640, T_enc]`
+4. **`decoder.int8.onnx`** + **`joiner.int8.onnx`** - greedy TDT decoding with LSTM state carry-over
 5. Token IDs are mapped to text via `vocab.txt`
 
 Partial results are emitted every ~1 s once ≥ 2 s of audio is in the rolling window; the window grows up to a hard 30 s ceiling. After every partial the last 3 results are compared - if their leading words form a stable common prefix, the corresponding audio is trimmed from the front of the window (retaining 4 s of tail context) and `TranscriptResult.WindowTrimmed` is emitted so `TextInjector` can re-anchor its alignment state. Silence runs (2 consecutive blank strides) and divergence loops (window > 12 s with no common prefix) trigger unconditional force-trims. Every raw transcript passes through an 8-step post-processing pipeline before emission: filler-word removal → stutter collapse (≥ 3× repeats) → phrase-loop deduplication → leading-dot strip → leading-punct strip → multi-dot normalisation → missing sentence-space repair → sentence-boundary capitalisation. A final inference pass runs over the entire remaining window when recording stops; clips shorter than 1.25 s are zero-padded to give the encoder sufficient frames.
@@ -212,4 +212,4 @@ Bug reports and pull requests are welcome. Please open an issue first for signif
 
 This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for the full text.
 
-The Parakeet-TDT model weights are distributed separately under [CC-BY-4.0](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) by NVIDIA.
+The Parakeet Ultra model weights are distributed separately under [CC-BY-4.0](https://huggingface.co/moondream/parakeet-ultra) by Moondream, based on [Parakeet-TDT 0.6B v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) by NVIDIA.

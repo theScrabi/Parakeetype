@@ -351,10 +351,10 @@ private fun DeleteConfirmDialog(
 }
 
 private val previewModelSmall = ModelInfo(
-    id = ModelId.PARAKEET_V3,
-    displayName = "Parakeet-V3 (Default)",
-    description = "Fast and compact English on-device ASR. Recommended for most devices.",
-    approximateSizeMb = 700,
+    id = ModelId.PARAKEET_ULTRA,
+    displayName = "Parakeet Ultra (Default)",
+    description = "Fast and compact multilingual on-device ASR. Recommended for most devices.",
+    approximateSizeMb = 630,
     archiveUrl = "https://example.com/model.zip",
     files = listOf(ModelFile("model.onnx")),
 )
@@ -374,10 +374,10 @@ private fun ModelListContentPreview() {
     ParakeetypeTheme {
         ModelListContent(
             modelStates = mapOf(
-                ModelId.PARAKEET_V3 to ModelState.Ready,
+                ModelId.PARAKEET_ULTRA to ModelState.Ready,
                 ModelId.WHISPER_SMALL to ModelState.NotDownloaded,
             ),
-            selectedModel = ModelId.PARAKEET_V3,
+            selectedModel = ModelId.PARAKEET_ULTRA,
             onImport = { _, _ -> }, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
         )
     }

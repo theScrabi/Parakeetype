@@ -10,7 +10,6 @@ import org.schabi.parakeetype.settings.model.ModelId.Companion.DEFAULT
  * files for that model are stored. Changing it will break existing installs - treat as stable.
  */
 enum class ModelId(val storageDirName: String) {
-    PARAKEET_V3("parakeet-v3"),
     PARAKEET_ULTRA("parakeet-ultra"),
     VOXTRAL_MINI("voxtral-mini-4b"),
     WHISPER_SMALL("whisper-small-int8"),
@@ -18,7 +17,7 @@ enum class ModelId(val storageDirName: String) {
 
     companion object {
         /** The model used when no preference has been saved yet. */
-        val DEFAULT: ModelId = PARAKEET_V3
+        val DEFAULT: ModelId = PARAKEET_ULTRA
 
         /** Returns the [ModelId] whose [storageDirName] matches [name], or [DEFAULT] if none found. */
         fun fromName(name: String): ModelId =

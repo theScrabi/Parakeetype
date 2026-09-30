@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# push_model.sh - push Parakeet-V3 model files directly into the app's
+# push_model.sh - push Parakeet Ultra model files directly into the app's
 # internal storage on a connected device / emulator.
 #
 # Prerequisites:
@@ -25,15 +25,15 @@
 set -euo pipefail
 
 PACKAGE="org.schabi.parakeetype"
-INTERNAL_MODEL_DIR="/data/user/0/${PACKAGE}/files/models/parakeet-v3"
+INTERNAL_MODEL_DIR="/data/user/0/${PACKAGE}/files/models/parakeet-ultra"
 STAGING_DIR="/sdcard/tmp_parakeetype_push"
 LOCAL_DIR="${1:-./model_files}"
 
 MODEL_FILES=(
-  "encoder-model.int8.onnx"
-  "decoder_joint-model.int8.onnx"
+  "encoder.int8.onnx"
+  "decoder.int8.onnx"
+  "joiner.int8.onnx"
   "nemo128.onnx"
-  "config.json"
   "vocab.txt"
 )
 
@@ -52,8 +52,7 @@ fi
 for f in "${MODEL_FILES[@]}"; do
   if [[ ! -f "${LOCAL_DIR}/${f}" ]]; then
     echo "❌  Missing local file: ${LOCAL_DIR}/${f}"
-    echo "    Download the model first from:"
-    echo "    https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx"
+    echo "    Build the model archive with devtools/package-model.sh and unzip it there."
     exit 1
   fi
 done

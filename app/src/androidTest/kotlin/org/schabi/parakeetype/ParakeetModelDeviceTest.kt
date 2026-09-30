@@ -22,18 +22,15 @@ private const val TAG = "ParakeetModelDeviceTest"
 private const val CHUNK_FRAMES = 25
 
 /**
- * Manual on-device check of the installed Parakeet models: transcribes every clip in
+ * Manual on-device check of the installed Parakeet model: transcribes every clip in
  * `<filesDir>/testaudio/` (raw 16 kHz mono 16-bit little-endian PCM, pushed with `run-as`)
  * one-shot and through the chunked streaming primitives, and logs both transcripts and
- * timings under [TAG]. Skipped when a model or the clips are not installed.
+ * timings under [TAG]. Skipped when the model or the clips are not installed.
  */
 @RunWith(AndroidJUnit4::class)
 class ParakeetModelDeviceTest {
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
-
-    @Test
-    fun parakeetV3() = transcribeClips(ModelId.PARAKEET_V3)
 
     @Test
     fun parakeetUltra() = transcribeClips(ModelId.PARAKEET_ULTRA)

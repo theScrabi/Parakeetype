@@ -179,7 +179,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 | Value | storageDirName | Status |
 |---|---|---|
-| PARAKEET_V3 | parakeet-v3 | Active |
+| PARAKEET_ULTRA | parakeet-ultra | Active (default) |
 | VOXTRAL_MINI | voxtral-mini-4b | Disabled (resource limits) |
 | WHISPER_SMALL | whisper-small-int8 | Disabled (resource limits) |
 
@@ -343,11 +343,11 @@ If all three layers fail, the entire partial is returned as new content (alignme
 ### Storage layout
 
     <filesDir>/models/
-      parakeet-v3/
+      parakeet-ultra/
         nemo128.onnx
-        encoder-model.int8.onnx
-        decoder_joint-model.int8.onnx
-        config.json
+        encoder.int8.onnx
+        decoder.int8.onnx
+        joiner.int8.onnx
         vocab.txt
       voxtral-mini-4b/    (placeholder - disabled)
       whisper-small-int8/ (placeholder - disabled)
@@ -367,15 +367,16 @@ If all three layers fail, the entire partial is returned as new content (alignme
 
 ### ParakeetEngine (active)
 
-NVIDIA Parakeet-TDT 0.6B v3, INT8 quantized, ~700 MB on disk.
+Parakeet Ultra (Moondream's further-trained NVIDIA Parakeet-TDT 0.6B v3, sherpa-onnx export by mldecode), INT8 quantized, ~630 MB on disk. The export has no preprocessor, so the archive carries the nemo128.onnx of istupakov's v3 ONNX export (same front end). The IME deletes the directory of the former Parakeet-V3 model (models/parakeet-v3/) on start.
 
-3-ONNX pipeline:
+4-ONNX pipeline:
 
 | Session | File | Input -> Output |
 |---|---|---|
 | Preprocessor | nemo128.onnx | Raw PCM float32 -> 128-dim log-mel spectrogram |
-| Encoder | encoder-model.int8.onnx | Spectrogram -> [B, 1024, T_enc] encoder features |
-| Decoder/Joint | decoder_joint-model.int8.onnx | Encoder features + LSTM state -> [B, T_enc, T_tgt, 8198] logits |
+| Encoder | encoder.int8.onnx | Spectrogram -> [B, 640, T_enc] encoder features |
+| Decoder | decoder.int8.onnx | Previous token + LSTM state -> [B, 640, 1] prediction output + next LSTM state (cached across blank frames) |
+| Joiner | joiner.int8.onnx | One encoder frame + prediction output -> [B, 1, 1, 8198] logits |
 
 - Tokenizer: SentencePiece-like vocabulary from vocab.json (1024 tokens + blank).
 - Decoding: greedy TDT (Token-and-Duration Transducer). LSTM state is carried across strides.
@@ -538,7 +539,7 @@ testOptions { unitTests.isReturnDefaultValues = true }.
 
 Test helpers: RealAudioTestUtils (model-dir resolution, WER), WavReader, FakeSpeechEngine, FakeInputConnection.
 
-**CI behaviour:** the real-model tests resolve the model directory (-Dtest.model.dir > $PARAKEETYPE_TEST_MODEL_DIR > ~/.cache/parakeetype-test-model/parakeet-tdt-0.6b-v3/) and skip themselves (JUnit Assume) when it is absent — so the CI pipeline always runs the model-free suite, while a local machine with the model present runs everything.
+**CI behaviour:** the real-model tests resolve the model directory (-Dtest.model.dir > $PARAKEETYPE_TEST_MODEL_DIR > ~/.cache/parakeetype-test-model/parakeet-ultra/) and skip themselves (JUnit Assume) when it is absent — so the CI pipeline always runs the model-free suite, while a local machine with the model present runs everything.
 
 Instrumented tests (device/emulator required) in app/src/androidTest/, run with ./gradlew connectedAndroidTest.
 

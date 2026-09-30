@@ -23,6 +23,7 @@ import org.schabi.parakeetype.audio.PermissionHelper
 import org.schabi.parakeetype.inference.EngineState
 import org.schabi.parakeetype.inference.InferenceService
 import org.schabi.parakeetype.inference.cleanTranscript
+import org.schabi.parakeetype.settings.model.ModelStorageManager
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import org.schabi.parakeetype.ui.keyboard.ImeComposeView
 import org.schabi.parakeetype.ui.keyboard.KeyboardScreen
@@ -199,9 +200,12 @@ class ParakeetypeInputMethodService :
         Log.d(TAG, "InferenceService bind requested")
 
         // The word-suggestion feature was removed; free the language packs it may have
-        // downloaded into internal storage on earlier versions.
+        // downloaded into internal storage on earlier versions. Parakeet-V3 was replaced by
+        // Parakeet Ultra; its model directory can no longer be loaded.
         lifecycleScope.launch(Dispatchers.IO) {
             File(filesDir, "suggestion_files").takeIf { it.exists() }?.deleteRecursively()
+            File(ModelStorageManager.getModelsRoot(this@ParakeetypeInputMethodService), "parakeet-v3")
+                .takeIf { it.exists() }?.deleteRecursively()
         }
     }
 

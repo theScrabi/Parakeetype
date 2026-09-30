@@ -50,9 +50,9 @@ data class ModelInfo(
  */
 object ModelRegistry {
 
-    //    val all: List<ModelInfo> = listOf(parakeetV3, voxtralMini, whisperLargeV3Turbo)
+    //    val all: List<ModelInfo> = listOf(parakeetUltra, voxtralMini, whisperLargeV3Turbo)
     val all: List<ModelInfo> =
-        listOf(parakeetV3, parakeetUltra) // for now removed voxtralMini and whisperLargeV3Turbo as I could not get it to run on-device within reasonable resource limits
+        listOf(parakeetUltra) // for now removed voxtralMini and whisperLargeV3Turbo as I could not get it to run on-device within reasonable resource limits
 
     private val byId: Map<ModelId, ModelInfo> = all.associateBy { it.id }
 
@@ -61,32 +61,16 @@ object ModelRegistry {
         byId[id] ?: error("ModelRegistry: unknown ModelId $id")
 }
 
-private val parakeetV3 = ModelInfo(
-    id = ModelId.PARAKEET_V3,
-    displayName = "Parakeet-V3 (Default)",
-    description = "NeMo TDT model for on-device ASR optimised for English and 24 other european languages like DE, FR, ES, IT, RU etc. " +
-            "Very fast and compact - the recommended choice for most devices.",
-    approximateSizeMb = 700,
-    // Built from https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx by devtools/package-model.sh.
-    archiveUrl = MODEL_ARCHIVE_RELEASE,
-    files = listOf(
-        ModelFile("encoder-model.int8.onnx", "6139d2fa7e1b086097b277c7149725edbab89cc7c7ae64b23c741be4055aff09"),
-        ModelFile("decoder_joint-model.int8.onnx", "eea7483ee3d1a30375daedc8ed83e3960c91b098812127a0d99d1c8977667a70"),
-        ModelFile("nemo128.onnx", "a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"),
-        ModelFile("config.json", "666903c76b9798caf2c210afd4f6cd60b08a8dbf9800ec8d7a3bc0d2148ac466"),
-        ModelFile("vocab.txt", "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"),
-    ),
-)
-
-// Experimental: Moondream's further-trained Parakeet TDT 0.6B v3 in the sherpa-onnx layout
-// (separate decoder / joiner, 640-dim encoder output); ParakeetEngine detects the layout.
+// Moondream's further-trained Parakeet TDT 0.6B v3 in the sherpa-onnx layout
+// (separate decoder / joiner, 640-dim encoder output).
 private val parakeetUltra = ModelInfo(
     id = ModelId.PARAKEET_ULTRA,
-    displayName = "Parakeet Ultra (Experimental)",
-    description = "Parakeet-V3 further trained by Moondream: lower word error rate, especially " +
-            "with background noise, in the same 25 languages. Same size and speed as Parakeet-V3.",
+    displayName = "Parakeet Ultra (Default)",
+    description = "NVIDIA's Parakeet TDT v3 further trained by Moondream, for on-device ASR in English " +
+            "and 24 other european languages like DE, FR, ES, IT, RU etc. Robust against background " +
+            "noise, very fast and compact - the recommended choice for most devices.",
     approximateSizeMb = 630,
-    // Built from https://huggingface.co/mldecode/parakeet-ultra-onnx-int8 by devtools/package-ultra-model.sh.
+    // Built from https://huggingface.co/mldecode/parakeet-ultra-onnx-int8 by devtools/package-model.sh.
     archiveUrl = MODEL_ARCHIVE_RELEASE,
     files = listOf(
         ModelFile("encoder.int8.onnx", "181382735a719c75076d13658dc4418de4b566aef39935ca0f8f55da16928f4e"),

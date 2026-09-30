@@ -82,12 +82,10 @@ The model is **not** checked in. The real-audio tests skip gracefully when the m
 directory is absent. To run them:
 
 ```bash
-# 1. Download the model files (same files the app downloads, SHA-256 verified):
-mkdir -p ~/.cache/parakeetype-test-model/parakeet-tdt-0.6b-v3 && cd ~/.cache/parakeetype-test-model/parakeet-tdt-0.6b-v3
-BASE=https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main
-for f in vocab.txt config.json nemo128.onnx decoder_joint-model.int8.onnx encoder-model.int8.onnx; do
-  curl -sL -O "$BASE/$f"
-done
+# 1. Build the model archive (same files the app imports, SHA-256 verified) and unpack it:
+devtools/package-model.sh /tmp
+mkdir -p ~/.cache/parakeetype-test-model/parakeet-ultra
+unzip /tmp/parakeet-ultra-int8.zip -d ~/.cache/parakeetype-test-model/parakeet-ultra
 
 # 2. Run the tests (model dir resolution: -Dtest.model.dir > $PARAKEETYPE_TEST_MODEL_DIR > cache dir)
 ./gradlew testDebugUnitTest

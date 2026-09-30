@@ -1,17 +1,24 @@
 #!/usr/bin/env bash
-# Builds the single-file Parakeet-V3 model archive that users download in their browser
-# and import in Parakeetype (the app itself has no network access).
+# Builds the single-file Parakeet Ultra model archive that users download in their browser
+# and import in Parakeetype (the app itself has no network access), from
+# https://huggingface.co/mldecode/parakeet-ultra-onnx-int8.
 #
 #   devtools/package-model.sh [output-dir]
 #
-# Downloads the five model files from Hugging Face, verifies each against the SHA-256
-# pinned in ModelRegistry.kt, and packs them into parakeet-tdt-0.6b-v3-int8.zip
-# (stored, not compressed: the int8 ONNX weights do not compress, and stored entries make
-# the on-device import a straight copy).
+# Downloads the model files from Hugging Face, verifies each against the SHA-256 pinned in
+# ModelRegistry.kt, and
+# packs them into parakeet-ultra-int8.zip (stored, not compressed: the int8 ONNX weights do
+# not compress, and stored entries make the on-device import a straight copy).
+#
+# The export is a sherpa-onnx bundle (separate decoder.int8.onnx and joiner.int8.onnx,
+# 640-dim encoder frames). It has no nemo128.onnx preprocessor (sherpa computes the
+# features natively); the front end matches Parakeet TDT 0.6B v3 (128 mel bins,
+# per-feature normalisation), so the nemo128.onnx of istupakov's v3 ONNX export is packed
+# alongside. tokens.txt is packed as vocab.txt.
 #
 # The model is licensed CC BY 4.0, which only allows redistribution together with the
 # licence and an attribution notice, so the archive also contains LICENSE.txt (the full
-# licence text) and NOTICE.txt (creator, source, changes) from devtools/licenses/.
+# licence text) and NOTICE.txt (creators, sources, changes) from devtools/licenses/.
 # ModelImporter skips entries that are not model files.
 #
 # Upload the result as a release asset of the release MODEL_ARCHIVE_RELEASE in
@@ -19,17 +26,19 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BASE="https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main"
+# Pinned revisions, so the hashes below keep matching when the repos are updated.
+ULTRA_BASE="https://huggingface.co/mldecode/parakeet-ultra-onnx-int8/resolve/3282a6e32885b431c1543d58c7710e6e3412eac0"
+V3_BASE="https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main"
 OUT_DIR="${1:-.}"
-ARCHIVE="parakeet-tdt-0.6b-v3-int8.zip"
+ARCHIVE="parakeet-ultra-int8.zip"
 
-# filename  sha256 (must match ModelRegistry.kt)
+# base  remote name  archive name  sha256
 FILES=(
-  "encoder-model.int8.onnx       6139d2fa7e1b086097b277c7149725edbab89cc7c7ae64b23c741be4055aff09"
-  "decoder_joint-model.int8.onnx eea7483ee3d1a30375daedc8ed83e3960c91b098812127a0d99d1c8977667a70"
-  "nemo128.onnx                  a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"
-  "config.json                   666903c76b9798caf2c210afd4f6cd60b08a8dbf9800ec8d7a3bc0d2148ac466"
-  "vocab.txt                     d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"
+  "$ULTRA_BASE encoder.int8.onnx encoder.int8.onnx 181382735a719c75076d13658dc4418de4b566aef39935ca0f8f55da16928f4e"
+  "$ULTRA_BASE decoder.int8.onnx decoder.int8.onnx 0ba8ace2de04bb2d9a6b20ed2d67138c23df4a385f268438df0ff200502de77a"
+  "$ULTRA_BASE joiner.int8.onnx  joiner.int8.onnx  20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"
+  "$ULTRA_BASE tokens.txt        vocab.txt         d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"
+  "$V3_BASE    nemo128.onnx      nemo128.onnx      a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"
 )
 
 WORK="$(mktemp -d)"
@@ -37,15 +46,15 @@ trap 'rm -rf "$WORK"' EXIT
 
 names=()
 for entry in "${FILES[@]}"; do
-  read -r name sha <<<"$entry"
-  echo "Downloading $name…"
-  curl -fL --retry 3 -o "$WORK/$name" "$BASE/$name"
+  read -r base remote name sha <<<"$entry"
+  echo "Downloading $remote…"
+  curl -fL --retry 3 -o "$WORK/$name" "$base/$remote"
   echo "$sha  $WORK/$name" | sha256sum -c --quiet -
   names+=("$name")
 done
 
 cp "$SCRIPT_DIR/licenses/CC-BY-4.0.txt" "$WORK/LICENSE.txt"
-cp "$SCRIPT_DIR/licenses/parakeet-tdt-0.6b-v3-NOTICE.txt" "$WORK/NOTICE.txt"
+cp "$SCRIPT_DIR/licenses/parakeet-ultra-NOTICE.txt" "$WORK/NOTICE.txt"
 names+=(LICENSE.txt NOTICE.txt)
 
 mkdir -p "$OUT_DIR"

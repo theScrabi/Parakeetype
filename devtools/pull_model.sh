@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# pull_model.sh - pull Parakeet-V3 model files OUT of the app's internal
+# pull_model.sh - pull Parakeet Ultra model files OUT of the app's internal
 # storage back to your local machine.
 #
 # Run this BEFORE a manual uninstall so you can re-push quickly afterwards.
@@ -14,15 +14,15 @@
 set -euo pipefail
 
 PACKAGE="org.schabi.parakeetype"
-INTERNAL_MODEL_DIR="/data/user/0/${PACKAGE}/files/models/parakeet-v3"
+INTERNAL_MODEL_DIR="/data/user/0/${PACKAGE}/files/models/parakeet-ultra"
 STAGING_DIR="/sdcard/tmp_parakeetype_pull"
 OUTPUT_DIR="${1:-./model_files}"
 
 MODEL_FILES=(
-  "encoder-model.int8.onnx"
-  "decoder_joint-model.int8.onnx"
+  "encoder.int8.onnx"
+  "decoder.int8.onnx"
+  "joiner.int8.onnx"
   "nemo128.onnx"
-  "config.json"
   "vocab.txt"
 )
 

@@ -7,7 +7,6 @@ import ai.onnxruntime.OrtSession
 import android.os.Debug
 import android.util.Log
 import org.schabi.parakeetype.audio.AudioChunk
-import org.json.JSONObject
 import java.io.File
 import java.nio.FloatBuffer
 import java.nio.IntBuffer
@@ -37,7 +36,7 @@ private data class DecodeResult(val text: String, val confidence: Float)
  * `prev_batched_state`.
  *
  *  - [lstmState1] / [lstmState2]: the decoder LSTM hidden / cell, each `[2, 1, 640]`
- *    (1280 floats) as produced by `decoder_joint`'s `output_states_1/2`.
+ *    (1280 floats) as produced by the prediction network's `h_next` / `c_next`.
  *  - [prevToken]: the last emitted token ID (the predictor embedding input for the next
  *    frame). The blank token for a fresh start (see [ParakeetEngine.initialTdtState]).
  *  - [frameDelta]: how far the decoder's frame position overshot the range end when the
@@ -77,28 +76,13 @@ private object Names {
     const val PREP_IN_LENGTH = "waveforms_lens"
     // Outputs accessed by index: [0] = features, [1] = feature lengths
 
-    // encoder-model.int8.onnx  ← verified
+    // encoder.int8.onnx
     const val ENC_IN_SIGNAL = "audio_signal"   // FLOAT [-1, 128, -1]
     const val ENC_IN_LENGTH = "length"          // INT64 [-1]
-    const val ENC_OUT_SIGNAL = "outputs"          // FLOAT [-1, 1024, -1]  (B, D, T)
-    const val ENC_OUT_LEN = "encoded_lengths"  // INT64 [-1]
+    const val ENC_OUT_SIGNAL = "outputs"          // FLOAT [-1, 640, -1]  (B, D, T)
+    const val ENC_OUT_LEN = "encoded_lengths"  // INT32 [-1]
 
-    // decoder_joint-model.int8.onnx  ← verified
-    const val DEC_IN_ENC_OUT = "encoder_outputs"  // FLOAT [-1, 1024, -1]
-    const val DEC_IN_TARGETS = "targets"           // INT32 [-1, -1]
-    const val DEC_IN_TARGET_LEN = "target_length"     // INT32 [-1]
-    const val DEC_IN_STATES_1 = "input_states_1"    // FLOAT [2, -1, 640]
-    const val DEC_IN_STATES_2 = "input_states_2"    // FLOAT [2, -1, 640]
-    // Outputs accessed by index:
-    //   0 → "outputs"         FLOAT [-1,-1,-1, 8198]  (B, T_enc, T_tgt, vocab+dur)
-    //   1 → "prednet_lengths" INT32 [-1]
-    //   2 → "output_states_1" FLOAT [2,-1, 640]
-    //   3 → "output_states_2" FLOAT [2,-1, 640]
-
-    // Split (sherpa-onnx) layout, e.g. Parakeet Ultra: same encoder names, but the encoder
-    // emits 640-dim frames and INT32 lengths, and the prediction and joint networks are
-    // separate models.
-    // decoder.int8.onnx
+    // decoder.int8.onnx (prediction network)
     const val PRED_IN_TARGETS = "targets"          // INT32 [-1, 1]
     const val PRED_IN_TARGET_LEN = "target_lengths" // INT32 [-1]
     const val PRED_IN_H = "h"                      // FLOAT [2, -1, 640]
@@ -110,22 +94,19 @@ private object Names {
     // Output 0 → logits FLOAT [-1, 1, 1, 8198]
 }
 
-/** File names of the fused (istupakov) and split (sherpa-onnx) Parakeet ONNX layouts. */
+/** File names of the Parakeet ONNX export (sherpa-onnx layout). */
 private object Files {
-    const val FUSED_ENCODER = "encoder-model.int8.onnx"
-    const val FUSED_DECODER_JOINT = "decoder_joint-model.int8.onnx"
-    const val SPLIT_ENCODER = "encoder.int8.onnx"
-    const val SPLIT_DECODER = "decoder.int8.onnx"
-    const val SPLIT_JOINER = "joiner.int8.onnx"
+    const val PREPROCESSOR = "nemo128.onnx"
+    const val ENCODER = "encoder.int8.onnx"
+    const val DECODER = "decoder.int8.onnx"
+    const val JOINER = "joiner.int8.onnx"
+    const val VOCAB = "vocab.txt"
 }
-
-/** One joint evaluation: the logits and the LSTM state after consuming the previous token. */
-private class JointStep(val logits: FloatArray, val state1: FloatArray, val state2: FloatArray)
 
 /**
  * The prediction network's output for [token] fed with the LSTM state ([inState1],
- * [inState2]) - cached by the split layout so blank runs, which neither change the token
- * nor the state, re-run only the joiner.
+ * [inState2]) - cached so blank runs, which neither change the token nor the state,
+ * re-run only the joiner.
  */
 private class PredictorOutput(
     val token: Int,
@@ -183,17 +164,14 @@ data class ChunkDecodeResult(
 )
 
 /**
- * Wraps the Parakeet ONNX sessions. Two layouts are supported, detected from the files in
- * the model directory:
- *  - fused (Parakeet-V3, istupakov export): `encoder-model` + `decoder_joint-model`;
- *  - split (Parakeet Ultra, sherpa-onnx export): `encoder` + `decoder` + `joiner`.
- * Both use nemo128.onnx and vocab.txt.
+ * Wraps the Parakeet ONNX sessions (Parakeet Ultra, sherpa-onnx export: `encoder` +
+ * `decoder` + `joiner`, plus nemo128.onnx and vocab.txt).
  *
- * Pipeline (all tensor names verified from device logcat):
+ * Pipeline:
  *  1. Normalise PCM  →  float32 in [-1, 1]
  *  2. nemo128.onnx   →  log-mel features  [1, 128, T′]
- *  3. encoder        →  encoded features  [1, 1024, T_enc]   ← (B, D, T) format!
- *  4. greedy TDT     →  token IDs via decoder_joint with LSTM state carry-over
+ *  3. encoder        →  encoded features  [1, 640, T_enc]   ← (B, D, T) format!
+ *  4. greedy TDT     →  token IDs via decoder + joiner with LSTM state carry-over
  *  5. detokenise     →  string via vocab.txt
  */
 class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
@@ -201,9 +179,9 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
     private var env: OrtEnvironment? = null
     private var prepSession: OrtSession? = null
     private var encSession: OrtSession? = null
-    /** `decoder_joint` in the fused layout, the prediction network (`decoder`) in the split one. */
+    /** The prediction network (`decoder`). */
     private var decSession: OrtSession? = null
-    /** The joint network (`joiner`); only set in the split layout. */
+    /** The joint network (`joiner`). */
     private var joinSession: OrtSession? = null
 
     private var vocabulary: Array<String> = emptyArray()
@@ -220,11 +198,12 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
      * `null` means auto-detect; the post-processing pipeline defaults to `"en"` in that case.
      *
      * **ONNX language conditioning note:**
-     * The current Parakeet TDT 0.6B-v3 ONNX export (nemo128 + encoder + decoder_joint) does
-     * NOT expose a language input tensor — the three verified input sets are:
-     *   • nemo128:         [waveforms (FLOAT), waveforms_lens (INT64)]
-     *   • encoder:         [audio_signal (FLOAT), length (INT64)]
-     *   • decoder_joint:   [encoder_outputs, targets, target_length, input_states_1, input_states_2]
+     * The Parakeet ONNX export (nemo128 + encoder + decoder + joiner) does NOT expose a
+     * language input tensor — the input sets are:
+     *   • nemo128:  [waveforms (FLOAT), waveforms_lens (INT64)]
+     *   • encoder:  [audio_signal (FLOAT), length (INT64)]
+     *   • decoder:  [targets, target_lengths, h, c]
+     *   • joiner:   [encoder_out, decoder_out]
      * None of these carry a language token.  When a language-conditioned ONNX export becomes
      * available, the correct place to inject it is `encode()` — pass the language ID as an
      * additional INT64 tensor whose name matches the new export's input slot (e.g.
@@ -267,7 +246,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         env = OrtEnvironment.getEnvironment()
         val e = env!!
 
-        val prepFile = File(modelDir, "nemo128.onnx")
+        val prepFile = File(modelDir, Files.PREPROCESSOR)
         if (prepFile.exists()) {
             prepSession = e.createSession(prepFile.absolutePath, opts)
             logSession("nemo128 (preprocessor)", prepSession!!)
@@ -275,43 +254,32 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             Log.w(TAG, "nemo128.onnx absent - will forward raw audio to encoder (shapes will mismatch)")
         }
 
-        if (File(modelDir, Files.SPLIT_DECODER).exists()) {
-            encSession = e.createSession(File(modelDir, Files.SPLIT_ENCODER).absolutePath, opts)
-            logSession("encoder", encSession!!)
-            decSession = e.createSession(File(modelDir, Files.SPLIT_DECODER).absolutePath, opts)
-            logSession("decoder", decSession!!)
-            joinSession = e.createSession(File(modelDir, Files.SPLIT_JOINER).absolutePath, opts)
-            logSession("joiner", joinSession!!)
-        } else {
-            encSession = e.createSession(File(modelDir, Files.FUSED_ENCODER).absolutePath, opts)
-            logSession("encoder", encSession!!)
-            decSession = e.createSession(File(modelDir, Files.FUSED_DECODER_JOINT).absolutePath, opts)
-            logSession("decoder_joint", decSession!!)
-        }
+        encSession = e.createSession(File(modelDir, Files.ENCODER).absolutePath, opts)
+        logSession("encoder", encSession!!)
+        decSession = e.createSession(File(modelDir, Files.DECODER).absolutePath, opts)
+        logSession("decoder", decSession!!)
+        joinSession = e.createSession(File(modelDir, Files.JOINER).absolutePath, opts)
+        logSession("joiner", joinSession!!)
 
         // vocab.txt format: "<token_text> <id>" (e.g. "▁like 2656").
         // Lines are in ID order so line N = token ID N - we just need the first field.
-        vocabulary = File(modelDir, "vocab.txt").readLines()
+        vocabulary = File(modelDir, Files.VOCAB).readLines()
             .map { line -> line.trim().split(Regex("\\s+")).firstOrNull().orEmpty() }
             .toTypedArray()
         Log.d(TAG, "Vocabulary: ${vocabulary.size} tokens")
 
-        // Resolution order:
-        //  1. Scan vocab.txt for a known blank label - most reliable for NeMo TDT exports
-        //  2. config.json - may be stale or wrong in third-party ONNX conversions
-        //  3. vocabulary.size - 1 - safe heuristic (blank is always the last NeMo token)
-        blankId = scanVocabForBlankId()
-            ?: parseBlankId(File(modelDir, "config.json"))
-                    ?: run {
-                val fallback = (vocabulary.size - 1).coerceAtLeast(0)
-                Log.w(TAG, "blank_id not found in vocab or config.json - using vocabulary.size-1=$fallback")
-                fallback
-            }
+        // Scan vocab.txt for a known blank label, else vocabulary.size - 1 (blank is always
+        // the last NeMo token).
+        blankId = scanVocabForBlankId() ?: run {
+            val fallback = (vocabulary.size - 1).coerceAtLeast(0)
+            Log.w(TAG, "blank_id not found in vocab - using vocabulary.size-1=$fallback")
+            fallback
+        }
         val blankLabel = vocabulary.getOrNull(blankId) ?: "<out-of-range>"
         Log.d(TAG, "Blank id: $blankId  ('$blankLabel')")
 
         // Derive numDurations from the joint's first output dimension
-        val jointSession = joinSession ?: decSession!!
+        val jointSession = joinSession!!
         val jointOutInfo = jointSession.outputInfo[jointSession.outputNames.first()]
         val jointDim = (jointOutInfo?.info as? ai.onnxruntime.TensorInfo)?.shape?.last()?.toInt() ?: 0
         numDurations = if (jointDim > blankId + 1) jointDim - (blankId + 1) else 0
@@ -503,29 +471,25 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             val lenOut = result.get(Names.ENC_OUT_LEN)
                 .orElseThrow { RuntimeException("Encoder output '${Names.ENC_OUT_LEN}' not found") }
                     as OnnxTensor
-            // INT64 in the fused export, INT32 in the split one
+            // INT32 in the sherpa-onnx export, INT64 in other NeMo exports
             val encLen = if (lenOut.info.type == OnnxJavaType.INT32) lenOut.intBuffer[0] else lenOut.longBuffer[0].toInt()
             cloneTensor(env, outTensor) to encLen
         }
     }
 
     /**
-     * Greedy TDT decoder - all details verified from logcat on 2026-03-23:
+     * Greedy TDT decoder.
      *
-     * Encoder output layout: [batch, enc_dim=1024, enc_time]  ← (B, D, T) NOT (B, T, D)
+     * Encoder output layout: [batch, enc_dim=640, enc_time]  ← (B, D, T) NOT (B, T, D)
      *
-     * decoder_joint inputs:
-     *   encoder_outputs  FLOAT [1, 1024, 1]    one frame at a time
-     *   targets          INT32 [1, 1]           previous token
-     *   target_length    INT32 [1]              always 1
-     *   input_states_1   FLOAT [2, 1, 640]      LSTM hidden
-     *   input_states_2   FLOAT [2, 1, 640]      LSTM cell
+     * decoder (prediction network), run once per emitted token:
+     *   in:  targets INT32 [1, 1] (previous token), target_lengths INT32 [1] (always 1),
+     *        h / c FLOAT [2, 1, 640] (LSTM hidden / cell)
+     *   out: 0 decoder_out FLOAT [1, 640, 1], 2 h_next, 3 c_next
      *
-     * decoder_joint outputs  (by index):
-     *   0  outputs          FLOAT [1, 1, 1, 8198]  joint logits
-     *   1  prednet_lengths  INT32 [1]              ignored
-     *   2  output_states_1  FLOAT [2, 1, 640]      updated LSTM hidden
-     *   3  output_states_2  FLOAT [2, 1, 640]      updated LSTM cell
+     * joiner, run once per encoder frame visited:
+     *   in:  encoder_out FLOAT [1, 640, 1] (one frame), decoder_out FLOAT [1, 640, 1]
+     *   out: 0 logits FLOAT [1, 1, 1, 8198]
      *
      * Logit layout: [0..blankId] = token logits (blank at blankId=8193),
      *               [blankId+1 .. blankId+numDurations] = TDT duration logits
@@ -545,7 +509,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
     ): DecodeRangeResult {
         // Encoder layout: [1, D, T]
         val encShape = encoderOut.info.shape
-        val encDim = encShape[1].toInt()   // D = 1024 (fused) / 640 (split)
+        val encDim = encShape[1].toInt()   // D = 640
 
         val encData = FloatArray(encoderOut.floatBuffer.remaining())
         encoderOut.floatBuffer.rewind()
@@ -557,7 +521,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         var lstmState1 = state.lstmState1.copyOf()
         var lstmState2 = state.lstmState2.copyOf()
 
-        // Split layout: the prediction network's output for the current token and state.
+        // The prediction network's output for the current token and state.
         var predictor: PredictorOutput? = null
 
         val hypothesis = mutableListOf<Int>()
@@ -588,18 +552,12 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
                 env, FloatBuffer.wrap(frameData), longArrayOf(1L, encDim.toLong(), 1L)
             )
             try {
-                val result = if (joinSession != null) {
-                    val cached = predictor?.takeIf {
-                        it.token == prevToken && it.inState1 === lstmState1 && it.inState2 === lstmState2
-                    }
-                    val pred = cached ?: runPredictor(env, session, prevToken, lstmState1, lstmState2)
-                    predictor = pred
-                    JointStep(runJoiner(env, frameTensor, pred.decoderOut), pred.state1, pred.state2)
-                } else {
-                    runDecoderJoint(env, session, frameTensor, prevToken, lstmState1, lstmState2)
-                }
+                val pred = predictor?.takeIf {
+                    it.token == prevToken && it.inState1 === lstmState1 && it.inState2 === lstmState2
+                } ?: runPredictor(env, session, prevToken, lstmState1, lstmState2)
+                predictor = pred
                 run {
-                    val logits = result.logits
+                    val logits = runJoiner(env, frameTensor, pred.decoderOut)
 
                     // Token: argmax over [0..blankId] (inclusive)
                     val predictedToken = (0..blankId).maxByOrNull { logits[it] } ?: blankId
@@ -631,8 +589,8 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
                     // context across blanks. Updating on every step (including blank) lets a
                     // low-margin short word collapse into a degenerate period loop.
                     if (predictedToken != blankId) {
-                        lstmState1 = result.state1
-                        lstmState2 = result.state2
+                        lstmState1 = pred.state1
+                        lstmState2 = pred.state2
                     }
 
                     // TDT advance rule
@@ -683,49 +641,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         )
     }
 
-    /**
-     * Runs the fused `decoder_joint` on one encoder frame: the joint logits and the LSTM
-     * state after consuming [prevToken] (the input state when the model has no state
-     * outputs).
-     */
-    private fun runDecoderJoint(
-        env: OrtEnvironment,
-        session: OrtSession,
-        frameTensor: OnnxTensor,
-        prevToken: Int,
-        state1: FloatArray,
-        state2: FloatArray,
-    ): JointStep {
-        val outputNames = session.outputNames.toList()
-        // targets and target_length are INT32 (verified from logcat)
-        val targetTensor = OnnxTensor.createTensor(env, IntBuffer.wrap(intArrayOf(prevToken)), longArrayOf(1L, 1L))
-        val targetLenTensor = OnnxTensor.createTensor(env, IntBuffer.wrap(intArrayOf(1)), longArrayOf(1L))
-        val statesTensor1 = OnnxTensor.createTensor(env, FloatBuffer.wrap(state1), LSTM_STATE_SHAPE)
-        val statesTensor2 = OnnxTensor.createTensor(env, FloatBuffer.wrap(state2), LSTM_STATE_SHAPE)
-        val inputs = mapOf(
-            Names.DEC_IN_ENC_OUT to frameTensor,
-            Names.DEC_IN_TARGETS to targetTensor,
-            Names.DEC_IN_TARGET_LEN to targetLenTensor,
-            Names.DEC_IN_STATES_1 to statesTensor1,
-            Names.DEC_IN_STATES_2 to statesTensor2,
-        )
-        try {
-            return session.run(inputs).use { result ->
-                // Joint logits: [1, 1, 1, 8198] → flat array of 8198 floats
-                val logits = (result.get(outputNames[0]).get() as OnnxTensor).toFloatArray()
-                val out1 = if (outputNames.size > 2) (result.get(outputNames[2]).get() as OnnxTensor).toFloatArray() else state1
-                val out2 = if (outputNames.size > 3) (result.get(outputNames[3]).get() as OnnxTensor).toFloatArray() else state2
-                JointStep(logits, out1, out2)
-            }
-        } finally {
-            targetTensor.close()
-            targetLenTensor.close()
-            statesTensor1.close()
-            statesTensor2.close()
-        }
-    }
-
-    /** Runs the split layout's prediction network on [token] from the LSTM state. */
+    /** Runs the prediction network on [token] from the LSTM state. */
     private fun runPredictor(
         env: OrtEnvironment,
         session: OrtSession,
@@ -763,7 +679,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         }
     }
 
-    /** Runs the split layout's joint network on one encoder frame and the predictor output. */
+    /** Runs the joint network on one encoder frame and the predictor output. */
     private fun runJoiner(env: OrtEnvironment, frameTensor: OnnxTensor, decoderOut: FloatArray): FloatArray {
         val decTensor = OnnxTensor.createTensor(
             env, FloatBuffer.wrap(decoderOut), longArrayOf(1L, decoderOut.size.toLong(), 1L)
@@ -864,33 +780,6 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
             }
         }
         return null
-    }
-
-    /**
-     * Attempts to read `blank_id` from `config.json`.
-     * Checks (in order): top-level, `model_defaults`, `decoder`, `tokenizer` sections.
-     * Returns `null` if the file is absent or no key is found - caller falls back to vocabulary.size-1.
-     */
-    private fun parseBlankId(configFile: File): Int? {
-        if (!configFile.exists()) return null
-        return runCatching {
-            val json = JSONObject(configFile.readText())
-            // Top-level key (common in ONNX-converted NeMo exports)
-            if (json.has("blank_id")) return@runCatching json.getInt("blank_id")
-            // NeMo model_defaults section
-            json.optJSONObject("model_defaults")?.let {
-                if (it.has("blank_id")) return@runCatching it.getInt("blank_id")
-            }
-            // NeMo decoder section
-            json.optJSONObject("decoder")?.let {
-                if (it.has("blank_id")) return@runCatching it.getInt("blank_id")
-            }
-            // NeMo tokenizer section
-            json.optJSONObject("tokenizer")?.let {
-                if (it.has("blank_id")) return@runCatching it.getInt("blank_id")
-            }
-            null
-        }.getOrNull()
     }
 
     private fun logMemoryUsage() {
