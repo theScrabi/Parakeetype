@@ -504,7 +504,11 @@ class KeyboardViewModel(
 
                     when (result) {
                         is TranscriptResult.Partial -> {
-                            _uiState.value = KeyboardUiState.Processing(result.text)
+                            // A partial that lands after the mic stopped must not flip
+                            // Transcribing back to the listening look.
+                            if (_uiState.value !is KeyboardUiState.Transcribing) {
+                                _uiState.value = KeyboardUiState.Processing(result.text)
+                            }
                             textInjector?.setPartial(result.text)
                             // Update alignment recovery counter from the injector.
                             val injector = textInjector

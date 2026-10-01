@@ -28,7 +28,8 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  *
  * - [KeyboardUiState.Idle]          → nothing (diagnostics badge if non-clean)
  * - [KeyboardUiState.Listening]     → nothing (the talk button shows it)
- * - [KeyboardUiState.Processing]    → partial transcript text
+ * - [KeyboardUiState.Processing]    → nothing (the partial is already in the text field;
+ *                                     this row only ever shows status messages)
  * - [KeyboardUiState.Transcribing]  → "Transcribing…" label (mic off, engine busy)
  * - [KeyboardUiState.Error]         → warning icon + error message + recovery action(s)
  * - [KeyboardUiState.EngineLoading] → loading / model-missing message (the "Open Parakeetype"
@@ -60,14 +61,12 @@ fun StatusIndicator(
 ) {
     AnimatedContent(
         targetState = uiState,
-        // Pure fade, no size animation: the default SizeTransform grew the width on every
-        // new partial while the content stayed centred, so the transcript appeared to
-        // slide in from the right.
+        // Pure fade, no size animation.
         transitionSpec = { (fadeIn(tween(200)) togetherWith fadeOut(tween(150))).using(null) },
         contentAlignment = Alignment.CenterStart,
         // Key by state type: each new partial transcript is a new Processing(...) value;
-        // without this every partial restarted the transition. The text now updates in
-        // place and only real state changes (listening → processing → transcribing …) fade.
+        // without this every partial restarted the transition. Only real state changes
+        // (listening → processing → transcribing …) fade.
         contentKey = { it::class },
         label = "statusIndicatorContent",
         modifier = modifier,
@@ -75,7 +74,7 @@ fun StatusIndicator(
         when (state) {
             is KeyboardUiState.Idle -> IdleIndicator(diagnostics = diagnostics)
             is KeyboardUiState.Listening -> Unit
-            is KeyboardUiState.Processing -> ProcessingIndicator(partial = state.partial)
+            is KeyboardUiState.Processing -> Unit
             is KeyboardUiState.Transcribing -> TranscribingIndicator()
             is KeyboardUiState.Error -> {
                 val isTransient = state.reason in setOf(
@@ -129,18 +128,6 @@ private fun IdleIndicator(diagnostics: PipelineDiagnostics = PipelineDiagnostics
             text = diagnostics.summary(),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.tertiary,
-            maxLines = 1,
-        )
-    }
-}
-
-@Composable
-private fun ProcessingIndicator(partial: String) {
-    if (partial.isNotEmpty()) {
-        Text(
-            text = partial,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
             maxLines = 1,
         )
     }
@@ -226,14 +213,6 @@ private fun EngineLoadingIndicator(message: String) {
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         maxLines = 2,
     )
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF111111)
-@Composable
-private fun StatusProcessingPreview() {
-    ParakeetypeKeyboardTheme {
-        StatusIndicator(uiState = KeyboardUiState.Processing("The quick brown fox…"))
-    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)
