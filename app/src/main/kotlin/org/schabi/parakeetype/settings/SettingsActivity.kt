@@ -7,6 +7,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -66,6 +69,8 @@ object SettingsRoutes {
     const val CALIBRATION = "calibration"
 }
 
+private const val SCREEN_FADE_MS = 300
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsNavHost(navController: NavHostController) {
@@ -102,6 +107,14 @@ private fun SettingsNavHost(navController: NavHostController) {
             navController = navController,
             startDestination = SettingsRoutes.HOME,
             modifier = Modifier.padding(padding),
+            // Fade only. The library's default for the predictive back gesture scales the
+            // leaving screen down, which looked inconsistent next to the fades elsewhere.
+            enterTransition = { fadeIn(tween(SCREEN_FADE_MS)) },
+            exitTransition = { fadeOut(tween(SCREEN_FADE_MS)) },
+            popEnterTransition = { fadeIn(tween(SCREEN_FADE_MS)) },
+            popExitTransition = { fadeOut(tween(SCREEN_FADE_MS)) },
+            predictivePopEnterTransition = { fadeIn(tween(SCREEN_FADE_MS)) },
+            predictivePopExitTransition = { fadeOut(tween(SCREEN_FADE_MS)) },
         ) {
             composable(
                 route = SettingsRoutes.HOME,
