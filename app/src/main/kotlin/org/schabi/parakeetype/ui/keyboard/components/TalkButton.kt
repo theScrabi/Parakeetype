@@ -5,10 +5,10 @@ import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material.icons.rounded.Mic
-import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.*
@@ -50,13 +50,12 @@ private const val LOCK_HINT_GAP_DP = 8
  * to engage continuous mode.  A lock indicator floats to the left of the button while the user
  * holds, similar to the WhatsApp voice-message lock UI: a bouncing left chevron invites the
  * swipe, and the lock closes and fills with colour as the drag threshold is approached.
- * The button scales and turns to the error container colour to confirm the lock.
  * Recording continues without the user needing to keep touching the screen.
  *
  * While listening a tinted halo behind the button follows the microphone level ([micLevel]),
  * like the voice-input sheet's microphone.
  *
- * **Continuous mode** (HOLD) - button shows a pulsing [Stop] icon.  Tap once to stop recording.
+ * **Continuous mode** (HOLD) - button keeps the listening look.  Tap once to stop recording.
  *
  * **TAP_TOGGLE mode** - single tap starts recording; another tap stops it.  No hold needed.
  *
@@ -115,20 +114,8 @@ fun TalkButton(
         label = "talkButtonBaseScale",
     )
 
-    //  Continuous-mode pulse
-    val infiniteTransition = rememberInfiniteTransition(label = "talkButtonContinuousPulse")
-    val pulse by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.1f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 650, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse,
-        ),
-        label = "talkButtonPulseScale",
-    )
-
-    // Combine base scale with drag-progress grow and continuous pulse.
-    val finalScale = baseScale * (if (isContinuousActive) pulse else 1f) +
+    // Combine base scale with drag-progress grow.
+    val finalScale = baseScale +
             (if (effectiveListening && !isContinuousActive) dragProgress * 0.05f else 0f)
 
     // Halo behind the button that grows with the microphone level while listening.
@@ -137,12 +124,11 @@ fun TalkButton(
         label = "talkButtonMicLevel",
     )
 
-    //  Colours - Material 3 tonal container pairs: listening uses the same
-    //  secondaryContainer as the Enter key, locked (continuous) mode the errorContainer.
+    //  Colours - Material 3 tonal container pairs: listening (held or locked) uses the
+    //  same secondaryContainer as the Enter key.
     val backgroundColor by animateColorAsState(
         targetValue = when {
             !enabled -> MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-            isContinuousActive -> MaterialTheme.colorScheme.errorContainer
             effectiveListening -> MaterialTheme.colorScheme.secondaryContainer
             else -> MaterialTheme.colorScheme.surfaceVariant
         },
@@ -151,12 +137,15 @@ fun TalkButton(
     val iconTint by animateColorAsState(
         targetValue = when {
             !enabled -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
-            isContinuousActive -> MaterialTheme.colorScheme.onErrorContainer
             effectiveListening -> MaterialTheme.colorScheme.onSecondaryContainer
             else -> MaterialTheme.colorScheme.onSurfaceVariant
         },
         label = "talkButtonIconTint",
     )
+
+    // The halo's tint: a light primary at 24 % over the dark keyboard is about as bright as
+    // the dark theme's secondaryContainer button, so the rim blends into it — keep it fainter there.
+    val haloColor = MaterialTheme.colorScheme.primary.copy(alpha = if (isSystemInDarkTheme()) 0.10f else 0.24f)
 
     //  Capture latest callbacks so pointerInput coroutine always calls the 
     //  current lambdas without restarting the gesture handler.             
@@ -264,7 +253,7 @@ fun TalkButton(
                 modifier = Modifier
                     .matchParentSize()
                     .scale(haloScale)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.24f), CircleShape),
+                    .background(haloColor, CircleShape),
             )
         }
 
@@ -278,7 +267,7 @@ fun TalkButton(
                 .background(backgroundColor),
         ) {
             Icon(
-                imageVector = if (isContinuousActive) Icons.Rounded.Stop else Icons.Rounded.Mic,
+                imageVector = Icons.Rounded.Mic,
                 contentDescription = when {
                     !enabled -> stringResource(R.string.cd_talk_disabled)
                     isContinuousActive -> stringResource(R.string.cd_talk_stop_continuous)
