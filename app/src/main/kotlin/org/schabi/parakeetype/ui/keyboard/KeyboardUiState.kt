@@ -46,6 +46,9 @@ sealed class KeyboardUiState {
     enum class ErrorReason {
         MicPermissionDenied,
         MicInitFailed,
+
+        /** Another app (e.g. a phone call) has the microphone. */
+        MicBusy,
         TranscriptionFailed,
         AudioCaptureFailed,
         EngineLoadFailed,

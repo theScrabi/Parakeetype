@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Chargement du moteur de transcription…</string>
     <string name="status_error_mic_permission">Autorisation du micro refusée – ouvrez Parakeetype pour l\'accorder</string>
     <string name="status_error_mic_init">Impossible d\'ouvrir le micro</string>
+    <string name="status_error_mic_busy">Le micro est utilisé par une autre application</string>
     <string name="status_error_transcription">Échec de la transcription</string>
     <string name="status_error_audio_capture">Échec de la capture audio</string>
     <string name="status_error_engine_load">Échec du chargement du moteur</string>

@@ -187,6 +187,13 @@ class ParakeetypeInputMethodService :
             }
         }
 
+        // Another app (e.g. a phone call) has the microphone and the keyboard has shown that
+        // for a few seconds: close it — or return to the keyboard an instant-mode session
+        // came from.
+        keyboardViewModel.onCloseForBusyMic = { switchBack ->
+            if (!switchBack || !switchToPreviousInputMethod()) requestHideSelf(0)
+        }
+
         keyboardViewModel.onMissingRepo = {
             inferenceBinder?.reloadIfNeeded()
             if (!isBound) {

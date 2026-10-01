@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Läser in transkriberingsmotorn…</string>
     <string name="status_error_mic_permission">Mikrofonbehörighet nekad - öppna Parakeetype för att bevilja den</string>
     <string name="status_error_mic_init">Det gick inte att öppna mikrofonen</string>
+    <string name="status_error_mic_busy">Mikrofonen används av en annan app</string>
     <string name="status_error_transcription">Transkriberingen misslyckades</string>
     <string name="status_error_audio_capture">Ljudinspelningen misslyckades</string>
     <string name="status_error_engine_load">Motorn kunde inte läsas in</string>

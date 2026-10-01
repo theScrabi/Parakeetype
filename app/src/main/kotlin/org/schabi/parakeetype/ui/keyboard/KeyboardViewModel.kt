@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import org.schabi.parakeetype.audio.AudioCaptureManager
+import org.schabi.parakeetype.audio.MicrophoneBusyException
 import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.ime.EnterAction
 import org.schabi.parakeetype.ime.TextInjector
@@ -28,6 +29,9 @@ private const val INSTANT_END_OF_SPEECH_SILENCE_MS = 2_000L
 
 /** Without any speech for this long an instant-mode session ends on its own. */
 private const val INSTANT_NO_SPEECH_TIMEOUT_MS = 8_000L
+
+/** How long the "microphone in use" error is shown before the keyboard closes. */
+private const val MIC_BUSY_CLOSE_DELAY_MS = 3_000L
 
 /** Report the microphone level every 3rd 30 ms chunk (~11 updates per second). */
 private const val LEVEL_REPORT_INTERVAL_CHUNKS = 3
@@ -370,6 +374,13 @@ class KeyboardViewModel(
     }
 
     /**
+     * Set by [org.schabi.parakeetype.ime.ParakeetypeInputMethodService]: another app has the
+     * microphone, the error has been shown for a few seconds — close the keyboard. With
+     * [switchBack] (an instant-mode session) return to the previous keyboard instead.
+     */
+    var onCloseForBusyMic: ((switchBack: Boolean) -> Unit)? = null
+
+    /**
      * Set by [org.schabi.parakeetype.ime.ParakeetypeInputMethodService] to a lambda that requests
      * the inference service to reload its (still-present) model and re-establish the
      * repository binding.
@@ -597,6 +608,9 @@ class KeyboardViewModel(
                 }
             } catch (e: CancellationException) {
                 throw e
+            } catch (e: MicrophoneBusyException) {
+                Log.w(TAG, "Microphone in use by another app", e)
+                onMicBusy(switchBack = instant && instantSwitchBack)
             } catch (e: SecurityException) {
                 Log.e(TAG, "Microphone permission denied", e)
                 _isContinuousMode.value = false
@@ -621,6 +635,27 @@ class KeyboardViewModel(
                     detail = e.message,
                 )
             }
+        }
+    }
+
+    /**
+     * Another app (e.g. a phone call) has the microphone: keep what was transcribed so far,
+     * show the error and close the keyboard after [MIC_BUSY_CLOSE_DELAY_MS] unless the user
+     * dismissed the error or started over meanwhile.
+     */
+    private fun onMicBusy(switchBack: Boolean) {
+        val partial = (_uiState.value as? KeyboardUiState.Processing)?.partial
+        if (!partial.isNullOrEmpty()) textInjector?.commitFinal(partial) else textInjector?.clear()
+        captureJob = null
+        cancelInstantSession()
+        _isContinuousMode.value = false
+        val error = KeyboardUiState.Error(reason = KeyboardUiState.ErrorReason.MicBusy)
+        _uiState.value = error
+        viewModelScope.launch {
+            delay(MIC_BUSY_CLOSE_DELAY_MS)
+            if (_uiState.value !== error) return@launch
+            _uiState.value = KeyboardUiState.Idle
+            onCloseForBusyMic?.invoke(switchBack)
         }
     }
 

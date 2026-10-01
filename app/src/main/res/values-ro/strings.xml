@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Se încarcă motorul de transcriere…</string>
     <string name="status_error_mic_permission">Permisiunea pentru microfon a fost refuzată – deschideți Parakeetype pentru a o acorda</string>
     <string name="status_error_mic_init">Microfonul nu a putut fi deschis</string>
+    <string name="status_error_mic_busy">Microfonul este folosit de altă aplicație</string>
     <string name="status_error_transcription">Transcrierea nu a reușit</string>
     <string name="status_error_audio_capture">Captarea audio nu a reușit</string>
     <string name="status_error_engine_load">Motorul nu s-a putut încărca</string>

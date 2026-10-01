@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Qed titgħabba l-magna tat-traskrizzjoni…</string>
     <string name="status_error_mic_permission">Permess għall-mikrofonu miċħud – iftaħ Parakeetype biex tagħtih</string>
     <string name="status_error_mic_init">Il-mikrofonu ma setax jinfetaħ</string>
+    <string name="status_error_mic_busy">Il-mikrofonu qed jintuża minn app oħra</string>
     <string name="status_error_transcription">It-traskrizzjoni falliet</string>
     <string name="status_error_audio_capture">Ir-reġistrazzjoni tal-awdjo falliet</string>
     <string name="status_error_engine_load">Il-magna ma setgħetx titgħabba</string>

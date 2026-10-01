@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Učitavanje modula za transkripciju…</string>
     <string name="status_error_mic_permission">Dopuštenje za mikrofon odbijeno – otvorite Parakeetype da biste ga dodijelili</string>
     <string name="status_error_mic_init">Mikrofon se nije mogao otvoriti</string>
+    <string name="status_error_mic_busy">Mikrofon koristi druga aplikacija</string>
     <string name="status_error_transcription">Transkripcija nije uspjela</string>
     <string name="status_error_audio_capture">Snimanje zvuka nije uspjelo</string>
     <string name="status_error_engine_load">Učitavanje modula nije uspjelo</string>

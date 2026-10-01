@@ -60,12 +60,18 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
 import org.schabi.parakeetype.settings.SettingsActivity
 import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
 
 private const val TAG = "VoiceInputActivity"
+
+/** How long the sheet shows "microphone in use" before it closes. */
+private const val MIC_BUSY_CLOSE_DELAY_MS = 3_000L
 
 private sealed class VoiceInputUiState {
     /**
@@ -146,7 +152,11 @@ class VoiceInputActivity : ComponentActivity() {
         super.onDestroy()
     }
 
+    /** Closes the sheet a few seconds after another app turned out to hold the microphone. */
+    private var closeJob: Job? = null
+
     private fun startSession() {
+        closeJob?.cancel()
         session?.cancel()
         closeResult = Activity.RESULT_CANCELED
         uiState = VoiceInputUiState.Listening()
@@ -188,14 +198,22 @@ class VoiceInputActivity : ComponentActivity() {
 
         override fun onEndOfSegmentedSession() = Unit
 
-        override fun onError(error: Int) {
+        override fun onError(error: Int, microphoneBusy: Boolean) {
             session = null
-            Log.w(TAG, "Recognition error $error")
+            Log.w(TAG, "Recognition error $error" + if (microphoneBusy) " (microphone busy)" else "")
             closeResult = when (error) {
                 SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> RecognizerIntent.RESULT_NO_MATCH
                 SpeechRecognizer.ERROR_AUDIO, SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> RecognizerIntent.RESULT_AUDIO_ERROR
                 SpeechRecognizer.ERROR_CLIENT -> RecognizerIntent.RESULT_CLIENT_ERROR
                 else -> RecognizerIntent.RESULT_SERVER_ERROR
+            }
+            if (microphoneBusy) {
+                uiState = VoiceInputUiState.Failed(R.string.status_error_mic_busy, canRetry = false, openApp = false)
+                closeJob = lifecycleScope.launch {
+                    delay(MIC_BUSY_CLOSE_DELAY_MS)
+                    finishWith(closeResult)
+                }
+                return
             }
             uiState = when (error) {
                 SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT ->

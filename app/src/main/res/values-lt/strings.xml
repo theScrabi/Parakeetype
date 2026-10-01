@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Įkeliamas transkribavimo variklis…</string>
     <string name="status_error_mic_permission">Mikrofono leidimas atmestas – atidarykite programą Parakeetype ir jį suteikite</string>
     <string name="status_error_mic_init">Nepavyko atidaryti mikrofono</string>
+    <string name="status_error_mic_busy">Mikrofoną naudoja kita programa</string>
     <string name="status_error_transcription">Transkribuoti nepavyko</string>
     <string name="status_error_audio_capture">Nepavyko įrašyti garso</string>
     <string name="status_error_engine_load">Nepavyko įkelti variklio</string>

@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Notiek transkripcijas dzinēja ielāde…</string>
     <string name="status_error_mic_permission">Mikrofona atļauja liegta — atveriet lietotni Parakeetype, lai to piešķirtu</string>
     <string name="status_error_mic_init">Neizdevās atvērt mikrofonu</string>
+    <string name="status_error_mic_busy">Mikrofonu izmanto cita lietotne</string>
     <string name="status_error_transcription">Transkripcija neizdevās</string>
     <string name="status_error_audio_capture">Audio ierakstīšana neizdevās</string>
     <string name="status_error_engine_load">Dzinēju neizdevās ielādēt</string>

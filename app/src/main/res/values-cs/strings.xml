@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Načítání modulu přepisu…</string>
     <string name="status_error_mic_permission">Oprávnění k mikrofonu bylo zamítnuto – otevřete Parakeetype a udělte ho</string>
     <string name="status_error_mic_init">Mikrofon se nepodařilo otevřít</string>
+    <string name="status_error_mic_busy">Mikrofon používá jiná aplikace</string>
     <string name="status_error_transcription">Přepis se nezdařil</string>
     <string name="status_error_audio_capture">Záznam zvuku se nezdařil</string>
     <string name="status_error_engine_load">Modul se nepodařilo načíst</string>

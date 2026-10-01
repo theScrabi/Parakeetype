@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Cargando motor de transcripción…</string>
     <string name="status_error_mic_permission">Permiso de micrófono denegado: abre Parakeetype para concederlo</string>
     <string name="status_error_mic_init">No se ha podido abrir el micrófono</string>
+    <string name="status_error_mic_busy">Otra aplicación está usando el micrófono</string>
     <string name="status_error_transcription">Error de transcripción</string>
     <string name="status_error_audio_capture">Error al capturar el audio</string>
     <string name="status_error_engine_load">No se ha podido cargar el motor</string>

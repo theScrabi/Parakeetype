@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Завантаження рушія розпізнавання…</string>
     <string name="status_error_mic_permission">Немає доступу до мікрофона – відкрийте Parakeetype, щоб надати його</string>
     <string name="status_error_mic_init">Не вдалося відкрити мікрофон</string>
+    <string name="status_error_mic_busy">Мікрофон використовує інший застосунок</string>
     <string name="status_error_transcription">Помилка розпізнавання</string>
     <string name="status_error_audio_capture">Помилка запису звуку</string>
     <string name="status_error_engine_load">Не вдалося завантажити рушій</string>

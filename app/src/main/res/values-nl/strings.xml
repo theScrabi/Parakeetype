@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Transcriptie-engine laden…</string>
     <string name="status_error_mic_permission">Microfoontoegang geweigerd - open Parakeetype om toegang te geven</string>
     <string name="status_error_mic_init">Kan de microfoon niet openen</string>
+    <string name="status_error_mic_busy">De microfoon wordt gebruikt door een andere app</string>
     <string name="status_error_transcription">Transcriptie mislukt</string>
     <string name="status_error_audio_capture">Audio-opname mislukt</string>
     <string name="status_error_engine_load">Engine kan niet worden geladen</string>

@@ -30,6 +30,12 @@ private const val CHUNK_SAMPLES = 480
  */
 private const val HANGOVER_DRAIN_SAFETY_FRAMES = 20
 
+/**
+ * Check every 10th chunk (~300 ms) whether Android silences this recording because another
+ * app (a phone call, a voice recorder) has the microphone.
+ */
+private const val SILENCED_CHECK_INTERVAL_CHUNKS = 10
+
 // Capture source: MediaRecorder.AudioSource.DEFAULT — the vendor-recommended source.
 // It arrives at a usable level with the platform's standard voice processing, so no
 // application-side gain is applied.
@@ -107,6 +113,9 @@ class AudioCaptureManager(private val context: Context) {
      *   [SpeechEndpointer]. Only called with [vadEnabled].
      * @throws SecurityException if [android.Manifest.permission.RECORD_AUDIO] is not granted.
      * @throws IllegalStateException if [AudioRecord] fails to initialise.
+     * @throws MicrophoneBusyException if another app has the microphone: recording does not
+     *   start, or Android silences it (it then delivers only zeros) — at the start or later,
+     *   e.g. when a phone call comes in.
      */
     // Permission is checked manually via PermissionHelper before AudioRecord is created.
     @SuppressLint("MissingPermission")
@@ -178,9 +187,20 @@ class AudioCaptureManager(private val context: Context) {
 
             try {
                 recorder.startRecording()
+                if (recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING) {
+                    throw MicrophoneBusyException("AudioRecord did not start recording")
+                }
                 Log.d(TAG, "AudioRecord started - chunk=$CHUNK_SAMPLES samples, buf=$bufferBytes bytes")
 
+                var chunksRead = 0
                 while (currentCoroutineContext().isActive && !stopRequested) {
+                    // Android does not fail a recording while another app holds the
+                    // microphone (concurrent capture, API 29+): it keeps delivering silence.
+                    if (chunksRead++ % SILENCED_CHECK_INTERVAL_CHUNKS == 0 &&
+                        recorder.activeRecordingConfiguration?.isClientSilenced == true
+                    ) {
+                        throw MicrophoneBusyException("Recording is silenced - another app uses the microphone")
+                    }
                     val read = recorder.read(buffer, 0, buffer.size)
                     when {
                         read > 0 -> {

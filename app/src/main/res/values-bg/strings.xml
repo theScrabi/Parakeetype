@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Механизмът за разпознаване се зарежда…</string>
     <string name="status_error_mic_permission">Няма разрешение за микрофона – отворете Parakeetype, за да го дадете</string>
     <string name="status_error_mic_init">Микрофонът не можа да бъде отворен</string>
+    <string name="status_error_mic_busy">Микрофонът се използва от друго приложение</string>
     <string name="status_error_transcription">Разпознаването не бе успешно</string>
     <string name="status_error_audio_capture">Записът на звук не бе успешен</string>
     <string name="status_error_engine_load">Механизмът за разпознаване не можа да се зареди</string>

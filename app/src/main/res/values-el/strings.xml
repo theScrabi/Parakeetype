@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Φόρτωση μηχανής μεταγραφής…</string>
     <string name="status_error_mic_permission">Δεν δόθηκε άδεια μικροφώνου – ανοίξτε το Parakeetype για να την παραχωρήσετε</string>
     <string name="status_error_mic_init">Δεν ήταν δυνατό το άνοιγμα του μικροφώνου</string>
+    <string name="status_error_mic_busy">Το μικρόφωνο χρησιμοποιείται από άλλη εφαρμογή</string>
     <string name="status_error_transcription">Η μεταγραφή απέτυχε</string>
     <string name="status_error_audio_capture">Η εγγραφή ήχου απέτυχε</string>
     <string name="status_error_engine_load">Η φόρτωση της μηχανής απέτυχε</string>

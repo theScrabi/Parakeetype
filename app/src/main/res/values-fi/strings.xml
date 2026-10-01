@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Ladataan litterointimoottoria…</string>
     <string name="status_error_mic_permission">Mikrofonin käyttölupa evätty - myönnä se avaamalla Parakeetype</string>
     <string name="status_error_mic_init">Mikrofonia ei voitu avata</string>
+    <string name="status_error_mic_busy">Toinen sovellus käyttää mikrofonia</string>
     <string name="status_error_transcription">Litterointi epäonnistui</string>
     <string name="status_error_audio_capture">Äänen tallennus epäonnistui</string>
     <string name="status_error_engine_load">Moottorin lataaminen epäonnistui</string>

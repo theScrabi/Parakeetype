@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Átíró motor betöltése…</string>
     <string name="status_error_mic_permission">Mikrofonengedély megtagadva – a megadáshoz nyissa meg a Parakeetype alkalmazást</string>
     <string name="status_error_mic_init">Nem sikerült megnyitni a mikrofont</string>
+    <string name="status_error_mic_busy">A mikrofont egy másik alkalmazás használja</string>
     <string name="status_error_transcription">Sikertelen átírás</string>
     <string name="status_error_audio_capture">Sikertelen hangrögzítés</string>
     <string name="status_error_engine_load">Nem sikerült betölteni a motort</string>

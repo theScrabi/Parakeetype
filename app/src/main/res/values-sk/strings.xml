@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Načítava sa modul prepisu…</string>
     <string name="status_error_mic_permission">Povolenie pre mikrofón bolo zamietnuté – otvorte Parakeetype a udeľte ho</string>
     <string name="status_error_mic_init">Mikrofón sa nepodarilo otvoriť</string>
+    <string name="status_error_mic_busy">Mikrofón používa iná aplikácia</string>
     <string name="status_error_transcription">Prepis zlyhal</string>
     <string name="status_error_audio_capture">Záznam zvuku zlyhal</string>
     <string name="status_error_engine_load">Modul sa nepodarilo načítať</string>

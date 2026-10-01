@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Transkribeerimismootori laadimine…</string>
     <string name="status_error_mic_permission">Mikrofoni luba keelati - avage loa andmiseks Parakeetype</string>
     <string name="status_error_mic_init">Mikrofoni ei saanud avada</string>
+    <string name="status_error_mic_busy">Mikrofoni kasutab teine rakendus</string>
     <string name="status_error_transcription">Transkribeerimine ebaõnnestus</string>
     <string name="status_error_audio_capture">Heli salvestamine ebaõnnestus</string>
     <string name="status_error_engine_load">Mootori laadimine ebaõnnestus</string>

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.schabi.parakeetype.audio.AudioCaptureManager
 import org.schabi.parakeetype.audio.AudioChunk
+import org.schabi.parakeetype.audio.MicrophoneBusyException
 import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.inference.TranscriptResult
 import org.schabi.parakeetype.settings.preferences.AppPreferences
@@ -115,8 +116,12 @@ class RecognitionSession(
         /** Terminal: a segmented session ended. */
         fun onEndOfSegmentedSession()
 
-        /** Terminal: [error] is a `SpeechRecognizer.ERROR_*` code. */
-        fun onError(error: Int)
+        /**
+         * Terminal: [error] is a `SpeechRecognizer.ERROR_*` code. [microphoneBusy] marks an
+         * [SpeechRecognizer.ERROR_AUDIO] because another app (e.g. a phone call) has the
+         * microphone.
+         */
+        fun onError(error: Int, microphoneBusy: Boolean = false)
     }
 
     private val capture = AudioCaptureManager(audioContext)
@@ -193,6 +198,9 @@ class RecognitionSession(
                 }).collect { chunk -> audio.send(chunk) }
             } catch (e: CancellationException) {
                 throw e
+            } catch (e: MicrophoneBusyException) {
+                Log.w(TAG, "Microphone in use by another app", e)
+                fail(SpeechRecognizer.ERROR_AUDIO, microphoneBusy = true)
             } catch (e: SecurityException) {
                 Log.e(TAG, "Microphone permission missing", e)
                 fail(SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS)
@@ -301,10 +309,10 @@ class RecognitionSession(
         }
     }
 
-    private fun fail(error: Int) {
+    private fun fail(error: Int, microphoneBusy: Boolean = false) {
         if (finished) return
         finished = true
-        listener.onError(error)
+        listener.onError(error, microphoneBusy)
         job?.cancel()
     }
 

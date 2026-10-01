@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Wczytywanie silnika transkrypcji…</string>
     <string name="status_error_mic_permission">Brak uprawnienia do mikrofonu – otwórz Parakeetype, aby je przyznać</string>
     <string name="status_error_mic_init">Nie udało się otworzyć mikrofonu</string>
+    <string name="status_error_mic_busy">Mikrofon jest używany przez inną aplikację</string>
     <string name="status_error_transcription">Transkrypcja nie powiodła się</string>
     <string name="status_error_audio_capture">Nagrywanie dźwięku nie powiodło się</string>
     <string name="status_error_engine_load">Nie udało się wczytać silnika</string>

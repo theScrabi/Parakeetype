@@ -148,6 +148,7 @@
     <string name="status_engine_loading">Transkriptions-Engine wird geladen …</string>
     <string name="status_error_mic_permission">Mikrofonberechtigung fehlt - Parakeetype öffnen</string>
     <string name="status_error_mic_init">Mikrofon konnte nicht geöffnet werden</string>
+    <string name="status_error_mic_busy">Das Mikrofon wird von einer anderen App verwendet</string>
     <string name="status_error_transcription">Transkription fehlgeschlagen</string>
     <string name="status_error_audio_capture">Audioaufnahme fehlgeschlagen</string>
     <string name="status_error_engine_load">Engine konnte nicht geladen werden</string>

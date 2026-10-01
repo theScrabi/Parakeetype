@@ -45,7 +45,7 @@ internal val PARAKEET_LANGUAGES = listOf(
  * microphone use is attributed to (and shown for) the calling app as well.
  *
  * The service has no UI, so it tells the user directly when a recognition has to wait for the
- * model to load or fails because no model is installed — with a toast, as a service in the
+ * model to load or fails because no model is installed or another app has the microphone — with a toast, as a service in the
  * background may not start an activity. Android suppresses those toasts while Parakeetype's
  * notifications are disabled; that is accepted.
  */
@@ -155,12 +155,13 @@ class ParakeetypeRecognitionService : RecognitionService() {
             callback.send { endOfSegmentedSession() }
         }
 
-        override fun onError(error: Int) {
+        override fun onError(error: Int, microphoneBusy: Boolean) {
             endSession()
             // Only reported when no model is installed (see InferenceConnection).
             if (error == SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE) {
                 showToast(R.string.voice_input_error_no_model, Toast.LENGTH_LONG)
             }
+            if (microphoneBusy) showToast(R.string.status_error_mic_busy, Toast.LENGTH_LONG)
             callback.send { error(error) }
         }
 

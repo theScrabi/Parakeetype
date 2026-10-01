@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Nalaganje pogona za prepis…</string>
     <string name="status_error_mic_permission">Dovoljenje za mikrofon je zavrnjeno – odprite Parakeetype in ga odobrite</string>
     <string name="status_error_mic_init">Mikrofona ni bilo mogoče odpreti</string>
+    <string name="status_error_mic_busy">Mikrofon uporablja druga aplikacija</string>
     <string name="status_error_transcription">Prepis ni uspel</string>
     <string name="status_error_audio_capture">Zajem zvoka ni uspel</string>
     <string name="status_error_engine_load">Pogona ni bilo mogoče naložiti</string>

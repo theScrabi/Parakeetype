@@ -40,7 +40,8 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  * [KeyboardUiState.ErrorReason.AudioCaptureFailed], [KeyboardUiState.ErrorReason.MicInitFailed])
  * a "Try again" button is shown alongside the error so the user can retry immediately without
  * leaving the keyboard. For errors that require external action (permission denied, engine load
- * failed) the "Open Parakeetype" button is shown instead.
+ * failed) the "Open Parakeetype" button is shown instead. A busy microphone
+ * ([KeyboardUiState.ErrorReason.MicBusy]) shows no button: the keyboard closes after a few seconds.
  *
  * @param diagnostics Pipeline counters from the most recent recording session. When non-clean
  *                    a compact summary (e.g. "2T · 1R") is shown in the idle state,
@@ -82,9 +83,11 @@ fun StatusIndicator(
                     KeyboardUiState.ErrorReason.AudioCaptureFailed,
                     KeyboardUiState.ErrorReason.MicInitFailed,
                 )
+                // Another app has the microphone: nothing to do here, the keyboard closes.
+                val closesItself = state.reason == KeyboardUiState.ErrorReason.MicBusy
                 ErrorIndicator(
                     message = localizedErrorMessage(state),
-                    onOpenCompanionApp = if (isTransient) null else onOpenCompanionApp,
+                    onOpenCompanionApp = if (isTransient || closesItself) null else onOpenCompanionApp,
                     onRetry = if (isTransient) onRetry else null,
                 )
             }
@@ -103,6 +106,7 @@ private fun localizedErrorMessage(state: KeyboardUiState.Error): String {
         when (state.reason) {
             KeyboardUiState.ErrorReason.MicPermissionDenied -> R.string.status_error_mic_permission
             KeyboardUiState.ErrorReason.MicInitFailed -> R.string.status_error_mic_init
+            KeyboardUiState.ErrorReason.MicBusy -> R.string.status_error_mic_busy
             KeyboardUiState.ErrorReason.TranscriptionFailed -> R.string.status_error_transcription
             KeyboardUiState.ErrorReason.AudioCaptureFailed -> R.string.status_error_audio_capture
             KeyboardUiState.ErrorReason.EngineLoadFailed -> R.string.status_error_engine_load

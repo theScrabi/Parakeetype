@@ -143,6 +143,7 @@
     <string name="status_engine_loading">Loading transcription engine…</string>
     <string name="status_error_mic_permission">Microphone permission denied - open Parakeetype to grant it</string>
     <string name="status_error_mic_init">Could not open the microphone</string>
+    <string name="status_error_mic_busy">The microphone is in use by another app</string>
     <string name="status_error_transcription">Transcription failed</string>
     <string name="status_error_audio_capture">Audio capture failed</string>
     <string name="status_error_engine_load">Engine failed to load</string>

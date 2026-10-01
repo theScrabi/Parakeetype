@@ -126,6 +126,7 @@
     <string name="status_engine_loading">Загрузка движка распознавания…</string>
     <string name="status_error_mic_permission">Нет доступа к микрофону – откройте Parakeetype, чтобы предоставить его</string>
     <string name="status_error_mic_init">Не удалось открыть микрофон</string>
+    <string name="status_error_mic_busy">Микрофон используется другим приложением</string>
     <string name="status_error_transcription">Ошибка распознавания</string>
     <string name="status_error_audio_capture">Ошибка записи звука</string>
     <string name="status_error_engine_load">Не удалось загрузить движок</string>
