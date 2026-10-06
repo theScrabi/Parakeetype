@@ -1,0 +1,1 @@
+Rychlá klávesnice a hlasový vstup s převodem řeči na text přímo v zařízení.

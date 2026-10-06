@@ -1,0 +1,25 @@
+Parakeetype ist eine freie Open-Source-App für Spracherkennung auf Android. Sie funktioniert als Sprachtastatur und als Spracherkennungsdienst für das gesamte System.
+
+Die gesamte Transkription läuft ausschließlich auf deinem Gerät mit dem Parakeet-Ultra-Modell (einer weitertrainierten Version von NVIDIAs Parakeet-TDT v3) über ONNX Runtime - kein Audio verlässt dein Handy, kein Konto nötig, und die App hat überhaupt keinen Internetzugriff.
+
+<b>Funktionen</b>
+
+• Sprache-zu-Text-Tastatur: diktiere in jedes Textfeld
+• Spracheingabe-Dienst: andere Apps wie Übersetzer, Firefox oder Duolingo können Parakeetype für ihre Spracheingabe nutzen
+• Sehr schnell: das Modell bleibt im Speicher geladen, sodass die Transkription sofort startet
+• Erkennung vollständig auf dem Gerät - komplett privat
+• Keine Internetberechtigung: lade die Modelldatei einmal im Browser herunter und importiere sie
+• Keine Google Play Services, kein Firebase und keine Telemetrie von Drittanbietern
+• Minimale Berechtigungen: Mikrofon, Benachrichtigungen, Vordergrunddienst
+
+<b>Basiert auf Outspoke</b>
+
+Parakeetype ist ein Fork der App Outspoke und erweitert sie um neue Funktionen.
+
+<b>Voraussetzungen</b>
+
+• Android 12 (API 31) oder neuer
+• ~630 MB freier Speicher für die Modelldatei
+
+<b>Open Source</b>
+Parakeetype steht unter der GPL-3.0-Lizenz. Quellcode und Build-Anleitung sind auf GitHub verfügbar.

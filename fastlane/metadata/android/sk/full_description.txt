@@ -1,0 +1,25 @@
+Parakeetype je bezplatná aplikácia s otvoreným zdrojovým kódom na prevod reči na text pre Android. Funguje ako hlasová klávesnica aj ako služba rozpoznávania reči pre celý systém.
+
+Celý prepis prebieha výhradne vo vašom zariadení pomocou modelu Parakeet Ultra (ďalej trénovanej verzie modelu Parakeet-TDT v3 od NVIDIA) cez ONNX Runtime - žiadny zvuk neopustí váš telefón, nepotrebujete účet a aplikácia nemá vôbec prístup na internet.
+
+<b>Funkcie</b>
+
+• Klávesnica na prevod reči na text: diktujte do ľubovoľného textového poľa
+• Služba hlasového vstupu: iné aplikácie, ako sú prekladače, Firefox alebo Duolingo, môžu používať Parakeetype na hlasový vstup
+• Veľmi rýchla: model zostáva načítaný v pamäti, takže prepis začína okamžite
+• Rozpoznávanie výhradne v zariadení - úplne súkromné
+• Bez povolenia na internet: súbor modelu raz stiahnite v prehliadači a importujte ho
+• Žiadne Google Play Services, Firebase ani telemetria tretích strán
+• Minimálne povolenia: mikrofón, upozornenia, služba v popredí
+
+<b>Založené na Outspoke</b>
+
+Parakeetype je fork aplikácie Outspoke a pridáva do nej nové funkcie.
+
+<b>Požiadavky</b>
+
+• Android 12 (API 31) alebo novší
+• ~630 MB voľného miesta pre súbor modelu
+
+<b>Otvorený zdrojový kód</b>
+Parakeetype je licencovaný pod licenciou GPL-3.0. Zdrojový kód a návod na zostavenie sú k dispozícii na GitHube.

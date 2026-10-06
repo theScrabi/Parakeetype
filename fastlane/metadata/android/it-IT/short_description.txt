@@ -1,0 +1,1 @@
+Tastiera e input vocale veloci con riconoscimento vocale sul dispositivo.

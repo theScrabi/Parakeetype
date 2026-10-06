@@ -1,2 +1,1 @@
-On-device speech-to-text keyboard powered by Parakeet - no cloud, no tracking.
-
+Fast on-device speech-to-text keyboard and voice input - no cloud, no tracking.

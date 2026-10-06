@@ -1,0 +1,25 @@
+O Parakeetype é uma aplicação gratuita e de código aberto de voz para texto para Android. Funciona como teclado de voz e como serviço de reconhecimento de voz para todo o sistema.
+
+Toda a transcrição é feita inteiramente no seu dispositivo com o modelo Parakeet Ultra (uma versão com treino adicional do Parakeet-TDT v3 da NVIDIA) através do ONNX Runtime - nenhum áudio sai do seu telemóvel, não é necessária conta e a aplicação não tem qualquer acesso à Internet.
+
+<b>Funcionalidades</b>
+
+• Teclado de voz para texto: dite em qualquer campo de texto
+• Serviço de entrada de voz: outras aplicações, como tradutores, o Firefox ou o Duolingo, podem usar o Parakeetype para a entrada de voz
+• Muito rápido: o modelo fica carregado na memória, por isso a transcrição começa de imediato
+• Reconhecimento inteiramente no dispositivo - totalmente privado
+• Sem permissão de Internet: transfira o ficheiro do modelo uma vez no navegador e importe-o
+• Sem Google Play Services, Firebase ou telemetria de terceiros
+• Permissões mínimas: microfone, notificações, serviço em primeiro plano
+
+<b>Baseado no Outspoke</b>
+
+O Parakeetype é um fork da aplicação Outspoke e acrescenta-lhe novas funcionalidades.
+
+<b>Requisitos</b>
+
+• Android 12 (API 31) ou superior
+• ~630 MB de armazenamento livre para o ficheiro do modelo
+
+<b>Código aberto</b>
+O Parakeetype está licenciado sob a licença GPL-3.0. O código-fonte e as instruções de compilação estão disponíveis no GitHub.

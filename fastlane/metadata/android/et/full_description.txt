@@ -1,0 +1,25 @@
+Parakeetype on tasuta avatud lähtekoodiga kõne tekstiks rakendus Androidile. See töötab nii häälklaviatuurina kui ka kogu süsteemi kõnetuvastusteenusena.
+
+Kogu transkriptsioon toimub täielikult sinu seadmes Parakeet Ultra mudeliga (NVIDIA Parakeet-TDT v3 edasi treenitud versioon) ONNX Runtime'i abil - ükski heli ei lahku su telefonist, kontot pole vaja ja rakendusel puudub igasugune internetiühendus.
+
+<b>Funktsioonid</b>
+
+• Kõne tekstiks klaviatuur: dikteeri mis tahes tekstivälja
+• Häälsisestusteenus: teised rakendused, nagu tõlkerakendused, Firefox või Duolingo, saavad kasutada Parakeetype'i häälsisestuseks
+• Väga kiire: mudel jääb mällu laadituks, nii et transkriptsioon algab kohe
+• Tuvastus täielikult seadmes - täiesti privaatne
+• Internetiluba puudub: laadi mudelifail üks kord brauseris alla ja impordi see
+• Ei mingeid Google Play teenuseid, Firebase'i ega kolmandate osapoolte telemeetriat
+• Minimaalsed load: mikrofon, märguanded, esiplaaniteenus
+
+<b>Põhineb Outspoke'il</b>
+
+Parakeetype on rakenduse Outspoke fork ja lisab sellele uusi funktsioone.
+
+<b>Nõuded</b>
+
+• Android 12 (API 31) või uuem
+• ~630 MB vaba salvestusruumi mudelifaili jaoks
+
+<b>Avatud lähtekood</b>
+Parakeetype on litsentsitud GPL-3.0 litsentsi all. Lähtekood ja ehitusjuhised on saadaval GitHubis.

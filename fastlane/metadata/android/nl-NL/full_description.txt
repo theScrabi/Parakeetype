@@ -1,0 +1,25 @@
+Parakeetype is een gratis open-source spraak-naar-tekst-app voor Android. De app werkt als spraaktoetsenbord en als spraakherkenningsdienst voor het hele systeem.
+
+Alle transcriptie gebeurt volledig op je apparaat met het Parakeet Ultra-model (een verder getrainde versie van NVIDIA's Parakeet-TDT v3) via ONNX Runtime - er verlaat geen audio je telefoon, er is geen account nodig en de app heeft helemaal geen internettoegang.
+
+<b>Functies</b>
+
+• Spraak-naar-tekst-toetsenbord: dicteer in elk tekstveld
+• Spraakinvoerdienst: andere apps zoals vertalers, Firefox of Duolingo kunnen Parakeetype gebruiken voor spraakinvoer
+• Erg snel: het model blijft in het geheugen geladen, zodat de transcriptie meteen begint
+• Herkenning volledig op het apparaat - helemaal privé
+• Geen internettoestemming: download het modelbestand eenmalig in je browser en importeer het
+• Geen Google Play Services, Firebase of telemetrie van derden
+• Minimale toestemmingen: microfoon, meldingen, voorgronddienst
+
+<b>Gebaseerd op Outspoke</b>
+
+Parakeetype is een fork van de app Outspoke en voegt er nieuwe functies aan toe.
+
+<b>Vereisten</b>
+
+• Android 12 (API 31) of hoger
+• ~630 MB vrije opslag voor het modelbestand
+
+<b>Open source</b>
+Parakeetype valt onder de GPL-3.0-licentie. Broncode en bouwinstructies zijn beschikbaar op GitHub.

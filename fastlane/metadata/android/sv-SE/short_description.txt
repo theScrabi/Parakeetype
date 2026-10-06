@@ -1,0 +1,1 @@
+Snabbt tal-till-text-tangentbord och röstinmatning på enheten, utan moln.

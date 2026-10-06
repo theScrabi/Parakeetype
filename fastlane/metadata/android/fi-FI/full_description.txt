@@ -1,0 +1,25 @@
+Parakeetype on ilmainen avoimen lähdekoodin puheesta tekstiksi -sovellus Androidille. Se toimii sekä puhenäppäimistönä että koko järjestelmän puheentunnistuspalveluna.
+
+Kaikki litterointi tapahtuu kokonaan laitteellasi Parakeet Ultra -mallilla (NVIDIAn Parakeet-TDT v3:n edelleen koulutettu versio) ONNX Runtimen avulla - mikään ääni ei poistu puhelimestasi, tiliä ei tarvita eikä sovelluksella ole lainkaan internetyhteyttä.
+
+<b>Ominaisuudet</b>
+
+• Puheesta tekstiksi -näppäimistö: sanele mihin tahansa tekstikenttään
+• Äänisyötepalvelu: muut sovellukset, kuten kääntäjät, Firefox tai Duolingo, voivat käyttää Parakeetypea äänisyötteeseen
+• Erittäin nopea: malli pidetään ladattuna muistiin, joten litterointi alkaa heti
+• Tunnistus kokonaan laitteella - täysin yksityinen
+• Ei internet-oikeutta: lataa mallitiedosto kerran selaimella ja tuo se sovellukseen
+• Ei Google Play -palveluita, Firebasea eikä kolmansien osapuolten telemetriaa
+• Vähäiset käyttöoikeudet: mikrofoni, ilmoitukset, etualan palvelu
+
+<b>Perustuu Outspokeen</b>
+
+Parakeetype on Outspoke-sovelluksen fork ja lisää siihen uusia ominaisuuksia.
+
+<b>Vaatimukset</b>
+
+• Android 12 (API 31) tai uudempi
+• ~630 Mt vapaata tallennustilaa mallitiedostolle
+
+<b>Avoin lähdekoodi</b>
+Parakeetype on lisensoitu GPL-3.0-lisenssillä. Lähdekoodi ja käännösohjeet löytyvät GitHubista.

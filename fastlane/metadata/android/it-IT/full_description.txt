@@ -1,0 +1,25 @@
+Parakeetype è un'app libera e open source di riconoscimento vocale per Android. Funziona sia come tastiera vocale sia come servizio di riconoscimento vocale per tutto il sistema.
+
+Tutta la trascrizione avviene interamente sul tuo dispositivo con il modello Parakeet Ultra (una versione ulteriormente addestrata di Parakeet-TDT v3 di NVIDIA) tramite ONNX Runtime: nessun audio lascia il tuo telefono, non serve alcun account e l'app non ha alcun accesso a Internet.
+
+<b>Funzionalità</b>
+
+• Tastiera di dettatura vocale: detta in qualsiasi campo di testo
+• Servizio di input vocale: altre app come traduttori, Firefox o Duolingo possono usare Parakeetype per l'input vocale
+• Molto veloce: il modello resta caricato in memoria, quindi la trascrizione inizia subito
+• Riconoscimento interamente sul dispositivo: completamente privato
+• Nessun permesso Internet: scarica il file del modello una volta nel browser e importalo
+• Niente Google Play Services, Firebase o telemetria di terze parti
+• Permessi minimi: microfono, notifiche, servizio in primo piano
+
+<b>Basato su Outspoke</b>
+
+Parakeetype è un fork dell'app Outspoke e aggiunge nuove funzionalità.
+
+<b>Requisiti</b>
+
+• Android 12 (API 31) o superiore
+• ~630 MB di spazio libero per il file del modello
+
+<b>Open source</b>
+Parakeetype è distribuito con licenza GPL-3.0. Il codice sorgente e le istruzioni di compilazione sono disponibili su GitHub.

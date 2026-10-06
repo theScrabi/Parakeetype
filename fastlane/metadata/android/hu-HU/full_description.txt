@@ -1,0 +1,25 @@
+A Parakeetype egy ingyenes, nyílt forráskódú beszédből szöveg alkalmazás Androidra. Hangalapú billentyűzetként és az egész rendszer beszédfelismerő szolgáltatásaként is működik.
+
+Minden átirat teljes egészében a készülékeden készül a Parakeet Ultra modellel (az NVIDIA Parakeet-TDT v3 továbbtanított változata) az ONNX Runtime segítségével - semmilyen hang nem hagyja el a telefonodat, nincs szükség fiókra, és az alkalmazásnak egyáltalán nincs internet-hozzáférése.
+
+<b>Funkciók</b>
+
+• Beszédből szöveg billentyűzet: diktálj bármelyik szövegmezőbe
+• Hangbeviteli szolgáltatás: más alkalmazások, például fordítók, a Firefox vagy a Duolingo is használhatják a Parakeetype-ot hangbevitelre
+• Nagyon gyors: a modell betöltve marad a memóriában, így az átírás azonnal indul
+• Felismerés teljesen a készüléken - teljesen privát
+• Nincs internetengedély: töltsd le egyszer a modellfájlt a böngésződben, és importáld
+• Nincs Google Play Services, Firebase vagy harmadik féltől származó telemetria
+• Minimális engedélyek: mikrofon, értesítések, előtérben futó szolgáltatás
+
+<b>Az Outspoke alapján</b>
+
+A Parakeetype az Outspoke alkalmazás forkja, és új funkciókkal bővíti azt.
+
+<b>Követelmények</b>
+
+• Android 12 (API 31) vagy újabb
+• ~630 MB szabad tárhely a modellfájlhoz
+
+<b>Nyílt forráskód</b>
+A Parakeetype a GPL-3.0 licenc alatt érhető el. A forráskód és a fordítási útmutató elérhető a GitHubon.

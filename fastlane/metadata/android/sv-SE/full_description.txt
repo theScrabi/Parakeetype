@@ -1,0 +1,25 @@
+Parakeetype är en fri app med öppen källkod för tal till text på Android. Den fungerar både som rösttangentbord och som taligenkänningstjänst för hela systemet.
+
+All transkribering sker helt på din enhet med modellen Parakeet Ultra (en vidaretränad version av NVIDIAs Parakeet-TDT v3) via ONNX Runtime - inget ljud lämnar din telefon, inget konto krävs och appen har ingen internetåtkomst alls.
+
+<b>Funktioner</b>
+
+• Tal-till-text-tangentbord: diktera i vilket textfält som helst
+• Röstinmatningstjänst: andra appar som översättare, Firefox eller Duolingo kan använda Parakeetype för röstinmatning
+• Mycket snabb: modellen hålls inläst i minnet, så transkriberingen startar direkt
+• Igenkänning helt på enheten - helt privat
+• Ingen internetbehörighet: ladda ner modellfilen en gång i webbläsaren och importera den
+• Inga Google Play-tjänster, ingen Firebase och ingen telemetri från tredje part
+• Minimala behörigheter: mikrofon, aviseringar, förgrundstjänst
+
+<b>Baserad på Outspoke</b>
+
+Parakeetype är en fork av appen Outspoke och lägger till nya funktioner.
+
+<b>Krav</b>
+
+• Android 12 (API 31) eller senare
+• ~630 MB ledigt lagringsutrymme för modellfilen
+
+<b>Öppen källkod</b>
+Parakeetype är licensierad under GPL-3.0. Källkod och bygginstruktioner finns på GitHub.

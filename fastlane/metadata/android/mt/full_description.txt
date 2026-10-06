@@ -1,0 +1,25 @@
+Parakeetype hija app b'xejn u ta' sors miftuħ għal Android li tibdel id-diskors f'test. Taħdem kemm bħala tastiera tal-vuċi kif ukoll bħala servizz ta' rikonoxximent tad-diskors għas-sistema kollha.
+
+It-traskrizzjoni kollha ssir kompletament fuq l-apparat tiegħek bil-mudell Parakeet Ultra (verżjoni mħarrġa aktar tal-Parakeet-TDT v3 ta' NVIDIA) permezz ta' ONNX Runtime - l-ebda awdjo ma joħroġ mit-telefon tiegħek, m'hemmx bżonn ta' kont, u l-app m'għandha l-ebda aċċess għall-internet.
+
+<b>Karatteristiċi</b>
+
+• Tastiera minn diskors għal test: iddetta f'kull qasam tat-test
+• Servizz ta' input bil-vuċi: apps oħra bħal tradutturi, Firefox jew Duolingo jistgħu jużaw Parakeetype għall-input bil-vuċi tagħhom
+• Veloċi ħafna: il-mudell jibqa' mgħobbi fil-memorja, għalhekk it-traskrizzjoni tibda mill-ewwel
+• Rikonoxximent kompletament fuq l-apparat - privat għalkollox
+• L-ebda permess tal-internet: niżżel il-fajl tal-mudell darba fil-browser tiegħek u importah
+• L-ebda Google Play Services, Firebase jew telemetrija ta' partijiet terzi
+• Permessi minimi: mikrofonu, notifiki, servizz fil-quddiem
+
+<b>Ibbażata fuq Outspoke</b>
+
+Parakeetype hija fork tal-app Outspoke u żżid karatteristiċi ġodda magħha.
+
+<b>Rekwiżiti</b>
+
+• Android 12 (API 31) jew aktar ġdid
+• ~630 MB spazju ħieles għall-fajl tal-mudell
+
+<b>Sors miftuħ</b>
+Parakeetype hija liċenzjata taħt il-liċenzja GPL-3.0. Il-kodiċi sors u l-istruzzjonijiet tal-bini huma disponibbli fuq GitHub.

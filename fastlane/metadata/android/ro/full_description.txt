@@ -1,0 +1,25 @@
+Parakeetype este o aplicație gratuită și open source de transformare a vorbirii în text pentru Android. Funcționează ca tastatură vocală și ca serviciu de recunoaștere a vorbirii pentru întregul sistem.
+
+Toată transcrierea are loc exclusiv pe dispozitivul tău, cu modelul Parakeet Ultra (o versiune antrenată suplimentar a Parakeet-TDT v3 de la NVIDIA) prin ONNX Runtime - niciun sunet nu părăsește telefonul, nu este nevoie de cont, iar aplicația nu are deloc acces la internet.
+
+<b>Funcții</b>
+
+• Tastatură de vorbire în text: dictează în orice câmp de text
+• Serviciu de introducere vocală: alte aplicații, precum traducătoare, Firefox sau Duolingo, pot folosi Parakeetype pentru introducerea vocală
+• Foarte rapidă: modelul rămâne încărcat în memorie, astfel că transcrierea începe imediat
+• Recunoaștere complet pe dispozitiv - total privată
+• Fără permisiune de internet: descarcă fișierul modelului o dată în browser și importă-l
+• Fără Google Play Services, Firebase sau telemetrie de la terți
+• Permisiuni minime: microfon, notificări, serviciu în prim-plan
+
+<b>Bazată pe Outspoke</b>
+
+Parakeetype este un fork al aplicației Outspoke și îi adaugă funcții noi.
+
+<b>Cerințe</b>
+
+• Android 12 (API 31) sau mai nou
+• ~630 MB spațiu liber pentru fișierul modelului
+
+<b>Open source</b>
+Parakeetype este licențiată sub GPL-3.0. Codul sursă și instrucțiunile de compilare sunt disponibile pe GitHub.

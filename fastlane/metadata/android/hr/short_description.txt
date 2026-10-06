@@ -1,0 +1,1 @@
+Brza tipkovnica i glasovni unos s pretvorbom govora u tekst na uređaju.

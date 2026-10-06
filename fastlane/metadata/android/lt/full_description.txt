@@ -1,0 +1,25 @@
+Parakeetype - tai nemokama atvirojo kodo kalbos vertimo į tekstą programa, skirta Android. Ji veikia kaip balso klaviatūra ir kaip visos sistemos kalbos atpažinimo paslauga.
+
+Visa transkripcija atliekama tik jūsų įrenginyje naudojant Parakeet Ultra modelį (papildomai apmokytą NVIDIA Parakeet-TDT v3 versiją) per ONNX Runtime - joks garsas nepalieka jūsų telefono, paskyros nereikia, o programa visiškai neturi prieigos prie interneto.
+
+<b>Funkcijos</b>
+
+• Kalbos į tekstą klaviatūra: diktuokite į bet kurį teksto lauką
+• Balso įvesties paslauga: kitos programos, pavyzdžiui, vertėjai, Firefox ar Duolingo, gali naudoti Parakeetype balso įvesčiai
+• Labai greita: modelis lieka įkeltas į atmintį, todėl transkripcija prasideda iškart
+• Atpažinimas tik įrenginyje - visiškai privatu
+• Jokio interneto leidimo: vieną kartą atsisiųskite modelio failą naršyklėje ir jį importuokite
+• Jokių Google Play Services, Firebase ar trečiųjų šalių telemetrijos
+• Minimalūs leidimai: mikrofonas, pranešimai, priekinio plano paslauga
+
+<b>Sukurta Outspoke pagrindu</b>
+
+Parakeetype yra programos Outspoke atšaka (fork) ir prideda naujų funkcijų.
+
+<b>Reikalavimai</b>
+
+• Android 12 (API 31) ar naujesnė
+• ~630 MB laisvos vietos modelio failui
+
+<b>Atvirasis kodas</b>
+Parakeetype licencijuojama pagal GPL-3.0 licenciją. Šaltinio kodas ir kompiliavimo instrukcijos pateikiami GitHub.

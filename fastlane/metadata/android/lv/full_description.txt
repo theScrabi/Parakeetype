@@ -1,0 +1,25 @@
+Parakeetype ir bezmaksas atvērtā koda runas pārveides tekstā lietotne Android ierīcēm. Tā darbojas gan kā balss tastatūra, gan kā visas sistēmas runas atpazīšanas pakalpojums.
+
+Visa transkripcija notiek tikai jūsu ierīcē, izmantojot Parakeet Ultra modeli (tālāk apmācītu NVIDIA Parakeet-TDT v3 versiju) ar ONNX Runtime - neviena skaņa neatstāj jūsu tālruni, konts nav vajadzīgs, un lietotnei vispār nav piekļuves internetam.
+
+<b>Funkcijas</b>
+
+• Runas pārveides tekstā tastatūra: diktējiet jebkurā teksta laukā
+• Balss ievades pakalpojums: citas lietotnes, piemēram, tulkotāji, Firefox vai Duolingo, var izmantot Parakeetype balss ievadei
+• Ļoti ātra: modelis paliek ielādēts atmiņā, tāpēc transkripcija sākas uzreiz
+• Atpazīšana pilnībā ierīcē - pilnīgi privāti
+• Nav interneta atļaujas: vienreiz lejupielādējiet modeļa failu pārlūkā un importējiet to
+• Nav Google Play Services, Firebase vai trešo pušu telemetrijas
+• Minimālas atļaujas: mikrofons, paziņojumi, priekšplāna pakalpojums
+
+<b>Balstīta uz Outspoke</b>
+
+Parakeetype ir lietotnes Outspoke atzars (fork), kas pievieno jaunas funkcijas.
+
+<b>Prasības</b>
+
+• Android 12 (API 31) vai jaunāka versija
+• ~630 MB brīvas vietas modeļa failam
+
+<b>Atvērtais kods</b>
+Parakeetype ir licencēta saskaņā ar GPL-3.0 licenci. Pirmkods un būvēšanas instrukcijas ir pieejamas GitHub.

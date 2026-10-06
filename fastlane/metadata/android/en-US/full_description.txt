@@ -1,20 +1,19 @@
-Parakeetype is a free and open-source speech-to-text keyboard for Android.
+Parakeetype is a free and open-source speech-to-text app for Android. It works as a voice keyboard and as a speech recognition service for the whole system.
 
-All transcription happens entirely on your device using the NVIDIA Parakeet ASR model via ONNX Runtime - no audio ever leaves your phone, no account required, and the app has no internet access at all.
+All transcription happens entirely on your device using the Parakeet Ultra model (a further-trained version of NVIDIA's Parakeet-TDT v3) via ONNX Runtime - no audio ever leaves your phone, no account required, and the app has no internet access at all.
 
 <b>Features</b>
-
+• Speech-to-text keyboard: dictate into any text field
+• Speech-to-text input service: other apps such as translators, Firefox or Duolingo can use Parakeetype for their voice input
+• Very fast: the model is kept loaded in memory, so transcription starts right away
 • Fully on-device inference - completely private
-• Works as a standard Android Input Method (IME) in any app
-• No internet permission: download the model file once in your browser and import it
-• No Google Play Services, Firebase, or any third-party telemetry
-• Minimal permissions: microphone, notifications, foreground service
+• Minimal permissions: no internet access required
+
+<b>Based on Outspoke</b>
+
+Parakeetype is a fork of the Outspoke app and adds new features on top of it.
 
 <b>Requirements</b>
 
 • Android 12 (API 31) or higher
 • ~630 MB free storage for the model file
-
-<b>Open Source</b>
-Parakeetype is licensed under GPL-3.0 license. Source code and build instructions are available on GitHub.
-

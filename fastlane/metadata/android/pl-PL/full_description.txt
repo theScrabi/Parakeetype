@@ -1,0 +1,25 @@
+Parakeetype to darmowa aplikacja open source do zamiany mowy na tekst na Androida. Działa jako klawiatura głosowa oraz jako usługa rozpoznawania mowy dla całego systemu.
+
+Cała transkrypcja odbywa się wyłącznie na Twoim urządzeniu przy użyciu modelu Parakeet Ultra (dodatkowo wytrenowanej wersji Parakeet-TDT v3 od NVIDII) za pomocą ONNX Runtime - żaden dźwięk nie opuszcza telefonu, konto nie jest potrzebne, a aplikacja w ogóle nie ma dostępu do internetu.
+
+<b>Funkcje</b>
+
+• Klawiatura zamiany mowy na tekst: dyktuj w dowolnym polu tekstowym
+• Usługa wprowadzania głosowego: inne aplikacje, takie jak tłumacze, Firefox czy Duolingo, mogą używać Parakeetype do wprowadzania głosowego
+• Bardzo szybka: model pozostaje załadowany w pamięci, więc transkrypcja zaczyna się od razu
+• Rozpoznawanie w całości na urządzeniu - w pełni prywatne
+• Brak uprawnienia do internetu: pobierz plik modelu raz w przeglądarce i zaimportuj go
+• Bez Google Play Services, Firebase ani telemetrii firm trzecich
+• Minimalne uprawnienia: mikrofon, powiadomienia, usługa na pierwszym planie
+
+<b>Oparte na Outspoke</b>
+
+Parakeetype to fork aplikacji Outspoke, który dodaje do niej nowe funkcje.
+
+<b>Wymagania</b>
+
+• Android 12 (API 31) lub nowszy
+• ~630 MB wolnego miejsca na plik modelu
+
+<b>Open source</b>
+Parakeetype jest udostępniany na licencji GPL-3.0. Kod źródłowy i instrukcje kompilacji są dostępne na GitHubie.

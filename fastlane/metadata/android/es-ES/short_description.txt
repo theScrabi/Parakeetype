@@ -1,0 +1,1 @@
+Teclado y entrada de voz rápidos con voz a texto en el dispositivo, sin nube.
