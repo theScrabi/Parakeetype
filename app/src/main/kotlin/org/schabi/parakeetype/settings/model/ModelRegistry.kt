@@ -74,7 +74,9 @@ private val parakeetUltra = ModelInfo(
     displayName = "Parakeet Ultra (Default)",
     description = "NVIDIA's Parakeet TDT v3 further trained by Moondream, for on-device ASR in English " +
             "and 24 other european languages like DE, FR, ES, IT, RU etc. Robust against background " +
-            "noise, very fast and compact - the recommended choice for most devices.",
+            "noise, very fast and compact - the recommended choice for most devices. " +
+            "The archive also contains the Silero VAD model, which filters out silence " +
+            "before transcription.",
     approximateSizeMb = 630,
     // Built from https://huggingface.co/mldecode/parakeet-ultra-onnx-int8 by devtools/package-model.sh.
     archiveUrl = MODEL_ARCHIVE_RELEASE,
