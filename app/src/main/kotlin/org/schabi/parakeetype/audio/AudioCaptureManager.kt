@@ -21,18 +21,18 @@ private const val TAG = "AudioCaptureManager"
 /** 16 kHz mono - matches Parakeet V3's expected input format. */
 private const val SAMPLE_RATE = 16_000
 
-/** 30 ms window at 16 kHz = 480 samples per chunk. Matches Silero VAD's required frame size. */
-private const val CHUNK_SAMPLES = 480
+/** 32 ms window at 16 kHz = 512 samples per chunk. Matches Silero VAD's required frame size. */
+private const val CHUNK_SAMPLES = 512
 
 /**
  * Maximum silence frames pumped through the VAD during the trailing drain phase.
- * 20 frames × 30 ms = 600 ms - generously above [RMSVadFilter]'s 15-frame / 450 ms hangover
+ * 20 frames × 32 ms = 640 ms - generously above [RMSVadFilter]'s 15-frame / 450 ms hangover
  * so the hangover always expires before this cap is hit.
  */
 private const val HANGOVER_DRAIN_SAFETY_FRAMES = 20
 
 /**
- * Check every 10th chunk (~300 ms) whether Android silences this recording because another
+ * Check every 10th chunk (~320 ms) whether Android silences this recording because another
  * app (a phone call, a voice recorder) has the microphone.
  */
 private const val SILENCED_CHECK_INTERVAL_CHUNKS = 10

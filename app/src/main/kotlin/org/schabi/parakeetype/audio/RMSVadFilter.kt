@@ -21,18 +21,18 @@ import kotlin.math.ln
  *
  * ### Three smoothing layers (reference: Handy pipeline SmoothedVad)
  *
- * **Layer A - Onset Gate ([ONSET_FRAMES] = 2 frames / 60 ms)**
+ * **Layer A - Onset Gate ([ONSET_FRAMES] = 2 frames / 64 ms)**
  * The energy must exceed [threshold] for 2 consecutive frames before the pipeline
  * transitions to IN_SPEECH. Suppresses single-frame activations from plosive pops,
  * finger taps, and brief noise events.
  *
- * **Layer B - Pre-roll buffer ([LEAD_IN_FRAMES] = 15 frames / 450 ms)**
+ * **Layer B - Pre-roll buffer ([LEAD_IN_FRAMES] = 15 frames / 480 ms)**
  * A ring buffer of the last 15+1 frames is always maintained during silence. When the
  * onset gate fires, the entire buffer (including the onset gate frames themselves) is
  * emitted before the triggering frame. This captures the first consonant/phoneme of the
  * word that triggered the gate - the word would otherwise be truncated.
  *
- * **Layer C - Hangover ([HANGOVER_FRAMES] = 15 frames / 450 ms)**
+ * **Layer C - Hangover ([HANGOVER_FRAMES] = 15 frames / 480 ms)**
  * After energy first drops below threshold, the filter continues emitting frames as SPEECH
  * for 15 more frames (450 ms). Captures trailing soft syllables (-ing, -ed, -s) and brief
  * inter-word pauses that momentarily dip below the threshold.
@@ -150,27 +150,27 @@ class RMSVadFilter(sensitivity: Float = 0.5f) : VadFilter {
     companion object {
         /**
          * Number of consecutive above-threshold frames required before speech onset is
-         * confirmed. 2 frames × 30 ms = 60 ms - suppresses single-frame plosive pops
+         * confirmed. 2 frames × 32 ms = 64 ms - suppresses single-frame plosive pops
          * and finger taps while still opening fast enough to capture onset phonemes.
          */
         private const val ONSET_FRAMES = 2
 
         /**
          * Frames of audio prepended before confirmed speech onset (pre-roll buffer).
-         * 15 frames × 30 ms = 450 ms - captures the first consonant/phoneme of the
+         * 15 frames × 32 ms = 480 ms - captures the first consonant/phoneme of the
          * triggering word so it is not truncated.
          */
         private const val LEAD_IN_FRAMES = 15
 
         /**
          * Frames of sub-threshold audio tolerated before declaring silence (hangover).
-         * 15 frames × 30 ms = 450 ms - captures trailing soft syllables and brief pauses.
+         * 15 frames × 32 ms = 480 ms - captures trailing soft syllables and brief pauses.
          */
         private const val HANGOVER_FRAMES = 15
 
         /**
          * Frames of continuous SILENCE (after hangover) before emitting a silence-boundary
-         * sentinel. 20 frames × 30 ms = 600 ms. Triggers an utterance boundary reset in
+         * sentinel. 20 frames × 32 ms = 640 ms. Triggers an utterance boundary reset in
          * InferenceRepository so the next sentence starts in a fresh, uncontaminated window.
          */
         internal const val SILENCE_BOUNDARY_FRAMES = 20

@@ -25,7 +25,7 @@ MODEL_FILES=(
   "joiner.int8.onnx   20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"
   "nemo128.onnx       a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"
   "vocab.txt          d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"
-  "silero_vad_v4.onnx a35ebf52fd3ce5f1469b2a36158dba761bc47b973ea3382b3186ca15b1f5af28"
+  "silero_vad_v6.onnx 1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3"
 )
 
 WORK="$(mktemp -d)"

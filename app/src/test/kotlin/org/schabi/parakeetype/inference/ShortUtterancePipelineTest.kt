@@ -100,7 +100,7 @@ class ShortUtterancePipelineTest {
     }
 
     /**
-     * Splits [samples] into 480-sample (30 ms) chunks and runs them through the real
+     * Splits [samples] into 512-sample (32 ms) chunks and runs them through the real
      * Silero VAD (production threshold), returning the VAD-emitted samples — the exact
      * audio a recording session hands to the repository.
      */
@@ -108,10 +108,10 @@ class ShortUtterancePipelineTest {
         val vad = SileroVadFilter(modelBytes = resolveSileroModel().readBytes(), threshold = 0.3f)
         val out = ArrayList<ShortArray>()
         var i = 0
-        while (i + 480 <= samples.size) {
-            for (c in vad.process(AudioChunk(samples.copyOfRange(i, i + 480)), 0f))
+        while (i + 512 <= samples.size) {
+            for (c in vad.process(AudioChunk(samples.copyOfRange(i, i + 512)), 0f))
                 if (c.samples.isNotEmpty()) out.add(c.samples)
-            i += 480
+            i += 512
         }
         if (i < samples.size) {
             for (c in vad.process(AudioChunk(samples.copyOfRange(i, samples.size)), 0f))

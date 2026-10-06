@@ -16,8 +16,8 @@
 # per-feature normalisation), so the nemo128.onnx of istupakov's v3 ONNX export is packed
 # alongside. tokens.txt is packed as vocab.txt.
 #
-# The archive also carries the Silero VAD v4 model (silero_vad_v4.onnx, MIT, from
-# https://github.com/snakers4/silero-vad at tag v4.0), which the app's voice activity
+# The archive also carries the Silero VAD v6 model (silero_vad_v6.onnx, MIT, from
+# https://github.com/snakers4/silero-vad at tag v6.2.3), which the app's voice activity
 # detection loads from the installed model directory, so no model weights live in the
 # app's source tree.
 #
@@ -35,7 +35,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Pinned revisions, so the hashes below keep matching when the repos are updated.
 ULTRA_BASE="https://huggingface.co/mldecode/parakeet-ultra-onnx-int8/resolve/3282a6e32885b431c1543d58c7710e6e3412eac0"
 V3_BASE="https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main"
-SILERO_BASE="https://raw.githubusercontent.com/snakers4/silero-vad/915dd3d639b8333a52e001af095f87c5b7f1e0ac/files"
+SILERO_BASE="https://raw.githubusercontent.com/snakers4/silero-vad/5cd7945676eb32225748052e2e6a0580e4686a08/src/silero_vad/data"
 OUT_DIR="${1:-.}"
 ARCHIVE="parakeet-ultra-int8.zip"
 
@@ -46,7 +46,7 @@ FILES=(
   "$ULTRA_BASE joiner.int8.onnx  joiner.int8.onnx  20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"
   "$ULTRA_BASE tokens.txt        vocab.txt         d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"
   "$V3_BASE    nemo128.onnx      nemo128.onnx      a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"
-  "$SILERO_BASE silero_vad.onnx  silero_vad_v4.onnx a35ebf52fd3ce5f1469b2a36158dba761bc47b973ea3382b3186ca15b1f5af28"
+  "$SILERO_BASE silero_vad.onnx  silero_vad_v6.onnx 1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3"
 )
 
 WORK="$(mktemp -d)"

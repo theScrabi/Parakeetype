@@ -6,7 +6,7 @@
 
 A privacy-focused speech-to-text keyboard (IME) and system speech recognizer for Android — other apps can use it for voice input through Android's standard `SpeechRecognizer` / `RecognizerIntent` APIs. Speech recognition runs entirely on-device - the app has no internet access at all, no account, no data leaving your phone.
 
-It uses [Parakeet Ultra](https://huggingface.co/moondream/parakeet-ultra), Moondream's further-trained version of NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) automatic speech recognition model, quantized to INT8 and run via [ONNX Runtime](https://onnxruntime.ai/) for efficient on-device inference. Voice activity detection uses [Silero VAD v4](https://github.com/snakers4/silero-vad) (also ONNX, also fully on-device) to suppress silence before it ever reaches the ASR model.
+It uses [Parakeet Ultra](https://huggingface.co/moondream/parakeet-ultra), Moondream's further-trained version of NVIDIA's [Parakeet-TDT v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) automatic speech recognition model, quantized to INT8 and run via [ONNX Runtime](https://onnxruntime.ai/) for efficient on-device inference. Voice activity detection uses [Silero VAD v6](https://github.com/snakers4/silero-vad) (also ONNX, also fully on-device) to suppress silence before it ever reaches the ASR model.
 
 
 ## Screenshots
@@ -25,7 +25,7 @@ It uses [Parakeet Ultra](https://huggingface.co/moondream/parakeet-ultra), Moond
 - **Works in any app** - injects text via Android's standard `InputConnection` API
 - **Speech recognizer for other apps** - implements Android's `RecognitionService` (for apps using `SpeechRecognizer`, and selectable as the system's voice-input service) and handles `RecognizerIntent.ACTION_RECOGNIZE_SPEECH` (the "tap the mic" voice input other apps launch), all on-device with the same model as the keyboard
 - **Parakeet Ultra** (Parakeet-TDT 0.6B v3, further trained) - INT8 quantized, ~630 MB, robust against background noise, runs on mid-range hardware
-- **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; ships in the model archive and falls back to energy-threshold VAD if it can't load
+- **Voice Activity Detection** - Silero VAD v6 neural network (ONNX) filters silence before it reaches the ASR model; ships in the model archive and falls back to energy-threshold VAD if it can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
 - **Instant mode** - when you switch to Parakeetype (e.g. with the microphone key of another keyboard) it starts listening right away, types the text once you stop speaking and switches back to your keyboard (touch the talk button to stay on Parakeetype). Opt-in; off by default.
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets); an opt-in left-handed mode mirrors the buttons (Enter on the left, drag right to lock)
@@ -93,7 +93,7 @@ Parakeetype is structured as a clean layered pipeline. The `SpeechEngine` interf
                │  Flow<AudioChunk>
 ┌──────────────▼──────────────────┐
 │    AudioCaptureManager          │  ← 16 kHz / 16-bit / mono PCM
-│    SileroVadFilter              │  ← Neural VAD (Silero v4, ONNX)
+│    SileroVadFilter              │  ← Neural VAD (Silero v6, ONNX)
 │    RMSVadFilter                 │  ← Energy-threshold fallback
 └─────────────────────────────────┘
 ```
@@ -106,9 +106,9 @@ Parakeetype is structured as a clean layered pipeline. The `SpeechEngine` interf
 | `inference` | `ParakeetEngine` | Implements `SpeechEngine` using three ONNX sessions (preprocessor → encoder → decoder/joint) |
 | `inference` | `InferenceService` | `LifecycleService` that owns the engine and exposes `InferenceRepository` to bound clients |
 | `inference` | `InferenceRepository` | Sliding-window inference driver: buffers audio chunks, waits for ≥ 2 s of context, then fires a partial inference every 1 s up to a 30 s hard ceiling; tracks the last 3 partials and performs **stable-chunk trims** when a common leading-word prefix is confirmed, emitting `TranscriptResult.WindowTrimmed` to `TextInjector`; force-trims on divergence loops (> 12 s) and silence runs (2 consecutive blank strides); applies a **post-processing pipeline** to every raw transcript (filler-word removal, stutter collapse ≥ 3×, phrase-loop deduplication, leading-dot / leading-punct stripping, trailing-dot normalisation, missing sentence-space repair, sentence-boundary capitalisation) |
-| `audio` | `AudioCaptureManager` | Opens `AudioRecord` with the vendor-recommended DEFAULT source, emits 30 ms `AudioChunk`s as a cold `Flow`; applies the calibration-selected microphone when set; drains hardware buffer and VAD hangover on stop |
+| `audio` | `AudioCaptureManager` | Opens `AudioRecord` with the vendor-recommended DEFAULT source, emits 32 ms `AudioChunk`s as a cold `Flow`; applies the calibration-selected microphone when set; drains hardware buffer and VAD hangover on stop |
 | `audio` | `VadFilter` | Interface - common contract for VAD implementations (process, flush, isSpeechActive) |
-| `audio` | `SileroVadFilter` | Neural VAD using Silero v4 (ONNX); preserves RNN state across chunks; primary filter when model is available |
+| `audio` | `SileroVadFilter` | Neural VAD using Silero v6 (ONNX); preserves RNN state and 64-sample context across chunks; primary filter when model is available |
 | `audio` | `RMSVadFilter` | Energy-threshold VAD; used as fallback when Silero ONNX model can't load |
 | `ime` | `ParakeetypeInputMethodService` | Core IME; wires Compose view tree, binds `InferenceService`, drives capture lifecycle |
 | `recognition` | `ParakeetypeRecognitionService`, `VoiceInputActivity` | Speech recognizer for other apps (`SpeechRecognizer` / `ACTION_RECOGNIZE_SPEECH`); both run a `RecognitionSession` against the shared `InferenceService` |
@@ -214,4 +214,4 @@ This project is licensed under the **GNU General Public License v3.0**. See [LIC
 
 The Parakeet Ultra model weights are distributed separately under [CC-BY-4.0](https://huggingface.co/moondream/parakeet-ultra) by Moondream, based on [Parakeet-TDT 0.6B v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) by NVIDIA.
 
-The model archive also contains the [Silero VAD v4](https://github.com/snakers4/silero-vad) model by the Silero Team, licensed under the MIT License. The archive carries both licences and an attribution notice.
+The model archive also contains the [Silero VAD v6](https://github.com/snakers4/silero-vad) model by the Silero Team, licensed under the MIT License. The archive carries both licences and an attribution notice.

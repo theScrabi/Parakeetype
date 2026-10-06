@@ -10,14 +10,15 @@ import java.nio.LongBuffer
 private const val TAG = "SileroVadFilter"
 
 /**
- * A stateful neural-network VAD filter using Silero VAD v4 (ONNX).
+ * A stateful neural-network VAD filter using Silero VAD v6 (ONNX).
  *
  * Silero provides highly accurate frame-level speech probabilities. We wrap this
  * raw probability stream with exactly the same onset, pre-roll, and hangover smoothing
  * logic used in the energy-based [RMSVadFilter].
  *
- * The `h` and `c` RNN state tensors are preserved across chunks in a continuous recording
- * session, and reset when [flush] is called.
+ * The RNN state tensor and the 64-sample context (the tail of the previous chunk, which the
+ * model expects in front of every chunk) are preserved across chunks in a continuous
+ * recording session, and reset when [flush] is called.
  */
 class SileroVadFilter(
     modelBytes: ByteArray,
@@ -31,9 +32,11 @@ class SileroVadFilter(
     private var env: OrtEnvironment? = null
     private var session: OrtSession? = null
 
-    // Silero RNN states: [2, 1, 64] float tensors
-    private val hState: FloatArray = FloatArray(2 * 1 * 64)
-    private val cState: FloatArray = FloatArray(2 * 1 * 64)
+    // Silero RNN state: [2, 1, 128] float tensor
+    private val rnnState: FloatArray = FloatArray(STATE_SIZE)
+
+    // Input buffer: the last CONTEXT_SAMPLES of the previous chunk, followed by the current chunk
+    private val input: FloatArray = FloatArray(CONTEXT_SAMPLES + REQUIRED_SAMPLES)
 
     private var state = State.SILENCE
     private var onsetCount = 0
@@ -70,40 +73,39 @@ class SileroVadFilter(
 
         if (e != null && s != null && chunk.samples.size == REQUIRED_SAMPLES) {
             try {
-                // Silero requires float32 samples in range [-1.0, 1.0].
-                val floatSamples = FloatArray(REQUIRED_SAMPLES) { i -> chunk.samples[i] / 32_768f }
+                // Silero requires float32 samples in range [-1.0, 1.0], behind the context
+                // samples that are already at the start of [input].
+                for (i in 0 until REQUIRED_SAMPLES) input[CONTEXT_SAMPLES + i] = chunk.samples[i] / 32_768f
 
                 val inputTensor = OnnxTensor.createTensor(
                     e,
-                    FloatBuffer.wrap(floatSamples),
-                    longArrayOf(1, REQUIRED_SAMPLES.toLong())
+                    FloatBuffer.wrap(input),
+                    longArrayOf(1, input.size.toLong())
                 )
                 val srTensor =
                     OnnxTensor.createTensor(e, LongBuffer.wrap(longArrayOf(SAMPLE_RATE.toLong())), longArrayOf(1))
-                val hTensor = OnnxTensor.createTensor(e, FloatBuffer.wrap(hState), longArrayOf(2, 1, 64))
-                val cTensor = OnnxTensor.createTensor(e, FloatBuffer.wrap(cState), longArrayOf(2, 1, 64))
+                val stateTensor = OnnxTensor.createTensor(e, FloatBuffer.wrap(rnnState), longArrayOf(2, 1, 128))
 
                 val inputs = mapOf(
                     "input" to inputTensor,
                     "sr" to srTensor,
-                    "h" to hTensor,
-                    "c" to cTensor
+                    "state" to stateTensor
                 )
 
                 s.run(inputs).use { result ->
                     val outputTensor = result.get("output").get() as OnnxTensor
                     speechProb = outputTensor.floatBuffer[0]
 
-                    val hnTensor = result.get("hn").get() as OnnxTensor
-                    hnTensor.floatBuffer.get(hState)
-                    val cnTensor = result.get("cn").get() as OnnxTensor
-                    cnTensor.floatBuffer.get(cState)
+                    val stateNTensor = result.get("stateN").get() as OnnxTensor
+                    stateNTensor.floatBuffer.get(rnnState)
                 }
 
                 inputTensor.close()
                 srTensor.close()
-                hTensor.close()
-                cTensor.close()
+                stateTensor.close()
+
+                // The tail of this chunk is the context of the next one.
+                input.copyInto(input, destinationOffset = 0, startIndex = REQUIRED_SAMPLES)
             } catch (ex: Exception) {
                 Log.e(TAG, "Silero VAD inference failed", ex)
             }
@@ -175,9 +177,9 @@ class SileroVadFilter(
         consecutiveSilenceFrames = 0
         leadIn.clear()
 
-        // Reset RNN state for the next recording session
-        hState.fill(0f)
-        cState.fill(0f)
+        // Reset RNN state and context for the next recording session
+        rnnState.fill(0f)
+        input.fill(0f)
 
         return wasSpeech
     }
@@ -190,19 +192,25 @@ class SileroVadFilter(
     companion object {
         private const val SAMPLE_RATE = 16_000
 
-        /** 30 ms window at 16 kHz = 480 samples. Required by Silero v4 ONNX. */
-        private const val REQUIRED_SAMPLES = 480
+        /** 32 ms window at 16 kHz = 512 samples. Required by Silero v5+ ONNX. */
+        internal const val REQUIRED_SAMPLES = 512
 
-        /** 1 frame × 30 ms = 30 ms - opens gate on first confirmed speech frame to avoid clipping onset phonemes. */
+        /** Samples of the previous chunk the model expects in front of every chunk (at 16 kHz). */
+        private const val CONTEXT_SAMPLES = 64
+
+        /** Size of the RNN state tensor [2, 1, 128]. */
+        private const val STATE_SIZE = 2 * 1 * 128
+
+        /** 1 frame × 32 ms = 32 ms - opens gate on first confirmed speech frame to avoid clipping onset phonemes. */
         private const val ONSET_FRAMES = 1
 
-        /** 20 frames × 30 ms = 600 ms - gives model pre-speech silence as acoustic context. */
+        /** 20 frames × 32 ms = 640 ms - gives model pre-speech silence as acoustic context. */
         private const val LEAD_IN_FRAMES = 20
 
-        /** 15 frames × 30 ms = 450 ms - captures trailing soft syllables. */
+        /** 15 frames × 32 ms = 480 ms - captures trailing soft syllables. */
         private const val HANGOVER_FRAMES = 15
 
-        /** 20 frames × 30 ms = 600 ms of silence after hangover before emitting an utterance boundary. */
+        /** 20 frames × 32 ms = 640 ms of silence after hangover before emitting an utterance boundary. */
         internal const val SILENCE_BOUNDARY_FRAMES = 20
 
         // ── Short-utterance VAD parameters ───────────────────────────────────────────
@@ -216,10 +224,10 @@ class SileroVadFilter(
         //   shared for both short and long recordings — so these values are documented
         //   here as named constants for A/B testing readiness but are NOT applied yet.
 
-        /** Target onset gate for the short-utterance path: 1 frame × 30 ms = 30 ms. */
+        /** Target onset gate for the short-utterance path: 1 frame × 32 ms = 32 ms. */
         internal const val SHORT_UTT_VAD_ONSET_MS = 30
 
-        /** Target lead-in for the short-utterance path: ~6-7 frames × 30 ms ≈ 200 ms. */
+        /** Target lead-in for the short-utterance path: ~6 frames × 32 ms ≈ 200 ms. */
         internal const val SHORT_UTT_VAD_LEAD_IN_MS = 200
     }
 }

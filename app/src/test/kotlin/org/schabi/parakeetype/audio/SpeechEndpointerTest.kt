@@ -18,10 +18,13 @@ import kotlin.random.Random
  */
 class SpeechEndpointerTest {
 
-    private val frameMs = 30
+    private val frameMs = 32
 
     /** [ms] rounded up to whole frames: the endpointer counts time in frames. */
     private fun frames(ms: Int) = (ms + frameMs - 1) / frameMs * frameMs
+
+    /** The time [feed] actually feeds for [ms]: whole frames, rounded down. */
+    private fun fed(ms: Int) = ms / frameMs * frameMs
 
     /** Feeds [ms] of frames with [probability]; returns the events with their time. */
     private fun SpeechEndpointer.feed(ms: Int, probability: Float, events: MutableList<Pair<Int, Event>>, clock: IntArray) {
@@ -41,7 +44,7 @@ class SpeechEndpointerTest {
         e.feed(5_000, 0.05f, events, clock)
 
         assertThat(events.map { it.second }).containsExactly(Event.SpeechStart, Event.EndOfSpeech)
-        assertThat(events.last().first).isEqualTo(300 + 900 + frames(2_000))
+        assertThat(events.last().first).isEqualTo(fed(300) + fed(900) + frames(2_000))
     }
 
     @Test
@@ -74,7 +77,7 @@ class SpeechEndpointerTest {
         e.feed(3_000, 0.1f, events, clock)
 
         assertThat(events.map { it.second }).containsExactly(Event.SpeechStart, Event.EndOfSpeech)
-        assertThat(events.last().first).isEqualTo(600 + 1_500 + 600 + frames(2_000))
+        assertThat(events.last().first).isEqualTo(fed(600) + fed(1_500) + fed(600) + frames(2_000))
     }
 
     @Test
@@ -86,12 +89,12 @@ class SpeechEndpointerTest {
         e.feed(300, 0.1f, events, clock)
         // A breath / tap every 450 ms: two likely-speech frames, never a sustained run.
         repeat(10) {
-            e.feed(60, 0.8f, events, clock)
-            e.feed(390, 0.1f, events, clock)
+            e.feed(64, 0.8f, events, clock)
+            e.feed(384, 0.1f, events, clock)
         }
 
         assertThat(events.map { it.second }).containsExactly(Event.SpeechStart, Event.EndOfSpeech)
-        assertThat(events.last().first).isEqualTo(600 + frames(2_000))
+        assertThat(events.last().first).isEqualTo(fed(600) + frames(2_000))
     }
 
     @Test
@@ -100,8 +103,8 @@ class SpeechEndpointerTest {
         val events = mutableListOf<Pair<Int, Event>>()
         val clock = IntArray(1)
         repeat(40) {
-            e.feed(90, 0.9f, events, clock)
-            e.feed(210, 0.1f, events, clock)
+            e.feed(96, 0.9f, events, clock)
+            e.feed(192, 0.1f, events, clock)
         }
 
         assertThat(events).containsExactly(frames(8_000) to Event.NoSpeech)
@@ -115,7 +118,7 @@ class SpeechEndpointerTest {
         e.feed(600, 0.9f, events, clock)
         e.feed(5_000, 0.1f, events, clock)
 
-        assertThat(events.last()).isEqualTo(3_000 to Event.EndOfSpeech)
+        assertThat(events.last()).isEqualTo(frames(3_000) to Event.EndOfSpeech)
     }
 
     @Test
@@ -184,17 +187,17 @@ class SpeechEndpointerTest {
         var endAtMs = -1L
         var vadReopened = false
         var frame = 0
-        val speechEndFrame = speech.size / 480
+        val speechEndFrame = speech.size / 512
         var i = 0
-        while (i + 480 <= audio.size && endAtMs < 0) {
-            val out = vad.process(AudioChunk(audio.copyOfRange(i, i + 480)), 0f)
+        while (i + 512 <= audio.size && endAtMs < 0) {
+            val out = vad.process(AudioChunk(audio.copyOfRange(i, i + 512)), 0f)
             // Well after the speech decayed, any VAD output is a transient reopening it.
             if (frame > speechEndFrame + 25 && out.any { !it.isSilenceBoundary }) vadReopened = true
             if (endpointer.onFrame(vad.lastSpeechProbability) == Event.EndOfSpeech) {
-                endAtMs = (frame - speechEndFrame) * 30L
+                endAtMs = (frame - speechEndFrame) * 32L
             }
             frame++
-            i += 480
+            i += 512
         }
         vad.close()
 

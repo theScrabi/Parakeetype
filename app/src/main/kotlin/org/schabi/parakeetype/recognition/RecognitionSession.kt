@@ -30,7 +30,7 @@ private const val NO_SPEECH_TIMEOUT_MS = 8_000L
 /** Silence after speech that ends the session when the client asks for no length. */
 private const val DEFAULT_COMPLETE_SILENCE_MS = 1_000L
 
-/** Report the microphone level every 3rd 30 ms chunk (~11 updates per second). */
+/** Report the microphone level every 3rd 32 ms chunk (~10 updates per second). */
 private const val LEVEL_REPORT_INTERVAL_CHUNKS = 3
 
 /** The [RecognizerIntent] extras a [RecognitionSession] honours. */

@@ -42,7 +42,7 @@ on-device via ONNX Runtime; no audio ever leaves the device, and the app has no 
          |   SpeechEngine         <- Interface; swap models here (currently ParakeetEngine)
          | Flow<AudioChunk>
     AudioCaptureManager           <- 16 kHz / 16-bit / mono PCM
-    SileroVadFilter               <- Neural VAD (Silero v4, ONNX) - primary
+    SileroVadFilter               <- Neural VAD (Silero v6, ONNX) - primary
     RMSVadFilter                  <- Energy-threshold VAD - fallback
 
 **Core design principles:**
@@ -81,9 +81,9 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 **AudioCaptureManager**
 
 - Opens AudioRecord with source DEFAULT (the vendor-recommended source), 16 kHz mono PCM-16. No application-side gain: DEFAULT arrives at a usable level.
-- Emits 480-sample (30 ms) chunks as a cold Flow<AudioChunk>.
+- Emits 512-sample (32 ms) chunks (the frame size Silero v5+ requires) as a cold Flow<AudioChunk>.
 - When the user has run mic calibration, applies the selected microphone via AudioRecord.setPreferredDevice (no-op when unset or the device is gone).
-- On stop: drains the hardware buffer then waits HANGOVER_DRAIN_SAFETY_FRAMES = 20 frames (600 ms) to flush VAD hangover before the flow completes.
+- On stop: drains the hardware buffer then waits HANGOVER_DRAIN_SAFETY_FRAMES = 20 frames (640 ms) to flush VAD hangover before the flow completes.
 
 **VadFilter interface**
 
@@ -96,10 +96,10 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **SileroVadFilter** (primary)
 
-- Silero VAD v4 ONNX. RNN state tensors h/c shape [2,1,64] carried across chunks.
+- Silero VAD v6 ONNX (v6.2.3). Inputs: the last 64 samples of the previous chunk + the 512-sample chunk, the RNN state [2,1,128] and the sample rate; state and context are carried across chunks and reset by flush().
 - Speech probability threshold: 0.3.
-- Three layers: onset gate (2 frames/60 ms), pre-roll buffer (15 frames/450 ms lead-in), hangover.
-- The model (silero_vad_v4.onnx) is not in the APK: it ships in the model archive and is loaded from the installed model's directory (ModelStorageManager.findVadModel).
+- Three layers: onset gate (1 frame/32 ms), pre-roll buffer (20 frames/640 ms lead-in), hangover (15 frames/480 ms).
+- The model (silero_vad_v6.onnx) is not in the APK: it ships in the model archive and is loaded from the installed model's directory (ModelStorageManager.findVadModel).
 - Falls back to RMSVadFilter if the ONNX model fails to load.
 
 **RMSVadFilter** (fallback)
@@ -288,7 +288,7 @@ Key constants in InferenceRepository:
 2. Silence trim: 2 consecutive blank strides -> proactive trim regardless of prefix agreement.
 3. Force trim: window > FORCE_TRIM_WINDOW_SAMPLES with no stable prefix -> unconditional trim.
 
-**End of speech** (ending a recognizer or instant-mode session) is not taken from these boundaries but from SpeechEndpointer, fed with the VAD's raw per-frame speech probability (VadFilter.lastSpeechProbability via AudioCaptureManager.startCapture(onSpeechProbability)). The VAD's filtered output opens on one frame ≥ 0.3 and replays its 600 ms lead-in, so a breath or a tap on the phone looked like resumed speech and postponed an endpoint that waited past the boundary forever. SpeechEndpointer counts only 4 consecutive frames (120 ms) at ≥ 0.5 as speech (the shortest words reach 7+, breaths and taps 0–2) and measures the silence in frames from the last such run.
+**End of speech** (ending a recognizer or instant-mode session) is not taken from these boundaries but from SpeechEndpointer, fed with the VAD's raw per-frame speech probability (VadFilter.lastSpeechProbability via AudioCaptureManager.startCapture(onSpeechProbability)). The VAD's filtered output opens on one frame ≥ 0.3 and replays its 640 ms lead-in, so a breath or a tap on the phone looked like resumed speech and postponed an endpoint that waited past the boundary forever. SpeechEndpointer counts only 8 consecutive frames (256 ms) at ≥ 0.5 as speech (with Silero v6 the shortest words reach 12+; taps and breaths on their own never reach 0.5, a breath right after speech ~6) and measures the silence in frames from the last such run.
 
 **Mid-session final**: when isSilenceBoundary is set on an AudioChunk, the repository emits Final(isUtteranceBoundary = true) without stopping capture (useful for long continuous dictation).
 

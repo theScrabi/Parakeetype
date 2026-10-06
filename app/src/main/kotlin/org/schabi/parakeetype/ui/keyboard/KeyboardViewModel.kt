@@ -33,7 +33,7 @@ private const val INSTANT_NO_SPEECH_TIMEOUT_MS = 8_000L
 /** How long the "microphone in use" error is shown before the keyboard closes. */
 private const val MIC_BUSY_CLOSE_DELAY_MS = 3_000L
 
-/** Report the microphone level every 3rd 30 ms chunk (~11 updates per second). */
+/** Report the microphone level every 3rd 32 ms chunk (~10 updates per second). */
 private const val LEVEL_REPORT_INTERVAL_CHUNKS = 3
 
 /**
@@ -729,7 +729,7 @@ class KeyboardViewModel(
                 // Explicitly stop the current audio capture so the old AudioRecord
                 // stops feeding chunks into the channel buffer immediately - without
                 // this, the old capture can keep producing audio for up to one read
-                // cycle (~30 ms) after captureJob.cancel(), and those samples would
+                // cycle (~32 ms) after captureJob.cancel(), and those samples would
                 // end up in the new session's rolling window via the Channel.UNLIMITED
                 // buffer if the old flow hadn't been cancelled yet.
                 audioCaptureManager.stopCapture()

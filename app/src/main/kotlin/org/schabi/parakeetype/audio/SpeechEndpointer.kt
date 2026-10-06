@@ -4,13 +4,14 @@ package org.schabi.parakeetype.audio
 private const val SPEECH_PROBABILITY = 0.5f
 
 /**
- * Consecutive speech frames (4 × 30 ms = 120 ms) that make up speech. The shortest words stay
- * above [SPEECH_PROBABILITY] for 7+ frames; breaths and taps on the phone reach it for 0–2.
+ * Consecutive speech frames (8 × 32 ms = 256 ms) that make up speech. With Silero v6 the
+ * shortest words ("no", "hello") stay above [SPEECH_PROBABILITY] for 12+ frames; taps and
+ * breaths on their own never reach it, but a breath right after speech can hold it for ~6.
  */
-private const val SUSTAINED_SPEECH_FRAMES = 4
+private const val SUSTAINED_SPEECH_FRAMES = 8
 
-/** Duration of one VAD frame (480 samples at 16 kHz). */
-private const val FRAME_MS = 30L
+/** Duration of one VAD frame (512 samples at 16 kHz). */
+private const val FRAME_MS = 32L
 
 /**
  * End-of-speech detection from the VAD's per-frame speech probability

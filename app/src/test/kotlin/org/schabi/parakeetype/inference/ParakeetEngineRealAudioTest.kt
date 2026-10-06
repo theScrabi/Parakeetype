@@ -71,7 +71,7 @@ class ParakeetEngineRealAudioTest {
 
     /**
      * Feeds the fixture to the engine the way the production short-utterance path does:
-     * up to 600 ms of VAD lead-in silence prepended (SileroVadFilter LEAD_IN_FRAMES),
+     * up to 640 ms of VAD lead-in silence prepended (SileroVadFilter LEAD_IN_FRAMES),
      * then zero-padding to at least [MIN_PADDING_SAMPLES].
      *
      * [leadMs] is 0 for the non-speech rejection tests, which probe raw noise/silence

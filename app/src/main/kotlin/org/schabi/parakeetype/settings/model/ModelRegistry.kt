@@ -9,10 +9,10 @@ private const val MODEL_ARCHIVE_RELEASE =
     "https://github.com/theScrabi/Parakeetype/releases/tag/v0.4"
 
 /**
- * The Silero VAD v4 model. It ships in the model archive (not in the APK), so it lives in the
+ * The Silero VAD v6 model. It ships in the model archive (not in the APK), so it lives in the
  * installed model's directory; see [ModelStorageManager.findVadModel].
  */
-const val SILERO_VAD_FILE = "silero_vad_v4.onnx"
+const val SILERO_VAD_FILE = "silero_vad_v6.onnx"
 
 /**
  * One file of an installed model.
@@ -86,7 +86,7 @@ private val parakeetUltra = ModelInfo(
         ModelFile("joiner.int8.onnx", "20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"),
         ModelFile("nemo128.onnx", "a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"),
         ModelFile("vocab.txt", "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"),
-        ModelFile(SILERO_VAD_FILE, "a35ebf52fd3ce5f1469b2a36158dba761bc47b973ea3382b3186ca15b1f5af28"),
+        ModelFile(SILERO_VAD_FILE, "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3"),
     ),
 )
 
