@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Спиране на записа</string>
     <string name="cd_talk_tap_start">Докоснете, за да започнете запис</string>
     <string name="cd_talk_hold_start">Започване на запис (задръжте) · плъзнете наляво за заключване</string>
+    <string name="cd_talk_hold_start_right">Започване на запис (задръжте) · плъзнете надясно за заключване</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Първоначална настройка</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Отляво</string>
     <string name="pref_position_center">В центъра</string>
     <string name="pref_position_right">Отдясно</string>
+    <string name="pref_left_handed_title">Режим за левичари</string>
+    <string name="pref_left_handed_subtitle">Огледално обръща бутоните на клавиатурата: Enter се премества вляво, а записът се заключва с плъзгане на бутона за говорене надясно.</string>
     <string name="pref_vad_title">Откриване на гласова активност (VAD)</string>
     <string name="pref_vad_subtitle">Използва Silero VAD, за да филтрира тишината и фоновия шум преди разпознаването. Деактивирайте само ако VAD отрязва началото на говора ви или дава празни резултати.</string>
     <string name="pref_postprocessing_title">Последваща обработка на текста</string>

@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Peata salvestamine</string>
     <string name="cd_talk_tap_start">Puudutage salvestamise alustamiseks</string>
     <string name="cd_talk_hold_start">Alusta salvestamist (hoidke all) · lukustamiseks pühkige vasakule</string>
+    <string name="cd_talk_hold_start_right">Alusta salvestamist (hoidke all) · lukustamiseks pühkige paremale</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Seadistamine</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Vasakul</string>
     <string name="pref_position_center">Keskel</string>
     <string name="pref_position_right">Paremal</string>
+    <string name="pref_left_handed_title">Vasakukäeliste režiim</string>
+    <string name="pref_left_handed_subtitle">Peegeldab klaviatuuri nupud: Enter liigub vasakusse serva ja salvestuse lukustate, lohistades rääkimisnuppu paremale.</string>
     <string name="pref_vad_title">Kõnetegevuse tuvastus (VAD)</string>
     <string name="pref_vad_subtitle">Kasutab Silero VAD-i, et vaikus ja taustamüra enne transkribeerimist välja filtreerida. Keelake see ainult siis, kui VAD lõikab teie kõne alguse ära või annab tühje tulemusi.</string>
     <string name="pref_postprocessing_title">Transkriptsiooni järeltöötlus</string>

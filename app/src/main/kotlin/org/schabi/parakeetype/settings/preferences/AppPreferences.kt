@@ -90,6 +90,21 @@ class AppPreferences(private val context: Context) {
         context.dataStore.edit { prefs -> prefs[keyKeyboardPositionLandscape] = position }
     }
 
+    private val keyLeftHandedMode = booleanPreferencesKey("left_handed_mode")
+
+    /**
+     * When `true`, the keyboard's button row is mirrored for left-handed use: Enter sits on
+     * the left edge and the talk button locks with a drag to the right. Opt-in; defaults to
+     * `false`.
+     */
+    val leftHandedMode: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[keyLeftHandedMode] ?: false
+    }
+
+    suspend fun setLeftHandedMode(enabled: Boolean) {
+        context.dataStore.edit { prefs -> prefs[keyLeftHandedMode] = enabled }
+    }
+
     private val keyRawMicCapture = booleanPreferencesKey("raw_mic_capture")
 
     /**

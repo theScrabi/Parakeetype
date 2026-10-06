@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Stoppa inspelningen</string>
     <string name="cd_talk_tap_start">Tryck för att starta inspelningen</string>
     <string name="cd_talk_hold_start">Starta inspelning (håll ned) · svep åt vänster för att låsa</string>
+    <string name="cd_talk_hold_start_right">Starta inspelning (håll ned) · svep åt höger för att låsa</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Kom igång</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Vänster</string>
     <string name="pref_position_center">Mitten</string>
     <string name="pref_position_right">Höger</string>
+    <string name="pref_left_handed_title">Vänsterhänt läge</string>
+    <string name="pref_left_handed_subtitle">Spegelvänder tangentbordets knappar: Enter flyttas till vänsterkanten och du låser en inspelning genom att dra pratknappen åt höger.</string>
     <string name="pref_vad_title">Röstaktivitetsdetektering (VAD)</string>
     <string name="pref_vad_subtitle">Använder Silero VAD för att filtrera bort tystnad och bakgrundsljud före transkriberingen. Inaktivera bara om VAD klipper bort början av det du säger eller ger tomma resultat.</string>
     <string name="pref_postprocessing_title">Efterbearbetning av transkription</string>

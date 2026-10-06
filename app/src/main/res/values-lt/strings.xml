@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Sustabdyti įrašymą</string>
     <string name="cd_talk_tap_start">Palieskite, kad pradėtumėte įrašymą</string>
     <string name="cd_talk_hold_start">Pradėti įrašymą (laikykite) · perbraukite kairėn, kad užrakintumėte</string>
+    <string name="cd_talk_hold_start_right">Pradėti įrašymą (laikykite) · perbraukite dešinėn, kad užrakintumėte</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Sąranka</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Kairėje</string>
     <string name="pref_position_center">Centre</string>
     <string name="pref_position_right">Dešinėje</string>
+    <string name="pref_left_handed_title">Kairiarankių režimas</string>
+    <string name="pref_left_handed_subtitle">Veidrodiškai sukeičia klaviatūros mygtukus: Enter perkeliamas į kairįjį kraštą, o įrašymą užrakinsite nuvilkę kalbėjimo mygtuką į dešinę.</string>
     <string name="pref_vad_title">Balso aktyvumo aptikimas (VAD)</string>
     <string name="pref_vad_subtitle">Naudoja Silero VAD, kad prieš transkribuojant būtų išfiltruota tyla ir foninis triukšmas. Išjunkite tik tada, jei VAD nukerpa jūsų kalbos pradžią arba pateikia tuščius rezultatus.</string>
     <string name="pref_postprocessing_title">Transkripcijos papildomas apdorojimas</string>

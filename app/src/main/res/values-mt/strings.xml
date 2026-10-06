@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Waqqaf ir-reġistrazzjoni</string>
     <string name="cd_talk_tap_start">Agħfas biex tibda r-reġistrazzjoni</string>
     <string name="cd_talk_hold_start">Ibda r-reġistrazzjoni (żomm) · żerżaq lejn ix-xellug biex issakkar</string>
+    <string name="cd_talk_hold_start_right">Ibda r-reġistrazzjoni (żomm) · żerżaq lejn il-lemin biex issakkar</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Twaqqif</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Xellug</string>
     <string name="pref_position_center">Nofs</string>
     <string name="pref_position_right">Lemin</string>
+    <string name="pref_left_handed_title">Modalità għax-xellugin</string>
+    <string name="pref_left_handed_subtitle">Taqleb il-buttuni tat-tastiera: Enter jiċċaqlaq għat-tarf tax-xellug, u tissakkar ir-reġistrazzjoni billi tkaxkar il-buttuna tat-taħdit lejn il-lemin.</string>
     <string name="pref_vad_title">Skoperta tal-Attività tal-Vuċi (VAD)</string>
     <string name="pref_vad_subtitle">Juża Silero VAD biex jiffiltra s-skiet u l-istorbju fl-isfond qabel it-traskrizzjoni. Iddiżattivah biss jekk il-VAD qed jaqta\' l-bidu tat-taħdit tiegħek jew qed jagħti riżultati vojta.</string>
     <string name="pref_postprocessing_title">Post-Proċessar tat-Traskrizzjoni</string>

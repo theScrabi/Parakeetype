@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Zatrzymaj nagrywanie</string>
     <string name="cd_talk_tap_start">Dotknij, aby rozpocząć nagrywanie</string>
     <string name="cd_talk_hold_start">Rozpocznij nagrywanie (przytrzymaj) · przesuń w lewo, aby zablokować</string>
+    <string name="cd_talk_hold_start_right">Rozpocznij nagrywanie (przytrzymaj) · przesuń w prawo, aby zablokować</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Przygotowanie</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Po lewej</string>
     <string name="pref_position_center">Na środku</string>
     <string name="pref_position_right">Po prawej</string>
+    <string name="pref_left_handed_title">Tryb dla leworęcznych</string>
+    <string name="pref_left_handed_subtitle">Odwraca przyciski klawiatury: Enter przenosi się do lewej krawędzi, a nagrywanie blokujesz, przeciągając przycisk mówienia w prawo.</string>
     <string name="pref_vad_title">Wykrywanie aktywności głosowej (VAD)</string>
     <string name="pref_vad_subtitle">Używa Silero VAD do odfiltrowania ciszy i szumów tła przed transkrypcją. Wyłącz tylko wtedy, gdy VAD obcina początek wypowiedzi lub daje puste wyniki.</string>
     <string name="pref_postprocessing_title">Przetwarzanie końcowe transkrypcji</string>

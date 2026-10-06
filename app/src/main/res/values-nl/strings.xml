@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Opname stoppen</string>
     <string name="cd_talk_tap_start">Tik om de opname te starten</string>
     <string name="cd_talk_hold_start">Opname starten (vasthouden) · veeg naar links om te vergrendelen</string>
+    <string name="cd_talk_hold_start_right">Opname starten (vasthouden) · veeg naar rechts om te vergrendelen</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Instellen</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Links</string>
     <string name="pref_position_center">Midden</string>
     <string name="pref_position_right">Rechts</string>
+    <string name="pref_left_handed_title">Linkshandige modus</string>
+    <string name="pref_left_handed_subtitle">Spiegelt de toetsen van het toetsenbord: Enter verhuist naar de linkerrand en je vergrendelt een opname door de spreekknop naar rechts te slepen.</string>
     <string name="pref_vad_title">Spraakactiviteitsdetectie (VAD)</string>
     <string name="pref_vad_subtitle">Gebruikt Silero VAD om stilte en achtergrondgeluid weg te filteren vóór de transcriptie. Schakel dit alleen uit als VAD het begin van je spraak afkapt of lege resultaten geeft.</string>
     <string name="pref_postprocessing_title">Nabewerking van transcript</string>

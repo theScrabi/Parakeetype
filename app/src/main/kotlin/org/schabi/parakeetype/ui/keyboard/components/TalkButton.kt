@@ -2,6 +2,7 @@ package org.schabi.parakeetype.ui.keyboard.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.LockOpen
 import androidx.compose.material.icons.rounded.Mic
@@ -35,10 +36,10 @@ import androidx.compose.ui.unit.dp
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
 
-/** How many dp to the left the user must drag to engage continuous mode. */
+/** How many dp sideways (towards the lock) the user must drag to engage continuous mode. */
 private const val CONTINUOUS_DRAG_THRESHOLD_DP = 56
 
-/** Gap between the TalkButton's left edge and the right edge of the lock hint indicator. */
+/** Gap between the TalkButton's edge and the facing edge of the lock hint indicator. */
 private const val LOCK_HINT_GAP_DP = 8
 
 /**
@@ -59,13 +60,18 @@ private const val LOCK_HINT_GAP_DP = 8
  *
  * **TAP_TOGGLE mode** - single tap starts recording; another tap stops it.  No hold needed.
  *
+ * **Left-handed** ([lockToRight]) - everything above is mirrored: the lock hint floats to the
+ * right of the button and the lock engages with a drag to the right.
+ *
  * Every finger down and finger up on the button gives the standard keyboard key vibration.
  *
  * @param triggerMode          `"HOLD"` (default) or `"TAP_TOGGLE"`.
  * @param isContinuous         `true` when continuous (locked) mode is active (HOLD mode only).
  * @param onContinuousModeEnabled Callback fired when the drag-left threshold is crossed (HOLD mode only).
  * @param micLevel             Microphone level in [0, 1] while listening.
- * @param onLockHintVisibleChange Called whenever the lock hint (left of the button) appears or
+ * @param lockToRight          `true` for left-handed mode: the lock hint sits right of the
+ *                             button and a drag to the right locks. Physical, also in RTL locales.
+ * @param onLockHintVisibleChange Called whenever the lock hint (beside the button) appears or
  *                                disappears, so the caller can hide what it would cover.
  */
 @Composable
@@ -80,6 +86,7 @@ fun TalkButton(
     enabled: Boolean = true,
     micLevel: Float = 0f,
     previewForceLockHint: Boolean = false, // For previews: force lock hint visible
+    lockToRight: Boolean = false,
     onLockHintVisibleChange: (Boolean) -> Unit = {},
 ) {
     val effectiveListening = isListening && enabled
@@ -168,7 +175,7 @@ fun TalkButton(
         modifier = modifier
             .size(72.dp)
             .then(
-                if (enabled) Modifier.pointerInput(triggerMode, true) {
+                if (enabled) Modifier.pointerInput(triggerMode, lockToRight) {
                     val thresholdPx = CONTINUOUS_DRAG_THRESHOLD_DP * density
 
                     awaitPointerEventScope {
@@ -185,7 +192,7 @@ fun TalkButton(
                                     currentOnRecordStart()
                                 }
                             } else {
-                                //  HOLD mode: hold to record, drag left to lock 
+                                //  HOLD mode: hold to record, drag towards the lock to lock 
                                 val down = awaitFirstDown(requireUnconsumed = false)
                                 buzz()
 
@@ -222,10 +229,12 @@ fun TalkButton(
                                             if (!change.pressed) break  // finger up → release
 
                                             change.consume()
-                                            val leftDelta = startX - change.position.x
-                                            dragProgress = (leftDelta / thresholdPx).coerceIn(0f, 1f)
+                                            // Distance dragged towards the lock hint.
+                                            val lockDelta = if (lockToRight) change.position.x - startX
+                                            else startX - change.position.x
+                                            dragProgress = (lockDelta / thresholdPx).coerceIn(0f, 1f)
 
-                                            if (!locked && leftDelta > thresholdPx) {
+                                            if (!locked && lockDelta > thresholdPx) {
                                                 locked = true
                                                 dragProgress = 0f
                                                 isHolding = false
@@ -274,6 +283,7 @@ fun TalkButton(
                     isListening && triggerMode == "TAP_TOGGLE" -> stringResource(R.string.cd_talk_tap_stop)
                     isListening -> stringResource(R.string.cd_talk_stop)
                     triggerMode == "TAP_TOGGLE" -> stringResource(R.string.cd_talk_tap_start)
+                    lockToRight -> stringResource(R.string.cd_talk_hold_start_right)
                     else -> stringResource(R.string.cd_talk_hold_start)
                 },
                 tint = iconTint,
@@ -281,22 +291,24 @@ fun TalkButton(
             )
         }
 
-        //  Lock hint: floats to the left without disturbing layout
+        //  Lock hint: floats beside the button without disturbing layout
         // Modifier.layout reports (0, 0) to the parent Box so the button's
-        // measured position is never shifted.  The placeable is then placed
-        // with a negative X offset so it renders left of the button bounds, where
-        // the delete-all key sits; KeyboardScreen hides that key while the hint is
-        // visible (see onLockHintVisibleChange).
+        // measured position is never shifted.  The placeable is then placed with an
+        // X offset so it renders left of the button bounds (right of them when
+        // lockToRight), where the delete-all key sits; KeyboardScreen hides that key
+        // while the hint is visible (see onLockHintVisibleChange).
         val lockHintVisible = triggerMode == "HOLD" && isHolding && !isContinuousActive
         val currentOnLockHintVisibleChange by rememberUpdatedState(onLockHintVisibleChange)
         LaunchedEffect(lockHintVisible) { currentOnLockHintVisibleChange(lockHintVisible) }
+        // The hint grows out of the edge facing the button.
+        val hintOrigin = TransformOrigin(if (lockToRight) 0f else 1f, 0.5f)
         if (triggerMode == "HOLD") {
             AnimatedVisibility(
                 visible = lockHintVisible,
                 enter = fadeIn(animationSpec = tween(150)) +
                         scaleIn(
                             initialScale = 0.75f,
-                            transformOrigin = TransformOrigin(1f, 0.5f),
+                            transformOrigin = hintOrigin,
                             animationSpec = spring(
                                 dampingRatio = Spring.DampingRatioMediumBouncy,
                                 stiffness = Spring.StiffnessMedium,
@@ -305,7 +317,7 @@ fun TalkButton(
                 exit = fadeOut(animationSpec = tween(120)) +
                         scaleOut(
                             targetScale = 0.75f,
-                            transformOrigin = TransformOrigin(1f, 0.5f),
+                            transformOrigin = hintOrigin,
                             animationSpec = tween(120),
                         ),
                 modifier = Modifier.layout { measurable, constraints ->
@@ -320,21 +332,24 @@ fun TalkButton(
                     )
                     val gapPx = LOCK_HINT_GAP_DP.dp.roundToPx()
                     // The zero-size child sits at the Box centre (constraints.maxWidth / 2
-                    // from the left).  Subtract that offset so the hint's right edge aligns
-                    // with the button's left edge, vertically centred on the button.
+                    // from the left).  Offset from there so the hint's facing edge aligns
+                    // with the button's left (or right) edge, vertically centred on the button.
+                    // placeRelative is avoided on purpose: the side is physical.
                     val buttonHalfPx = constraints.maxWidth / 2
                     layout(0, 0) {
                         placeable.place(
-                            x = -placeable.width - gapPx - buttonHalfPx,
+                            x = if (lockToRight) buttonHalfPx + gapPx
+                            else -placeable.width - gapPx - buttonHalfPx,
                             y = -placeable.height / 2,
                         )
                     }
                 },
             ) {
-                // The lock gesture is always a physical drag to the left, so keep the hint
-                // left-to-right even in RTL locales (no mirrored chevron / reversed order).
+                // The lock gesture is always a physical drag (left, or right when
+                // lockToRight), so keep the hint left-to-right even in RTL locales
+                // (no mirrored chevron / reversed order).
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    LockHint(dragProgress = dragProgress)
+                    LockHint(dragProgress = dragProgress, pointsRight = lockToRight)
                 }
             }
         }
@@ -342,7 +357,8 @@ fun TalkButton(
 }
 
 /**
- * Visual hint displayed to the left of [TalkButton] while the user holds in HOLD mode.
+ * Visual hint displayed to the left of [TalkButton] while the user holds in HOLD mode
+ * (to the right of it when [pointsRight], i.e. left-handed mode — then mirrored).
  *
  * Mimics the WhatsApp voice-message lock indicator:
  * - A bouncing left chevron (closest to the button) invites the leftward swipe.
@@ -353,6 +369,7 @@ fun TalkButton(
 private fun LockHint(
     dragProgress: Float,
     modifier: Modifier = Modifier,
+    pointsRight: Boolean = false,
 ) {
     val idleColor = MaterialTheme.colorScheme.onSurfaceVariant
     val activeColor = MaterialTheme.colorScheme.primary
@@ -361,11 +378,11 @@ private fun LockHint(
     val lockScale = 0.65f + dragProgress * 0.35f
     val lockAlpha = 0.50f + dragProgress * 0.50f
 
-    // Infinite bounce animation for the left chevron.
+    // Infinite bounce animation for the chevron, towards the lock.
     val arrowTransition = rememberInfiniteTransition(label = "lockHintArrow")
     val arrowOffsetDp by arrowTransition.animateFloat(
         initialValue = 0f,
-        targetValue = -5f,
+        targetValue = if (pointsRight) 5f else -5f,
         animationSpec = infiniteRepeatable(
             animation = tween(480, easing = FastOutSlowInEasing),
             repeatMode = RepeatMode.Reverse,
@@ -378,6 +395,9 @@ private fun LockHint(
         horizontalArrangement = Arrangement.spacedBy(0.dp),
         modifier = modifier,
     ) {
+        // The chevron is always the element closest to the button.
+        if (pointsRight) LockHintChevron(pointsRight = true, offsetDp = arrowOffsetDp)
+
         // Lock icon inside a circular pill that scales and brightens with drag progress.
         Box(
             contentAlignment = Alignment.Center,
@@ -395,16 +415,22 @@ private fun LockHint(
             )
         }
 
-        // Left chevron: bounces to signal the swipe-left gesture.
-        Icon(
-            imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
-            modifier = Modifier
-                .size(25.dp)
-                .offset(x = arrowOffsetDp.dp),
-        )
+        if (!pointsRight) LockHintChevron(pointsRight = false, offsetDp = arrowOffsetDp)
     }
+}
+
+/** The [LockHint]'s chevron: bounces by [offsetDp] to signal the swipe towards the lock. */
+@Composable
+private fun LockHintChevron(pointsRight: Boolean, offsetDp: Float) {
+    Icon(
+        imageVector = if (pointsRight) Icons.AutoMirrored.Rounded.KeyboardArrowRight
+        else Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+        modifier = Modifier
+            .size(25.dp)
+            .offset(x = offsetDp.dp),
+    )
 }
 
 //  Previews 

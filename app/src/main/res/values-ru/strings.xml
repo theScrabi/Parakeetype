@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Остановить запись</string>
     <string name="cd_talk_tap_start">Нажмите, чтобы начать запись</string>
     <string name="cd_talk_hold_start">Начать запись (удерживайте) · проведите влево, чтобы зафиксировать</string>
+    <string name="cd_talk_hold_start_right">Начать запись (удерживайте) · проведите вправо, чтобы зафиксировать</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Настройка</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Слева</string>
     <string name="pref_position_center">По центру</string>
     <string name="pref_position_right">Справа</string>
+    <string name="pref_left_handed_title">Режим для левшей</string>
+    <string name="pref_left_handed_subtitle">Зеркально отражает кнопки клавиатуры: Enter перемещается к левому краю, а запись фиксируется перетаскиванием кнопки разговора вправо.</string>
     <string name="pref_vad_title">Обнаружение голосовой активности (VAD)</string>
     <string name="pref_vad_subtitle">Использует Silero VAD, чтобы отфильтровывать тишину и фоновый шум перед распознаванием. Отключайте, только если VAD обрезает начало вашей речи или выдаёт пустые результаты.</string>
     <string name="pref_postprocessing_title">Постобработка текста</string>

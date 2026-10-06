@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Διακοπή εγγραφής</string>
     <string name="cd_talk_tap_start">Πατήστε για έναρξη εγγραφής</string>
     <string name="cd_talk_hold_start">Έναρξη εγγραφής (παρατεταμένο πάτημα) · σύρετε αριστερά για κλείδωμα</string>
+    <string name="cd_talk_hold_start_right">Έναρξη εγγραφής (παρατεταμένο πάτημα) · σύρετε δεξιά για κλείδωμα</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Ρύθμιση</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Αριστερά</string>
     <string name="pref_position_center">Κέντρο</string>
     <string name="pref_position_right">Δεξιά</string>
+    <string name="pref_left_handed_title">Λειτουργία για αριστερόχειρες</string>
+    <string name="pref_left_handed_subtitle">Αντικατοπτρίζει τα κουμπιά του πληκτρολογίου: το Enter μετακινείται στην αριστερή άκρη και κλειδώνετε την εγγραφή σύροντας το κουμπί ομιλίας προς τα δεξιά.</string>
     <string name="pref_vad_title">Ανίχνευση φωνητικής δραστηριότητας (VAD)</string>
     <string name="pref_vad_subtitle">Χρησιμοποιεί το Silero VAD για να φιλτράρει τη σιωπή και τον θόρυβο περιβάλλοντος πριν από τη μεταγραφή. Απενεργοποιήστε το μόνο αν το VAD κόβει την αρχή της ομιλίας σας ή δίνει κενά αποτελέσματα.</string>
     <string name="pref_postprocessing_title">Μεταεπεξεργασία κειμένου</string>

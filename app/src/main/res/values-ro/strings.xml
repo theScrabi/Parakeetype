@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Opriți înregistrarea</string>
     <string name="cd_talk_tap_start">Atingeți pentru a începe înregistrarea</string>
     <string name="cd_talk_hold_start">Începeți înregistrarea (țineți apăsat) · glisați spre stânga pentru a bloca</string>
+    <string name="cd_talk_hold_start_right">Începeți înregistrarea (țineți apăsat) · glisați spre dreapta pentru a bloca</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Configurare inițială</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Stânga</string>
     <string name="pref_position_center">Centru</string>
     <string name="pref_position_right">Dreapta</string>
+    <string name="pref_left_handed_title">Mod pentru stângaci</string>
+    <string name="pref_left_handed_subtitle">Oglindește butoanele tastaturii: Enter se mută la marginea din stânga, iar înregistrarea se blochează trăgând butonul de vorbire spre dreapta.</string>
     <string name="pref_vad_title">Detectarea activității vocale (VAD)</string>
     <string name="pref_vad_subtitle">Folosește Silero VAD pentru a filtra liniștea și zgomotul de fundal înainte de transcriere. Dezactivați doar dacă VAD taie începutul vorbirii sau produce rezultate goale.</string>
     <string name="pref_postprocessing_title">Post-procesarea transcrierii</string>

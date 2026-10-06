@@ -74,6 +74,10 @@ class KeyboardViewModel(
     val keyboardPositionLandscape: StateFlow<String> = appPreferences.keyboardPositionLandscape
         .stateIn(viewModelScope, SharingStarted.Eagerly, "RIGHT")
 
+    /** `true` when the button row is mirrored for left-handed use (Enter left, lock right). */
+    val leftHandedMode: StateFlow<Boolean> = appPreferences.leftHandedMode
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     /**
      * `true` when the user opted into raw (unprocessed) microphone capture,
      * which bypasses the platform's echo cancellation - needed when transcribing

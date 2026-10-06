@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Zaustavi snimanje</string>
     <string name="cd_talk_tap_start">Dodirnite za početak snimanja</string>
     <string name="cd_talk_hold_start">Započni snimanje (držite) · prijeđite prstom ulijevo za zaključavanje</string>
+    <string name="cd_talk_hold_start_right">Započni snimanje (držite) · prijeđite prstom udesno za zaključavanje</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Postavljanje</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Lijevo</string>
     <string name="pref_position_center">Sredina</string>
     <string name="pref_position_right">Desno</string>
+    <string name="pref_left_handed_title">Način za ljevake</string>
+    <string name="pref_left_handed_subtitle">Zrcali tipke tipkovnice: Enter se premješta na lijevi rub, a snimanje zaključavate povlačenjem tipke za govor udesno.</string>
     <string name="pref_vad_title">Detekcija glasovne aktivnosti (VAD)</string>
     <string name="pref_vad_subtitle">Upotrebljava Silero VAD za uklanjanje tišine i pozadinske buke prije transkripcije. Onemogućite samo ako VAD odsijeca početak vašeg govora ili daje prazne rezultate.</string>
     <string name="pref_postprocessing_title">Naknadna obrada transkripta</string>

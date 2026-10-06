@@ -56,7 +56,9 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  *  2. Bottom row (left → right):
  *       [Delete All] · [TalkButton] · [Delete Word] · [Enter]
  *     The two delete keys flank the TalkButton; Enter is pinned to the right edge. The
- *     TalkButton stays centred with equal weight on both sides.
+ *     TalkButton stays centred with equal weight on both sides. In left-handed mode the row
+ *     is mirrored: [Enter] · [Delete Word] · [TalkButton] · [Delete All], and the talk
+ *     button locks with a drag to the right. Left / right are physical, also in RTL locales.
  *     While no model is installed the whole row is replaced by a single centred
  *     "Open Parakeetype" key: dictation, delete and Enter are useless until then.
  *
@@ -69,7 +71,7 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  * @param onWhisperLanguageSelected Called when the user taps a language pill.
  * @param onRecordStart          Callback fired when the user presses the talk button.
  * @param onRecordStop           Callback fired when the user releases / stops recording.
- * @param onContinuousModeEnabled Callback fired when the drag-left lock threshold is crossed.
+ * @param onContinuousModeEnabled Callback fired when the drag-to-lock threshold is crossed.
  * @param onDeleteWord           Delete backward to the previous word boundary.
  * @param onDeleteAll            Delete all text in the current editor.
  * @param onEnterAction          Perform the context-aware Enter action (newline or IME action).
@@ -79,6 +81,7 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
  * @param micLevel             Microphone level in [0, 1] while recording (read lazily so only
  *                               the talk button recomposes on every update).
  * @param diagnostics            Pipeline counters from the most recent recording session.
+ * @param leftHanded             `true` mirrors the button row (Enter left, lock to the right).
  */
 @Composable
 fun KeyboardScreen(
@@ -129,6 +132,7 @@ fun KeyboardScreen(
     /** Left / right system insets (side nav bar, display cutout) in pixels, kept clear. */
     leftInsetPx: Int = 0,
     rightInsetPx: Int = 0,
+    leftHanded: Boolean = false,
 ) {
     val density = LocalDensity.current
     // Convert the service-provided pixel heights to Dp once; stay constant per session.
@@ -239,25 +243,76 @@ fun KeyboardScreen(
                 }
             } else Row(
                 modifier = buttonRowModifier,
+                // Physical order, also in RTL locales: the lock hint always covers the
+                // delete-all key, whose side is fixed by the left-handed setting alone.
+                horizontalArrangement = Arrangement.Absolute.Left,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                // Left group: [Delete All], directly left of the talk button. Hidden while the
-                // talk button's lock hint is shown, since the hint floats over this spot.
-                Box(modifier = Modifier.weight(1f)) {
-                    // Fully qualified: the enclosing Row's RowScope overload isn't usable here.
-                    androidx.compose.animation.AnimatedVisibility(
-                        visible = !lockHintVisible,
-                        enter = fadeIn(tween(150)),
-                        exit = fadeOut(tween(120)),
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                    ) {
+                // The edge of each side group that faces the talk button.
+                val leftGroupInner = AbsoluteAlignment.CenterRight
+                val rightGroupInner = AbsoluteAlignment.CenterLeft
+
+                // [Delete All], directly beside the talk button on the lock-hint side. Hidden
+                // while the talk button's lock hint is shown, since the hint floats over it.
+                val deleteAllGroup: @Composable RowScope.() -> Unit = {
+                    Box(modifier = Modifier.weight(1f)) {
+                        // Fully qualified: the enclosing Row's RowScope overload isn't usable here.
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = !lockHintVisible,
+                            enter = fadeIn(tween(150)),
+                            exit = fadeOut(tween(120)),
+                            modifier = Modifier.align(if (leftHanded) rightGroupInner else leftGroupInner),
+                        ) {
+                            DeleteKey(
+                                icon = Icons.Rounded.DeleteForever,
+                                contentDescription = stringResource(R.string.cd_delete_all),
+                                onClick = onDeleteAll,
+                            )
+                        }
+                    }
+                }
+
+                // [Delete Word] directly beside the talk button, [Enter] at the outer edge.
+                val enterGroup: @Composable RowScope.() -> Unit = {
+                    Box(modifier = Modifier.weight(1f)) {
                         DeleteKey(
-                            icon = Icons.Rounded.DeleteForever,
-                            contentDescription = stringResource(R.string.cd_delete_all),
-                            onClick = onDeleteAll,
+                            icon = Icons.AutoMirrored.Rounded.Backspace,
+                            contentDescription = stringResource(R.string.cd_delete_word),
+                            onClick = onDeleteWord,
+                            modifier = Modifier.align(if (leftHanded) leftGroupInner else rightGroupInner),
+                        )
+
+                        // Outer edge: context-aware Enter action
+                        val (enterIcon, enterDescription) = when (enterAction) {
+                            EnterAction.SEARCH -> Icons.Rounded.Search to stringResource(R.string.cd_action_search)
+                            EnterAction.GO -> Icons.AutoMirrored.Rounded.ArrowForward to stringResource(R.string.cd_action_go)
+                            EnterAction.NEXT -> Icons.AutoMirrored.Rounded.ArrowForward to stringResource(R.string.cd_action_next)
+                            EnterAction.SEND,
+                            EnterAction.DONE,
+                            EnterAction.ENTER_KEY,
+                            EnterAction.NEWLINE -> Icons.Rounded.SubdirectoryArrowLeft to stringResource(R.string.cd_action_enter)
+                        }
+                        // A filled, larger key: the old 40 dp icon-only button was easy to miss
+                        // and looked like the delete buttons.
+                        KeyboardActionButton(
+                            icon = enterIcon,
+                            contentDescription = enterDescription,
+                            onClick = onEnterAction,
+                            // Disable auto-repeat for action buttons - search/send/go should only fire once.
+                            repeatEnabled = enterAction == EnterAction.NEWLINE,
+                            size = DpSize(64.dp, 52.dp),
+                            iconSize = 28.dp,
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer,
+                            shape = KEY_SHAPE,
+                            modifier = Modifier.align(
+                                if (leftHanded) AbsoluteAlignment.CenterLeft else AbsoluteAlignment.CenterRight
+                            ),
                         )
                     }
                 }
+
+                if (leftHanded) enterGroup() else deleteAllGroup()
 
                 Spacer(modifier = Modifier.width(8.dp))
 
@@ -275,47 +330,13 @@ fun KeyboardScreen(
                     enabled = uiState !is KeyboardUiState.EngineLoading && uiState !is KeyboardUiState.Error && uiState !is KeyboardUiState.Transcribing,
                     micLevel = micLevel(),
                     previewForceLockHint = previewForceLockHint,
+                    lockToRight = leftHanded,
                     onLockHintVisibleChange = { lockHintVisible = it },
                 )
 
                 Spacer(modifier = Modifier.width(8.dp))
 
-                // Right group: [Delete Word] directly right of the talk button, [Enter] far right
-                Box(modifier = Modifier.weight(1f)) {
-                    DeleteKey(
-                        icon = Icons.AutoMirrored.Rounded.Backspace,
-                        contentDescription = stringResource(R.string.cd_delete_word),
-                        onClick = onDeleteWord,
-                        modifier = Modifier.align(Alignment.CenterStart),
-                    )
-
-                    // Far-right: context-aware Enter action
-                    val (enterIcon, enterDescription) = when (enterAction) {
-                        EnterAction.SEARCH -> Icons.Rounded.Search to stringResource(R.string.cd_action_search)
-                        EnterAction.GO -> Icons.AutoMirrored.Rounded.ArrowForward to stringResource(R.string.cd_action_go)
-                        EnterAction.NEXT -> Icons.AutoMirrored.Rounded.ArrowForward to stringResource(R.string.cd_action_next)
-                        EnterAction.SEND,
-                        EnterAction.DONE,
-                        EnterAction.ENTER_KEY,
-                        EnterAction.NEWLINE -> Icons.Rounded.SubdirectoryArrowLeft to stringResource(R.string.cd_action_enter)
-                    }
-                    // A filled, larger key: the old 40 dp icon-only button was easy to miss
-                    // and looked like the delete buttons.
-                    KeyboardActionButton(
-                        icon = enterIcon,
-                        contentDescription = enterDescription,
-                        onClick = onEnterAction,
-                        // Disable auto-repeat for action buttons - search/send/go should only fire once.
-                        repeatEnabled = enterAction == EnterAction.NEWLINE,
-                        size = DpSize(64.dp, 52.dp),
-                        iconSize = 28.dp,
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                        tint = MaterialTheme.colorScheme.onSecondaryContainer,
-                        shape = KEY_SHAPE,
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                    )
-
-                }
+                if (leftHanded) deleteAllGroup() else enterGroup()
             }
         } // end main content Box
     } // end outer Box
@@ -436,6 +457,7 @@ fun KeyboardScreen(
     val micLevel by viewModel.micLevel.collectAsState()
     val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
     val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
+    val leftHanded by viewModel.leftHandedMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     // Only surface real diagnostics counters when the user has enabled the badge in settings.
@@ -465,6 +487,7 @@ fun KeyboardScreen(
         keyboardPosition = if (isLandscape) positionLandscape else positionPortrait,
         leftInsetPx = leftInsetPx,
         rightInsetPx = rightInsetPx,
+        leftHanded = leftHanded,
     )
 }
 
@@ -477,6 +500,7 @@ private fun KeyboardScreenPreviewScaffold(
     showLockHint: Boolean = false,
     enterAction: EnterAction = EnterAction.DONE,
     keyboardPosition: String = "CENTER",
+    leftHanded: Boolean = false,
     height: Int = 220,
 ) {
     ParakeetypeKeyboardTheme {
@@ -499,6 +523,7 @@ private fun KeyboardScreenPreviewScaffold(
                 onOpenCompanionApp = {},
                 previewForceLockHint = showLockHint,
                 keyboardPosition = keyboardPosition,
+                leftHanded = leftHanded,
             )
         }
     }
@@ -541,6 +566,12 @@ private fun KeyboardScreenWhisperIdlePreview() {
 @Composable
 private fun KeyboardScreenListeningPreview() {
     KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Listening, showLockHint = true)
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF111111, name = "Left-handed · lock hint")
+@Composable
+private fun KeyboardScreenLeftHandedPreview() {
+    KeyboardScreenPreviewScaffold(uiState = KeyboardUiState.Listening, showLockHint = true, leftHanded = true)
 }
 
 @Preview(showBackground = true, backgroundColor = 0xFF111111)

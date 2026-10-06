@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Interrompi registrazione</string>
     <string name="cd_talk_tap_start">Tocca per avviare la registrazione</string>
     <string name="cd_talk_hold_start">Avvia registrazione (tieni premuto) · scorri a sinistra per bloccare</string>
+    <string name="cd_talk_hold_start_right">Avvia registrazione (tieni premuto) · scorri a destra per bloccare</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Configurazione iniziale</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Sinistra</string>
     <string name="pref_position_center">Centro</string>
     <string name="pref_position_right">Destra</string>
+    <string name="pref_left_handed_title">Modalità mancino</string>
+    <string name="pref_left_handed_subtitle">Specchia i tasti della tastiera: Invio si sposta sul bordo sinistro e la registrazione si blocca trascinando il pulsante di dettatura verso destra.</string>
     <string name="pref_vad_title">Rilevamento dell\'attività vocale (VAD)</string>
     <string name="pref_vad_subtitle">Usa Silero VAD per filtrare silenzio e rumori di fondo prima della trascrizione. Disattivalo solo se il VAD taglia l\'inizio del tuo parlato o produce risultati vuoti.</string>
     <string name="pref_postprocessing_title">Post-elaborazione della trascrizione</string>

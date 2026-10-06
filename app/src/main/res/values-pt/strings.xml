@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Parar gravação</string>
     <string name="cd_talk_tap_start">Toque para iniciar a gravação</string>
     <string name="cd_talk_hold_start">Iniciar gravação (manter premido) · deslize para a esquerda para bloquear</string>
+    <string name="cd_talk_hold_start_right">Iniciar gravação (manter premido) · deslize para a direita para bloquear</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Configuração inicial</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Esquerda</string>
     <string name="pref_position_center">Centro</string>
     <string name="pref_position_right">Direita</string>
+    <string name="pref_left_handed_title">Modo canhoto</string>
+    <string name="pref_left_handed_subtitle">Espelha os botões do teclado: o Enter passa para a margem esquerda e a gravação é bloqueada arrastando o botão de falar para a direita.</string>
     <string name="pref_vad_title">Deteção de atividade de voz (VAD)</string>
     <string name="pref_vad_subtitle">Utiliza o Silero VAD para filtrar o silêncio e o ruído de fundo antes da transcrição. Desative apenas se o VAD cortar o início da sua fala ou produzir resultados vazios.</string>
     <string name="pref_postprocessing_title">Pós-processamento da transcrição</string>

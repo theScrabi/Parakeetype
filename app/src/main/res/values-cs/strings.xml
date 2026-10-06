@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Zastavit nahrávání</string>
     <string name="cd_talk_tap_start">Klepnutím spustíte nahrávání</string>
     <string name="cd_talk_hold_start">Spustit nahrávání (podržte) · přejetím doleva uzamknete</string>
+    <string name="cd_talk_hold_start_right">Spustit nahrávání (podržte) · přejetím doprava uzamknete</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Úvodní nastavení</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Vlevo</string>
     <string name="pref_position_center">Uprostřed</string>
     <string name="pref_position_right">Vpravo</string>
+    <string name="pref_left_handed_title">Režim pro leváky</string>
+    <string name="pref_left_handed_subtitle">Zrcadlově převrátí tlačítka klávesnice: Enter se přesune k levému okraji a nahrávání uzamknete tažením tlačítka mluvení doprava.</string>
     <string name="pref_vad_title">Detekce hlasové aktivity (VAD)</string>
     <string name="pref_vad_subtitle">Pomocí Silero VAD odfiltruje před přepisem ticho a hluk v pozadí. Vypínejte jen tehdy, pokud VAD ořezává začátek vaší řeči nebo vrací prázdné výsledky.</string>
     <string name="pref_postprocessing_title">Následné zpracování přepisu</string>

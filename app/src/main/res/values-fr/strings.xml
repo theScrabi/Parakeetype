@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Arrêter l\'enregistrement</string>
     <string name="cd_talk_tap_start">Appuyez pour démarrer l\'enregistrement</string>
     <string name="cd_talk_hold_start">Démarrer l\'enregistrement (maintenir) · balayer vers la gauche pour verrouiller</string>
+    <string name="cd_talk_hold_start_right">Démarrer l\'enregistrement (maintenir) · balayer vers la droite pour verrouiller</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Mise en route</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Gauche</string>
     <string name="pref_position_center">Centre</string>
     <string name="pref_position_right">Droite</string>
+    <string name="pref_left_handed_title">Mode gaucher</string>
+    <string name="pref_left_handed_subtitle">Inverse les boutons du clavier : Entrée passe sur le bord gauche et l\'enregistrement se verrouille en faisant glisser le bouton de parole vers la droite.</string>
     <string name="pref_vad_title">Détection d\'activité vocale (VAD)</string>
     <string name="pref_vad_subtitle">Utilise Silero VAD pour filtrer le silence et les bruits de fond avant la transcription. Ne désactivez cette option que si la VAD coupe le début de vos paroles ou produit des résultats vides.</string>
     <string name="pref_postprocessing_title">Post-traitement de la transcription</string>

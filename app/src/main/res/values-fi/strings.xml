@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Lopeta tallennus</string>
     <string name="cd_talk_tap_start">Aloita tallennus napauttamalla</string>
     <string name="cd_talk_hold_start">Aloita tallennus (pidä painettuna) · lukitse pyyhkäisemällä vasemmalle</string>
+    <string name="cd_talk_hold_start_right">Aloita tallennus (pidä painettuna) · lukitse pyyhkäisemällä oikealle</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Käyttöönotto</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Vasen</string>
     <string name="pref_position_center">Keskellä</string>
     <string name="pref_position_right">Oikea</string>
+    <string name="pref_left_handed_title">Vasenkätinen tila</string>
+    <string name="pref_left_handed_subtitle">Peilaa näppäimistön painikkeet: Enter siirtyy vasempaan reunaan, ja tallennus lukitaan vetämällä puhepainiketta oikealle.</string>
     <string name="pref_vad_title">Puheaktiivisuuden tunnistus (VAD)</string>
     <string name="pref_vad_subtitle">Suodattaa Silero VAD:n avulla hiljaisuuden ja taustamelun pois ennen litterointia. Poista käytöstä vain, jos VAD leikkaa puheesi alun pois tai tuottaa tyhjiä tuloksia.</string>
     <string name="pref_postprocessing_title">Litteroinnin jälkikäsittely</string>

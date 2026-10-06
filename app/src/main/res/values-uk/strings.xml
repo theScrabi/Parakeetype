@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Зупинити запис</string>
     <string name="cd_talk_tap_start">Торкніться, щоб почати запис</string>
     <string name="cd_talk_hold_start">Почати запис (утримуйте) · проведіть ліворуч, щоб зафіксувати</string>
+    <string name="cd_talk_hold_start_right">Почати запис (утримуйте) · проведіть праворуч, щоб зафіксувати</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Початкове налаштування</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Ліворуч</string>
     <string name="pref_position_center">По центру</string>
     <string name="pref_position_right">Праворуч</string>
+    <string name="pref_left_handed_title">Режим для шульг</string>
+    <string name="pref_left_handed_subtitle">Віддзеркалює кнопки клавіатури: Enter переміщується до лівого краю, а запис фіксується перетягуванням кнопки мовлення праворуч.</string>
     <string name="pref_vad_title">Виявлення голосової активності (VAD)</string>
     <string name="pref_vad_subtitle">Використовує Silero VAD, щоб відфільтровувати тишу й фоновий шум перед розпізнаванням. Вимикайте, лише якщо VAD обрізає початок вашого мовлення або дає порожні результати.</string>
     <string name="pref_postprocessing_title">Постобробка тексту</string>

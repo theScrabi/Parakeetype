@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Detener grabación</string>
     <string name="cd_talk_tap_start">Toca para iniciar la grabación</string>
     <string name="cd_talk_hold_start">Iniciar grabación (mantener pulsado) · desliza a la izquierda para bloquear</string>
+    <string name="cd_talk_hold_start_right">Iniciar grabación (mantener pulsado) · desliza a la derecha para bloquear</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Configuración inicial</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Izquierda</string>
     <string name="pref_position_center">Centro</string>
     <string name="pref_position_right">Derecha</string>
+    <string name="pref_left_handed_title">Modo zurdo</string>
+    <string name="pref_left_handed_subtitle">Invierte los botones del teclado: Intro pasa al borde izquierdo y la grabación se bloquea arrastrando el botón de hablar hacia la derecha.</string>
     <string name="pref_vad_title">Detección de actividad de voz (VAD)</string>
     <string name="pref_vad_subtitle">Usa Silero VAD para filtrar el silencio y el ruido de fondo antes de la transcripción. Desactívalo solo si el VAD corta el comienzo de lo que dices o produce resultados vacíos.</string>
     <string name="pref_postprocessing_title">Posprocesamiento de la transcripción</string>

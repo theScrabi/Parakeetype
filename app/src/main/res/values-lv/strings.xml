@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Apturēt ierakstīšanu</string>
     <string name="cd_talk_tap_start">Pieskarieties, lai sāktu ierakstīšanu</string>
     <string name="cd_talk_hold_start">Sākt ierakstīšanu (turēt) · velciet pa kreisi, lai fiksētu</string>
+    <string name="cd_talk_hold_start_right">Sākt ierakstīšanu (turēt) · velciet pa labi, lai fiksētu</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Iestatīšana</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Pa kreisi</string>
     <string name="pref_position_center">Centrā</string>
     <string name="pref_position_right">Pa labi</string>
+    <string name="pref_left_handed_title">Kreiļu režīms</string>
+    <string name="pref_left_handed_subtitle">Spoguļo tastatūras pogas: Enter pārvietojas uz kreiso malu, un ierakstu var bloķēt, velkot runāšanas pogu pa labi.</string>
     <string name="pref_vad_title">Balss aktivitātes noteikšana (VAD)</string>
     <string name="pref_vad_subtitle">Izmanto Silero VAD, lai pirms transkripcijas atfiltrētu klusumu un fona troksni. Atspējojiet tikai tad, ja VAD nogriež jūsu runas sākumu vai sniedz tukšus rezultātus.</string>
     <string name="pref_postprocessing_title">Transkripta pēcapstrāde</string>

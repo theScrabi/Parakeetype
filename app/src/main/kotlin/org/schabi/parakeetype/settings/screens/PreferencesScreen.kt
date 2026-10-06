@@ -43,6 +43,7 @@ fun InputPreferencesScreen(
     val rawMicCapture by viewModel.rawMicCapture.collectAsState()
     val positionPortrait by viewModel.keyboardPositionPortrait.collectAsState()
     val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
+    val leftHandedMode by viewModel.leftHandedMode.collectAsState()
 
     PreferencesColumn {
         MicSection(
@@ -71,6 +72,11 @@ fun InputPreferencesScreen(
             positionLandscape = positionLandscape,
             onPositionPortraitChange = viewModel::setKeyboardPositionPortrait,
             onPositionLandscapeChange = viewModel::setKeyboardPositionLandscape,
+        )
+        HorizontalDivider()
+        LeftHandedModeSection(
+            leftHandedMode = leftHandedMode,
+            onLeftHandedModeChange = viewModel::setLeftHandedMode,
         )
     }
 }
@@ -347,6 +353,39 @@ private fun KeyboardPositionSection(
             selected = positionLandscape,
             onSelect = onPositionLandscapeChange,
         )
+    }
+}
+
+@Composable
+private fun LeftHandedModeSection(
+    leftHandedMode: Boolean,
+    onLeftHandedModeChange: (Boolean) -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(
+            text = stringResource(R.string.pref_left_handed_title),
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.pref_left_handed_subtitle),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Text(
+                text = if (leftHandedMode) stringResource(R.string.state_enabled)
+                else stringResource(R.string.state_disabled),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Switch(
+                checked = leftHandedMode,
+                onCheckedChange = onLeftHandedModeChange,
+            )
+        }
     }
 }
 

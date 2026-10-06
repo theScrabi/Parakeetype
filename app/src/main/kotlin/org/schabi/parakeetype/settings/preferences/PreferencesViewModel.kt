@@ -61,6 +61,16 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch { prefs.setKeyboardPositionLandscape(position) }
     }
 
+    val leftHandedMode: StateFlow<Boolean> = prefs.leftHandedMode.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = false,
+    )
+
+    fun setLeftHandedMode(enabled: Boolean) {
+        viewModelScope.launch { prefs.setLeftHandedMode(enabled) }
+    }
+
     val rawMicCapture: StateFlow<Boolean> = prefs.rawMicCapture.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),

@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Felvétel leállítása</string>
     <string name="cd_talk_tap_start">Koppintson a felvétel indításához</string>
     <string name="cd_talk_hold_start">Felvétel indítása (nyomva tartva) · húzza balra a rögzítéshez</string>
+    <string name="cd_talk_hold_start_right">Felvétel indítása (nyomva tartva) · húzza jobbra a rögzítéshez</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Beállítás</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Bal</string>
     <string name="pref_position_center">Közép</string>
     <string name="pref_position_right">Jobb</string>
+    <string name="pref_left_handed_title">Balkezes mód</string>
+    <string name="pref_left_handed_subtitle">Tükrözi a billentyűzet gombjait: az Enter a bal szélre kerül, a felvételt pedig a beszéd gomb jobbra húzásával zárolhatja.</string>
     <string name="pref_vad_title">Hangaktivitás-érzékelés (VAD)</string>
     <string name="pref_vad_subtitle">A Silero VAD segítségével kiszűri a csendet és a háttérzajt az átírás előtt. Csak akkor kapcsolja ki, ha a VAD levágja a beszéd elejét, vagy üres eredményt ad.</string>
     <string name="pref_postprocessing_title">Átirat utófeldolgozása</string>

@@ -42,6 +42,7 @@
     <string name="cd_talk_stop">Stop recording</string>
     <string name="cd_talk_tap_start">Tap to start recording</string>
     <string name="cd_talk_hold_start">Start recording (hold) · swipe left to lock</string>
+    <string name="cd_talk_hold_start_right">Start recording (hold) · swipe right to lock</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Setup</string>
@@ -84,6 +85,8 @@
     <string name="pref_position_left">Left</string>
     <string name="pref_position_center">Center</string>
     <string name="pref_position_right">Right</string>
+    <string name="pref_left_handed_title">Left-Handed Mode</string>
+    <string name="pref_left_handed_subtitle">Mirrors the keyboard buttons: Enter moves to the left edge, and you lock a recording by dragging the talk button to the right.</string>
     <string name="pref_vad_title">Voice Activity Detection (VAD)</string>
     <string name="pref_vad_subtitle">Uses Silero VAD to filter out silence and background noise before transcription.
         Disable only if VAD is cutting off the start of your speech or producing empty results.

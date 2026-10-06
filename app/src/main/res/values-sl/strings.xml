@@ -43,6 +43,7 @@
     <string name="cd_talk_stop">Ustavi snemanje</string>
     <string name="cd_talk_tap_start">Dotaknite se, da začnete snemati</string>
     <string name="cd_talk_hold_start">Začni snemanje (pridržite) · povlecite v levo za zaklep</string>
+    <string name="cd_talk_hold_start_right">Začni snemanje (pridržite) · povlecite v desno za zaklep</string>
 
     <!-- Home screen -->
     <string name="home_section_setup">Priprava</string>
@@ -81,6 +82,8 @@
     <string name="pref_position_left">Levo</string>
     <string name="pref_position_center">Sredina</string>
     <string name="pref_position_right">Desno</string>
+    <string name="pref_left_handed_title">Način za levičarje</string>
+    <string name="pref_left_handed_subtitle">Zrcali gumbe tipkovnice: Enter se premakne na levi rob, snemanje pa zaklenete tako, da gumb za govor povlečete v desno.</string>
     <string name="pref_vad_title">Zaznavanje glasovne aktivnosti (VAD)</string>
     <string name="pref_vad_subtitle">Uporablja Silero VAD, da pred prepisom odstrani tišino in hrup v ozadju. Onemogočite samo, če VAD odreže začetek vašega govora ali vrača prazne rezultate.</string>
     <string name="pref_postprocessing_title">Naknadna obdelava prepisa</string>
