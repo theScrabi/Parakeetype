@@ -99,6 +99,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 - Silero VAD v4 ONNX. RNN state tensors h/c shape [2,1,64] carried across chunks.
 - Speech probability threshold: 0.3.
 - Three layers: onset gate (2 frames/60 ms), pre-roll buffer (15 frames/450 ms lead-in), hangover.
+- The model (silero_vad_v4.onnx) is not in the APK: it ships in the model archive and is loaded from the installed model's directory (ModelStorageManager.findVadModel).
 - Falls back to RMSVadFilter if the ONNX model fails to load.
 
 **RMSVadFilter** (fallback)
@@ -510,6 +511,8 @@ Repositories: Google, MavenCentral, Gradle Plugin Portal only.
 
 All unit tests in app/src/test/kotlin/org/schabi/parakeetype/.
 testOptions { unitTests.isReturnDefaultValues = true }.
+
+The model (incl. the Silero VAD) is not in the repository; devtools/fetch-test-model.sh downloads it from the pinned release page. The speech WAV fixtures (app/src/test/resources/audio/, git-ignored) are internal development data and not published. Tests that need either skip themselves (JUnit Assume) when they are missing.
 
 | Test file | What it covers |
 |---|---|

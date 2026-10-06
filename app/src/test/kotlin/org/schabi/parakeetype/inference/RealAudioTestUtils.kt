@@ -1,7 +1,10 @@
 package org.schabi.parakeetype.inference
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Assume
+import org.schabi.parakeetype.settings.model.SILERO_VAD_FILE
 import java.io.File
+import java.io.InputStream
 import java.util.Locale
 
 /**
@@ -46,6 +49,32 @@ fun resolveModelDir(): File {
             appendLine("  Or place model files in: $cacheDir")
         }
     )
+}
+
+/**
+ * Opens the WAV fixture `audio/[name]` from the test classpath. The fixtures are internal
+ * development data (git-ignored, not published); without them the calling test is skipped.
+ */
+fun openWavFixture(name: String): InputStream {
+    val stream = object {}.javaClass.classLoader!!.getResourceAsStream("audio/$name")
+    Assume.assumeTrue(
+        "WAV fixture '$name' not found in app/src/test/resources/audio/",
+        stream != null,
+    )
+    return stream!!
+}
+
+/**
+ * Returns the Silero VAD model from the model directory ([resolveModelDir]); it ships in the
+ * model archive, not in the repository. Skips the calling test when it is not available.
+ */
+fun resolveSileroModel(): File {
+    val file = runCatching { File(resolveModelDir(), SILERO_VAD_FILE) }.getOrNull()
+    Assume.assumeTrue(
+        "$SILERO_VAD_FILE not found - run devtools/fetch-test-model.sh",
+        file?.isFile == true,
+    )
+    return file!!
 }
 
 /**

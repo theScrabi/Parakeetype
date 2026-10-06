@@ -7,7 +7,8 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
-import org.schabi.parakeetype.R
+import org.schabi.parakeetype.settings.model.ModelStorageManager
+import org.schabi.parakeetype.settings.model.SILERO_VAD_FILE
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -138,10 +139,12 @@ class AudioCaptureManager(private val context: Context) {
             // Only create a filter when VAD is enabled; null means pass-through (VAD disabled).
             val vad: VadFilter? = if (vadEnabled) {
                 try {
-                    val sileroBytes = context.resources.openRawResource(R.raw.silero_vad_v4).readBytes()
-                    SileroVadFilter(modelBytes = sileroBytes, threshold = 0.3f)
+                    val sileroFile = checkNotNull(ModelStorageManager.findVadModel(context)) {
+                        "no installed model contains $SILERO_VAD_FILE"
+                    }
+                    SileroVadFilter(modelBytes = sileroFile.readBytes(), threshold = 0.3f)
                 } catch (e: Exception) {
-                    Log.w(TAG, "Silero VAD model not found in raw resources. Falling back to Energy VAD.", e)
+                    Log.w(TAG, "Silero VAD model could not be loaded. Falling back to Energy VAD.", e)
                     RMSVadFilter(0.4f)
                 }
             } else null.also { Log.d(TAG, "VAD disabled") }

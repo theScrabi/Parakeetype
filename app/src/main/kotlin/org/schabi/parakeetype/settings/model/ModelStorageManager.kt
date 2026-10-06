@@ -48,6 +48,15 @@ object ModelStorageManager {
     fun isModelReady(context: Context): Boolean =
         isModelReady(context, ModelId.DEFAULT)
 
+    /**
+     * Returns the Silero VAD model ([SILERO_VAD_FILE]) from the first registered model's
+     * directory that has it, or `null` when no installed model carries one.
+     */
+    fun findVadModel(context: Context): File? =
+        ModelRegistry.all
+            .map { getFilePath(context, it.id, SILERO_VAD_FILE) }
+            .firstOrNull { it.exists() && it.length() > 0 }
+
     /** Deletes the entire model directory for [modelId] from internal storage. */
     fun deleteModel(context: Context, modelId: ModelId) {
         getModelDir(context, modelId).deleteRecursively()

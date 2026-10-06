@@ -35,6 +35,7 @@ MODEL_FILES=(
   "joiner.int8.onnx"
   "nemo128.onnx"
   "vocab.txt"
+  "silero_vad_v4.onnx"
 )
 
 # ---- Sanity checks -----------------------------------------------------------

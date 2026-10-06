@@ -1,11 +1,11 @@
 package org.schabi.parakeetype.audio
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assume
 import org.junit.Test
 import org.schabi.parakeetype.audio.SpeechEndpointer.Event
 import org.schabi.parakeetype.inference.WavReader
-import java.io.File
+import org.schabi.parakeetype.inference.openWavFixture
+import org.schabi.parakeetype.inference.resolveSileroModel
 import kotlin.math.PI
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -154,17 +154,8 @@ class SpeechEndpointerTest {
      */
     @Test
     fun `real VAD - breaths and taps after speech do not keep the session open`() {
-        val model = listOf(
-            File("src/main/res/raw/silero_vad_v4.onnx"),
-            File("app/src/main/res/raw/silero_vad_v4.onnx"),
-        ).firstOrNull { it.exists() }
-        val wav = listOf(
-            File("src/test/resources/audio/long-sentence.wav"),
-            File("app/src/test/resources/audio/long-sentence.wav"),
-        ).firstOrNull { it.exists() }
-        Assume.assumeTrue("Silero model or fixture not found", model != null && wav != null)
-
-        val speech = WavReader().loadAsSingleChunk(wav!!.inputStream()).samples
+        val model = resolveSileroModel()
+        val speech = WavReader().loadAsSingleChunk(openWavFixture("long-sentence.wav")).samples
         val tailN = 16_000 * 6
         val tail = noise(tailN, -55.0, brown = true)
         val breath = noise(4_800, -40.0, brown = false).also { b ->
@@ -188,7 +179,7 @@ class SpeechEndpointerTest {
         }
 
         val silenceMs = 2_000L
-        val vad = SileroVadFilter(model!!.readBytes(), threshold = 0.3f)
+        val vad = SileroVadFilter(model.readBytes(), threshold = 0.3f)
         val endpointer = SpeechEndpointer(silenceMs = silenceMs, noSpeechTimeoutMs = 8_000)
         var endAtMs = -1L
         var vadReopened = false

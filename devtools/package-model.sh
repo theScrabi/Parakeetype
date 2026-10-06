@@ -16,9 +16,15 @@
 # per-feature normalisation), so the nemo128.onnx of istupakov's v3 ONNX export is packed
 # alongside. tokens.txt is packed as vocab.txt.
 #
+# The archive also carries the Silero VAD v4 model (silero_vad_v4.onnx, MIT, from
+# https://github.com/snakers4/silero-vad at tag v4.0), which the app's voice activity
+# detection loads from the installed model directory, so no model weights live in the
+# app's source tree.
+#
 # The model is licensed CC BY 4.0, which only allows redistribution together with the
 # licence and an attribution notice, so the archive also contains LICENSE.txt (the full
-# licence text) and NOTICE.txt (creators, sources, changes) from devtools/licenses/.
+# licence text) and NOTICE.txt (creators, sources, changes) from devtools/licenses/, plus
+# LICENSE-silero-vad.txt (the MIT notice the Silero VAD must be distributed with).
 # ModelImporter skips entries that are not model files.
 #
 # Upload the result as a release asset of the release MODEL_ARCHIVE_RELEASE in
@@ -29,6 +35,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # Pinned revisions, so the hashes below keep matching when the repos are updated.
 ULTRA_BASE="https://huggingface.co/mldecode/parakeet-ultra-onnx-int8/resolve/3282a6e32885b431c1543d58c7710e6e3412eac0"
 V3_BASE="https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx/resolve/main"
+SILERO_BASE="https://raw.githubusercontent.com/snakers4/silero-vad/915dd3d639b8333a52e001af095f87c5b7f1e0ac/files"
 OUT_DIR="${1:-.}"
 ARCHIVE="parakeet-ultra-int8.zip"
 
@@ -39,6 +46,7 @@ FILES=(
   "$ULTRA_BASE joiner.int8.onnx  joiner.int8.onnx  20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"
   "$ULTRA_BASE tokens.txt        vocab.txt         d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"
   "$V3_BASE    nemo128.onnx      nemo128.onnx      a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"
+  "$SILERO_BASE silero_vad.onnx  silero_vad_v4.onnx a35ebf52fd3ce5f1469b2a36158dba761bc47b973ea3382b3186ca15b1f5af28"
 )
 
 WORK="$(mktemp -d)"
@@ -55,7 +63,8 @@ done
 
 cp "$SCRIPT_DIR/licenses/CC-BY-4.0.txt" "$WORK/LICENSE.txt"
 cp "$SCRIPT_DIR/licenses/parakeet-ultra-NOTICE.txt" "$WORK/NOTICE.txt"
-names+=(LICENSE.txt NOTICE.txt)
+cp "$SCRIPT_DIR/licenses/silero-vad-LICENSE.txt" "$WORK/LICENSE-silero-vad.txt"
+names+=(LICENSE.txt NOTICE.txt LICENSE-silero-vad.txt)
 
 mkdir -p "$OUT_DIR"
 rm -f "$OUT_DIR/$ARCHIVE"

@@ -11,7 +11,6 @@ import org.junit.Assume
 import org.junit.BeforeClass
 import org.junit.Test
 import java.io.ByteArrayInputStream
-import java.io.File
 
 /**
  * Integration tests for the short-utterance decode path (the decode-context retry in
@@ -55,8 +54,7 @@ class ShortUtterancePipelineTest {
     private val wavReader = WavReader()
 
     private fun wavSamples(name: String): ShortArray {
-        val stream = javaClass.classLoader!!.getResourceAsStream("audio/$name")
-            ?: throw IllegalStateException("WAV fixture '$name' not found on classpath")
+        val stream = openWavFixture(name)
         val pcm = wavReader.readPcm16(ByteArrayInputStream(stream.readBytes()))
         return wavReader.resampleLinear(pcm.samples, pcm.sampleRate, 16_000)
     }
@@ -107,12 +105,7 @@ class ShortUtterancePipelineTest {
      * audio a recording session hands to the repository.
      */
     private fun vadProcess(samples: ShortArray): ShortArray {
-        val sileroPath = listOf(
-            File("app/src/main/res/raw/silero_vad_v4.onnx"),
-            File("src/main/res/raw/silero_vad_v4.onnx"),
-        ).firstOrNull { it.exists() }
-        Assume.assumeTrue("silero_vad_v4.onnx not found in candidates", sileroPath != null)
-        val vad = SileroVadFilter(modelBytes = sileroPath!!.readBytes(), threshold = 0.3f)
+        val vad = SileroVadFilter(modelBytes = resolveSileroModel().readBytes(), threshold = 0.3f)
         val out = ArrayList<ShortArray>()
         var i = 0
         while (i + 480 <= samples.size) {

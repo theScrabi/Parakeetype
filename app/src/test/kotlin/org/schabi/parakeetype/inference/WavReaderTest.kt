@@ -146,8 +146,7 @@ class WavReaderTest {
     // ─── Integration with generated WAV files ───────────────────────────────
     @Test
     fun `loadAsSingleChunk reads generated silence-only wav from classpath`() {
-        val stream = javaClass.classLoader?.getResourceAsStream("audio/silence-only.wav")
-            ?: throw IllegalStateException("'audio/silence-only.wav' not found on classpath")
+        val stream = openWavFixture("silence-only.wav")
         val chunk = reader.loadAsSingleChunk(stream)
 
         assertThat(chunk.sampleRate).isEqualTo(16_000)
@@ -158,8 +157,7 @@ class WavReaderTest {
     }
     @Test
     fun `loadAsSingleChunk reads generated noise-only wav from classpath`() {
-        val stream = javaClass.classLoader?.getResourceAsStream("audio/noise-only.wav")
-            ?: throw IllegalStateException("'audio/noise-only.wav' not found on classpath")
+        val stream = openWavFixture("noise-only.wav")
         val chunk = reader.loadAsSingleChunk(stream)
 
         assertThat(chunk.sampleRate).isEqualTo(16_000)

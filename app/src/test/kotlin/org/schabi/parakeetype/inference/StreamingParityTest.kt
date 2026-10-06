@@ -62,8 +62,7 @@ class StreamingParityTest {
     }
 
     private fun wavSamples(name: String): ShortArray {
-        val stream = javaClass.classLoader!!.getResourceAsStream("audio/$name")
-            ?: throw IllegalStateException("WAV fixture '$name' not found on classpath")
+        val stream = openWavFixture(name)
         val pcm = WavReader().readPcm16(ByteArrayInputStream(stream.readBytes()))
         val resampled = WavReader().resampleLinear(pcm.samples, pcm.sampleRate, 16_000)
         return if (pcm.channels > 1) {

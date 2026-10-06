@@ -28,3 +28,9 @@ Disclaimer
   The model is provided "as-is", without warranties of any kind, as stated in
   Section 5 of the licence. NVIDIA, Moondream and the other licensors do not
   endorse Parakeetype or its use of the model.
+
+Silero VAD
+  silero_vad_v4.onnx is the Silero VAD v4 voice activity detection model by the
+  Silero Team (https://github.com/snakers4/silero-vad, tag v4.0, unmodified),
+  licensed under the MIT License; see LICENSE-silero-vad.txt. It is not part of
+  the Parakeet Ultra work and not covered by CC BY 4.0.

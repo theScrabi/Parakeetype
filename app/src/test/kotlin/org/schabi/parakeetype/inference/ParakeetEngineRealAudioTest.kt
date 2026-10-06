@@ -99,8 +99,7 @@ class ParakeetEngineRealAudioTest {
      * `audio` segment) and every lookup failed with FileNotFoundException.
      */
     private fun openWav(name: String): java.io.InputStream =
-        javaClass.classLoader!!.getResourceAsStream("audio/$name")
-            ?: throw IllegalStateException("WAV fixture '$name' not found on classpath")
+        openWavFixture(name)
 
     @After
     fun resetLanguage() {

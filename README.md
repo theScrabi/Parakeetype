@@ -25,7 +25,7 @@ It uses [Parakeet Ultra](https://huggingface.co/moondream/parakeet-ultra), Moond
 - **Works in any app** - injects text via Android's standard `InputConnection` API
 - **Speech recognizer for other apps** - implements Android's `RecognitionService` (for apps using `SpeechRecognizer`, and selectable as the system's voice-input service) and handles `RecognizerIntent.ACTION_RECOGNIZE_SPEECH` (the "tap the mic" voice input other apps launch), all on-device with the same model as the keyboard
 - **Parakeet Ultra** (Parakeet-TDT 0.6B v3, further trained) - INT8 quantized, ~630 MB, robust against background noise, runs on mid-range hardware
-- **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; falls back to energy-threshold VAD if the model can't load
+- **Voice Activity Detection** - Silero VAD v4 neural network (ONNX) filters silence before it reaches the ASR model; ships in the model archive and falls back to energy-threshold VAD if it can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
 - **Instant mode** - when you switch to Parakeetype (e.g. with the microphone key of another keyboard) it starts listening right away, types the text once you stop speaking and switches back to your keyboard (touch the talk button to stay on Parakeetype). Opt-in; off by default.
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets); an opt-in left-handed mode mirrors the buttons (Enter on the left, drag right to lock)
@@ -204,7 +204,7 @@ Bug reports and pull requests are welcome. Please open an issue first for signif
 
 - Follow the existing Kotlin code style (`kotlin.code.style=official`)
 - Keep the `SpeechEngine` interface stable - new engines should be additive
-- Unit tests for business logic live in `app/src/test/`
+- Unit tests for business logic live in `app/src/test/`. The real-audio tests need the model, which is not in the repository: run `devtools/fetch-test-model.sh` to download it. Their speech WAV fixtures are internal development data and not published; without the model or the fixtures those tests are skipped
 
 ---
 
@@ -213,3 +213,5 @@ Bug reports and pull requests are welcome. Please open an issue first for signif
 This project is licensed under the **GNU General Public License v3.0**. See [LICENSE](LICENSE) for the full text.
 
 The Parakeet Ultra model weights are distributed separately under [CC-BY-4.0](https://huggingface.co/moondream/parakeet-ultra) by Moondream, based on [Parakeet-TDT 0.6B v3](https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3) by NVIDIA.
+
+The model archive also contains the [Silero VAD v4](https://github.com/snakers4/silero-vad) model by the Silero Team, licensed under the MIT License. The archive carries both licences and an attribution notice.
