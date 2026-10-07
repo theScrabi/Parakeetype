@@ -6,7 +6,7 @@ package org.schabi.parakeetype.settings.model
  * handed to the user's browser. Build the archive with `devtools/package-model.sh`.
  */
 private const val MODEL_ARCHIVE_RELEASE =
-    "https://github.com/theScrabi/Parakeetype/releases/tag/v0.4"
+    "https://github.com/theScrabi/Parakeetype/releases/tag/v0.4.0"
 
 /**
  * The Silero VAD v6 model. It ships in the model archive (not in the APK), so it lives in the
