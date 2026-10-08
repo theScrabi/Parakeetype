@@ -2,8 +2,10 @@ package org.schabi.parakeetype.recognition
 
 import android.content.ContextParams
 import android.content.Intent
+import android.media.AudioFormat
 import android.os.Build
 import android.os.Bundle
+import android.os.ParcelFileDescriptor
 import android.os.RemoteException
 import android.speech.RecognitionService
 import android.speech.RecognitionSupport
@@ -14,10 +16,15 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.IntentCompat
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import org.schabi.parakeetype.R
+import org.schabi.parakeetype.audio.ClientAudioReader
+import org.schabi.parakeetype.audio.PIPELINE_SAMPLE_RATE
+import org.schabi.parakeetype.audio.PcmFormat
 import org.schabi.parakeetype.audio.PermissionHelper
+import org.schabi.parakeetype.audio.VadFilter
 import org.schabi.parakeetype.settings.model.ModelStorageManager
 
 private const val TAG = "ParakeetypeRecognition"
@@ -43,6 +50,10 @@ internal val PARAKEET_LANGUAGES = listOf(
  * The platform already checked that the caller holds `RECORD_AUDIO`. Audio is recorded on an
  * attribution context built from the caller's [Callback.getCallingAttributionSource], so the
  * microphone use is attributed to (and shown for) the calling app as well.
+ *
+ * Instead of the microphone, a client can supply the audio itself through
+ * [RecognizerIntent.EXTRA_AUDIO_SOURCE] (a file or pipe of raw PCM, described by the
+ * `EXTRA_AUDIO_SOURCE_*` extras); Parakeetype then needs no microphone permission of its own.
  *
  * The service has no UI, so it tells the user directly when a recognition has to wait for the
  * model to load or fails because no model is installed or another app has the microphone — with a toast, as a service in the
@@ -74,13 +85,13 @@ class ParakeetypeRecognitionService : RecognitionService() {
             listener.send { error(SpeechRecognizer.ERROR_RECOGNIZER_BUSY) }
             return
         }
-        if (recognizerIntent.hasExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE)) {
-            // Only live microphone input is supported.
-            Log.w(TAG, "EXTRA_AUDIO_SOURCE is not supported")
-            listener.send { error(SpeechRecognizer.ERROR_CLIENT) }
-            return
-        }
-        if (!PermissionHelper.hasRecordPermission(this)) {
+        val clientAudio = if (recognizerIntent.hasExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE)) {
+            clientAudio(recognizerIntent) ?: run {
+                listener.send { error(SpeechRecognizer.ERROR_CLIENT) }
+                return
+            }
+        } else null
+        if (clientAudio == null && !PermissionHelper.hasRecordPermission(this)) {
             // Parakeetype itself also needs the permission; it is granted in the app.
             Log.w(TAG, "RECORD_AUDIO not granted to Parakeetype")
             listener.send { error(SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS) }
@@ -101,7 +112,42 @@ class ParakeetypeRecognitionService : RecognitionService() {
             options = options,
             listener = CallbackListener(listener),
             scope = scope,
+            clientAudio = clientAudio,
         ).also { it.start() }
+    }
+
+    /**
+     * The reader for the client's [RecognizerIntent.EXTRA_AUDIO_SOURCE], or `null` (after
+     * closing the descriptor) when the extra is no file descriptor or the audio format is not
+     * supported.
+     */
+    private fun clientAudio(intent: Intent): ClientAudioReader? {
+        val descriptor = IntentCompat.getParcelableExtra(
+            intent, RecognizerIntent.EXTRA_AUDIO_SOURCE, ParcelFileDescriptor::class.java,
+        ) ?: run {
+            Log.w(TAG, "EXTRA_AUDIO_SOURCE is not a ParcelFileDescriptor")
+            return null
+        }
+        val format = PcmFormat(
+            encoding = intent.getIntExtra(
+                RecognizerIntent.EXTRA_AUDIO_SOURCE_ENCODING, AudioFormat.ENCODING_PCM_16BIT,
+            ),
+            channelCount = intent.getIntExtra(RecognizerIntent.EXTRA_AUDIO_SOURCE_CHANNEL_COUNT, 1),
+            sampleRate = intent.getIntExtra(
+                RecognizerIntent.EXTRA_AUDIO_SOURCE_SAMPLING_RATE, PIPELINE_SAMPLE_RATE,
+            ),
+        )
+        if (!format.isSupported) {
+            Log.w(TAG, "Unsupported client audio format: $format")
+            descriptor.close()
+            return null
+        }
+        Log.d(TAG, "Reading client audio: $format")
+        return ClientAudioReader(
+            input = ParcelFileDescriptor.AutoCloseInputStream(descriptor),
+            format = format,
+            loadVad = { VadFilter.load(this) },
+        )
     }
 
     override fun onStopListening(listener: Callback) {

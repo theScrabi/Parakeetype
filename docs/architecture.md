@@ -60,7 +60,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 | Package | Key files | Responsibility |
 |---|---|---|
-| audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, SpeechEndpointer, AudioChunk, PermissionHelper | Mic capture, PCM chunking, Voice Activity Detection, end-of-speech detection, optional mic calibration |
+| audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, SpeechEndpointer, AudioChunk, ClientAudioReader, PcmConverter, PermissionHelper | Mic capture, client-supplied audio (EXTRA_AUDIO_SOURCE), PCM chunking, Voice Activity Detection, end-of-speech detection, optional mic calibration |
 | inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
 | ime | ParakeetypeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
 | recognition | ParakeetypeRecognitionService, VoiceInputActivity, RecognitionSession, InferenceConnection, TranscriptAccumulator | Speech recognizer for other apps: android.speech RecognitionService and RecognizerIntent.ACTION_RECOGNIZE_SPEECH |
@@ -447,7 +447,7 @@ Two entry points bind the same InferenceService as the IME (via InferenceConnect
            (or EXTRA_RESULTS_PENDINGINTENT); leaving the activity cancels; while the model loads the
            sheet's title shows the keyboard's "Loading transcription engine…" text
 
-RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE); when an installed model has to load first, Listener.onModelLoading(true / false) brackets the wait. VAD is always on and feeds a SpeechEndpointer, which ends a normal session (end of speech = 1 s of silence after sustained speech; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS change it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied audio) is rejected with ERROR_CLIENT; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
+RecognitionSession starts capture at once and buffers it in an unlimited channel while InferenceConnection.awaitRepository() waits for EngineState.Ready (reloading a memory-pressure unload; no model installed -> ERROR_LANGUAGE_UNAVAILABLE); when an installed model has to load first, Listener.onModelLoading(true / false) brackets the wait. VAD is always on and feeds a SpeechEndpointer, which ends a normal session (end of speech = 1 s of silence after sustained speech; EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS / _MINIMUM_LENGTH_MILLIS change it), 8 s without speech ends it with ERROR_SPEECH_TIMEOUT, and EXTRA_SEGMENTED_SESSION (API 33+) reports each utterance via segmentResults until stopped. TranscriptAccumulator rebuilds the full text from the TranscriptResult stream (finals + current partial; WindowTrimmed on the legacy path is merged with TranscriptAligner.findNewContent). EXTRA_AUDIO_SOURCE (client-supplied raw PCM in a file or pipe, format from EXTRA_AUDIO_SOURCE_ENCODING / _CHANNEL_COUNT / _SAMPLING_RATE, default 16-bit mono 16 kHz) replaces the microphone: ClientAudioReader converts it with PcmConverter to 16 kHz mono and emits the same VAD-filtered 32 ms chunks into a bounded queue (the input is read faster than real time); the endpointer's end of speech stops the reader on that frame, end of input ends the session like stop(), unsupported formats get ERROR_CLIENT, and Parakeetype needs no RECORD_AUDIO of its own for it; EXTRA_LANGUAGE is ignored (Parakeet detects the language itself).
 
 AudioCaptureManager builds its AudioRecord with AudioRecord.Builder.setContext(context) — that is what carries the attribution — and reports the raw level of every chunk through the optional onLevel callback (used for rmsChanged).
 
@@ -519,6 +519,8 @@ The model (incl. the Silero VAD) is not in the repository; devtools/fetch-test-m
 | audio/AudioChunkTest | AudioChunk data class, normalisation |
 | audio/MicScorerTest | Mic quality scoring (HF fraction, percentile SNR) |
 | audio/RMSVadFilterTest | Energy VAD onset/hangover logic |
+| audio/PcmConverterTest | Client PCM decoding (8/16/24/32-bit, float), channel downmix, resampling to 16 kHz |
+| audio/ClientAudioReaderTest | Client audio framing into 512-sample chunks, stop from the endpointer callback |
 | ime/TranscriptAlignerTest | All 3 layers of findNewContent |
 | ime/TextInjectorTest | Composing span management, trim resets |
 | inference/InferenceRepositoryTest | Sliding-window buffering strategy (stride/trim constants) |

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.schabi.parakeetype.audio.AudioCaptureManager
 import org.schabi.parakeetype.audio.AudioChunk
+import org.schabi.parakeetype.audio.ClientAudioReader
 import org.schabi.parakeetype.audio.MicrophoneBusyException
 import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.inference.TranscriptResult
@@ -32,6 +33,12 @@ private const val DEFAULT_COMPLETE_SILENCE_MS = 1_000L
 
 /** Report the microphone level every 3rd 32 ms chunk (~10 updates per second). */
 private const val LEVEL_REPORT_INTERVAL_CHUNKS = 3
+
+/**
+ * Client audio is read as fast as it arrives, so its queue is bounded (~4 s): a long file
+ * waits in the client's file instead of in memory while the model loads or decodes.
+ */
+private const val CLIENT_AUDIO_QUEUE_CHUNKS = 128
 
 /** The [RecognizerIntent] extras a [RecognitionSession] honours. */
 data class RecognitionOptions(
@@ -76,8 +83,13 @@ data class RecognitionOptions(
  * said right after [start] is lost. The session ends on its own once the VAD detects the end
  * of the utterance (unless [RecognitionOptions.segmented]), on [stop], or with an error.
  *
+ * With [clientAudio] the session transcribes the audio the client supplies
+ * ([RecognizerIntent.EXTRA_AUDIO_SOURCE]) instead of the microphone, with the same
+ * end-of-speech detection; the end of that input ends the session like [stop].
+ *
  * @param audioContext Context the [android.media.AudioRecord] is built on — for the
  *   recognition service an attribution context carrying the calling app's identity.
+ * @param clientAudio The client's audio, or `null` to record the microphone.
  * @param scope Scope on the main dispatcher; every [listener] callback runs on it.
  */
 class RecognitionSession(
@@ -86,6 +98,7 @@ class RecognitionSession(
     private val options: RecognitionOptions,
     private val listener: Listener,
     private val scope: CoroutineScope,
+    private val clientAudio: ClientAudioReader? = null,
 ) {
 
     /**
@@ -155,7 +168,7 @@ class RecognitionSession(
     fun stop() {
         if (stopRequested || finished) return
         stopRequested = true
-        capture.stopCapture()
+        stopInput()
         if (speechStarted) listener.onEndOfSpeech()
     }
 
@@ -163,6 +176,12 @@ class RecognitionSession(
     fun cancel() {
         finished = true
         job?.cancel()
+        // A read blocked on the client's pipe does not react to cancellation.
+        clientAudio?.stop()
+    }
+
+    private fun stopInput() {
+        if (clientAudio != null) clientAudio.stop() else capture.stopCapture()
     }
 
     private suspend fun run() = coroutineScope {
@@ -173,29 +192,46 @@ class RecognitionSession(
 
         // Capture → channel → repository. The unlimited channel buffers the audio while
         // awaitRepository() is still waiting for the model to load.
-        val audio = Channel<AudioChunk>(Channel.UNLIMITED)
+        val audio = Channel<AudioChunk>(if (clientAudio != null) CLIENT_AUDIO_QUEUE_CHUNKS else Channel.UNLIMITED)
         var levelChunks = 0
         var readyReported = false
         val endpointer = endpointer()
+        val onSpeechProbability = { probability: Float ->
+            val event = endpointer?.onFrame(probability)
+            // Client audio is read faster than real time: end it at this very frame, not
+            // once the main thread handles the event.
+            if (event == SpeechEndpointer.Event.EndOfSpeech) clientAudio?.stop()
+            if (event != null) launch { onEndpointerEvent(event) }
+        }
+        val onLevel = { level: Float ->
+            // A stop() that raced the start of capture was lost: startCapture resets
+            // the manager's stop flag when the AudioRecord starts.
+            if (stopRequested) stopInput()
+            if (levelChunks++ % LEVEL_REPORT_INTERVAL_CHUNKS == 0) launch {
+                if (finished) return@launch
+                if (!readyReported) {
+                    readyReported = true
+                    listener.onReadyForSpeech()
+                }
+                listener.onRmsChanged(rmsToDb(level))
+            }
+        }
         launch {
             try {
                 // VAD is always on: its speech probability drives the end-of-speech detection.
-                capture.startCapture(vadEnabled = true, rawSource = rawSource, onSpeechProbability = { probability ->
-                    val event = endpointer?.onFrame(probability)
-                    if (event != null) launch { onEndpointerEvent(event) }
-                }, onLevel = { level ->
-                    // A stop() that raced the start of capture was lost: startCapture resets
-                    // the manager's stop flag when the AudioRecord starts.
-                    if (stopRequested) capture.stopCapture()
-                    if (levelChunks++ % LEVEL_REPORT_INTERVAL_CHUNKS == 0) launch {
-                        if (finished) return@launch
-                        if (!readyReported) {
-                            readyReported = true
-                            listener.onReadyForSpeech()
-                        }
-                        listener.onRmsChanged(rmsToDb(level))
-                    }
-                }).collect { chunk -> audio.send(chunk) }
+                val input = clientAudio?.read(onLevel, onSpeechProbability)
+                    ?: capture.startCapture(
+                        vadEnabled = true,
+                        rawSource = rawSource,
+                        onSpeechProbability = onSpeechProbability,
+                        onLevel = onLevel,
+                    )
+                input.collect { chunk -> audio.send(chunk) }
+                // The client's audio ended on its own: report it like a stop(). Queued behind
+                // the endpointer events still pending on the main thread.
+                if (clientAudio != null) launch {
+                    if (speechStarted && !stopRequested && !finished) listener.onEndOfSpeech()
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: MicrophoneBusyException) {
@@ -314,6 +350,7 @@ class RecognitionSession(
         finished = true
         listener.onError(error, microphoneBusy)
         job?.cancel()
+        clientAudio?.stop()
     }
 
     internal companion object {

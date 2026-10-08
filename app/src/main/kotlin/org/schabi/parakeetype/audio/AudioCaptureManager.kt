@@ -7,8 +7,6 @@ import android.media.AudioRecord
 import android.media.MediaRecorder
 import android.os.Build
 import android.util.Log
-import org.schabi.parakeetype.settings.model.ModelStorageManager
-import org.schabi.parakeetype.settings.model.SILERO_VAD_FILE
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
@@ -23,13 +21,6 @@ private const val SAMPLE_RATE = 16_000
 
 /** 32 ms window at 16 kHz = 512 samples per chunk. Matches Silero VAD's required frame size. */
 private const val CHUNK_SAMPLES = 512
-
-/**
- * Maximum silence frames pumped through the VAD during the trailing drain phase.
- * 20 frames × 32 ms = 640 ms - generously above [RMSVadFilter]'s 15-frame / 450 ms hangover
- * so the hangover always expires before this cap is hit.
- */
-private const val HANGOVER_DRAIN_SAFETY_FRAMES = 20
 
 /**
  * Check every 10th chunk (~320 ms) whether Android silences this recording because another
@@ -138,15 +129,7 @@ class AudioCaptureManager(private val context: Context) {
 
             // Only create a filter when VAD is enabled; null means pass-through (VAD disabled).
             val vad: VadFilter? = if (vadEnabled) {
-                try {
-                    val sileroFile = checkNotNull(ModelStorageManager.findVadModel(context)) {
-                        "no installed model contains $SILERO_VAD_FILE"
-                    }
-                    SileroVadFilter(modelBytes = sileroFile.readBytes(), threshold = 0.3f)
-                } catch (e: Exception) {
-                    Log.w(TAG, "Silero VAD model could not be loaded. Falling back to Energy VAD.", e)
-                    RMSVadFilter(0.4f)
-                }
+                VadFilter.load(context)
             } else null.also { Log.d(TAG, "VAD disabled") }
 
             val minBufferBytes = AudioRecord.getMinBufferSize(
@@ -258,16 +241,10 @@ class AudioCaptureManager(private val context: Context) {
                     // Phase 2: if VAD is still in hangover/speech, feed silence frames until
                     // the hangover counter expires and VAD transitions back to SILENCE.
                     // This guarantees the hangover tail is emitted before the flow completes.
-                    if (vad != null && vad.isSpeechActive) {
-                        val silence = AudioChunk(ShortArray(CHUNK_SAMPLES))
-                        var safetyFrames = HANGOVER_DRAIN_SAFETY_FRAMES
-                        while (vad.isSpeechActive && safetyFrames-- > 0) {
-                            val toSend = vad.process(silence, 0f)
-                            for (c in toSend) {
-                                send(c)
-                            }
+                    if (vad != null) {
+                        for (c in vad.drainHangover(CHUNK_SAMPLES)) {
+                            send(c)
                         }
-                        Log.d(TAG, "VAD hangover drain complete (framesLeft=$safetyFrames)")
                     }
                 }
 
@@ -279,17 +256,6 @@ class AudioCaptureManager(private val context: Context) {
                 Log.d(TAG, "AudioRecord stopped and released")
             }
         }.flowOn(Dispatchers.IO)
-
-    /**
-     * Computes the RMS amplitude of [samples] and normalises it to [0.0, 1.0] relative to
-     * [Short.MAX_VALUE] (32 767).
-     */
-    private fun calculateRms(samples: ShortArray): Float {
-        if (samples.isEmpty()) return 0f
-        val sumOfSquares = samples.fold(0.0) { acc, s -> acc + s.toDouble() * s.toDouble() }
-        val rms = sqrt(sumOfSquares / samples.size)
-        return (rms / Short.MAX_VALUE.toDouble()).toFloat().coerceIn(0f, 1f)
-    }
 
     /**
      * Applies the calibration-selected microphone to [recorder] via `setPreferredDevice`
@@ -311,4 +277,15 @@ class AudioCaptureManager(private val context: Context) {
             Log.w(TAG, "setPreferredDevice failed for id=$id", e)
         }
     }
+}
+
+/**
+ * Computes the RMS amplitude of [samples] and normalises it to [0.0, 1.0] relative to
+ * [Short.MAX_VALUE] (32 767).
+ */
+internal fun calculateRms(samples: ShortArray): Float {
+    if (samples.isEmpty()) return 0f
+    val sumOfSquares = samples.fold(0.0) { acc, s -> acc + s.toDouble() * s.toDouble() }
+    val rms = sqrt(sumOfSquares / samples.size)
+    return (rms / Short.MAX_VALUE.toDouble()).toFloat().coerceIn(0f, 1f)
 }
