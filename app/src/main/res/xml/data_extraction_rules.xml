@@ -2,13 +2,17 @@
 <!--
    Backup and device-transfer rules (API 31+).
    See https://developer.android.com/about/versions/12/backup-restore#xml-changes
+
+   Only the settings (DataStore) are backed up. Everything else is left out: the model
+   files in models/ are hundreds of MB (far over the 25 MB cloud-backup quota, which would
+   make the whole backup fail) and are re-imported from the archive; crash reports in
+   crash/ may contain dictated text.
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- Crash reports may contain dictated text; never back them up. -->
-        <exclude domain="file" path="crash/"/>
+        <include domain="file" path="datastore/"/>
     </cloud-backup>
     <device-transfer>
-        <exclude domain="file" path="crash/"/>
+        <include domain="file" path="datastore/"/>
     </device-transfer>
 </data-extraction-rules>

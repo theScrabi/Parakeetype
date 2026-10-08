@@ -2,8 +2,9 @@
 <!--
    Auto Backup rules for Android 11 and lower (ignored from API 31, see data_extraction_rules.xml).
    See https://developer.android.com/guide/topics/data/autobackup
+
+   Only the settings (DataStore) are backed up — not the model files or crash reports.
 -->
 <full-backup-content>
-    <!-- Crash reports may contain dictated text; never back them up. -->
-    <exclude domain="file" path="crash/"/>
+    <include domain="file" path="datastore/"/>
 </full-backup-content>
