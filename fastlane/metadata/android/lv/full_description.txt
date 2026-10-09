@@ -20,6 +20,7 @@ Parakeetype ir lietotnes Outspoke atzars (fork), kas pievieno jaunas funkcijas.
 
 • Android 12 (API 31) vai jaunāka versija
 • ~630 MB brīvas vietas modeļa failam
+• Modelis tiek lejupielādēts atsevišķi no projekta GitHub laidieniem un importēts lietotnē (CC-BY-4.0)
 
 <b>Atvērtais kods</b>
 Parakeetype ir licencēta saskaņā ar GPL-3.0 licenci. Pirmkods un būvēšanas instrukcijas ir pieejamas GitHub.

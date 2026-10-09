@@ -20,6 +20,7 @@ Parakeetype ist ein Fork der App Outspoke und erweitert sie um neue Funktionen.
 
 • Android 12 (API 31) oder neuer
 • ~630 MB freier Speicher für die Modelldatei
+• Das Modell wird separat aus den GitHub-Releases des Projekts heruntergeladen und in der App importiert (CC-BY-4.0)
 
 <b>Open Source</b>
 Parakeetype steht unter der GPL-3.0-Lizenz. Quellcode und Build-Anleitung sind auf GitHub verfügbar.

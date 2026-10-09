@@ -20,6 +20,7 @@ Parakeetype hija fork tal-app Outspoke u żżid karatteristiċi ġodda magħha.
 
 • Android 12 (API 31) jew aktar ġdid
 • ~630 MB spazju ħieles għall-fajl tal-mudell
+• Il-mudell jitniżżel separatament mir-rilaxxi tal-proġett fuq GitHub u jiġi importat fl-app (CC-BY-4.0)
 
 <b>Sors miftuħ</b>
 Parakeetype hija liċenzjata taħt il-liċenzja GPL-3.0. Il-kodiċi sors u l-istruzzjonijiet tal-bini huma disponibbli fuq GitHub.
