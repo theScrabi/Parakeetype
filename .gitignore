@@ -37,3 +37,6 @@ google-services.json
 
 # Speech WAV test fixtures - internal development data, not published
 /app/src/test/resources/audio/
+
+# build output
+/app/release
