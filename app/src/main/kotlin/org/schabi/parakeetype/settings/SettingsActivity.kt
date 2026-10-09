@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
+import org.schabi.parakeetype.BuildConfig
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
 import org.schabi.parakeetype.crash.CrashReportDialog
@@ -37,6 +38,7 @@ import org.schabi.parakeetype.settings.screens.ModelScreen
 import org.schabi.parakeetype.settings.screens.SpeechPreferencesScreen
 import org.schabi.parakeetype.settings.screens.ToolsPreferencesScreen
 import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
+import org.woheller69.freeDroidWarn.FreeDroidWarn
 
 /** Entry-point for the Parakeetype companion / settings app (the launcher icon). */
 class SettingsActivity : ComponentActivity() {
@@ -57,6 +59,7 @@ class SettingsActivity : ComponentActivity() {
                 if (hasCrashReport) CrashReportDialog()
             }
         }
+        FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE)
     }
 }
 

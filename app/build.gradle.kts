@@ -174,6 +174,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
     implementation("androidx.lifecycle:lifecycle-service:2.11.0")
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.30.0")
+    implementation("com.github.woheller69:FreeDroidWarn:V1.14")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
