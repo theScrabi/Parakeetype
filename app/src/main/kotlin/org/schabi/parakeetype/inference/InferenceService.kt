@@ -23,6 +23,7 @@ import org.schabi.parakeetype.settings.model.ModelRegistry
 import org.schabi.parakeetype.settings.model.ModelStorageManager
 import org.schabi.parakeetype.settings.SettingsActivity
 import org.schabi.parakeetype.settings.preferences.AppPreferences
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -216,27 +217,40 @@ class InferenceService : LifecycleService() {
      */
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        val type = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
-        } else 0
         val text = when (_engineState.value) {
             EngineState.Ready -> currentModelId?.let { getString(R.string.notif_engine_ready, ModelRegistry[it].displayName) }
             EngineState.Unloaded -> getString(R.string.notif_model_not_downloaded)
             else -> null
         } ?: getString(R.string.notif_engine_loading)
-        return try {
-            ServiceCompat.startForeground(this, NOTIFICATION_ID, buildNotification(text), type)
-            isStarted = true
-            Log.i(TAG, "Started as keep-loaded foreground service")
-            START_STICKY
-        } catch (e: Exception) {
-            // ForegroundServiceStartNotAllowedException / SecurityException: we cannot hold
-            // the process in the foreground right now. Drop the started state; the service
-            // keeps working as a plain bound service.
-            Log.w(TAG, "Could not enter keep-loaded foreground state", e)
-            stopSelf(startId)
-            START_NOT_STICKY
+        val types = keepLoadedServiceTypes(Build.VERSION.SDK_INT)
+        for ((index, type) in types.withIndex()) {
+            try {
+                ServiceCompat.startForeground(this, NOTIFICATION_ID, buildNotification(text), type)
+                isStarted = true
+                Log.i(TAG, "Started as keep-loaded foreground service (type=$type)")
+                return START_STICKY
+            } catch (e: SecurityException) {
+                // The microphone type needs RECORD_AUDIO; fall back to the next type.
+                if (index == types.lastIndex) {
+                    return leaveKeepLoaded(startId, e)
+                }
+                Log.w(TAG, "Foreground service type $type rejected - trying the next one", e)
+            } catch (e: Exception) {
+                return leaveKeepLoaded(startId, e)
+            }
         }
+        return START_NOT_STICKY
+    }
+
+    /**
+     * ForegroundServiceStartNotAllowedException / SecurityException: we cannot hold the
+     * process in the foreground right now. Drop the started state; the service keeps working
+     * as a plain bound service.
+     */
+    private fun leaveKeepLoaded(startId: Int, e: Exception): Int {
+        Log.w(TAG, "Could not enter keep-loaded foreground state", e)
+        stopSelf(startId)
+        return START_NOT_STICKY
     }
 
     /**
@@ -373,16 +387,16 @@ class InferenceService : LifecycleService() {
 
             val startTime = System.currentTimeMillis()
             try {
-                val engine = SpeechEngineFactory.create(modelId)
-                engine.load(modelDir)
-
-                // Apply forced-language preference so post-processing uses the correct locale.
-                // For Parakeet TDT, this does not affect ONNX inference (no language tensor in
-                // the current export) but controls filler removal and number normalisation.
-                val lang = AppPreferences(applicationContext).forcedLanguage.first()
-                if (lang != null) {
-                    engine.setLanguage(lang)
-                    Log.d(TAG, "Forced language '$lang' applied to engine for $modelId")
+                // Closes the engine again when the service is destroyed during the load.
+                val engine = loadEngine(create = { SpeechEngineFactory.create(modelId) }, modelDir = modelDir) { engine ->
+                    // Apply forced-language preference so post-processing uses the correct locale.
+                    // For Parakeet TDT, this does not affect ONNX inference (no language tensor in
+                    // the current export) but controls filler removal and number normalisation.
+                    val lang = AppPreferences(applicationContext).forcedLanguage.first()
+                    if (lang != null) {
+                        engine.setLanguage(lang)
+                        Log.d(TAG, "Forced language '$lang' applied to engine for $modelId")
+                    }
                 }
 
                 currentEngine = engine
@@ -392,6 +406,9 @@ class InferenceService : LifecycleService() {
                 val elapsed = System.currentTimeMillis() - startTime
                 Log.i(TAG, "Engine loaded successfully for $modelId in ${elapsed}ms")
                 logMemoryUsage()
+            } catch (e: CancellationException) {
+                Log.i(TAG, "Engine load for $modelId abandoned - the service was destroyed")
+                throw e
             } catch (e: Exception) {
                 val msg = e.localizedMessage ?: "Unknown error"
                 Log.e(TAG, "Engine load failed for $modelId: $msg", e)
@@ -530,3 +547,23 @@ class InferenceService : LifecycleService() {
         }
     }
 }
+
+/**
+ * The foreground-service types [InferenceService] tries, in order, when it enters the
+ * keep-loaded state.
+ *
+ * The microphone type comes first: on Android 17 the platform binds a third-party recognition
+ * service without the calling app's capabilities, so the recognition service (and the hidden
+ * keyboard) can only record while Parakeetype's process holds the microphone capability
+ * itself. Android only grants it when the service starts while Parakeetype may use the
+ * microphone (e.g. from the open app); otherwise the type is accepted without the capability.
+ * Without RECORD_AUDIO the microphone type is rejected, hence the specialUse fallback. Before
+ * Android 14, type 0 means all types the manifest declares (microphone|specialUse).
+ */
+internal fun keepLoadedServiceTypes(sdkInt: Int): List<Int> =
+    if (sdkInt >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        listOf(
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE or ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE,
+        )
+    } else listOf(0)

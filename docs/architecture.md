@@ -48,7 +48,7 @@ on-device via ONNX Runtime; no audio ever leaves the device, and the app has no 
 **Core design principles:**
 
 - SpeechEngine is the *only* seam for adding a new ASR model. Nothing in the IME or service layer changes.
-- InferenceService keeps the engine alive across keyboard hide/show cycles. With the *Keep model loaded* setting (`keep_model_loaded`, on by default) it also starts itself as a `specialUse` foreground service, which survives the unbind and keeps the model warm across keyboard switches; when the user opts out it is bound-only (destroyed — model unloaded — when the user switches to another IME and the IME unbinds).
+- InferenceService keeps the engine alive across keyboard hide/show cycles. With the *Keep model loaded* setting (`keep_model_loaded`, on by default) it also starts itself as a `microphone|specialUse` foreground service, which survives the unbind and keeps the model warm across keyboard switches; when the user opts out it is bound-only (destroyed — model unloaded — when the user switches to another IME and the IME unbinds). The microphone type (keepLoadedServiceTypes; specialUse only without RECORD_AUDIO) gives the process the microphone capability the Android 17 recognition-service binding no longer passes on. Engine loads go through loadEngine, which closes an engine the destroyed service no longer wants instead of leaking ~660 MB.
 - Constructor injection only throughout; no field injection.
 - No external SDKs that phone home (no analytics, no crash-reporting services). Crashes are logged locally only and shared by the user on request (`crash` package).
 
@@ -138,7 +138,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **InferenceService**
 
-- LifecycleService, bound by the IME; optionally a started `specialUse` foreground service (keep-loaded mode).
+- LifecycleService, bound by the IME; optionally a started `microphone|specialUse` foreground service (keep-loaded mode).
 - Notification channel: parakeetype_inference, notification ID 1001.
 - Owns the SpeechEngine instance; reloads on selectedModelId preference change.
 - Uses a Mutex to protect engine swaps.
