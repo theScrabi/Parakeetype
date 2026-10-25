@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, udløser &amp; layout</string>
     <string name="nav_title_speech">Talebehandling</string>
     <string name="nav_title_tools">Diagnosticering</string>
+    <string name="nav_title_replacements">Ordudskiftning</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Åbn Indstillinger</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Administrer</string>
     <string name="action_cancel">Annuller</string>
     <string name="action_delete">Slet</string>
+    <string name="action_save">Gem</string>
     <string name="action_retry">Prøv igen</string>
     <string name="action_set_as_active">Angiv som aktiv</string>
     <string name="action_open_parakeetype">Åbn Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Aktiv model</string>
     <string name="cd_delete_model">Slet model</string>
+    <string name="cd_delete_replacement">Slet udskiftning</string>
     <string name="cd_status_error">Fejl</string>
     <string name="cd_talk_disabled">Taleknap deaktiveret - motoren er ikke klar</string>
     <string name="cd_talk_stop_continuous">Stop kontinuerlig optagelse</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofon, udløsertilstand &amp; layout</string>
     <string name="home_pref_speech">Taleaktivitet, efterbehandling &amp; modelhukommelse</string>
     <string name="home_pref_tools">Diagnosticering</string>
+    <string name="home_pref_replacements">Ordudskiftning</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Udløsertilstand</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Viser et live-badge på tastaturet med tællere for vinduesbeskæringer, gendannelser af justering og kasserede tomme skridt. Nyttigt til at diagnosticere pipelineproblemer; skjult som standard.</string>
     <string name="pref_diagnostics_visible">Synlig</string>
     <string name="pref_diagnostics_hidden">Skjult</string>
+    <string name="replacements_description">Udskifter ord eller sætninger i dine transskriptioner, f.eks. et navn, som modellen bliver ved med at stave forkert. Matcher kun hele ord og ser bort fra store og små bogstaver. Anvendes som en del af efterbehandlingen af transskriptionen.</string>
+    <string name="replacements_add">Tilføj udskiftning</string>
+    <string name="replacements_edit">Rediger udskiftning</string>
+    <string name="replacements_empty">Ingen udskiftninger endnu.</string>
+    <string name="replacements_from_label">Ord eller sætning</string>
+    <string name="replacements_to_label">Erstat med</string>
+    <string name="replacements_to_hint">Lad feltet være tomt for at fjerne det.</string>
+    <string name="replacements_removed">(fjernet)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Talegenkendelsesmodeller</string>

@@ -135,6 +135,12 @@ private val LEADING_PUNCT_RE = Regex("""^[,;]+\s*""")
 private val MISSING_SENTENCE_SPACE_RE = Regex("""([.!?])(\p{L})""")
 
 /**
+ * A time of day the model writes with a dot before "Uhr" (German "vierzehn Uhr sieben" →
+ * "14.07 Uhr"). [cleanTranscript] turns the dot into a colon: "14:07 Uhr".
+ */
+private val DOTTED_TIME_RE = Regex("""(?<![\d.])([01]?\d|2[0-3])\.([0-5]\d)(?=\s+Uhr\b)""")
+
+/**
  * Strips all leading/trailing non-alphanumeric characters from a single word token
  * for comparison purposes only - the original word is kept in the output.
  * e.g. "Sachen," → "sachen", "kann.." → "kann", "gut!" → "gut"
@@ -713,12 +719,17 @@ internal fun String.cleanTranscriptStructural(
  *   that re-clean text already cleaned from the full transcript (the production
  *   displayCleanFn) must set this to `true` so the authoritative full-text periods are
  *   preserved.
+ * @param replacements The user's word / phrase replacements, applied just before the
+ *   structural transforms. Only the repository passes them: the display re-clean works on
+ *   text that already went through them, and a rule whose output contains its own phrase
+ *   would be applied twice.
  */
 internal fun String.cleanTranscript(
     isContinuation: Boolean = false,
     language: String = "en",
     formatNumbersAsDigits: Boolean = true,
     skipSpuriousPeriods: Boolean = false,
+    replacements: TextReplacements = TextReplacements.NONE,
 ): String {
     if (isBlank()) {
         Log.d(TAG, "[CLEAN] blank input → discarded")
@@ -751,7 +762,10 @@ internal fun String.cleanTranscript(
         afterStutters
     }
 
-    val afterDedup = afterNumbers.collapseRepeatedPhrases()
+    val afterTimes = afterNumbers.replace(DOTTED_TIME_RE, "$1:$2")
+    if (afterTimes != afterNumbers) Log.d(TAG, "[CLEAN:TIMES]       \"$afterNumbers\" → \"$afterTimes\"")
+
+    val afterDedup = afterTimes.collapseRepeatedPhrases()
     if (afterDedup != afterStutters) Log.d(TAG, "[CLEAN:PHRASES]     ${afterStutters.length} → ${afterDedup.length} chars")
 
     val afterSpuriousPeriods = if (skipSpuriousPeriods) {
@@ -765,7 +779,10 @@ internal fun String.cleanTranscript(
         filtered
     }
 
-    return afterSpuriousPeriods.cleanTranscriptStructural(isContinuation, modelFirstWord)
+    val afterReplacements = replacements.apply(afterSpuriousPeriods)
+    if (afterReplacements != afterSpuriousPeriods) Log.d(TAG, "[CLEAN:REPLACE]     ${afterSpuriousPeriods.length} → ${afterReplacements.length} chars")
+
+    return afterReplacements.cleanTranscriptStructural(isContinuation, modelFirstWord)
 }
 
 /**
@@ -1292,6 +1309,10 @@ class InferenceRepository(
      *   stutter collapse, repetition deduplication, capitalisation) are skipped and the raw
      *   model output is emitted as-is.  Useful for debugging whether cleaning causes drops.
      *   Defaults to `true` (post-processing active).
+     * @param replacements The user's word / phrase replacements, applied with the other
+     *   post-processing (not when [postprocessingEnabled] is `false`). Only the chunked-TDT
+     *   streaming path applies them; the legacy path emits structurally cleaned text and
+     *   leaves the full cleaning to the keyboard's display re-clean.
      * @param wordTimings When `true` every [TranscriptResult.Final] carries the timing and
      *   confidence of each of its words ([TranscriptResult.Final.words], positions from the
      *   chunks' [AudioChunk.timestampMs]). Only the chunked-TDT streaming path reports them.
@@ -1300,6 +1321,7 @@ class InferenceRepository(
         audio: Flow<AudioChunk>,
         postprocessingEnabled: Boolean = true,
         formatNumbersAsDigits: Boolean = true,
+        replacements: TextReplacements = TextReplacements.NONE,
         wordTimings: Boolean = false,
     ): Flow<TranscriptResult> = channelFlow<TranscriptResult> {
         // The chunked-TDT streaming path requires the [ChunkStreamingEngine] stateful
@@ -1488,6 +1510,7 @@ class InferenceRepository(
                 raw.cleanTranscript(
                     language = engine.currentLanguage,
                     formatNumbersAsDigits = formatNumbersAsDigits,
+                    replacements = replacements,
                 )
             else raw
             if (cleaned.isBlank()) return
@@ -1631,7 +1654,11 @@ class InferenceRepository(
             }
             val (raw, confidence) = checkNotNull(result)
             val cleaned = if (postprocessingEnabled)
-                raw.cleanTranscript(language = engine.currentLanguage, formatNumbersAsDigits = formatNumbersAsDigits)
+                raw.cleanTranscript(
+                    language = engine.currentLanguage,
+                    formatNumbersAsDigits = formatNumbersAsDigits,
+                    replacements = replacements,
+                )
             else raw
             val finalText = if (cleaned.isBlank()) raw else cleaned
             val base = TranscriptResult.Final(finalText, isUtteranceBoundary = isUtteranceBoundary, confidence = confidence)

@@ -3,6 +3,7 @@ package org.schabi.parakeetype.settings.screens
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.CloudDownload
+import androidx.compose.material.icons.rounded.FindReplace
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MicOff
@@ -60,6 +61,7 @@ fun HomeScreen(
     onNavigateToInput: () -> Unit,
     onNavigateToSpeech: () -> Unit,
     onNavigateToTools: () -> Unit,
+    onNavigateToReplacements: () -> Unit,
 ) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -109,6 +111,7 @@ fun HomeScreen(
         onNavigateToInput = onNavigateToInput,
         onNavigateToSpeech = onNavigateToSpeech,
         onNavigateToTools = onNavigateToTools,
+        onNavigateToReplacements = onNavigateToReplacements,
     )
 }
 
@@ -125,6 +128,7 @@ private fun HomeScreenContent(
     onNavigateToInput: () -> Unit,
     onNavigateToSpeech: () -> Unit,
     onNavigateToTools: () -> Unit,
+    onNavigateToReplacements: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -214,6 +218,11 @@ private fun HomeScreenContent(
             icon = Icons.Rounded.Keyboard,
             label = stringResource(R.string.home_pref_speech),
             onClick = onNavigateToSpeech,
+        )
+        ConfigurationButton(
+            icon = Icons.Rounded.FindReplace,
+            label = stringResource(R.string.home_pref_replacements),
+            onClick = onNavigateToReplacements,
         )
         ConfigurationButton(
             icon = Icons.Rounded.Settings,
@@ -344,6 +353,7 @@ private fun HomeScreenNothingSetupPreview() {
             onNavigateToInput = {},
             onNavigateToSpeech = {},
             onNavigateToTools = {},
+            onNavigateToReplacements = {},
         )
     }
 }
@@ -364,6 +374,7 @@ private fun HomeScreenAllReadyPreview() {
             onNavigateToInput = {},
             onNavigateToSpeech = {},
             onNavigateToTools = {},
+            onNavigateToReplacements = {},
         )
     }
 }
@@ -384,6 +395,7 @@ private fun HomeScreenPartialSetupPreview() {
             onNavigateToInput = {},
             onNavigateToSpeech = {},
             onNavigateToTools = {},
+            onNavigateToReplacements = {},
         )
     }
 }

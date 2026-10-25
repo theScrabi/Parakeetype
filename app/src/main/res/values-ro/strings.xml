@@ -9,6 +9,7 @@
     <string name="nav_title_input">Microfon, declanșare &amp; aspect</string>
     <string name="nav_title_speech">Procesarea vorbirii</string>
     <string name="nav_title_tools">Diagnosticare</string>
+    <string name="nav_title_replacements">Înlocuiri de cuvinte</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Deschideți setările</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Gestionați</string>
     <string name="action_cancel">Anulați</string>
     <string name="action_delete">Ștergeți</string>
+    <string name="action_save">Salvați</string>
     <string name="action_retry">Reîncercați</string>
     <string name="action_set_as_active">Setați ca activ</string>
     <string name="action_open_parakeetype">Deschideți Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Model activ</string>
     <string name="cd_delete_model">Ștergeți modelul</string>
+    <string name="cd_delete_replacement">Ștergeți înlocuirea</string>
     <string name="cd_status_error">Eroare</string>
     <string name="cd_talk_disabled">Butonul de vorbire este dezactivat – motorul nu este pregătit</string>
     <string name="cd_talk_stop_continuous">Opriți înregistrarea continuă</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Microfon, mod de declanșare &amp; aspect</string>
     <string name="home_pref_speech">Activitate vocală, post-procesare &amp; memoria modelului</string>
     <string name="home_pref_tools">Diagnosticare</string>
+    <string name="home_pref_replacements">Înlocuiri de cuvinte</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Mod de declanșare</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Afișează pe tastatură o insignă în timp real cu contoare pentru tăierile ferestrei, recuperările de aliniere și pașii goi eliminați. Util pentru diagnosticarea problemelor pipeline-ului; ascunsă în mod prestabilit.</string>
     <string name="pref_diagnostics_visible">Vizibilă</string>
     <string name="pref_diagnostics_hidden">Ascunsă</string>
+    <string name="replacements_description">Înlocuiește cuvinte sau expresii în transcrieri, de ex. un nume pe care modelul îl scrie mereu greșit. Se potrivesc doar cuvinte întregi, fără a ține cont de majuscule și minuscule. Se aplică în cadrul post-procesării transcrierii.</string>
+    <string name="replacements_add">Adăugați o înlocuire</string>
+    <string name="replacements_edit">Editați înlocuirea</string>
+    <string name="replacements_empty">Nicio înlocuire încă.</string>
+    <string name="replacements_from_label">Cuvânt sau expresie</string>
+    <string name="replacements_to_label">Înlocuiți cu</string>
+    <string name="replacements_to_hint">Lăsați gol pentru a-l elimina.</string>
+    <string name="replacements_removed">(eliminat)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modele de recunoaștere vocală</string>

@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, käivitus &amp; paigutus</string>
     <string name="nav_title_speech">Kõnetöötlus</string>
     <string name="nav_title_tools">Diagnostika</string>
+    <string name="nav_title_replacements">Sõnade asendused</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Ava seaded</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Halda</string>
     <string name="action_cancel">Tühista</string>
     <string name="action_delete">Kustuta</string>
+    <string name="action_save">Salvesta</string>
     <string name="action_retry">Proovi uuesti</string>
     <string name="action_set_as_active">Määra aktiivseks</string>
     <string name="action_open_parakeetype">Ava Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Sisesta</string>
     <string name="cd_active_model">Aktiivne mudel</string>
     <string name="cd_delete_model">Kustuta mudel</string>
+    <string name="cd_delete_replacement">Kustuta asendus</string>
     <string name="cd_status_error">Viga</string>
     <string name="cd_talk_disabled">Rääkimisnupp on keelatud - mootor pole valmis</string>
     <string name="cd_talk_stop_continuous">Peata pidev salvestamine</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofon, käivitusrežiim &amp; paigutus</string>
     <string name="home_pref_speech">Kõnetegevus, järeltöötlus &amp; mudeli mälu</string>
     <string name="home_pref_tools">Diagnostika</string>
+    <string name="home_pref_replacements">Sõnade asendused</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Käivitusrežiim</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Kuvab klaviatuuril reaalajas märgi, millel on loendurid akna kärpimiste, joonduse taastamiste ja kõrvale jäetud tühjade sammude kohta. Kasulik konveieri probleemide diagnoosimiseks; vaikimisi peidetud.</string>
     <string name="pref_diagnostics_visible">Nähtav</string>
     <string name="pref_diagnostics_hidden">Peidetud</string>
+    <string name="replacements_description">Asendab teie transkriptsioonides sõnu või fraase, nt nime, mille mudel ikka valesti kirjutab. Leiab ainult terveid sõnu ega erista suur- ja väiketähti. Rakendatakse transkriptsiooni järeltöötluse osana.</string>
+    <string name="replacements_add">Lisa asendus</string>
+    <string name="replacements_edit">Muuda asendust</string>
+    <string name="replacements_empty">Asendusi veel pole.</string>
+    <string name="replacements_from_label">Sõna või fraas</string>
+    <string name="replacements_to_label">Asenda sõnaga</string>
+    <string name="replacements_to_hint">Jätke tühjaks, et see eemaldada.</string>
+    <string name="replacements_removed">(eemaldatud)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Kõnetuvastusmudelid</string>

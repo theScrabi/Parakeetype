@@ -22,6 +22,7 @@ import org.schabi.parakeetype.audio.ClientAudioReader
 import org.schabi.parakeetype.audio.MicrophoneBusyException
 import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.audio.toPcm16Bytes
+import org.schabi.parakeetype.inference.TextReplacements
 import org.schabi.parakeetype.inference.TranscriptResult
 import org.schabi.parakeetype.inference.WordTiming
 import org.schabi.parakeetype.settings.preferences.AppPreferences
@@ -252,6 +253,7 @@ class RecognitionSession(
         val rawSource = prefs.rawMicCapture.first()
         val postprocessing = prefs.postprocessingEnabled.first()
         val numbersAsDigits = prefs.formatNumbersAsDigits.first()
+        val replacements = TextReplacements(prefs.textReplacements.first())
 
         // Capture → channel → repository. The unlimited channel buffers the audio while
         // awaitRepository() is still waiting for the model to load.
@@ -346,6 +348,7 @@ class RecognitionSession(
             audio = audio.consumeAsFlow(),
             postprocessingEnabled = postprocessing,
             formatNumbersAsDigits = numbersAsDigits,
+            replacements = replacements,
             wordTimings = options.words,
         ).collect { result ->
             if (finished) return@collect

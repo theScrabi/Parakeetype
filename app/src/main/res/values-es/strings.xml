@@ -9,6 +9,7 @@
     <string name="nav_title_input">Micrófono, activación &amp; diseño</string>
     <string name="nav_title_speech">Procesamiento de voz</string>
     <string name="nav_title_tools">Diagnóstico</string>
+    <string name="nav_title_replacements">Sustitución de palabras</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Abrir ajustes</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Gestionar</string>
     <string name="action_cancel">Cancelar</string>
     <string name="action_delete">Eliminar</string>
+    <string name="action_save">Guardar</string>
     <string name="action_retry">Reintentar</string>
     <string name="action_set_as_active">Establecer como activo</string>
     <string name="action_open_parakeetype">Abrir Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Intro</string>
     <string name="cd_active_model">Modelo activo</string>
     <string name="cd_delete_model">Eliminar modelo</string>
+    <string name="cd_delete_replacement">Eliminar sustitución</string>
     <string name="cd_status_error">Error</string>
     <string name="cd_talk_disabled">Botón de hablar desactivado: el motor no está listo</string>
     <string name="cd_talk_stop_continuous">Detener grabación continua</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Micrófono, modo de activación &amp; diseño</string>
     <string name="home_pref_speech">Actividad de voz, posprocesamiento &amp; memoria del modelo</string>
     <string name="home_pref_tools">Diagnóstico</string>
+    <string name="home_pref_replacements">Sustitución de palabras</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Modo de activación</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Muestra una insignia en tiempo real en el teclado con contadores de recortes de ventana, recuperaciones de alineación y pasos vacíos descartados. Útil para diagnosticar problemas de la canalización; oculta de forma predeterminada.</string>
     <string name="pref_diagnostics_visible">Visible</string>
     <string name="pref_diagnostics_hidden">Oculta</string>
+    <string name="replacements_description">Sustituye palabras o frases en tus transcripciones, p. ej. un nombre que el modelo siempre escribe mal. Solo coincide con palabras completas y no distingue mayúsculas de minúsculas. Se aplica como parte del posprocesamiento de la transcripción.</string>
+    <string name="replacements_add">Añadir sustitución</string>
+    <string name="replacements_edit">Editar sustitución</string>
+    <string name="replacements_empty">Aún no hay sustituciones.</string>
+    <string name="replacements_from_label">Palabra o frase</string>
+    <string name="replacements_to_label">Sustituir por</string>
+    <string name="replacements_to_hint">Déjalo vacío para eliminarla.</string>
+    <string name="replacements_removed">(eliminado)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modelos de reconocimiento de voz</string>

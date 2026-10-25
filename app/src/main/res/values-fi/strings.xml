@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofoni, käynnistys &amp; asettelu</string>
     <string name="nav_title_speech">Puheen käsittely</string>
     <string name="nav_title_tools">Diagnostiikka</string>
+    <string name="nav_title_replacements">Sanojen korvaukset</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Avaa asetukset</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Hallinnoi</string>
     <string name="action_cancel">Peru</string>
     <string name="action_delete">Poista</string>
+    <string name="action_save">Tallenna</string>
     <string name="action_retry">Yritä uudelleen</string>
     <string name="action_set_as_active">Aseta aktiiviseksi</string>
     <string name="action_open_parakeetype">Avaa Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Aktiivinen malli</string>
     <string name="cd_delete_model">Poista malli</string>
+    <string name="cd_delete_replacement">Poista korvaus</string>
     <string name="cd_status_error">Virhe</string>
     <string name="cd_talk_disabled">Puhepainike ei käytössä - moottori ei ole valmis</string>
     <string name="cd_talk_stop_continuous">Lopeta jatkuva tallennus</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofoni, käynnistystapa &amp; asettelu</string>
     <string name="home_pref_speech">Puheaktiivisuus, jälkikäsittely &amp; mallin muisti</string>
     <string name="home_pref_tools">Diagnostiikka</string>
+    <string name="home_pref_replacements">Sanojen korvaukset</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Käynnistystapa</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Näyttää näppäimistöllä reaaliaikaisen merkin, jossa on laskurit ikkunan rajauksille, kohdistuksen palautuksille ja hylätyille tyhjille askelille. Hyödyllinen putken ongelmien selvittämiseen; oletuksena piilotettu.</string>
     <string name="pref_diagnostics_visible">Näkyvissä</string>
     <string name="pref_diagnostics_hidden">Piilotettu</string>
+    <string name="replacements_description">Korvaa sanoja tai fraaseja litteroinneissasi, esim. nimen, jonka malli kirjoittaa aina väärin. Vain kokonaiset sanat täsmäävät, eikä isoilla ja pienillä kirjaimilla ole väliä. Tehdään osana litteroinnin jälkikäsittelyä.</string>
+    <string name="replacements_add">Lisää korvaus</string>
+    <string name="replacements_edit">Muokkaa korvausta</string>
+    <string name="replacements_empty">Ei vielä korvauksia.</string>
+    <string name="replacements_from_label">Sana tai fraasi</string>
+    <string name="replacements_to_label">Korvaa tekstillä</string>
+    <string name="replacements_to_hint">Jätä tyhjäksi poistaaksesi sen.</string>
+    <string name="replacements_removed">(poistetaan)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Puheentunnistusmallit</string>

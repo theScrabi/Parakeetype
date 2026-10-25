@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofón, spúšťanie &amp; rozloženie</string>
     <string name="nav_title_speech">Spracovanie reči</string>
     <string name="nav_title_tools">Diagnostika</string>
+    <string name="nav_title_replacements">Nahrádzanie slov</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Otvoriť nastavenia</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Spravovať</string>
     <string name="action_cancel">Zrušiť</string>
     <string name="action_delete">Odstrániť</string>
+    <string name="action_save">Uložiť</string>
     <string name="action_retry">Skúsiť znova</string>
     <string name="action_set_as_active">Nastaviť ako aktívny</string>
     <string name="action_open_parakeetype">Otvoriť Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Aktívny model</string>
     <string name="cd_delete_model">Odstrániť model</string>
+    <string name="cd_delete_replacement">Odstrániť nahradenie</string>
     <string name="cd_status_error">Chyba</string>
     <string name="cd_talk_disabled">Tlačidlo hovorenia je vypnuté – modul nie je pripravený</string>
     <string name="cd_talk_stop_continuous">Zastaviť nepretržité nahrávanie</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofón, režim spúšťania &amp; rozloženie</string>
     <string name="home_pref_speech">Detekcia hlasu, následné spracovanie &amp; pamäť modelu</string>
     <string name="home_pref_tools">Diagnostika</string>
+    <string name="home_pref_replacements">Nahrádzanie slov</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Režim spúšťania</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Zobrazuje na klávesnici živý odznak s počítadlami skrátení okna, obnovení zarovnania a zahodených prázdnych krokov. Užitočné na diagnostiku problémov so spracovaním; predvolene skryté.</string>
     <string name="pref_diagnostics_visible">Zobrazené</string>
     <string name="pref_diagnostics_hidden">Skryté</string>
+    <string name="replacements_description">Nahrádza slová alebo frázy v prepisoch, napr. meno, ktoré model stále píše nesprávne. Hľadá len celé slová a nerozlišuje veľké a malé písmená. Prebieha v rámci následného spracovania prepisu.</string>
+    <string name="replacements_add">Pridať nahradenie</string>
+    <string name="replacements_edit">Upraviť nahradenie</string>
+    <string name="replacements_empty">Zatiaľ žiadne nahradenia.</string>
+    <string name="replacements_from_label">Slovo alebo fráza</string>
+    <string name="replacements_to_label">Nahradiť za</string>
+    <string name="replacements_to_hint">Nechajte prázdne na odstránenie.</string>
+    <string name="replacements_removed">(odstránené)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modely rozpoznávania reči</string>

@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import org.schabi.parakeetype.inference.InferenceService
+import org.schabi.parakeetype.inference.TextReplacement
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -127,6 +128,28 @@ class PreferencesViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             prefs.setKeepModelLoaded(enabled)
             if (enabled) InferenceService.startKeepLoaded(getApplication())
+        }
+    }
+
+    val textReplacements: StateFlow<List<TextReplacement>> = prefs.textReplacements.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = emptyList(),
+    )
+
+    /** Appends [rule] to the replacement table, or replaces the rule at [index] when given. */
+    fun saveTextReplacement(rule: TextReplacement, index: Int? = null) {
+        viewModelScope.launch {
+            prefs.updateTextReplacements { rules ->
+                if (index == null || index !in rules.indices) rules + rule
+                else rules.toMutableList().apply { set(index, rule) }
+            }
+        }
+    }
+
+    fun removeTextReplacement(index: Int) {
+        viewModelScope.launch {
+            prefs.updateTextReplacements { rules -> rules.filterIndexed { i, _ -> i != index } }
         }
     }
 

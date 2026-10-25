@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, spouštění &amp; rozložení</string>
     <string name="nav_title_speech">Zpracování řeči</string>
     <string name="nav_title_tools">Diagnostika</string>
+    <string name="nav_title_replacements">Nahrazování slov</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Otevřít nastavení</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Spravovat</string>
     <string name="action_cancel">Zrušit</string>
     <string name="action_delete">Smazat</string>
+    <string name="action_save">Uložit</string>
     <string name="action_retry">Zkusit znovu</string>
     <string name="action_set_as_active">Nastavit jako aktivní</string>
     <string name="action_open_parakeetype">Otevřít Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Aktivní model</string>
     <string name="cd_delete_model">Smazat model</string>
+    <string name="cd_delete_replacement">Smazat nahrazení</string>
     <string name="cd_status_error">Chyba</string>
     <string name="cd_talk_disabled">Tlačítko mluvení je vypnuté – modul není připraven</string>
     <string name="cd_talk_stop_continuous">Zastavit nepřetržité nahrávání</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofon, režim spouštění &amp; rozložení</string>
     <string name="home_pref_speech">Detekce hlasu, následné zpracování &amp; paměť modelu</string>
     <string name="home_pref_tools">Diagnostika</string>
+    <string name="home_pref_replacements">Nahrazování slov</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Režim spouštění</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Zobrazuje na klávesnici živý odznak s počítadly zkrácení okna, obnovení zarovnání a zahozených prázdných kroků. Užitečné pro diagnostiku problémů se zpracováním; ve výchozím stavu skryto.</string>
     <string name="pref_diagnostics_visible">Zobrazeno</string>
     <string name="pref_diagnostics_hidden">Skryto</string>
+    <string name="replacements_description">Nahrazuje slova nebo fráze v přepisech, např. jméno, které model stále píše špatně. Hledá jen celá slova a nerozlišuje velká a malá písmena. Probíhá v rámci následného zpracování přepisu.</string>
+    <string name="replacements_add">Přidat nahrazení</string>
+    <string name="replacements_edit">Upravit nahrazení</string>
+    <string name="replacements_empty">Zatím žádná nahrazení.</string>
+    <string name="replacements_from_label">Slovo nebo fráze</string>
+    <string name="replacements_to_label">Nahradit za</string>
+    <string name="replacements_to_hint">Ponechte prázdné pro odstranění.</string>
+    <string name="replacements_removed">(odstraněno)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modely rozpoznávání řeči</string>

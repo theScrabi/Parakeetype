@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofonu, Attivazzjoni &amp; Tqassim</string>
     <string name="nav_title_speech">Proċessar tat-Taħdit</string>
     <string name="nav_title_tools">Dijanjostika</string>
+    <string name="nav_title_replacements">Sostituzzjonijiet ta\' kliem</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Iftaħ l-Issettjar</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Immaniġġja</string>
     <string name="action_cancel">Ikkanċella</string>
     <string name="action_delete">Ħassar</string>
+    <string name="action_save">Issejvja</string>
     <string name="action_retry">Erġa\' pprova</string>
     <string name="action_set_as_active">Issettja bħala Attiv</string>
     <string name="action_open_parakeetype">Iftaħ Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Daħħal</string>
     <string name="cd_active_model">Mudell attiv</string>
     <string name="cd_delete_model">Ħassar il-mudell</string>
+    <string name="cd_delete_replacement">Ħassar is-sostituzzjoni</string>
     <string name="cd_status_error">Żball</string>
     <string name="cd_talk_disabled">Buttuna tat-taħdit diżattivata – il-magna mhijiex lesta</string>
     <string name="cd_talk_stop_continuous">Waqqaf ir-reġistrazzjoni kontinwa</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofonu, Mod ta\' Attivazzjoni &amp; Tqassim</string>
     <string name="home_pref_speech">Attività tal-Vuċi, Post-Proċessar &amp; Memorja tal-Mudell</string>
     <string name="home_pref_tools">Dijanjostika</string>
+    <string name="home_pref_replacements">Sostituzzjonijiet ta\' kliem</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Mod ta\' Attivazzjoni</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Juri badge dirett fuq it-tastiera b\'counters għat-tqaċċit tat-tieqa, l-irkupri tal-allinjament u l-passi vojta mormija. Utli biex jiġu dijanjostikati problemi fil-pipeline; mitfi b\'mod awtomatiku.</string>
     <string name="pref_diagnostics_visible">Viżibbli</string>
     <string name="pref_diagnostics_hidden">Moħbi</string>
+    <string name="replacements_description">Jissostitwixxi kliem jew frażijiet fit-traskrizzjonijiet tiegħek, eż. isem li l-mudell dejjem jiktbu ħażin. Iqabbel kliem sħiħ biss u ma jagħmilx differenza bejn ittri kbar u żgħar. Jiġi applikat bħala parti mill-ipproċessar ta\' wara tat-traskrizzjoni.</string>
+    <string name="replacements_add">Żid sostituzzjoni</string>
+    <string name="replacements_edit">Editja s-sostituzzjoni</string>
+    <string name="replacements_empty">Għad m\'hemm l-ebda sostituzzjoni.</string>
+    <string name="replacements_from_label">Kelma jew frażi</string>
+    <string name="replacements_to_label">Issostitwixxi b\'</string>
+    <string name="replacements_to_hint">Ħallih vojt biex titneħħa.</string>
+    <string name="replacements_removed">(imneħħi)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Mudelli tar-Rikonoxximent tat-Taħdit</string>

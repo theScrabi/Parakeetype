@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, indítás &amp; elrendezés</string>
     <string name="nav_title_speech">Beszédfeldolgozás</string>
     <string name="nav_title_tools">Diagnosztika</string>
+    <string name="nav_title_replacements">Szócserék</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Beállítások megnyitása</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Kezelés</string>
     <string name="action_cancel">Mégse</string>
     <string name="action_delete">Törlés</string>
+    <string name="action_save">Mentés</string>
     <string name="action_retry">Újra</string>
     <string name="action_set_as_active">Beállítás aktívként</string>
     <string name="action_open_parakeetype">Parakeetype megnyitása</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Aktív modell</string>
     <string name="cd_delete_model">Modell törlése</string>
+    <string name="cd_delete_replacement">Csere törlése</string>
     <string name="cd_status_error">Hiba</string>
     <string name="cd_talk_disabled">Beszéd gomb letiltva – a motor nem áll készen</string>
     <string name="cd_talk_stop_continuous">Folyamatos felvétel leállítása</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofon, indítási mód &amp; elrendezés</string>
     <string name="home_pref_speech">Hangaktivitás, utófeldolgozás &amp; modellmemória</string>
     <string name="home_pref_tools">Diagnosztika</string>
+    <string name="home_pref_replacements">Szócserék</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Indítási mód</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Élő jelvényt jelenít meg a billentyűzeten, amely számolja az ablakvágásokat, az igazítás-helyreállításokat és az eldobott üres lépéseket. Hasznos a feldolgozási hibák diagnosztizálásához; alapértelmezés szerint ki van kapcsolva.</string>
     <string name="pref_diagnostics_visible">Látható</string>
     <string name="pref_diagnostics_hidden">Rejtett</string>
+    <string name="replacements_description">Szavakat vagy kifejezéseket cserél le az átiratokban, pl. egy nevet, amelyet a modell mindig rosszul ír. Csak egész szavakra illeszkedik, és nem különbözteti meg a kis- és nagybetűket. Az átirat utófeldolgozásának részeként fut.</string>
+    <string name="replacements_add">Csere hozzáadása</string>
+    <string name="replacements_edit">Csere szerkesztése</string>
+    <string name="replacements_empty">Még nincsenek cserék.</string>
+    <string name="replacements_from_label">Szó vagy kifejezés</string>
+    <string name="replacements_to_label">Csere erre</string>
+    <string name="replacements_to_hint">Hagyja üresen az eltávolításhoz.</string>
+    <string name="replacements_removed">(eltávolítva)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Beszédfelismerő modellek</string>

@@ -9,6 +9,7 @@
     <string name="nav_title_input">Мікрофон, запуск і розташування</string>
     <string name="nav_title_speech">Обробка мовлення</string>
     <string name="nav_title_tools">Діагностика</string>
+    <string name="nav_title_replacements">Заміна слів</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Відкрити налаштування</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Керувати</string>
     <string name="action_cancel">Скасувати</string>
     <string name="action_delete">Видалити</string>
+    <string name="action_save">Зберегти</string>
     <string name="action_retry">Повторити</string>
     <string name="action_set_as_active">Зробити активною</string>
     <string name="action_open_parakeetype">Відкрити Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Ввід</string>
     <string name="cd_active_model">Активна модель</string>
     <string name="cd_delete_model">Видалити модель</string>
+    <string name="cd_delete_replacement">Видалити заміну</string>
     <string name="cd_status_error">Помилка</string>
     <string name="cd_talk_disabled">Кнопку запису вимкнено – рушій не готовий</string>
     <string name="cd_talk_stop_continuous">Зупинити безперервний запис</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Мікрофон, режим запуску й розташування</string>
     <string name="home_pref_speech">Голосова активність, постобробка й памʼять моделі</string>
     <string name="home_pref_tools">Діагностика</string>
+    <string name="home_pref_replacements">Заміна слів</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Режим запуску</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Показує на клавіатурі значок із лічильниками обрізань вікна, відновлень вирівнювання й відкинутих порожніх кроків. Корисно для діагностики проблем конвеєра; за замовчуванням приховано.</string>
     <string name="pref_diagnostics_visible">Показано</string>
     <string name="pref_diagnostics_hidden">Приховано</string>
+    <string name="replacements_description">Замінює слова або фрази у ваших розшифровках, наприклад ім\'я, яке модель постійно пише неправильно. Враховуються лише цілі слова, регістр літер не має значення. Застосовується під час постобробки розшифровки.</string>
+    <string name="replacements_add">Додати заміну</string>
+    <string name="replacements_edit">Редагувати заміну</string>
+    <string name="replacements_empty">Замін поки немає.</string>
+    <string name="replacements_from_label">Слово або фраза</string>
+    <string name="replacements_to_label">Замінити на</string>
+    <string name="replacements_to_hint">Залиште порожнім, щоб видалити.</string>
+    <string name="replacements_removed">(видаляється)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Моделі розпізнавання мовлення</string>

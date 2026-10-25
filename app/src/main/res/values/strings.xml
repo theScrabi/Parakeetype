@@ -8,6 +8,7 @@
     <string name="nav_title_input">Microphone, Trigger &amp; Layout</string>
     <string name="nav_title_speech">Speech Processing</string>
     <string name="nav_title_tools">Diagnostics</string>
+    <string name="nav_title_replacements">Word Replacements</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Open Settings</string>
@@ -16,6 +17,7 @@
     <string name="action_manage">Manage</string>
     <string name="action_cancel">Cancel</string>
     <string name="action_delete">Delete</string>
+    <string name="action_save">Save</string>
     <string name="action_retry">Retry</string>
     <string name="action_set_as_active">Set as Active</string>
     <string name="action_open_parakeetype">Open Parakeetype</string>
@@ -35,6 +37,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Active model</string>
     <string name="cd_delete_model">Delete model</string>
+    <string name="cd_delete_replacement">Delete replacement</string>
     <string name="cd_status_error">Error</string>
     <string name="cd_talk_disabled">Talk button disabled - engine not ready</string>
     <string name="cd_talk_stop_continuous">Stop continuous recording</string>
@@ -67,6 +70,7 @@
     <string name="home_pref_input">Microphone, Trigger Mode &amp; Layout</string>
     <string name="home_pref_speech">Voice Activity, Post-Processing &amp; Model Memory</string>
     <string name="home_pref_tools">Diagnostics</string>
+    <string name="home_pref_replacements">Word Replacements</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Trigger Mode</string>
@@ -113,6 +117,14 @@
     </string>
     <string name="pref_diagnostics_visible">Visible</string>
     <string name="pref_diagnostics_hidden">Hidden</string>
+    <string name="replacements_description">Replaces words or phrases in your transcripts, e.g. a name the model keeps getting wrong. Matches whole words and ignores upper and lower case. Applied as part of the transcript post-processing.</string>
+    <string name="replacements_add">Add Replacement</string>
+    <string name="replacements_edit">Edit Replacement</string>
+    <string name="replacements_empty">No replacements yet.</string>
+    <string name="replacements_from_label">Word or phrase</string>
+    <string name="replacements_to_label">Replace with</string>
+    <string name="replacements_to_hint">Leave empty to remove it.</string>
+    <string name="replacements_removed">(removed)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Speech Recognition Models</string>

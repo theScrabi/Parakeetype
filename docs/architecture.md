@@ -61,12 +61,12 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 | Package | Key files | Responsibility |
 |---|---|---|
 | audio | AudioCaptureManager, MicCalibrationManager, SileroVadFilter, RMSVadFilter, VadFilter, SpeechEndpointer, AudioChunk, ClientAudioReader, PcmConverter, PermissionHelper | Mic capture, client-supplied audio (EXTRA_AUDIO_SOURCE), PCM chunking, Voice Activity Detection, end-of-speech detection, optional mic calibration |
-| inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
+| inference | SpeechEngine, ParakeetEngine, ChunkStreamingEngine, WhisperEngine, VoxtralEngine, SpeechEngineFactory, InferenceRepository, InferenceService, TranscriptResult, EngineState, PipelineDiagnostics, NumberNormaliser, TextReplacements, GrammarCorrector | ASR pipeline, sliding window, post-processing, foreground service |
 | ime | ParakeetypeInputMethodService, TextInjector, TranscriptAligner, EnterAction | Keyboard service, composing text management, alignment |
 | recognition | ParakeetypeRecognitionService, VoiceInputActivity, RecognitionSession, InferenceConnection, TranscriptAccumulator | Speech recognizer for other apps: android.speech RecognitionService and RecognizerIntent.ACTION_RECOGNIZE_SPEECH |
 | settings/model | ModelId, ModelRegistry, ModelImporter, ModelStorageManager, ModelState, ModelViewModel | Model enumeration, single-archive import, SHA-256 verification, on-disk paths |
 | settings/preferences | AppPreferences, PreferencesViewModel | DataStore-backed user preferences |
-| settings/screens | HomeScreen, ModelScreen, PreferencesScreen, MicCalibrationScreen | Settings Compose UI |
+| settings/screens | HomeScreen, ModelScreen, PreferencesScreen, ReplacementsScreen, MicCalibrationScreen | Settings Compose UI |
 | ui/keyboard | KeyboardViewModel, KeyboardUiState, KeyboardScreen, ImeComposeView | IME Compose hosting, UI state |
 | ui/keyboard/components | TalkButton, StatusIndicator, KeyboardActionButton, LanguageSelector | Keyboard UI sub-components |
 | ui/theme | ParakeetypeKeyboardTheme | Compose theming |
@@ -192,7 +192,7 @@ Single Gradle module (app). All Kotlin source lives under app/src/main/kotlin/ (
 
 **ModelImporter** installs a model from the ZIP archive the user picked via the system file picker (SAF OpenDocument, no storage permission), verifies SHA-256 of every file and emits ModelState.Importing(progress). Parakeetype itself never downloads anything.
 
-**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), instant_mode (Boolean, default false — listen on switching to the keyboard, switch back after the end of speech), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default true — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), left_handed_mode (Boolean, default false — mirrors the keyboard button row: Enter on the left, drag right to lock), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0).
+**AppPreferences** (DataStore, store name parakeetype_prefs): trigger_mode (String, default HOLD), instant_mode (Boolean, default false — listen on switching to the keyboard, switch back after the end of speech), delete_button_mode (String, DELETE_ALL | DELETE_LAST_SENTENCE, default DELETE_ALL), vad_sensitivity (Float, default 0.0), selected_model_id (String), whisper_language (String, default "auto"), postprocessing_enabled (Boolean, default true), show_pipeline_diagnostics (Boolean, default false), forced_language (String?, default null), format_numbers_as_digits (Boolean, default true), keep_model_loaded (Boolean, default true — runs InferenceService as a started foreground service so the model survives keyboard switches), keyboard_position_portrait (String, CENTER | LEFT | RIGHT, default CENTER), keyboard_position_landscape (String, LEFT | RIGHT, default RIGHT), left_handed_mode (Boolean, default false — mirrors the keyboard button row: Enter on the left, drag right to lock), raw_mic_capture (Boolean, default false — true captures from AudioSource.UNPROCESSED to bypass AEC, needed for the speakerphone use case), preferredMicId (Int, default 0), text_replacements (String, default absent — the user's word / phrase replacement table, one `from<TAB>to` rule per line, see TextReplacements).
 
 ---
 
@@ -537,6 +537,7 @@ The model (incl. the Silero VAD) is not in the repository; devtools/fetch-test-m
 | inference/ParakeetAllLanguagesTest | Post-processing does not block or corrupt any Parakeet-supported language's script |
 | inference/ParakeetLanguageTest | Language forcing threads into cleanTranscript (EN vs DE filler/disfluency handling) |
 | inference/NumberNormaliserTest | Number-word to digit normalisation |
+| inference/TextReplacementsTest | User word / phrase replacements: whole-word matching, ordering, encoding |
 | inference/GrammarCorrectorTest | GrammarCorrector implementations and repository integration |
 | inference/TranscriptResultTest | TranscriptResult sealed class |
 | inference/WavReaderTest | WAV parsing, resampling, channel downmix |

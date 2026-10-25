@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, sprožitev &amp; postavitev</string>
     <string name="nav_title_speech">Obdelava govora</string>
     <string name="nav_title_tools">Diagnostika</string>
+    <string name="nav_title_replacements">Zamenjave besed</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Odpri nastavitve</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Upravljaj</string>
     <string name="action_cancel">Prekliči</string>
     <string name="action_delete">Izbriši</string>
+    <string name="action_save">Shrani</string>
     <string name="action_retry">Poskusi znova</string>
     <string name="action_set_as_active">Nastavi kot aktivnega</string>
     <string name="action_open_parakeetype">Odpri Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Vnos</string>
     <string name="cd_active_model">Aktivni model</string>
     <string name="cd_delete_model">Izbriši model</string>
+    <string name="cd_delete_replacement">Izbriši zamenjavo</string>
     <string name="cd_status_error">Napaka</string>
     <string name="cd_talk_disabled">Gumb za govor je onemogočen – pogon ni pripravljen</string>
     <string name="cd_talk_stop_continuous">Ustavi neprekinjeno snemanje</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofon, način sprožitve &amp; postavitev</string>
     <string name="home_pref_speech">Zaznavanje govora, naknadna obdelava &amp; pomnilnik modela</string>
     <string name="home_pref_tools">Diagnostika</string>
+    <string name="home_pref_replacements">Zamenjave besed</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Način sprožitve</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Na tipkovnici prikaže značko v živo s števci obrezovanj okna, obnovitev poravnave in zavrženih praznih korakov. Uporabno za diagnosticiranje težav z obdelavo; privzeto skrito.</string>
     <string name="pref_diagnostics_visible">Prikazano</string>
     <string name="pref_diagnostics_hidden">Skrito</string>
+    <string name="replacements_description">Zamenja besede ali besedne zveze v vaših prepisih, npr. ime, ki ga model vedno napačno zapiše. Ujema se samo s celimi besedami in ne razlikuje med velikimi in malimi črkami. Uporabi se v okviru naknadne obdelave prepisa.</string>
+    <string name="replacements_add">Dodaj zamenjavo</string>
+    <string name="replacements_edit">Uredi zamenjavo</string>
+    <string name="replacements_empty">Ni še zamenjav.</string>
+    <string name="replacements_from_label">Beseda ali besedna zveza</string>
+    <string name="replacements_to_label">Zamenjaj z</string>
+    <string name="replacements_to_hint">Pustite prazno, da se odstrani.</string>
+    <string name="replacements_removed">(odstranjeno)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modeli za prepoznavanje govora</string>

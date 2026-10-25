@@ -9,6 +9,7 @@
     <string name="nav_title_input">Микрофон, задействане и разположение</string>
     <string name="nav_title_speech">Обработка на говора</string>
     <string name="nav_title_tools">Диагностика</string>
+    <string name="nav_title_replacements">Замяна на думи</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Отваряне на настройките</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Управление</string>
     <string name="action_cancel">Отказ</string>
     <string name="action_delete">Изтриване</string>
+    <string name="action_save">Запазване</string>
     <string name="action_retry">Нов опит</string>
     <string name="action_set_as_active">Задаване като активен</string>
     <string name="action_open_parakeetype">Отваряне на Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Въвеждане</string>
     <string name="cd_active_model">Активен модел</string>
     <string name="cd_delete_model">Изтриване на модела</string>
+    <string name="cd_delete_replacement">Изтриване на замяната</string>
     <string name="cd_status_error">Грешка</string>
     <string name="cd_talk_disabled">Бутонът за запис е деактивиран – механизмът за разпознаване не е готов</string>
     <string name="cd_talk_stop_continuous">Спиране на непрекъснатия запис</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Микрофон, режим на задействане и разположение</string>
     <string name="home_pref_speech">Гласова активност, последваща обработка и памет за модела</string>
     <string name="home_pref_tools">Диагностика</string>
+    <string name="home_pref_replacements">Замяна на думи</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Режим на задействане</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Показва на клавиатурата значка в реално време с броячи за изрязвания на прозореца, възстановявания на подравняването и отхвърлени празни стъпки. Полезно за диагностициране на проблеми в конвейера; по подразбиране е скрита.</string>
     <string name="pref_diagnostics_visible">Видима</string>
     <string name="pref_diagnostics_hidden">Скрита</string>
+    <string name="replacements_description">Заменя думи или фрази в транскрипциите, например име, което моделът постоянно греши. Съвпадат само цели думи, без значение от главни и малки букви. Прилага се като част от последващата обработка на транскрипцията.</string>
+    <string name="replacements_add">Добавяне на замяна</string>
+    <string name="replacements_edit">Редактиране на замяна</string>
+    <string name="replacements_empty">Все още няма замени.</string>
+    <string name="replacements_from_label">Дума или фраза</string>
+    <string name="replacements_to_label">Замяна с</string>
+    <string name="replacements_to_hint">Оставете празно, за да се премахне.</string>
+    <string name="replacements_removed">(премахнато)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Модели за разпознаване на говор</string>

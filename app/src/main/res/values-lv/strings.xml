@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofons, aktivizēšana &amp; izkārtojums</string>
     <string name="nav_title_speech">Runas apstrāde</string>
     <string name="nav_title_tools">Diagnostika</string>
+    <string name="nav_title_replacements">Vārdu aizstāšana</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Atvērt iestatījumus</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Pārvaldīt</string>
     <string name="action_cancel">Atcelt</string>
     <string name="action_delete">Dzēst</string>
+    <string name="action_save">Saglabāt</string>
     <string name="action_retry">Mēģināt vēlreiz</string>
     <string name="action_set_as_active">Iestatīt kā aktīvu</string>
     <string name="action_open_parakeetype">Atvērt Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Ievadīt</string>
     <string name="cd_active_model">Aktīvais modelis</string>
     <string name="cd_delete_model">Dzēst modeli</string>
+    <string name="cd_delete_replacement">Dzēst aizstāšanu</string>
     <string name="cd_status_error">Kļūda</string>
     <string name="cd_talk_disabled">Runāšanas poga atspējota — dzinējs nav gatavs</string>
     <string name="cd_talk_stop_continuous">Apturēt nepārtraukto ierakstīšanu</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofons, aktivizēšanas režīms &amp; izkārtojums</string>
     <string name="home_pref_speech">Balss aktivitāte, pēcapstrāde &amp; modeļa atmiņa</string>
     <string name="home_pref_tools">Diagnostika</string>
+    <string name="home_pref_replacements">Vārdu aizstāšana</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Aktivizēšanas režīms</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Rāda tastatūrā tiešraides emblēmu ar loga apgriešanas, līdzinājuma atkopšanas un atmesto tukšo soļu skaitītājiem. Noderīgi konveijera problēmu diagnosticēšanai; pēc noklusējuma izslēgta.</string>
     <string name="pref_diagnostics_visible">Redzama</string>
     <string name="pref_diagnostics_hidden">Paslēpta</string>
+    <string name="replacements_description">Aizstāj vārdus vai frāzes jūsu transkripcijās, piemēram, vārdu, ko modelis vienmēr uzraksta nepareizi. Atbilst tikai veseliem vārdiem un neņem vērā lielos un mazos burtus. Tiek piemērota transkripcijas pēcapstrādes laikā.</string>
+    <string name="replacements_add">Pievienot aizstāšanu</string>
+    <string name="replacements_edit">Rediģēt aizstāšanu</string>
+    <string name="replacements_empty">Vēl nav aizstāšanu.</string>
+    <string name="replacements_from_label">Vārds vai frāze</string>
+    <string name="replacements_to_label">Aizstāt ar</string>
+    <string name="replacements_to_hint">Atstājiet tukšu, lai to noņemtu.</string>
+    <string name="replacements_removed">(noņemts)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Runas atpazīšanas modeļi</string>

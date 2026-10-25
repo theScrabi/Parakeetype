@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofonas, paleidimas &amp; išdėstymas</string>
     <string name="nav_title_speech">Kalbos apdorojimas</string>
     <string name="nav_title_tools">Diagnostika</string>
+    <string name="nav_title_replacements">Žodžių pakeitimai</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Atidaryti nustatymus</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Tvarkyti</string>
     <string name="action_cancel">Atšaukti</string>
     <string name="action_delete">Ištrinti</string>
+    <string name="action_save">Išsaugoti</string>
     <string name="action_retry">Bandyti dar kartą</string>
     <string name="action_set_as_active">Nustatyti kaip aktyvų</string>
     <string name="action_open_parakeetype">Atidaryti Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Įvesti</string>
     <string name="cd_active_model">Aktyvus modelis</string>
     <string name="cd_delete_model">Ištrinti modelį</string>
+    <string name="cd_delete_replacement">Ištrinti pakeitimą</string>
     <string name="cd_status_error">Klaida</string>
     <string name="cd_talk_disabled">Kalbėjimo mygtukas išjungtas – variklis neparuoštas</string>
     <string name="cd_talk_stop_continuous">Sustabdyti nepertraukiamą įrašymą</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofonas, paleidimo režimas &amp; išdėstymas</string>
     <string name="home_pref_speech">Balso aktyvumas, papildomas apdorojimas &amp; modelio atmintis</string>
     <string name="home_pref_tools">Diagnostika</string>
+    <string name="home_pref_replacements">Žodžių pakeitimai</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Paleidimo režimas</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Klaviatūroje rodo tiesioginį ženklelį su lango apkarpymų, lygiavimo atkūrimų ir atmestų tuščių žingsnių skaitikliais. Naudinga diagnozuojant konvejerio problemas; pagal numatytuosius nustatymus išjungta.</string>
     <string name="pref_diagnostics_visible">Rodoma</string>
     <string name="pref_diagnostics_hidden">Paslėpta</string>
+    <string name="replacements_description">Pakeičia žodžius ar frazes jūsų transkripcijose, pvz., vardą, kurį modelis vis parašo neteisingai. Atpažįsta tik visus žodžius ir neskiria didžiųjų bei mažųjų raidžių. Taikoma kaip transkripcijos papildomo apdorojimo dalis.</string>
+    <string name="replacements_add">Pridėti pakeitimą</string>
+    <string name="replacements_edit">Redaguoti pakeitimą</string>
+    <string name="replacements_empty">Pakeitimų dar nėra.</string>
+    <string name="replacements_from_label">Žodis ar frazė</string>
+    <string name="replacements_to_label">Pakeisti į</string>
+    <string name="replacements_to_hint">Palikite tuščią, kad būtų pašalinta.</string>
+    <string name="replacements_removed">(pašalinta)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Kalbos atpažinimo modeliai</string>

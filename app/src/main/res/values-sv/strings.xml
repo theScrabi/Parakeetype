@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, utlösare &amp; layout</string>
     <string name="nav_title_speech">Talbearbetning</string>
     <string name="nav_title_tools">Diagnostik</string>
+    <string name="nav_title_replacements">Ordersättningar</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Öppna inställningar</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Hantera</string>
     <string name="action_cancel">Avbryt</string>
     <string name="action_delete">Radera</string>
+    <string name="action_save">Spara</string>
     <string name="action_retry">Försök igen</string>
     <string name="action_set_as_active">Ange som aktiv</string>
     <string name="action_open_parakeetype">Öppna Parakeetype</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Retur</string>
     <string name="cd_active_model">Aktiv modell</string>
     <string name="cd_delete_model">Radera modell</string>
+    <string name="cd_delete_replacement">Ta bort ersättning</string>
     <string name="cd_status_error">Fel</string>
     <string name="cd_talk_disabled">Talknappen är inaktiverad - motorn är inte redo</string>
     <string name="cd_talk_stop_continuous">Stoppa kontinuerlig inspelning</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Mikrofon, utlösarläge &amp; layout</string>
     <string name="home_pref_speech">Talaktivitet, efterbearbetning &amp; modellminne</string>
     <string name="home_pref_tools">Diagnostik</string>
+    <string name="home_pref_replacements">Ordersättningar</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Utlösarläge</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Visar en live-bricka på tangentbordet med räknare för fönsterbeskärningar, återställd justering och kasserade tomma steg. Användbart för att felsöka pipelineproblem; dold som standard.</string>
     <string name="pref_diagnostics_visible">Synlig</string>
     <string name="pref_diagnostics_hidden">Dold</string>
+    <string name="replacements_description">Ersätter ord eller fraser i dina transkriptioner, t.ex. ett namn som modellen alltid stavar fel. Matchar bara hela ord och bryr sig inte om stora och små bokstäver. Tillämpas som en del av efterbearbetningen av transkriptionen.</string>
+    <string name="replacements_add">Lägg till ersättning</string>
+    <string name="replacements_edit">Redigera ersättning</string>
+    <string name="replacements_empty">Inga ersättningar än.</string>
+    <string name="replacements_from_label">Ord eller fras</string>
+    <string name="replacements_to_label">Ersätt med</string>
+    <string name="replacements_to_hint">Lämna tomt för att ta bort det.</string>
+    <string name="replacements_removed">(tas bort)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Taligenkänningsmodeller</string>

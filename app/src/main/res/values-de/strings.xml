@@ -9,6 +9,7 @@
     <string name="nav_title_input">Mikrofon, Auslöser &amp; Layout</string>
     <string name="nav_title_speech">Sprachverarbeitung</string>
     <string name="nav_title_tools">Diagnose</string>
+    <string name="nav_title_replacements">Wortersetzungen</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Einstellungen öffnen</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Verwalten</string>
     <string name="action_cancel">Abbrechen</string>
     <string name="action_delete">Löschen</string>
+    <string name="action_save">Speichern</string>
     <string name="action_retry">Erneut versuchen</string>
     <string name="action_set_as_active">Als aktiv festlegen</string>
     <string name="action_open_parakeetype">Parakeetype öffnen</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Eingabe</string>
     <string name="cd_active_model">Aktives Modell</string>
     <string name="cd_delete_model">Modell löschen</string>
+    <string name="cd_delete_replacement">Ersetzung löschen</string>
     <string name="cd_status_error">Fehler</string>
     <string name="cd_talk_disabled">Sprechtaste deaktiviert – Engine nicht bereit</string>
     <string name="cd_talk_stop_continuous">Daueraufnahme beenden</string>
@@ -70,6 +73,7 @@
     <string name="home_pref_input">Mikrofon, Auslösemodus &amp; Layout</string>
     <string name="home_pref_speech">Spracherkennung, Nachbearbeitung &amp; Modellspeicher</string>
     <string name="home_pref_tools">Diagnose</string>
+    <string name="home_pref_replacements">Wortersetzungen</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Auslösemodus</string>
@@ -117,6 +121,14 @@
     </string>
     <string name="pref_diagnostics_visible">Sichtbar</string>
     <string name="pref_diagnostics_hidden">Ausgeblendet</string>
+    <string name="replacements_description">Ersetzt Wörter oder Wendungen in deinen Transkripten, z. B. einen Namen, den das Modell immer falsch schreibt. Es werden nur ganze Wörter erkannt, Groß- und Kleinschreibung wird ignoriert. Wird als Teil der Transkript-Nachbearbeitung angewendet.</string>
+    <string name="replacements_add">Ersetzung hinzufügen</string>
+    <string name="replacements_edit">Ersetzung bearbeiten</string>
+    <string name="replacements_empty">Noch keine Ersetzungen.</string>
+    <string name="replacements_from_label">Wort oder Wendung</string>
+    <string name="replacements_to_label">Ersetzen durch</string>
+    <string name="replacements_to_hint">Leer lassen, um es zu entfernen.</string>
+    <string name="replacements_removed">(entfernt)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Spracherkennungsmodelle</string>

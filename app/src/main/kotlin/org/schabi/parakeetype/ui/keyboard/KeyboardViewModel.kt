@@ -12,6 +12,7 @@ import org.schabi.parakeetype.ime.TextInjector
 import org.schabi.parakeetype.inference.EngineState
 import org.schabi.parakeetype.inference.InferenceRepository
 import org.schabi.parakeetype.inference.PipelineDiagnostics
+import org.schabi.parakeetype.inference.TextReplacements
 import org.schabi.parakeetype.inference.TranscriptResult
 import org.schabi.parakeetype.recognition.RecognitionSession
 import org.schabi.parakeetype.settings.preferences.AppPreferences
@@ -158,6 +159,11 @@ class KeyboardViewModel(
      */
     val formatNumbersAsDigits: StateFlow<Boolean> = appPreferences.formatNumbersAsDigits
         .stateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+    /** The user's word / phrase replacements, applied by the post-processing pipeline. */
+    private val textReplacements: StateFlow<TextReplacements> = appPreferences.textReplacements
+        .map { TextReplacements(it) }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, TextReplacements.NONE)
 
     /**
      * Persists [tag] to preferences and immediately forwards it to the loaded engine.
@@ -511,6 +517,7 @@ class KeyboardViewModel(
                     ),
                     postprocessingEnabled = postprocessingEnabled.value,
                     formatNumbersAsDigits = formatNumbersAsDigits.value,
+                    replacements = textReplacements.value,
                 ).collect { result ->
                     // Stale-session guard: if this job has been superseded (e.g. the field
                     // was cleared and a new session started), discard this result entirely

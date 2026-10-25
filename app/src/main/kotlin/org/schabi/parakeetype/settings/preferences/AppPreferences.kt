@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
+import org.schabi.parakeetype.inference.TextReplacement
+import org.schabi.parakeetype.inference.TextReplacements
 import org.schabi.parakeetype.settings.model.ModelId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -275,6 +277,27 @@ class AppPreferences(private val context: Context) {
 
     suspend fun setPreferredMicId(id: Int) {
         context.dataStore.edit { prefs -> prefs[keyPreferredMicId] = id }
+    }
+
+    private val keyTextReplacements = stringPreferencesKey("text_replacements")
+
+    /**
+     * The user's lookup table of word / phrase replacements, in the order they were added
+     * (stored with [TextReplacements.encode]). Applied by the post-processing pipeline;
+     * empty by default. Part of the DataStore, so it is backed up with the other settings.
+     */
+    val textReplacements: Flow<List<TextReplacement>> = context.dataStore.data.map { prefs ->
+        prefs[keyTextReplacements]?.let { TextReplacements.decode(it) } ?: emptyList()
+    }
+
+    /** Replaces the stored table with [transform] applied to it, in one atomic edit. */
+    suspend fun updateTextReplacements(transform: (List<TextReplacement>) -> List<TextReplacement>) {
+        context.dataStore.edit { prefs ->
+            val current = prefs[keyTextReplacements]?.let { TextReplacements.decode(it) } ?: emptyList()
+            val rules = transform(current)
+            if (rules.isEmpty()) prefs.remove(keyTextReplacements)
+            else prefs[keyTextReplacements] = TextReplacements.encode(rules)
+        }
     }
 
 }

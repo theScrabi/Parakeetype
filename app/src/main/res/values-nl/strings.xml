@@ -9,6 +9,7 @@
     <string name="nav_title_input">Microfoon, activering &amp; indeling</string>
     <string name="nav_title_speech">Spraakverwerking</string>
     <string name="nav_title_tools">Diagnostiek</string>
+    <string name="nav_title_replacements">Woordvervangingen</string>
 
     <!-- Common actions -->
     <string name="action_open_settings">Instellingen openen</string>
@@ -17,6 +18,7 @@
     <string name="action_manage">Beheren</string>
     <string name="action_cancel">Annuleren</string>
     <string name="action_delete">Verwijderen</string>
+    <string name="action_save">Opslaan</string>
     <string name="action_retry">Opnieuw proberen</string>
     <string name="action_set_as_active">Als actief instellen</string>
     <string name="action_open_parakeetype">Parakeetype openen</string>
@@ -36,6 +38,7 @@
     <string name="cd_action_enter">Enter</string>
     <string name="cd_active_model">Actief model</string>
     <string name="cd_delete_model">Model verwijderen</string>
+    <string name="cd_delete_replacement">Vervanging verwijderen</string>
     <string name="cd_status_error">Fout</string>
     <string name="cd_talk_disabled">Spreekknop uitgeschakeld - engine niet gereed</string>
     <string name="cd_talk_stop_continuous">Doorlopende opname stoppen</string>
@@ -68,6 +71,7 @@
     <string name="home_pref_input">Microfoon, activeringsmodus &amp; indeling</string>
     <string name="home_pref_speech">Spraakactiviteit, nabewerking &amp; modelgeheugen</string>
     <string name="home_pref_tools">Diagnostiek</string>
+    <string name="home_pref_replacements">Woordvervangingen</string>
 
     <!-- Preferences screen -->
     <string name="pref_trigger_mode_title">Activeringsmodus</string>
@@ -100,6 +104,14 @@
     <string name="pref_diagnostics_subtitle">Toont een live badge op het toetsenbord met tellers voor venstertrims, uitlijningsherstel en verworpen lege stappen. Handig om pipelineproblemen te diagnosticeren; standaard uit.</string>
     <string name="pref_diagnostics_visible">Zichtbaar</string>
     <string name="pref_diagnostics_hidden">Verborgen</string>
+    <string name="replacements_description">Vervangt woorden of zinsdelen in je transcripties, bijv. een naam die het model steeds verkeerd schrijft. Alleen hele woorden komen overeen, hoofdletters en kleine letters maken niet uit. Wordt toegepast als onderdeel van de nabewerking van de transcriptie.</string>
+    <string name="replacements_add">Vervanging toevoegen</string>
+    <string name="replacements_edit">Vervanging bewerken</string>
+    <string name="replacements_empty">Nog geen vervangingen.</string>
+    <string name="replacements_from_label">Woord of zinsdeel</string>
+    <string name="replacements_to_label">Vervangen door</string>
+    <string name="replacements_to_hint">Laat leeg om het te verwijderen.</string>
+    <string name="replacements_removed">(verwijderd)</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Spraakherkenningsmodellen</string>

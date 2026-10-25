@@ -35,6 +35,7 @@ import org.schabi.parakeetype.settings.screens.HomeScreen
 import org.schabi.parakeetype.settings.screens.InputPreferencesScreen
 import org.schabi.parakeetype.settings.screens.MicCalibrationScreen
 import org.schabi.parakeetype.settings.screens.ModelScreen
+import org.schabi.parakeetype.settings.screens.ReplacementsScreen
 import org.schabi.parakeetype.settings.screens.SpeechPreferencesScreen
 import org.schabi.parakeetype.settings.screens.ToolsPreferencesScreen
 import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
@@ -69,6 +70,7 @@ object SettingsRoutes {
     const val PREF_INPUT = "pref_input"
     const val PREF_SPEECH = "pref_speech"
     const val PREF_TOOLS = "pref_tools"
+    const val REPLACEMENTS = "replacements"
     const val CALIBRATION = "calibration"
 }
 
@@ -86,6 +88,7 @@ private fun SettingsNavHost(navController: NavHostController) {
         SettingsRoutes.PREF_INPUT -> stringResource(R.string.nav_title_input)
         SettingsRoutes.PREF_SPEECH -> stringResource(R.string.nav_title_speech)
         SettingsRoutes.PREF_TOOLS -> stringResource(R.string.nav_title_tools)
+        SettingsRoutes.REPLACEMENTS -> stringResource(R.string.nav_title_replacements)
         else -> stringResource(R.string.app_name)
     }
 
@@ -132,6 +135,7 @@ private fun SettingsNavHost(navController: NavHostController) {
                     onNavigateToInput = { navController.navigate(SettingsRoutes.PREF_INPUT) },
                     onNavigateToSpeech = { navController.navigate(SettingsRoutes.PREF_SPEECH) },
                     onNavigateToTools = { navController.navigate(SettingsRoutes.PREF_TOOLS) },
+                    onNavigateToReplacements = { navController.navigate(SettingsRoutes.REPLACEMENTS) },
                 )
             }
             composable(
@@ -152,6 +156,9 @@ private fun SettingsNavHost(navController: NavHostController) {
             }
             composable(route = SettingsRoutes.PREF_TOOLS) {
                 ToolsPreferencesScreen()
+            }
+            composable(route = SettingsRoutes.REPLACEMENTS) {
+                ReplacementsScreen()
             }
             composable(route = SettingsRoutes.CALIBRATION) {
                 MicCalibrationScreen()

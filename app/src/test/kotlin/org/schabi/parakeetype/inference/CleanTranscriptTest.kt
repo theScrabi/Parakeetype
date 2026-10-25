@@ -308,6 +308,33 @@ class CleanTranscriptTest {
     }
 
     @Test
+    fun `cleanTranscript writes a dotted time before Uhr with a colon`() {
+        assertThat("wir treffen uns um 14.07 Uhr.".cleanTranscript(language = "de"))
+            .isEqualTo("Wir treffen uns um 14:07 Uhr.")
+        assertThat("Der Zug fährt um 7.30 Uhr ab.".cleanTranscript(language = "de"))
+            .isEqualTo("Der Zug fährt um 7:30 Uhr ab.")
+    }
+
+    @Test
+    fun `cleanTranscript keeps dotted numbers that are no time of day`() {
+        assertThat("Es kostet 14.07 Euro.".cleanTranscript(language = "de"))
+            .isEqualTo("Es kostet 14.07 Euro.")
+        assertThat("Am 1.10.07 Uhr ist kein Wort.".cleanTranscript(language = "de"))
+            .isEqualTo("Am 1.10.07 Uhr ist kein Wort.")
+        assertThat("Um 25.07 Uhr.".cleanTranscript(language = "de"))
+            .isEqualTo("Um 25.07 Uhr.")
+    }
+
+    @Test
+    fun `cleanTranscript applies replacements before sentence capitalisation`() {
+        val replacements = TextReplacements(
+            listOf(TextReplacement("parakeet type", "Parakeetype"), TextReplacement("punkt", "."))
+        )
+        assertThat("ich nutze parakeet type punkt morgen mehr".cleanTranscript(language = "de", replacements = replacements))
+            .isEqualTo("Ich nutze Parakeetype. Morgen mehr")
+    }
+
+    @Test
     fun `cleanTranscript with language en removes English fillers including um`() {
         assertThat("um so I was saying uh hello.".cleanTranscript(language = "en"))
             .isEqualTo("So I was saying hello.")
