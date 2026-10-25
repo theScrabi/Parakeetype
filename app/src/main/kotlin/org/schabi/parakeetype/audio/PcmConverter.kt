@@ -183,3 +183,13 @@ class PcmConverter(private val format: PcmFormat) {
         fun build(): ShortArray = array.copyOf(size)
     }
 }
+
+/**
+ * These samples as raw 16-bit little-endian PCM bytes ([AudioFormat.ENCODING_PCM_16BIT]), e.g.
+ * for a recognizer client's `onBufferReceived`.
+ */
+fun ShortArray.toPcm16Bytes(): ByteArray {
+    val buffer = ByteBuffer.allocate(size * 2).order(ByteOrder.LITTLE_ENDIAN)
+    buffer.asShortBuffer().put(this)
+    return buffer.array()
+}

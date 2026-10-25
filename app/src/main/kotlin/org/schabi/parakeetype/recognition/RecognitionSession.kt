@@ -19,6 +19,7 @@ import org.schabi.parakeetype.audio.AudioChunk
 import org.schabi.parakeetype.audio.ClientAudioReader
 import org.schabi.parakeetype.audio.MicrophoneBusyException
 import org.schabi.parakeetype.audio.SpeechEndpointer
+import org.schabi.parakeetype.audio.toPcm16Bytes
 import org.schabi.parakeetype.inference.TranscriptResult
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import kotlin.math.log10
@@ -115,6 +116,12 @@ class RecognitionSession(
         fun onReadyForSpeech()
         fun onBeginningOfSpeech()
         fun onRmsChanged(rmsdB: Float)
+
+        /**
+         * The microphone audio as it is recorded: 16-bit little-endian mono PCM at 16 kHz.
+         * Not called for client-supplied audio, which the client has already.
+         */
+        fun onBufferReceived(buffer: ByteArray)
 
         /** The session text so far (only with [RecognitionOptions.partialResults]). */
         fun onPartialResult(text: String)
@@ -229,6 +236,10 @@ class RecognitionSession(
                         rawSource = rawSource,
                         onSpeechProbability = onSpeechProbability,
                         onLevel = onLevel,
+                        onAudio = { samples ->
+                            val buffer = samples.toPcm16Bytes()
+                            launch { if (!finished) listener.onBufferReceived(buffer) }
+                        },
                     )
                 input.collect { chunk -> audio.send(chunk) }
                 // The client's audio ended on its own: report it like a stop(). Queued behind

@@ -1,5 +1,6 @@
 package org.schabi.parakeetype.recognition
 
+import android.content.AttributionSource
 import android.content.ContextParams
 import android.content.Intent
 import android.media.AudioFormat
@@ -7,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.os.RemoteException
+import android.speech.ModelDownloadListener
 import android.speech.RecognitionService
 import android.speech.RecognitionSupport
 import android.speech.RecognizerIntent
@@ -172,6 +174,34 @@ class ParakeetypeRecognitionService : RecognitionService() {
         supportCallback.onSupportResult(support)
     }
 
+    /**
+     * Parakeetype cannot download a model (it has no network access): the model archive is
+     * imported in the app. Without one, the user is told so.
+     */
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onTriggerModelDownload(recognizerIntent: Intent) {
+        if (!ModelStorageManager.isModelReady(this)) showToast(R.string.voice_input_error_no_model, Toast.LENGTH_LONG)
+    }
+
+    /** Like [onTriggerModelDownload], and tells [listener] whether the model is there. */
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    override fun onTriggerModelDownload(
+        recognizerIntent: Intent,
+        attributionSource: AttributionSource,
+        listener: ModelDownloadListener,
+    ) {
+        val installed = ModelStorageManager.isModelReady(this)
+        if (!installed) showToast(R.string.voice_input_error_no_model, Toast.LENGTH_LONG)
+        reportModelDownload(installed, listener)
+    }
+
+    private fun showToast(@StringRes text: Int, duration: Int) {
+        if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            Log.w(TAG, "Notifications are disabled - Android suppresses this toast: ${getString(text)}")
+        }
+        Toast.makeText(this, text, duration).show()
+    }
+
     /** Forwards the session events to the client; a terminal event ends the session. */
     private inner class CallbackListener(private val callback: Callback) : RecognitionSession.Listener {
         override fun onModelLoading(loading: Boolean) {
@@ -181,6 +211,7 @@ class ParakeetypeRecognitionService : RecognitionService() {
         override fun onReadyForSpeech() = callback.send { readyForSpeech(Bundle()) }
         override fun onBeginningOfSpeech() = callback.send { beginningOfSpeech() }
         override fun onRmsChanged(rmsdB: Float) = callback.send { rmsChanged(rmsdB) }
+        override fun onBufferReceived(buffer: ByteArray) = callback.send { bufferReceived(buffer) }
         override fun onPartialResult(text: String) = callback.send { partialResults(resultsBundle(text, null)) }
         // Segmented sessions only exist on API 33+ (see RecognitionOptions.segmented).
         override fun onSegmentResult(text: String, confidence: Float) {
@@ -214,15 +245,17 @@ class ParakeetypeRecognitionService : RecognitionService() {
         private fun endSession() {
             session = null
         }
-
-        private fun showToast(@StringRes text: Int, duration: Int) {
-            val context = this@ParakeetypeRecognitionService
-            if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-                Log.w(TAG, "Notifications are disabled - Android suppresses this toast: ${getString(text)}")
-            }
-            Toast.makeText(context, text, duration).show()
-        }
     }
+}
+
+/**
+ * Answers `SpeechRecognizer.triggerModelDownload` with a listener: there is nothing to
+ * download, so the listener hears right away that the model is installed, or that the
+ * language is unavailable until the user imports a model in the app.
+ */
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+internal fun reportModelDownload(modelInstalled: Boolean, listener: ModelDownloadListener) {
+    if (modelInstalled) listener.onSuccess() else listener.onError(SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE)
 }
 
 /** Builds the `results` / `partialResults` bundle: one hypothesis, optionally scored. */

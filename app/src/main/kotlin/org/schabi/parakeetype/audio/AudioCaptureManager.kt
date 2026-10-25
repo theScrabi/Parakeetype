@@ -103,6 +103,8 @@ class AudioCaptureManager(private val context: Context) {
      *   probability ([VadFilter.lastSpeechProbability]), called on the capture thread for
      *   every chunk read while capturing (not for the drain after [stopCapture]); feeds a
      *   [SpeechEndpointer]. Only called with [vadEnabled].
+     * @param onAudio Optional observer of the raw samples of every chunk read while capturing,
+     *   before VAD filtering; called on the capture thread.
      * @throws SecurityException if [android.Manifest.permission.RECORD_AUDIO] is not granted.
      * @throws IllegalStateException if [AudioRecord] fails to initialise.
      * @throws MicrophoneBusyException if another app has the microphone: recording does not
@@ -116,6 +118,7 @@ class AudioCaptureManager(private val context: Context) {
         rawSource: Boolean = false,
         onLevel: ((Float) -> Unit)? = null,
         onSpeechProbability: ((Float) -> Unit)? = null,
+        onAudio: ((ShortArray) -> Unit)? = null,
     ): Flow<AudioChunk> =
         channelFlow {
             if (!PermissionHelper.hasRecordPermission(context)) {
@@ -194,6 +197,7 @@ class AudioCaptureManager(private val context: Context) {
                             val chunk = AudioChunk(samples = samples)
                             val rms = calculateRms(chunk.samples)
                             onLevel?.invoke(rms)
+                            onAudio?.invoke(samples)
 
                             val toSend = vad?.process(chunk, rms) ?: listOf(chunk)
                             if (vad != null) onSpeechProbability?.invoke(vad.lastSpeechProbability)
