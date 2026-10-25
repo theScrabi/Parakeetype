@@ -8,12 +8,14 @@ import android.speech.SpeechRecognizer
 import android.util.Log
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.schabi.parakeetype.audio.AudioCaptureManager
 import org.schabi.parakeetype.audio.AudioChunk
 import org.schabi.parakeetype.audio.ClientAudioReader
@@ -54,16 +56,39 @@ data class RecognitionOptions(
     val completeSilenceMs: Long = 0,
     /** [RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS]; 0 = no minimum. */
     val minimumLengthMs: Long = 0,
+    /**
+     * [RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION] (or a language switch, which needs
+     * it): report the spoken language.
+     */
+    val languageDetection: Boolean = false,
+    /** [RecognizerIntent.EXTRA_ENABLE_LANGUAGE_SWITCH]: report switches of the spoken language. */
+    val languageSwitch: Boolean = false,
+    /**
+     * [RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES] (else
+     * [RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES]); empty = any.
+     */
+    val detectionLanguages: List<String> = emptyList(),
 ) {
     companion object {
-        fun from(intent: Intent) = RecognitionOptions(
-            partialResults = intent.getBooleanExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false),
-            // The segment callbacks exist since API 33.
-            segmented = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                    intent.hasExtra(RecognizerIntent.EXTRA_SEGMENTED_SESSION),
-            completeSilenceMs = intent.millisExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS),
-            minimumLengthMs = intent.millisExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS),
-        )
+        fun from(intent: Intent): RecognitionOptions {
+            // The language detection callback exists since API 34.
+            val languageCallback = Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+            val languageSwitch = languageCallback && intent.getStringExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_SWITCH) != null
+            return RecognitionOptions(
+                partialResults = intent.getBooleanExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, false),
+                // The segment callbacks exist since API 33.
+                segmented = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        intent.hasExtra(RecognizerIntent.EXTRA_SEGMENTED_SESSION),
+                completeSilenceMs = intent.millisExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS),
+                minimumLengthMs = intent.millisExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS),
+                languageDetection = languageSwitch || languageCallback &&
+                        intent.getBooleanExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION, false),
+                languageSwitch = languageSwitch,
+                detectionLanguages = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES)
+                    ?: intent.getStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES)
+                    ?: emptyList(),
+            )
+        }
 
         // Documented as long, but clients commonly put an Int.
         @Suppress("DEPRECATION")
@@ -91,6 +116,8 @@ data class RecognitionOptions(
  * @param audioContext Context the [android.media.AudioRecord] is built on — for the
  *   recognition service an attribution context carrying the calling app's identity.
  * @param clientAudio The client's audio, or `null` to record the microphone.
+ * @param languageDetector Guesses the spoken language from the transcript for
+ *   [RecognitionOptions.languageDetection].
  * @param scope Scope on the main dispatcher; every [listener] callback runs on it.
  */
 class RecognitionSession(
@@ -100,6 +127,7 @@ class RecognitionSession(
     private val listener: Listener,
     private val scope: CoroutineScope,
     private val clientAudio: ClientAudioReader? = null,
+    private val languageDetector: LanguageDetector? = null,
 ) {
 
     /**
@@ -122,6 +150,9 @@ class RecognitionSession(
          * Not called for client-supplied audio, which the client has already.
          */
         fun onBufferReceived(buffer: ByteArray)
+
+        /** The spoken language (only with [RecognitionOptions.languageDetection]). */
+        fun onLanguageDetection(detection: LanguageDetection)
 
         /** The session text so far (only with [RecognitionOptions.partialResults]). */
         fun onPartialResult(text: String)
@@ -155,6 +186,13 @@ class RecognitionSession(
 
     /** `true` once a terminal callback was delivered or the session was cancelled. */
     private var finished = false
+
+    private val languageTracker = if (options.languageDetection && languageDetector != null) {
+        LanguageTracker(options.detectionLanguages, options.languageSwitch)
+    } else null
+
+    /** The transcript part whose language was detected last. */
+    private var languageText = ""
 
     fun start() {
         check(job == null) { "session already started" }
@@ -295,6 +333,7 @@ class RecognitionSession(
                     if (options.partialResults) {
                         listener.onPartialResult(if (options.segmented) result.text else transcript.text)
                     }
+                    detectLanguage(transcript.text)
                 }
 
                 is TranscriptResult.Final -> {
@@ -304,6 +343,7 @@ class RecognitionSession(
                     } else if (options.partialResults) {
                         listener.onPartialResult(transcript.text)
                     }
+                    detectLanguage(transcript.text)
                 }
 
                 is TranscriptResult.WindowTrimmed -> transcript.onWindowTrimmed()
@@ -337,6 +377,22 @@ class RecognitionSession(
             noSpeechTimeoutMs = NO_SPEECH_TIMEOUT_MS.takeUnless { options.segmented },
             minimumLengthMs = options.minimumLengthMs,
         )
+    }
+
+    /**
+     * Reports the language of [transcript]'s latest clauses when it changed. Detected from the
+     * text before the result is delivered, so the report reaches the client first.
+     */
+    private suspend fun detectLanguage(transcript: String) {
+        val tracker = languageTracker ?: return
+        val text = languageDetectionText(transcript)
+        if (text.isEmpty() || text == languageText) return
+        languageText = text
+        val hypotheses = withContext(Dispatchers.IO) { languageDetector!!.detect(text) }
+        Log.d(TAG, "Language of \"$text\": $hypotheses")
+        val detection = (if (hypotheses == null) tracker.onDetectionFailed() else tracker.onHypotheses(hypotheses))
+            ?: return
+        if (!finished) listener.onLanguageDetection(detection)
     }
 
     /** Runs on the main thread. */

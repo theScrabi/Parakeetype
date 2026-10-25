@@ -178,6 +178,7 @@ class VoiceInputActivity : ComponentActivity() {
 
         override fun onReadyForSpeech() = Unit
         override fun onBufferReceived(buffer: ByteArray) = Unit
+        override fun onLanguageDetection(detection: LanguageDetection) = Unit
         override fun onBeginningOfSpeech() = Unit
 
         override fun onRmsChanged(rmsdB: Float) {

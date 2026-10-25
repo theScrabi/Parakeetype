@@ -115,6 +115,7 @@ class ParakeetypeRecognitionService : RecognitionService() {
             listener = CallbackListener(listener),
             scope = scope,
             clientAudio = clientAudio,
+            languageDetector = TextClassifierLanguageDetector(this),
         ).also { it.start() }
     }
 
@@ -212,6 +213,13 @@ class ParakeetypeRecognitionService : RecognitionService() {
         override fun onBeginningOfSpeech() = callback.send { beginningOfSpeech() }
         override fun onRmsChanged(rmsdB: Float) = callback.send { rmsChanged(rmsdB) }
         override fun onBufferReceived(buffer: ByteArray) = callback.send { bufferReceived(buffer) }
+
+        // Only requested on API 34+ (see RecognitionOptions.languageDetection).
+        override fun onLanguageDetection(detection: LanguageDetection) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) return
+            callback.send { languageDetection(detection.toBundle()) }
+        }
+
         override fun onPartialResult(text: String) = callback.send { partialResults(resultsBundle(text, null)) }
         // Segmented sessions only exist on API 33+ (see RecognitionOptions.segmented).
         override fun onSegmentResult(text: String, confidence: Float) {
@@ -262,6 +270,14 @@ internal fun reportModelDownload(modelInstalled: Boolean, listener: ModelDownloa
 private fun resultsBundle(text: String, confidence: Float?) = Bundle().apply {
     putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, arrayListOf(text))
     if (confidence != null) putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, floatArrayOf(confidence))
+}
+
+/** Builds the `languageDetection` bundle. */
+private fun LanguageDetection.toBundle() = Bundle().apply {
+    putString(SpeechRecognizer.DETECTED_LANGUAGE, language)
+    putInt(SpeechRecognizer.LANGUAGE_DETECTION_CONFIDENCE_LEVEL, confidenceLevel)
+    putStringArrayList(SpeechRecognizer.TOP_LOCALE_ALTERNATIVES, ArrayList(alternatives))
+    if (switchResult != null) putInt(SpeechRecognizer.LANGUAGE_SWITCH_RESULT, switchResult)
 }
 
 /** Client callbacks are binder calls; a client that died is simply no longer notified. */
