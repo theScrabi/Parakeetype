@@ -182,6 +182,7 @@ class AudioCaptureManager(private val context: Context) {
                 Log.d(TAG, "AudioRecord started - chunk=$CHUNK_SAMPLES samples, buf=$bufferBytes bytes")
 
                 var chunksRead = 0
+                var capturedSamples = 0L
                 while (currentCoroutineContext().isActive && !stopRequested) {
                     // Android does not fail a recording while another app holds the
                     // microphone (concurrent capture, API 29+): it keeps delivering silence.
@@ -194,7 +195,8 @@ class AudioCaptureManager(private val context: Context) {
                     when {
                         read > 0 -> {
                             val samples = buffer.copyOf(read)
-                            val chunk = AudioChunk(samples = samples)
+                            val chunk = AudioChunk(samples = samples, timestampMs = samplesToMs(capturedSamples))
+                            capturedSamples += read
                             val rms = calculateRms(chunk.samples)
                             onLevel?.invoke(rms)
                             onAudio?.invoke(samples)
@@ -232,7 +234,8 @@ class AudioCaptureManager(private val context: Context) {
                     do {
                         drained = recorder.read(buffer, 0, buffer.size, AudioRecord.READ_NON_BLOCKING)
                         if (drained > 0) {
-                            val chunk = AudioChunk(samples = buffer.copyOf(drained))
+                            val chunk = AudioChunk(samples = buffer.copyOf(drained), timestampMs = samplesToMs(capturedSamples))
+                            capturedSamples += drained
                             val rms = calculateRms(chunk.samples)
                             val toSend = vad?.process(chunk, rms) ?: listOf(chunk)
                             for (c in toSend) {
@@ -246,7 +249,7 @@ class AudioCaptureManager(private val context: Context) {
                     // the hangover counter expires and VAD transitions back to SILENCE.
                     // This guarantees the hangover tail is emitted before the flow completes.
                     if (vad != null) {
-                        for (c in vad.drainHangover(CHUNK_SAMPLES)) {
+                        for (c in vad.drainHangover(CHUNK_SAMPLES, samplesToMs(capturedSamples))) {
                             send(c)
                         }
                     }

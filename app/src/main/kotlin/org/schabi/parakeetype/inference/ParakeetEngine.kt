@@ -62,6 +62,10 @@ data class TdtState(
  */
 private data class DecodeRangeResult(
     val tokens: List<Int>,
+    /** Encoder frame of each token in [tokens]. */
+    val tokenFrames: List<Int>,
+    /** Log-softmax probability of each token in [tokens]. */
+    val tokenLogProbs: List<Double>,
     val state: TdtState,
     val confidence: Float,
     /** Sum of per-emission log-softmax probabilities (non-blank tokens only). */
@@ -143,6 +147,9 @@ interface ChunkStreamingEngine {
 
     /** Detokenise [tokens] to a string (SentencePiece-aware). */
     fun detokenizeTokens(tokens: List<Int>): String
+
+    /** The index range in [tokens] of each word; by default every token is a word. */
+    fun wordTokenRanges(tokens: List<Int>): List<IntRange> = tokens.indices.map { it..it }
 }
 
 /**
@@ -187,12 +194,18 @@ internal fun detokenizeSentencePiece(tokenIds: List<Int>, vocabulary: Array<Stri
  * `exp(totalLogProbSum / totalEmissions)` — the geometric mean of every token's
  * probability. Summing log-probs (rather than averaging per-chunk confidences) is what
  * makes the combined score independent of how the audio is chunked.
+ *
+ * [tokenFrames] holds the encoder frame (within the encoded buffer, 80 ms each) at which each
+ * token was emitted and [tokenLogProbs] its log-softmax probability — the source of word
+ * timings and word confidences. Empty when the engine does not report them.
  */
 data class ChunkDecodeResult(
     val tokens: List<Int>,
     val state: TdtState,
     val logProbSum: Double,
     val emissionCount: Int,
+    val tokenFrames: List<Int> = emptyList(),
+    val tokenLogProbs: List<Double> = emptyList(),
 )
 
 /**
@@ -415,7 +428,9 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
     ): ChunkDecodeResult {
         check(isLoaded) { "Engine not loaded; call load() first" }
         val result = decodeRange(env!!, decSession!!, encoderOut, totalLength, frameStart, frameEnd, state)
-        return ChunkDecodeResult(result.tokens, result.state, result.logProbSum, result.emissionCount)
+        return ChunkDecodeResult(
+            result.tokens, result.state, result.logProbSum, result.emissionCount, result.tokenFrames, result.tokenLogProbs,
+        )
     }
 
     /**
@@ -424,6 +439,9 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
      * total for each partial.
      */
     override fun detokenizeTokens(tokens: List<Int>): String = detokenize(tokens)
+
+    override fun wordTokenRanges(tokens: List<Int>): List<IntRange> =
+        sentencePieceWordRanges(tokens, vocabulary, blankId)
 
     /** Releases all native ONNX Runtime resources. Safe to call more than once. */
     override fun close() {
@@ -557,6 +575,8 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         var predictor: PredictorOutput? = null
 
         val hypothesis = mutableListOf<Int>()
+        val tokenFrames = mutableListOf<Int>()
+        val tokenLogProbs = mutableListOf<Double>()
         // Per-token log-softmax accumulators for confidence scoring. Softmax is computed
         // over the token portion [0..blankId]; log(softmax[argmax]) is accumulated for every
         // non-blank emission. The geometric-mean probability exp(mean(logProbs)) is a
@@ -596,6 +616,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
 
                     // Per-token confidence: the argmax's log-softmax over the token portion
                     // [0..blankId]. Computed for non-blank emissions only.
+                    var logSoftmaxArgmax = 0.0
                     if (predictedToken != blankId) {
                         val maxLogit = (0..blankId).maxOf { logits[it] }
                         var expSum = 0.0
@@ -603,7 +624,7 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
                             expSum += Math.exp(logits[k].toDouble() - maxLogit)
                         }
                         // log_softmax(argmax) = logit[argmax] - maxLogit - ln(Σ exp) = -ln(Σ exp)
-                        val logSoftmaxArgmax = -Math.log(expSum)
+                        logSoftmaxArgmax = -Math.log(expSum)
                         logProbSum += logSoftmaxArgmax
                         nonBlankEmissions++
                     }
@@ -631,6 +652,8 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
                         tokensAtFrame = 0
                     } else {
                         hypothesis.add(predictedToken)
+                        tokenFrames.add(t)
+                        tokenLogProbs.add(logSoftmaxArgmax)
                         prevToken = predictedToken
                         tokensAtFrame++
 
@@ -666,6 +689,8 @@ class ParakeetEngine : SpeechEngine, ChunkStreamingEngine {
         }
         return DecodeRangeResult(
             hypothesis,
+            tokenFrames,
+            tokenLogProbs,
             TdtState(lstmState1, lstmState2, prevToken, frameDelta),
             confidence,
             logProbSum,

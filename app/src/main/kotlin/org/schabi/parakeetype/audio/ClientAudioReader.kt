@@ -70,11 +70,14 @@ class ClientAudioReader(
         val vad = loadVad()
         val frame = ShortArray(FRAME_SAMPLES)
         var frameSize = 0
+        var emittedSamples = 0L
 
         suspend fun emitFrame(samples: ShortArray) {
             val rms = calculateRms(samples)
             onLevel?.invoke(rms)
-            for (chunk in vad.process(AudioChunk(samples), rms)) send(chunk)
+            val chunk = AudioChunk(samples, timestampMs = samplesToMs(emittedSamples))
+            emittedSamples += samples.size
+            for (vadChunk in vad.process(chunk, rms)) send(vadChunk)
             onSpeechProbability?.invoke(vad.lastSpeechProbability)
         }
 
@@ -107,7 +110,7 @@ class ClientAudioReader(
                 // The VAD needs whole frames: pad the last one with silence.
                 if (frameSize > 0) emitFrame(frame.copyOf(frameSize).copyOf(FRAME_SAMPLES))
             }
-            for (chunk in vad.drainHangover(FRAME_SAMPLES)) send(chunk)
+            for (chunk in vad.drainHangover(FRAME_SAMPLES, samplesToMs(emittedSamples))) send(chunk)
         } finally {
             vad.flush()
             vad.close()

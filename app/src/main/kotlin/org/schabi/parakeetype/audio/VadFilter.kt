@@ -65,14 +65,16 @@ interface VadFilter {
 /**
  * Feeds silence frames of [frameSamples] samples until the VAD's hangover expires and returns
  * the chunks it still emits, so the tail of the last word is not cut off when the input ends
- * while speech is active.
+ * while speech is active. The first silence frame is at position [startMs] (see
+ * [AudioChunk.timestampMs]).
  */
-fun VadFilter.drainHangover(frameSamples: Int): List<AudioChunk> {
+fun VadFilter.drainHangover(frameSamples: Int, startMs: Long = 0): List<AudioChunk> {
     if (!isSpeechActive) return emptyList()
-    val silence = AudioChunk(ShortArray(frameSamples))
     val drained = mutableListOf<AudioChunk>()
     var safetyFrames = HANGOVER_DRAIN_SAFETY_FRAMES
+    var frames = 0L
     while (isSpeechActive && safetyFrames-- > 0) {
+        val silence = AudioChunk(ShortArray(frameSamples), timestampMs = startMs + samplesToMs(frames++ * frameSamples))
         drained += process(silence, 0f)
     }
     Log.d(TAG, "VAD hangover drain complete (framesLeft=$safetyFrames)")

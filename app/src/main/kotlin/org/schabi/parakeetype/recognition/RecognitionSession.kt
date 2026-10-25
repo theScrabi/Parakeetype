@@ -23,6 +23,7 @@ import org.schabi.parakeetype.audio.MicrophoneBusyException
 import org.schabi.parakeetype.audio.SpeechEndpointer
 import org.schabi.parakeetype.audio.toPcm16Bytes
 import org.schabi.parakeetype.inference.TranscriptResult
+import org.schabi.parakeetype.inference.WordTiming
 import org.schabi.parakeetype.settings.preferences.AppPreferences
 import kotlin.math.log10
 
@@ -68,7 +69,14 @@ data class RecognitionOptions(
      * [RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES]); empty = any.
      */
     val detectionLanguages: List<String> = emptyList(),
+    /** [RecognizerIntent.EXTRA_REQUEST_WORD_TIMING]: report when each word of a result starts. */
+    val wordTiming: Boolean = false,
+    /** [RecognizerIntent.EXTRA_REQUEST_WORD_CONFIDENCE]: report the confidence of each word of a result. */
+    val wordConfidence: Boolean = false,
 ) {
+    /** Whether results carry their words (`RECOGNITION_PARTS`). */
+    val words: Boolean get() = wordTiming || wordConfidence
+
     companion object {
         fun from(intent: Intent): RecognitionOptions {
             // The language detection callback exists since API 34.
@@ -87,6 +95,10 @@ data class RecognitionOptions(
                 detectionLanguages = intent.getStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES)
                     ?: intent.getStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES)
                     ?: emptyList(),
+                // RecognitionPart exists since API 34.
+                wordTiming = languageCallback && intent.getBooleanExtra(RecognizerIntent.EXTRA_REQUEST_WORD_TIMING, false),
+                wordConfidence = languageCallback &&
+                        intent.getBooleanExtra(RecognizerIntent.EXTRA_REQUEST_WORD_CONFIDENCE, false),
             )
         }
 
@@ -157,12 +169,18 @@ class RecognitionSession(
         /** The session text so far (only with [RecognitionOptions.partialResults]). */
         fun onPartialResult(text: String)
 
-        /** One finished utterance of a [RecognitionOptions.segmented] session. */
-        fun onSegmentResult(text: String, confidence: Float)
+        /**
+         * One finished utterance of a [RecognitionOptions.segmented] session. [words] times
+         * each word of [text] (only with [RecognitionOptions.words], otherwise empty).
+         */
+        fun onSegmentResult(text: String, confidence: Float, words: List<WordTiming>)
         fun onEndOfSpeech()
 
-        /** Terminal: the recognised text of a non-segmented session. */
-        fun onResult(text: String, confidence: Float)
+        /**
+         * Terminal: the recognised text of a non-segmented session. [words] times each word
+         * of [text] (only with [RecognitionOptions.words], otherwise empty).
+         */
+        fun onResult(text: String, confidence: Float, words: List<WordTiming>)
 
         /** Terminal: a segmented session ended. */
         fun onEndOfSegmentedSession()
@@ -321,10 +339,14 @@ class RecognitionSession(
         }
 
         val transcript = TranscriptAccumulator()
+        // The words of every final so far: on the streaming path the session text is the
+        // finals joined, so these time the words of the result.
+        val words = mutableListOf<WordTiming>()
         repository.transcribe(
             audio = audio.consumeAsFlow(),
             postprocessingEnabled = postprocessing,
             formatNumbersAsDigits = numbersAsDigits,
+            wordTimings = options.words,
         ).collect { result ->
             if (finished) return@collect
             when (result) {
@@ -338,8 +360,9 @@ class RecognitionSession(
 
                 is TranscriptResult.Final -> {
                     transcript.onFinal(result.text, result.confidence)
+                    words += result.words
                     if (options.segmented) {
-                        if (result.text.isNotBlank()) listener.onSegmentResult(result.text, result.confidence)
+                        if (result.text.isNotBlank()) listener.onSegmentResult(result.text, result.confidence, result.words)
                     } else if (options.partialResults) {
                         listener.onPartialResult(transcript.text)
                     }
@@ -361,7 +384,7 @@ class RecognitionSession(
         } else {
             val text = transcript.text
             if (text.isBlank()) listener.onError(SpeechRecognizer.ERROR_NO_MATCH)
-            else listener.onResult(text, transcript.confidence)
+            else listener.onResult(text, transcript.confidence, words)
         }
     }
 

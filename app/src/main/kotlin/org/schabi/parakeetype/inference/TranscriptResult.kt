@@ -27,11 +27,15 @@ sealed class TranscriptResult {
      *
      * [confidence] is the engine's per-token geometric-mean probability in [0.0, 1.0]
      * (1.0 when not computed). See [Partial.confidence].
+     *
+     * [words] times every word of [text] — only when word timings were requested from
+     * [InferenceRepository.transcribe] and the engine reports them, otherwise empty.
      */
     data class Final(
         val text: String,
         val isUtteranceBoundary: Boolean = false,
         val confidence: Float = 1.0f,
+        val words: List<WordTiming> = emptyList(),
     ) : TranscriptResult()
 
     /** Inference failed. [cause] carries the underlying exception for logging/display. */

@@ -47,6 +47,16 @@ class ClientAudioReaderTest {
     }
 
     @Test
+    fun `given client audio, when read, then each frame carries its position in the audio`() = runTest {
+        val samples = ShortArray(512 * 3) { 1_000 }
+
+        val chunks = ClientAudioReader(ByteArrayInputStream(pcm16(samples)), PcmFormat()) { PassThroughVad() }
+            .read().toList()
+
+        assertThat(chunks.map { it.timestampMs }).containsExactly(0L, 32L, 64L)
+    }
+
+    @Test
     fun `given stop from the speech callback, when read, then later audio is dropped`() = runTest {
         val samples = ShortArray(512 * 10) { 1_000 }
         lateinit var reader: ClientAudioReader

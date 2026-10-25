@@ -96,9 +96,10 @@ class FakeStreamingParakeet(
         // The per-buffer 100 ms padding frame makes the upper bound a small over-estimate
         // (never an under-estimate), so no scripted word at a chunk boundary is missed.
         val rangeEnd = nextAbsSample + (frameEnd - frameStart) * SAMPLES_PER_FRAME
-        val tokens = script
-            .filter { (start, _) -> start in nextAbsSample until rangeEnd }
-            .map { (_, word) -> wordId[word]!! }
+        val emitted = script.filter { (start, _) -> start in nextAbsSample until rangeEnd }
+        val tokens = emitted.map { (_, word) -> wordId[word]!! }
+        // Each word is emitted at the frame its start falls into.
+        val frames = emitted.map { (start, _) -> frameStart + (start - nextAbsSample) / SAMPLES_PER_FRAME }
 
         // A full 25-frame (2 s) stride advances the absolute cursor by one chunk;
         // flush-tail chunks (shorter than a full stride) leave the cursor for the
@@ -118,6 +119,8 @@ class FakeStreamingParakeet(
             ),
             logProbSum = tokens.size * logProb,
             emissionCount = tokens.size,
+            tokenFrames = frames,
+            tokenLogProbs = tokens.map { logProb },
         )
     }
 

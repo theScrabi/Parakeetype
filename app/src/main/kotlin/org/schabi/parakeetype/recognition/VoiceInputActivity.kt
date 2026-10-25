@@ -65,6 +65,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
+import org.schabi.parakeetype.inference.WordTiming
 import org.schabi.parakeetype.settings.SettingsActivity
 import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
 
@@ -187,13 +188,13 @@ class VoiceInputActivity : ComponentActivity() {
         }
 
         override fun onPartialResult(text: String) = Unit
-        override fun onSegmentResult(text: String, confidence: Float) = Unit
+        override fun onSegmentResult(text: String, confidence: Float, words: List<WordTiming>) = Unit
 
         override fun onEndOfSpeech() {
             if (uiState is VoiceInputUiState.Listening) uiState = VoiceInputUiState.Transcribing
         }
 
-        override fun onResult(text: String, confidence: Float) {
+        override fun onResult(text: String, confidence: Float, words: List<WordTiming>) {
             session = null
             deliver(text, confidence)
         }

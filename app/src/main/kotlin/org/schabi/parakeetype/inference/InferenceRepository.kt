@@ -862,6 +862,9 @@ private const val LEFT_CONTEXT_SAMPLES = SAMPLE_RATE * 2     // 2 s = 32 000 sam
  */
 private fun frameOffset(n: Int): Int = (n / 160 + 1) / 8
 
+/** The first sample position that [frameOffset] maps to encoder frame [frame]. */
+private fun frameStartSample(frame: Int): Int = ((frame * 8 - 1) * 160).coerceAtLeast(0)
+
 /**
  * When consecutive strides all diverge (no common prefix at all), the window can grow
  * unboundedly - each new stride makes the context longer, which causes even more attention
@@ -1289,11 +1292,15 @@ class InferenceRepository(
      *   stutter collapse, repetition deduplication, capitalisation) are skipped and the raw
      *   model output is emitted as-is.  Useful for debugging whether cleaning causes drops.
      *   Defaults to `true` (post-processing active).
+     * @param wordTimings When `true` every [TranscriptResult.Final] carries the timing and
+     *   confidence of each of its words ([TranscriptResult.Final.words], positions from the
+     *   chunks' [AudioChunk.timestampMs]). Only the chunked-TDT streaming path reports them.
      */
     fun transcribe(
         audio: Flow<AudioChunk>,
         postprocessingEnabled: Boolean = true,
         formatNumbersAsDigits: Boolean = true,
+        wordTimings: Boolean = false,
     ): Flow<TranscriptResult> = channelFlow<TranscriptResult> {
         // The chunked-TDT streaming path requires the [ChunkStreamingEngine] stateful
         // decode primitives (implemented by ParakeetEngine). If a non-streaming engine is
@@ -1321,6 +1328,13 @@ class InferenceRepository(
         var bufferStart = 0
         var state = streaming.initialTdtState()
         val allTokens = mutableListOf<Int>()
+        // With [wordTimings]: the capture position (ms) and log-probability of each token in
+        // [allTokens], and the utterance's sample position → capture position map. A short-
+        // utterance attempt prepends [leadSamples] of silence, which shifts its positions.
+        val tokenTimes = mutableListOf<Long>()
+        val tokenLogProbs = mutableListOf<Double>()
+        val positions = CapturePositions()
+        var leadSamples = 0
         var nextChunkStart = 0
         // Per-utterance confidence accumulators: the sum of per-emission log-softmax
         // probabilities and the count of non-blank emissions across all decoded chunks.
@@ -1422,6 +1436,11 @@ class InferenceRepository(
                 )
                 state = decoded.state
                 allTokens += decoded.tokens
+                if (wordTimings) decoded.tokens.indices.forEach { i ->
+                    val frame = decoded.tokenFrames.getOrElse(i) { fL }
+                    tokenTimes += positions.msAt(bufStart + frameStartSample(frame) - leadSamples)
+                    tokenLogProbs += decoded.tokenLogProbs.getOrElse(i) { 0.0 }
+                }
                 totalLogProbSum += decoded.logProbSum
                 totalEmissions += decoded.emissionCount
             } catch (ex: Exception) {
@@ -1429,6 +1448,20 @@ class InferenceRepository(
             } finally {
                 encOut.close()
             }
+        }
+
+        // The timed words of [allTokens], as the decoder spelled them.
+        fun rawWords(): List<WordTiming> = streaming.wordTokenRanges(allTokens).mapNotNull { range ->
+            val text = streaming.detokenizeTokens(allTokens.subList(range.first, range.last + 1))
+            if (text.isBlank()) return@mapNotNull null
+            val logProbs = tokenLogProbs.subList(range.first, range.last + 1)
+            WordTiming(text, tokenTimes[range.first], Math.exp(logProbs.average()).toFloat().coerceIn(0f, 1f))
+        }
+
+        fun resetTokens() {
+            allTokens.clear()
+            tokenTimes.clear()
+            tokenLogProbs.clear()
         }
 
         // Emit the current merged text as a Partial (fully cleaned + hallucination-checked).
@@ -1534,7 +1567,8 @@ class InferenceRepository(
                 bufferStart = 0
                 totalSamples = savedTotalSamples + if (withLead) SHORT_UTT_LEAD_SILENCE_SAMPLES else 0
                 state = streaming.initialTdtState()
-                allTokens.clear()
+                resetTokens()
+                leadSamples = if (withLead) SHORT_UTT_LEAD_SILENCE_SAMPLES else 0
                 totalLogProbSum = 0.0
                 totalEmissions = 0
                 nextChunkStart = 0
@@ -1613,7 +1647,9 @@ class InferenceRepository(
             } else {
                 applyGrammarCorrection(base, engine.currentLanguage)
             }
-            send(toSend)
+            // The short-utterance attempt that won is the one decoded last, so [allTokens]
+            // holds its tokens.
+            send(if (wordTimings && toSend is TranscriptResult.Final) toSend.copy(words = alignWordTimings(toSend.text, rawWords())) else toSend)
         }
 
         audio.buffer(Channel.UNLIMITED).takeWhile { streamFailure == null }.collect { incoming ->
@@ -1632,13 +1668,16 @@ class InferenceRepository(
                 totalSamples = 0
                 bufferStart = 0
                 state = streaming.initialTdtState()
-                allTokens.clear()
+                resetTokens()
+                positions.clear()
+                leadSamples = 0
                 nextChunkStart = 0
                 totalLogProbSum = 0.0
                 totalEmissions = 0
                 return@collect
             }
 
+            if (wordTimings) positions.onAudio(totalSamples, incoming.timestampMs)
             buffer.addLast(incoming.samples)
             totalSamples += incoming.samples.size
             decodeReadyChunks()

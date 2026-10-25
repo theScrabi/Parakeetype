@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.ParcelFileDescriptor
 import android.os.RemoteException
 import android.speech.ModelDownloadListener
+import android.speech.RecognitionPart
 import android.speech.RecognitionService
 import android.speech.RecognitionSupport
 import android.speech.RecognizerIntent
@@ -27,6 +28,7 @@ import org.schabi.parakeetype.audio.PIPELINE_SAMPLE_RATE
 import org.schabi.parakeetype.audio.PcmFormat
 import org.schabi.parakeetype.audio.PermissionHelper
 import org.schabi.parakeetype.audio.VadFilter
+import org.schabi.parakeetype.inference.WordTiming
 import org.schabi.parakeetype.settings.model.ModelStorageManager
 
 private const val TAG = "ParakeetypeRecognition"
@@ -112,7 +114,7 @@ class ParakeetypeRecognitionService : RecognitionService() {
             audioContext = audioContext,
             inference = inference,
             options = options,
-            listener = CallbackListener(listener),
+            listener = CallbackListener(listener, options),
             scope = scope,
             clientAudio = clientAudio,
             languageDetector = TextClassifierLanguageDetector(this),
@@ -204,7 +206,10 @@ class ParakeetypeRecognitionService : RecognitionService() {
     }
 
     /** Forwards the session events to the client; a terminal event ends the session. */
-    private inner class CallbackListener(private val callback: Callback) : RecognitionSession.Listener {
+    private inner class CallbackListener(
+        private val callback: Callback,
+        private val options: RecognitionOptions,
+    ) : RecognitionSession.Listener {
         override fun onModelLoading(loading: Boolean) {
             if (loading) showToast(R.string.status_engine_loading, Toast.LENGTH_SHORT)
         }
@@ -222,16 +227,16 @@ class ParakeetypeRecognitionService : RecognitionService() {
 
         override fun onPartialResult(text: String) = callback.send { partialResults(resultsBundle(text, null)) }
         // Segmented sessions only exist on API 33+ (see RecognitionOptions.segmented).
-        override fun onSegmentResult(text: String, confidence: Float) {
+        override fun onSegmentResult(text: String, confidence: Float, words: List<WordTiming>) {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-            callback.send { segmentResults(resultsBundle(text, confidence)) }
+            callback.send { segmentResults(resultsBundle(text, confidence).withParts(words)) }
         }
 
         override fun onEndOfSpeech() = callback.send { endOfSpeech() }
 
-        override fun onResult(text: String, confidence: Float) {
+        override fun onResult(text: String, confidence: Float, words: List<WordTiming>) {
             endSession()
-            callback.send { results(resultsBundle(text, confidence)) }
+            callback.send { results(resultsBundle(text, confidence).withParts(words)) }
         }
 
         override fun onEndOfSegmentedSession() {
@@ -253,6 +258,13 @@ class ParakeetypeRecognitionService : RecognitionService() {
         private fun endSession() {
             session = null
         }
+
+        /** Adds [words] as `RECOGNITION_PARTS` (only requested on API 34+, see [RecognitionOptions.words]). */
+        private fun Bundle.withParts(words: List<WordTiming>) = apply {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE || words.isEmpty()) return@apply
+            val parts = wordParts(words, options.wordTiming, options.wordConfidence).map { it.toRecognitionPart() }
+            putParcelableArrayList(SpeechRecognizer.RECOGNITION_PARTS, ArrayList(parts))
+        }
     }
 }
 
@@ -271,6 +283,12 @@ private fun resultsBundle(text: String, confidence: Float?) = Bundle().apply {
     putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, arrayListOf(text))
     if (confidence != null) putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, floatArrayOf(confidence))
 }
+
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+private fun WordPart.toRecognitionPart(): RecognitionPart = RecognitionPart.Builder(text)
+    .setTimestampMillis(timestampMillis)
+    .setConfidenceLevel(confidenceLevel)
+    .build()
 
 /** Builds the `languageDetection` bundle. */
 private fun LanguageDetection.toBundle() = Bundle().apply {
