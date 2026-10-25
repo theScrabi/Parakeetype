@@ -194,7 +194,11 @@ class RecognitionSession(
         // awaitRepository() is still waiting for the model to load.
         val audio = Channel<AudioChunk>(if (clientAudio != null) CLIENT_AUDIO_QUEUE_CHUNKS else Channel.UNLIMITED)
         var levelChunks = 0
-        var readyReported = false
+        // Client audio is ready as soon as the session starts: clients (e.g. Duolingo) write
+        // to the pipe only after onReadyForSpeech, so waiting for the first frame deadlocks.
+        // The microphone is ready once the AudioRecord delivers its first frame.
+        var readyReported = clientAudio != null
+        if (readyReported) listener.onReadyForSpeech()
         val endpointer = endpointer()
         val onSpeechProbability = { probability: Float ->
             val event = endpointer?.onFrame(probability)
