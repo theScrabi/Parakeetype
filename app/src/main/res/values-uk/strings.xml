@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Модель не встановлено</string>
     <string name="home_model_ready_subtitle">Модель розпізнавання мовлення встановлена й готова до роботи.</string>
     <string name="home_model_not_downloaded_subtitle">Встановіть модель розпізнавання мовлення, щоб користуватися клавіатурою.</string>
+    <string name="home_recognizer_default">Системне голосове введення налаштовано</string>
+    <string name="home_recognizer_not_default">Системне голосове введення не налаштовано</string>
+    <string name="home_recognizer_default_subtitle">Інші застосунки використовують Parakeetype для перетворення мовлення на текст.</string>
+    <string name="home_recognizer_not_default_subtitle">Необов\'язково: виберіть Parakeetype як системне голосове введення, щоб ним могли користуватися інші застосунки.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Необов\'язково: у розділі «Мовлення» › «Голосове введення» виберіть Parakeetype, щоб ним могли користуватися інші застосунки.</string>
     <string name="home_pref_input">Мікрофон, режим запуску й розташування</string>
     <string name="home_pref_speech">Голосова активність, постобробка й памʼять моделі</string>
     <string name="home_pref_tools">Діагностика</string>

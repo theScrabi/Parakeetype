@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Modèle non installé</string>
     <string name="home_model_ready_subtitle">Un modèle de transcription est installé et prêt.</string>
     <string name="home_model_not_downloaded_subtitle">Installez un modèle de transcription pour utiliser le clavier.</string>
+    <string name="home_recognizer_default">Saisie vocale du système configurée</string>
+    <string name="home_recognizer_not_default">Saisie vocale du système non configurée</string>
+    <string name="home_recognizer_default_subtitle">Les autres applis utilisent Parakeetype pour la reconnaissance vocale.</string>
+    <string name="home_recognizer_not_default_subtitle">Facultatif : choisissez Parakeetype comme saisie vocale du système pour que les autres applis puissent l\'utiliser.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Facultatif : dans Voix › Saisie vocale, choisissez Parakeetype pour que les autres applis puissent l\'utiliser.</string>
     <string name="home_pref_input">Micro, mode de déclenchement &amp; disposition</string>
     <string name="home_pref_speech">Activité vocale, post-traitement &amp; mémoire du modèle</string>
     <string name="home_pref_tools">Diagnostic</string>

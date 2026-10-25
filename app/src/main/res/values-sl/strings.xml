@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model ni nameščen</string>
     <string name="home_model_ready_subtitle">Model za prepis je nameščen in pripravljen.</string>
     <string name="home_model_not_downloaded_subtitle">Za uporabo tipkovnice namestite model za prepis.</string>
+    <string name="home_recognizer_default">Sistemski glasovni vnos je nastavljen</string>
+    <string name="home_recognizer_not_default">Sistemski glasovni vnos ni nastavljen</string>
+    <string name="home_recognizer_default_subtitle">Druge aplikacije uporabljajo Parakeetype za pretvorbo govora v besedilo.</string>
+    <string name="home_recognizer_not_default_subtitle">Izbirno: izberite Parakeetype kot sistemski glasovni vnos, da ga lahko uporabljajo tudi druge aplikacije.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Izbirno: v razdelku Govor › Glasovni vnos izberite Parakeetype, da ga lahko uporabljajo tudi druge aplikacije.</string>
     <string name="home_pref_input">Mikrofon, način sprožitve &amp; postavitev</string>
     <string name="home_pref_speech">Zaznavanje govora, naknadna obdelava &amp; pomnilnik modela</string>
     <string name="home_pref_tools">Diagnostika</string>

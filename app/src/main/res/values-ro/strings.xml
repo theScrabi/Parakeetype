@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model neinstalat</string>
     <string name="home_model_ready_subtitle">Un model de transcriere este instalat și pregătit.</string>
     <string name="home_model_not_downloaded_subtitle">Instalați un model de transcriere pentru a folosi tastatura.</string>
+    <string name="home_recognizer_default">Intrarea vocală a sistemului este setată</string>
+    <string name="home_recognizer_not_default">Intrarea vocală a sistemului nu este setată</string>
+    <string name="home_recognizer_default_subtitle">Alte aplicații folosesc Parakeetype pentru conversia vorbirii în text.</string>
+    <string name="home_recognizer_not_default_subtitle">Opțional: selectați Parakeetype ca intrare vocală a sistemului pentru ca alte aplicații să îl poată folosi.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Opțional: în Vorbire › Intrare vocală, selectați Parakeetype pentru ca alte aplicații să îl poată folosi.</string>
     <string name="home_pref_input">Microfon, mod de declanșare &amp; aspect</string>
     <string name="home_pref_speech">Activitate vocală, post-procesare &amp; memoria modelului</string>
     <string name="home_pref_tools">Diagnosticare</string>

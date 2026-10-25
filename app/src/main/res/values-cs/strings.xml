@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model není nainstalován</string>
     <string name="home_model_ready_subtitle">Model pro přepis je nainstalován a připraven.</string>
     <string name="home_model_not_downloaded_subtitle">Chcete-li používat klávesnici, nainstalujte model pro přepis.</string>
+    <string name="home_recognizer_default">Systémový hlasový vstup nastaven</string>
+    <string name="home_recognizer_not_default">Systémový hlasový vstup není nastaven</string>
+    <string name="home_recognizer_default_subtitle">Ostatní aplikace používají Parakeetype pro převod řeči na text.</string>
+    <string name="home_recognizer_not_default_subtitle">Volitelné: vyberte Parakeetype jako systémový hlasový vstup, aby jej mohly používat i ostatní aplikace.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Volitelné: v části Řeč › Hlasový vstup vyberte Parakeetype, aby jej mohly používat i ostatní aplikace.</string>
     <string name="home_pref_input">Mikrofon, režim spouštění &amp; rozložení</string>
     <string name="home_pref_speech">Detekce hlasu, následné zpracování &amp; paměť modelu</string>
     <string name="home_pref_tools">Diagnostika</string>

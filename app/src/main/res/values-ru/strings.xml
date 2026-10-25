@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Модель не установлена</string>
     <string name="home_model_ready_subtitle">Модель распознавания речи установлена и готова к работе.</string>
     <string name="home_model_not_downloaded_subtitle">Установите модель распознавания речи, чтобы пользоваться клавиатурой.</string>
+    <string name="home_recognizer_default">Системный голосовой ввод настроен</string>
+    <string name="home_recognizer_not_default">Системный голосовой ввод не настроен</string>
+    <string name="home_recognizer_default_subtitle">Другие приложения используют Parakeetype для преобразования речи в текст.</string>
+    <string name="home_recognizer_not_default_subtitle">Необязательно: выберите Parakeetype в качестве системного голосового ввода, чтобы им могли пользоваться другие приложения.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Необязательно: в разделе «Речь» › «Голосовой ввод» выберите Parakeetype, чтобы им могли пользоваться другие приложения.</string>
     <string name="home_pref_input">Микрофон, режим запуска и расположение</string>
     <string name="home_pref_speech">Голосовая активность, постобработка и память модели</string>
     <string name="home_pref_tools">Диагностика</string>

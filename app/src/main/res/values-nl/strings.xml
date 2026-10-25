@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model niet geïnstalleerd</string>
     <string name="home_model_ready_subtitle">Er is een transcriptiemodel geïnstalleerd en gereed.</string>
     <string name="home_model_not_downloaded_subtitle">Installeer een transcriptiemodel om het toetsenbord te gebruiken.</string>
+    <string name="home_recognizer_default">Spraakinvoer van systeem ingesteld</string>
+    <string name="home_recognizer_not_default">Spraakinvoer van systeem niet ingesteld</string>
+    <string name="home_recognizer_default_subtitle">Andere apps gebruiken Parakeetype voor spraak-naar-tekst.</string>
+    <string name="home_recognizer_not_default_subtitle">Optioneel: kies Parakeetype als spraakinvoer van het systeem zodat andere apps het kunnen gebruiken.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Optioneel: kies onder Spraak › Spraakinvoer Parakeetype zodat andere apps het kunnen gebruiken.</string>
     <string name="home_pref_input">Microfoon, activeringsmodus &amp; indeling</string>
     <string name="home_pref_speech">Spraakactiviteit, nabewerking &amp; modelgeheugen</string>
     <string name="home_pref_tools">Diagnostiek</string>

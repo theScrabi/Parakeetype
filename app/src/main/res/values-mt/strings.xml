@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Mudell mhux installat</string>
     <string name="home_model_ready_subtitle">Mudell tat-traskrizzjoni huwa installat u lest.</string>
     <string name="home_model_not_downloaded_subtitle">Installa mudell tat-traskrizzjoni biex tuża t-tastiera.</string>
+    <string name="home_recognizer_default">Id-dħul bil-vuċi tas-sistema ssettjat</string>
+    <string name="home_recognizer_not_default">Id-dħul bil-vuċi tas-sistema mhux issettjat</string>
+    <string name="home_recognizer_default_subtitle">Apps oħra jużaw Parakeetype biex jikkonvertu d-diskors f\'test.</string>
+    <string name="home_recognizer_not_default_subtitle">Mhux obbligatorju: agħżel Parakeetype bħala d-dħul bil-vuċi tas-sistema biex apps oħra jkunu jistgħu jużawh.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Mhux obbligatorju: taħt Diskors › Dħul bil-vuċi, agħżel Parakeetype biex apps oħra jkunu jistgħu jużawh.</string>
     <string name="home_pref_input">Mikrofonu, Mod ta\' Attivazzjoni &amp; Tqassim</string>
     <string name="home_pref_speech">Attività tal-Vuċi, Post-Proċessar &amp; Memorja tal-Mudell</string>
     <string name="home_pref_tools">Dijanjostika</string>

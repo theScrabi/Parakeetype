@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model nie jest zainstalowany</string>
     <string name="home_model_ready_subtitle">Model transkrypcji jest zainstalowany i gotowy.</string>
     <string name="home_model_not_downloaded_subtitle">Zainstaluj model transkrypcji, aby korzystać z klawiatury.</string>
+    <string name="home_recognizer_default">Systemowe wprowadzanie głosowe ustawione</string>
+    <string name="home_recognizer_not_default">Systemowe wprowadzanie głosowe nie jest ustawione</string>
+    <string name="home_recognizer_default_subtitle">Inne aplikacje używają Parakeetype do zamiany mowy na tekst.</string>
+    <string name="home_recognizer_not_default_subtitle">Opcjonalnie: wybierz Parakeetype jako systemowe wprowadzanie głosowe, aby inne aplikacje mogły z niego korzystać.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Opcjonalnie: w sekcji Mowa › Rozpoznawanie mowy wybierz Parakeetype, aby inne aplikacje mogły z niego korzystać.</string>
     <string name="home_pref_input">Mikrofon, tryb wyzwalania &amp; układ</string>
     <string name="home_pref_speech">Wykrywanie mowy, przetwarzanie końcowe &amp; pamięć modelu</string>
     <string name="home_pref_tools">Diagnostyka</string>

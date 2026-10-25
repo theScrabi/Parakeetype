@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Modelis neįdiegtas</string>
     <string name="home_model_ready_subtitle">Transkribavimo modelis įdiegtas ir paruoštas.</string>
     <string name="home_model_not_downloaded_subtitle">Įdiekite transkribavimo modelį, kad galėtumėte naudoti klaviatūrą.</string>
+    <string name="home_recognizer_default">Sistemos balso įvestis nustatyta</string>
+    <string name="home_recognizer_not_default">Sistemos balso įvestis nenustatyta</string>
+    <string name="home_recognizer_default_subtitle">Kitos programos naudoja Parakeetype kalbai paversti tekstu.</string>
+    <string name="home_recognizer_not_default_subtitle">Neprivaloma: pasirinkite Parakeetype kaip sistemos balso įvestį, kad galėtų ją naudoti ir kitos programos.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Neprivaloma: skiltyje Kalba › Balso įvestis pasirinkite Parakeetype, kad galėtų ją naudoti ir kitos programos.</string>
     <string name="home_pref_input">Mikrofonas, paleidimo režimas &amp; išdėstymas</string>
     <string name="home_pref_speech">Balso aktyvumas, papildomas apdorojimas &amp; modelio atmintis</string>
     <string name="home_pref_tools">Diagnostika</string>

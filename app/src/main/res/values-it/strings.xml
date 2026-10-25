@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Modello non installato</string>
     <string name="home_model_ready_subtitle">Un modello di trascrizione è installato e pronto.</string>
     <string name="home_model_not_downloaded_subtitle">Installa un modello di trascrizione per usare la tastiera.</string>
+    <string name="home_recognizer_default">Input vocale di sistema impostato</string>
+    <string name="home_recognizer_not_default">Input vocale di sistema non impostato</string>
+    <string name="home_recognizer_default_subtitle">Le altre app usano Parakeetype per la trascrizione vocale.</string>
+    <string name="home_recognizer_not_default_subtitle">Facoltativo: seleziona Parakeetype come input vocale di sistema perché le altre app possano usarlo.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Facoltativo: in Voce › Input vocale seleziona Parakeetype perché le altre app possano usarlo.</string>
     <string name="home_pref_input">Microfono, modalità di attivazione &amp; layout</string>
     <string name="home_pref_speech">Attività vocale, post-elaborazione &amp; memoria del modello</string>
     <string name="home_pref_tools">Diagnostica</string>

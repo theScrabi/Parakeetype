@@ -62,6 +62,11 @@
     <string name="home_model_not_downloaded_subtitle">Installiere ein Transkriptionsmodell, um die Tastatur zu
         verwenden.
     </string>
+    <string name="home_recognizer_default">System-Spracheingabe eingerichtet</string>
+    <string name="home_recognizer_not_default">System-Spracheingabe nicht eingerichtet</string>
+    <string name="home_recognizer_default_subtitle">Andere Apps nutzen Parakeetype für die Spracherkennung.</string>
+    <string name="home_recognizer_not_default_subtitle">Optional: Wähle Parakeetype als System-Spracheingabe, damit andere Apps es nutzen können.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Optional: Wähle unter Sprache › Spracheingabe Parakeetype aus, damit andere Apps es nutzen können.</string>
     <string name="home_pref_input">Mikrofon, Auslösemodus &amp; Layout</string>
     <string name="home_pref_speech">Spracherkennung, Nachbearbeitung &amp; Modellspeicher</string>
     <string name="home_pref_tools">Diagnose</string>

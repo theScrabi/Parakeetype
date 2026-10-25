@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">A modell nincs telepítve</string>
     <string name="home_model_ready_subtitle">Egy átírási modell telepítve van és készen áll.</string>
     <string name="home_model_not_downloaded_subtitle">Telepítsen egy átírási modellt a billentyűzet használatához.</string>
+    <string name="home_recognizer_default">Rendszerszintű hangbevitel beállítva</string>
+    <string name="home_recognizer_not_default">Rendszerszintű hangbevitel nincs beállítva</string>
+    <string name="home_recognizer_default_subtitle">Más alkalmazások a Parakeetype-ot használják beszédfelismerésre.</string>
+    <string name="home_recognizer_not_default_subtitle">Opcionális: válassza a Parakeetype-ot rendszerszintű hangbevitelnek, hogy más alkalmazások is használhassák.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Opcionális: a Beszéd › Hangbevitel menüben válassza a Parakeetype-ot, hogy más alkalmazások is használhassák.</string>
     <string name="home_pref_input">Mikrofon, indítási mód &amp; elrendezés</string>
     <string name="home_pref_speech">Hangaktivitás, utófeldolgozás &amp; modellmemória</string>
     <string name="home_pref_tools">Diagnosztika</string>

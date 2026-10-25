@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Modelis nav instalēts</string>
     <string name="home_model_ready_subtitle">Transkripcijas modelis ir instalēts un gatavs.</string>
     <string name="home_model_not_downloaded_subtitle">Instalējiet transkripcijas modeli, lai izmantotu tastatūru.</string>
+    <string name="home_recognizer_default">Sistēmas balss ievade iestatīta</string>
+    <string name="home_recognizer_not_default">Sistēmas balss ievade nav iestatīta</string>
+    <string name="home_recognizer_default_subtitle">Citas lietotnes izmanto Parakeetype runas pārvēršanai tekstā.</string>
+    <string name="home_recognizer_not_default_subtitle">Pēc izvēles: izvēlieties Parakeetype kā sistēmas balss ievadi, lai to varētu izmantot arī citas lietotnes.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Pēc izvēles: sadaļā Runa › Balss ievade izvēlieties Parakeetype, lai to varētu izmantot arī citas lietotnes.</string>
     <string name="home_pref_input">Mikrofons, aktivizēšanas režīms &amp; izkārtojums</string>
     <string name="home_pref_speech">Balss aktivitāte, pēcapstrāde &amp; modeļa atmiņa</string>
     <string name="home_pref_tools">Diagnostika</string>

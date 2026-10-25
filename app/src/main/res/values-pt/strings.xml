@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Modelo não instalado</string>
     <string name="home_model_ready_subtitle">Está instalado um modelo de transcrição pronto a usar.</string>
     <string name="home_model_not_downloaded_subtitle">Instale um modelo de transcrição para utilizar o teclado.</string>
+    <string name="home_recognizer_default">Entrada de voz do sistema definida</string>
+    <string name="home_recognizer_not_default">Entrada de voz do sistema não definida</string>
+    <string name="home_recognizer_default_subtitle">Outras apps usam o Parakeetype para converter voz em texto.</string>
+    <string name="home_recognizer_not_default_subtitle">Opcional: selecione o Parakeetype como entrada de voz do sistema para que outras apps o possam usar.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Opcional: em Voz › Entrada de voz, selecione o Parakeetype para que outras apps o possam usar.</string>
     <string name="home_pref_input">Microfone, modo de ativação &amp; esquema</string>
     <string name="home_pref_speech">Atividade de voz, pós-processamento &amp; memória do modelo</string>
     <string name="home_pref_tools">Diagnóstico</string>

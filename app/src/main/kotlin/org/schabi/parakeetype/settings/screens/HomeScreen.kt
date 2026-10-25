@@ -6,11 +6,15 @@ import androidx.compose.material.icons.rounded.CloudDownload
 import androidx.compose.material.icons.rounded.Keyboard
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MicOff
+import androidx.compose.material.icons.rounded.RecordVoiceOver
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Warning
 import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -41,12 +45,13 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
 /**
  * The home / dashboard screen of the Parakeetype companion app.
  *
- * Shows the three setup requirements the user must fulfil before the keyboard works:
+ * Shows the setup steps:
  *  1. IME enabled in system settings
  *  2. Microphone permission granted
  *  3. Model installed
+ *  4. Parakeetype selected as the system's voice input (optional, for other apps)
  *
- * All three statuses are re-evaluated every time the screen comes into the foreground
+ * All statuses are re-evaluated every time the screen comes into the foreground
  * so that changes made in system Settings or the file system are reflected immediately.
  */
 @Composable
@@ -59,7 +64,7 @@ fun HomeScreen(
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
-    // Initialise from the live sources of truth (all three checks are
+    // Initialise from the live sources of truth (all checks are
     // synchronous and cheap) rather than from defaults. After a process-death
     // relaunch the ON_RESUME event may already have fired before this observer
     // is registered, so relying on it alone leaves the screen stuck on the
@@ -67,6 +72,7 @@ fun HomeScreen(
     var isImeEnabled by remember { mutableStateOf(isParakeetypeImeEnabled(context)) }
     var hasMicPermission by remember { mutableStateOf(PermissionHelper.hasRecordPermission(context)) }
     var isModelReady by remember { mutableStateOf(ModelRegistry.all.any { ModelStorageManager.isModelReady(context, it) }) }
+    var isDefaultRecognizer by remember { mutableStateOf(isParakeetypeDefaultRecognizer(context)) }
 
     val micPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -84,6 +90,7 @@ fun HomeScreen(
                 isImeEnabled = isParakeetypeImeEnabled(context)
                 hasMicPermission = PermissionHelper.hasRecordPermission(context)
                 isModelReady = ModelRegistry.all.any { ModelStorageManager.isModelReady(context, it) }
+                isDefaultRecognizer = isParakeetypeDefaultRecognizer(context)
             }
         }
         lifecycle.addObserver(observer)
@@ -94,8 +101,10 @@ fun HomeScreen(
         isImeEnabled = isImeEnabled,
         hasMicPermission = hasMicPermission,
         isModelReady = isModelReady,
+        isDefaultRecognizer = isDefaultRecognizer,
         onOpenImeSettings = { context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) },
         onRequestMicPermission = { micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO) },
+        onOpenVoiceInputSettings = { openVoiceInputSettings(context) },
         onNavigateToModel = onNavigateToModel,
         onNavigateToInput = onNavigateToInput,
         onNavigateToSpeech = onNavigateToSpeech,
@@ -108,8 +117,10 @@ private fun HomeScreenContent(
     isImeEnabled: Boolean,
     hasMicPermission: Boolean,
     isModelReady: Boolean,
+    isDefaultRecognizer: Boolean,
     onOpenImeSettings: () -> Unit,
     onRequestMicPermission: () -> Unit,
+    onOpenVoiceInputSettings: () -> Unit,
     onNavigateToModel: () -> Unit,
     onNavigateToInput: () -> Unit,
     onNavigateToSpeech: () -> Unit,
@@ -168,6 +179,22 @@ private fun HomeScreenContent(
             action = onNavigateToModel,
         )
 
+        // 4. System voice input - optional, lets other apps use Parakeetype for speech-to-text
+        StatusRow(
+            icon = if (isDefaultRecognizer) Icons.Rounded.RecordVoiceOver else Icons.Rounded.Warning,
+            iconTint = if (isDefaultRecognizer) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.error,
+            title = if (isDefaultRecognizer) stringResource(R.string.home_recognizer_default)
+            else stringResource(R.string.home_recognizer_not_default),
+            subtitle = when {
+                isDefaultRecognizer -> stringResource(R.string.home_recognizer_default_subtitle)
+                VOICE_INPUT_IN_LANGUAGE_SETTINGS -> stringResource(R.string.home_recognizer_not_default_speech_subtitle)
+                else -> stringResource(R.string.home_recognizer_not_default_subtitle)
+            },
+            actionLabel = stringResource(R.string.action_open_settings),
+            action = if (!isDefaultRecognizer) onOpenVoiceInputSettings else null,
+        )
+
         Spacer(Modifier.height(8.dp))
         HorizontalDivider()
         Spacer(Modifier.height(4.dp))
@@ -200,6 +227,47 @@ private fun HomeScreenContent(
 private fun isParakeetypeImeEnabled(context: Context): Boolean {
     val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     return imm.enabledInputMethodList.any { it.packageName == context.packageName }
+}
+
+/**
+ * Returns `true` if Parakeetype's `RecognitionService` is the system's voice input
+ * (`Settings.Secure.voice_recognition_service`, hidden but readable). `false` if the
+ * setting can't be read.
+ */
+private fun isParakeetypeDefaultRecognizer(context: Context): Boolean {
+    val service = try {
+        Settings.Secure.getString(context.contentResolver, "voice_recognition_service")
+    } catch (e: SecurityException) {
+        null
+    }
+    return service?.let { ComponentName.unflattenFromString(it) }?.packageName == context.packageName
+}
+
+/**
+ * Since Android 14 the voice-input picker sits in Settings › Language › Speech, a fragment no
+ * intent opens, and [Settings.ACTION_VOICE_INPUT_SETTINGS] shows the digital-assistant page
+ * instead. There the home screen opens the language settings and its subtitle names the path.
+ */
+private val VOICE_INPUT_IN_LANGUAGE_SETTINGS = Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+
+/**
+ * Opens the settings page holding the system's voice-input picker. Some devices don't implement
+ * that screen, so fall back to the Settings app itself.
+ */
+private fun openVoiceInputSettings(context: Context) {
+    val actions = listOf(
+        if (VOICE_INPUT_IN_LANGUAGE_SETTINGS) Settings.ACTION_LOCALE_SETTINGS
+        else Settings.ACTION_VOICE_INPUT_SETTINGS,
+        Settings.ACTION_SETTINGS,
+    )
+    for (action in actions) {
+        try {
+            context.startActivity(Intent(action))
+            return
+        } catch (e: ActivityNotFoundException) {
+            // try the next one
+        }
+    }
 }
 
 /** A labelled outlined button in the Configuration section of the home screen. */
@@ -268,8 +336,10 @@ private fun HomeScreenNothingSetupPreview() {
             isImeEnabled = false,
             hasMicPermission = false,
             isModelReady = false,
+            isDefaultRecognizer = false,
             onOpenImeSettings = {},
             onRequestMicPermission = {},
+            onOpenVoiceInputSettings = {},
             onNavigateToModel = {},
             onNavigateToInput = {},
             onNavigateToSpeech = {},
@@ -286,8 +356,10 @@ private fun HomeScreenAllReadyPreview() {
             isImeEnabled = true,
             hasMicPermission = true,
             isModelReady = true,
+            isDefaultRecognizer = true,
             onOpenImeSettings = {},
             onRequestMicPermission = {},
+            onOpenVoiceInputSettings = {},
             onNavigateToModel = {},
             onNavigateToInput = {},
             onNavigateToSpeech = {},
@@ -304,8 +376,10 @@ private fun HomeScreenPartialSetupPreview() {
             isImeEnabled = true,
             hasMicPermission = false,
             isModelReady = false,
+            isDefaultRecognizer = false,
             onOpenImeSettings = {},
             onRequestMicPermission = {},
+            onOpenVoiceInputSettings = {},
             onNavigateToModel = {},
             onNavigateToInput = {},
             onNavigateToSpeech = {},

@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Modellen är inte installerad</string>
     <string name="home_model_ready_subtitle">En transkriptionsmodell är installerad och redo.</string>
     <string name="home_model_not_downloaded_subtitle">Installera en transkriptionsmodell för att använda tangentbordet.</string>
+    <string name="home_recognizer_default">Systemets röstinmatning är inställd</string>
+    <string name="home_recognizer_not_default">Systemets röstinmatning är inte inställd</string>
+    <string name="home_recognizer_default_subtitle">Andra appar använder Parakeetype för tal-till-text.</string>
+    <string name="home_recognizer_not_default_subtitle">Valfritt: välj Parakeetype som systemets röstinmatning så att andra appar kan använda det.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Valfritt: välj Parakeetype under Tal › Röstinmatning så att andra appar kan använda det.</string>
     <string name="home_pref_input">Mikrofon, utlösarläge &amp; layout</string>
     <string name="home_pref_speech">Talaktivitet, efterbearbetning &amp; modellminne</string>
     <string name="home_pref_tools">Diagnostik</string>

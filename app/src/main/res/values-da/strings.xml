@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model ikke installeret</string>
     <string name="home_model_ready_subtitle">En transskriptionsmodel er installeret og klar.</string>
     <string name="home_model_not_downloaded_subtitle">Installer en transskriptionsmodel for at bruge tastaturet.</string>
+    <string name="home_recognizer_default">Systemets stemmeinput er indstillet</string>
+    <string name="home_recognizer_not_default">Systemets stemmeinput er ikke indstillet</string>
+    <string name="home_recognizer_default_subtitle">Andre apps bruger Parakeetype til tale-til-tekst.</string>
+    <string name="home_recognizer_not_default_subtitle">Valgfrit: vælg Parakeetype som systemets stemmeinput, så andre apps kan bruge det.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Valgfrit: Vælg Parakeetype under Tale › Stemmeinput, så andre apps kan bruge det.</string>
     <string name="home_pref_input">Mikrofon, udløsertilstand &amp; layout</string>
     <string name="home_pref_speech">Taleaktivitet, efterbehandling &amp; modelhukommelse</string>
     <string name="home_pref_tools">Diagnosticering</string>

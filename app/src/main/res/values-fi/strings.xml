@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Mallia ei ole asennettu</string>
     <string name="home_model_ready_subtitle">Litterointimalli on asennettu ja valmis.</string>
     <string name="home_model_not_downloaded_subtitle">Asenna litterointimalli, jotta voit käyttää näppäimistöä.</string>
+    <string name="home_recognizer_default">Järjestelmän puhesyöte asetettu</string>
+    <string name="home_recognizer_not_default">Järjestelmän puhesyötettä ei ole asetettu</string>
+    <string name="home_recognizer_default_subtitle">Muut sovellukset käyttävät Parakeetypea puheentunnistukseen.</string>
+    <string name="home_recognizer_not_default_subtitle">Valinnainen: valitse Parakeetype järjestelmän puhesyötteeksi, jotta muut sovellukset voivat käyttää sitä.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Valinnainen: valitse Parakeetype kohdassa Puhe › Puhesyöte, jotta muut sovellukset voivat käyttää sitä.</string>
     <string name="home_pref_input">Mikrofoni, käynnistystapa &amp; asettelu</string>
     <string name="home_pref_speech">Puheaktiivisuus, jälkikäsittely &amp; mallin muisti</string>
     <string name="home_pref_tools">Diagnostiikka</string>

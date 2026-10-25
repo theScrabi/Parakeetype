@@ -59,6 +59,11 @@
     <string name="home_model_not_downloaded">Model not installed</string>
     <string name="home_model_ready_subtitle">A transcription model is installed and ready.</string>
     <string name="home_model_not_downloaded_subtitle">Install a transcription model to use the keyboard.</string>
+    <string name="home_recognizer_default">System voice input set</string>
+    <string name="home_recognizer_not_default">System voice input not set</string>
+    <string name="home_recognizer_default_subtitle">Other apps use Parakeetype for speech-to-text.</string>
+    <string name="home_recognizer_not_default_subtitle">Optional: select Parakeetype as the system voice input so other apps can use it.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Optional: under Speech › Voice input, select Parakeetype so other apps can use it.</string>
     <string name="home_pref_input">Microphone, Trigger Mode &amp; Layout</string>
     <string name="home_pref_speech">Voice Activity, Post-Processing &amp; Model Memory</string>
     <string name="home_pref_tools">Diagnostics</string>

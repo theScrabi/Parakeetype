@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Το μοντέλο δεν έχει εγκατασταθεί</string>
     <string name="home_model_ready_subtitle">Ένα μοντέλο μεταγραφής είναι εγκατεστημένο και έτοιμο.</string>
     <string name="home_model_not_downloaded_subtitle">Εγκαταστήστε ένα μοντέλο μεταγραφής για να χρησιμοποιήσετε το πληκτρολόγιο.</string>
+    <string name="home_recognizer_default">Η φωνητική εισαγωγή συστήματος ορίστηκε</string>
+    <string name="home_recognizer_not_default">Η φωνητική εισαγωγή συστήματος δεν έχει οριστεί</string>
+    <string name="home_recognizer_default_subtitle">Άλλες εφαρμογές χρησιμοποιούν το Parakeetype για μετατροπή ομιλίας σε κείμενο.</string>
+    <string name="home_recognizer_not_default_subtitle">Προαιρετικό: επιλέξτε το Parakeetype ως φωνητική εισαγωγή συστήματος, ώστε να μπορούν να το χρησιμοποιούν και άλλες εφαρμογές.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Προαιρετικό: στην ενότητα Ομιλία › Φωνητική εισαγωγή, επιλέξτε το Parakeetype ώστε να μπορούν να το χρησιμοποιούν και άλλες εφαρμογές.</string>
     <string name="home_pref_input">Μικρόφωνο, λειτουργία ενεργοποίησης και διάταξη</string>
     <string name="home_pref_speech">Φωνητική δραστηριότητα, μεταεπεξεργασία και μνήμη μοντέλου</string>
     <string name="home_pref_tools">Διαγνωστικά</string>

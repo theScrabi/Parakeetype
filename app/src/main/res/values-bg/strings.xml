@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Моделът не е инсталиран</string>
     <string name="home_model_ready_subtitle">Модел за разпознаване на говор е инсталиран и готов за работа.</string>
     <string name="home_model_not_downloaded_subtitle">Инсталирайте модел за разпознаване на говор, за да използвате клавиатурата.</string>
+    <string name="home_recognizer_default">Системното гласово въвеждане е настроено</string>
+    <string name="home_recognizer_not_default">Системното гласово въвеждане не е настроено</string>
+    <string name="home_recognizer_default_subtitle">Други приложения използват Parakeetype за преобразуване на говор в текст.</string>
+    <string name="home_recognizer_not_default_subtitle">По избор: изберете Parakeetype за системно гласово въвеждане, за да могат други приложения да го използват.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">По избор: в „Говор“ › „Гласово въвеждане“ изберете Parakeetype, за да могат други приложения да го използват.</string>
     <string name="home_pref_input">Микрофон, режим на задействане и разположение</string>
     <string name="home_pref_speech">Гласова активност, последваща обработка и памет за модела</string>
     <string name="home_pref_tools">Диагностика</string>

@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Mudel pole installitud</string>
     <string name="home_model_ready_subtitle">Transkribeerimismudel on installitud ja valmis.</string>
     <string name="home_model_not_downloaded_subtitle">Klaviatuuri kasutamiseks installige transkribeerimismudel.</string>
+    <string name="home_recognizer_default">Süsteemi häälsisend on määratud</string>
+    <string name="home_recognizer_not_default">Süsteemi häälsisend pole määratud</string>
+    <string name="home_recognizer_default_subtitle">Teised rakendused kasutavad Parakeetype\'i kõne tekstiks teisendamiseks.</string>
+    <string name="home_recognizer_not_default_subtitle">Valikuline: valige Parakeetype süsteemi häälsisendiks, et teised rakendused saaksid seda kasutada.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Valikuline: valige jaotises Kõne › Häälsisend Parakeetype, et teised rakendused saaksid seda kasutada.</string>
     <string name="home_pref_input">Mikrofon, käivitusrežiim &amp; paigutus</string>
     <string name="home_pref_speech">Kõnetegevus, järeltöötlus &amp; mudeli mälu</string>
     <string name="home_pref_tools">Diagnostika</string>

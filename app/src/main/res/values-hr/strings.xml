@@ -60,6 +60,11 @@
     <string name="home_model_not_downloaded">Model nije instaliran</string>
     <string name="home_model_ready_subtitle">Model za transkripciju instaliran je i spreman.</string>
     <string name="home_model_not_downloaded_subtitle">Instalirajte model za transkripciju da biste mogli upotrebljavati tipkovnicu.</string>
+    <string name="home_recognizer_default">Glasovni unos sustava postavljen</string>
+    <string name="home_recognizer_not_default">Glasovni unos sustava nije postavljen</string>
+    <string name="home_recognizer_default_subtitle">Druge aplikacije koriste Parakeetype za pretvaranje govora u tekst.</string>
+    <string name="home_recognizer_not_default_subtitle">Neobavezno: odaberite Parakeetype kao glasovni unos sustava kako bi ga druge aplikacije mogle koristiti.</string>
+    <string name="home_recognizer_not_default_speech_subtitle">Neobavezno: u odjeljku Govor › Glasovni unos odaberite Parakeetype kako bi ga druge aplikacije mogle koristiti.</string>
     <string name="home_pref_input">Mikrofon, način okidanja &amp; raspored</string>
     <string name="home_pref_speech">Detekcija glasa, naknadna obrada &amp; memorija modela</string>
     <string name="home_pref_tools">Dijagnostika</string>
