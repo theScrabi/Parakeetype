@@ -18,8 +18,8 @@ configure<ApplicationExtension> {
         applicationId = "org.schabi.parakeetype"
         minSdk = 31
         targetSdk = 37
-        versionCode = 12
-        versionName = "0.4.0"
+        versionCode = 130
+        versionName = "0.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -173,14 +173,14 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.3.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.11.0")
     implementation("androidx.lifecycle:lifecycle-service:2.11.0")
-    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.31.0")
+    implementation("com.microsoft.onnxruntime:onnxruntime-android:1.31.1")
     implementation("com.github.woheller69:FreeDroidWarn:V1.14")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.11.0")
 
     // Real-audio integration tests: JVM ONNX Runtime + Robolectric for android.util.Log shim
-    testImplementation("com.microsoft.onnxruntime:onnxruntime:1.31.0")
+    testImplementation("com.microsoft.onnxruntime:onnxruntime:1.31.1")
     testImplementation("org.robolectric:robolectric:4.17")
     androidTestImplementation("androidx.test.ext:junit:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.7.0")

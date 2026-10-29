@@ -1,0 +1,5 @@
+Second Parakeetype release (v0.5.0).
+
+- Adds a word replacement table
+- Prompts the user to set this app as the default RecognitionService implementation
+- Improves the RecognitionService implementation: It can now detect the spoken language and transcribe audio streams coming from other apps. This is useful for Duolingo's “Words” exercise.
