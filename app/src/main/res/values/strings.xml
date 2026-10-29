@@ -38,6 +38,7 @@
     <string name="cd_active_model">Active model</string>
     <string name="cd_delete_model">Delete model</string>
     <string name="cd_delete_replacement">Delete replacement</string>
+    <string name="cd_more_options">More options</string>
     <string name="cd_status_error">Error</string>
     <string name="cd_talk_disabled">Talk button disabled - engine not ready</string>
     <string name="cd_talk_stop_continuous">Stop continuous recording</string>
@@ -125,6 +126,17 @@
     <string name="replacements_to_label">Replace with</string>
     <string name="replacements_to_hint">Leave empty to remove it.</string>
     <string name="replacements_removed">(removed)</string>
+    <string name="replacements_import">Import from file</string>
+    <string name="replacements_export">Export to file</string>
+    <string name="replacements_import_title">Import Replacements</string>
+    <string name="replacements_import_message">Add the file\'s replacements to your table, or replace your table with them? When adding, a replacement for a word that is already in the table overwrites it.</string>
+    <string name="replacements_import_add">Add</string>
+    <string name="replacements_import_replace">Replace</string>
+    <string name="replacements_imported">Replacements imported: %1$d</string>
+    <string name="replacements_exported">Replacements exported: %1$d</string>
+    <string name="replacements_import_failed">Could not read the file.</string>
+    <string name="replacements_import_empty">No replacements found in the file.</string>
+    <string name="replacements_export_failed">Could not write the file.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Speech Recognition Models</string>

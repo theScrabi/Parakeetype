@@ -18,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,6 +36,7 @@ import org.schabi.parakeetype.settings.screens.HomeScreen
 import org.schabi.parakeetype.settings.screens.InputPreferencesScreen
 import org.schabi.parakeetype.settings.screens.MicCalibrationScreen
 import org.schabi.parakeetype.settings.screens.ModelScreen
+import org.schabi.parakeetype.settings.screens.ReplacementsMenu
 import org.schabi.parakeetype.settings.screens.ReplacementsScreen
 import org.schabi.parakeetype.settings.screens.SpeechPreferencesScreen
 import org.schabi.parakeetype.settings.screens.ToolsPreferencesScreen
@@ -104,6 +106,13 @@ private fun SettingsNavHost(navController: NavHostController) {
                                 contentDescription = stringResource(R.string.cd_back),
                             )
                         }
+                    }
+                },
+                actions = {
+                    // Same back-stack entry, so it shares the screen's PreferencesViewModel.
+                    val entry = backStackEntry
+                    if (currentRoute == SettingsRoutes.REPLACEMENTS && entry != null) {
+                        ReplacementsMenu(viewModel = viewModel(viewModelStoreOwner = entry))
                     }
                 },
             )

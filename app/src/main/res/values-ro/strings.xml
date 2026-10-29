@@ -39,6 +39,7 @@
     <string name="cd_active_model">Model activ</string>
     <string name="cd_delete_model">Ștergeți modelul</string>
     <string name="cd_delete_replacement">Ștergeți înlocuirea</string>
+    <string name="cd_more_options">Mai multe opțiuni</string>
     <string name="cd_status_error">Eroare</string>
     <string name="cd_talk_disabled">Butonul de vorbire este dezactivat – motorul nu este pregătit</string>
     <string name="cd_talk_stop_continuous">Opriți înregistrarea continuă</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Înlocuiți cu</string>
     <string name="replacements_to_hint">Lăsați gol pentru a-l elimina.</string>
     <string name="replacements_removed">(eliminat)</string>
+    <string name="replacements_import">Importați din fișier</string>
+    <string name="replacements_export">Exportați în fișier</string>
+    <string name="replacements_import_title">Importați înlocuiri</string>
+    <string name="replacements_import_message">Adăugați înlocuirile din fișier la tabel sau înlocuiți tabelul cu ele? La adăugare, o înlocuire pentru un cuvânt care este deja în tabel o suprascrie pe cea existentă.</string>
+    <string name="replacements_import_add">Adăugați</string>
+    <string name="replacements_import_replace">Înlocuiți</string>
+    <string name="replacements_imported">Înlocuiri importate: %1$d</string>
+    <string name="replacements_exported">Înlocuiri exportate: %1$d</string>
+    <string name="replacements_import_failed">Fișierul nu a putut fi citit.</string>
+    <string name="replacements_import_empty">Nu s-au găsit înlocuiri în fișier.</string>
+    <string name="replacements_export_failed">Fișierul nu a putut fi scris.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modele de recunoaștere vocală</string>

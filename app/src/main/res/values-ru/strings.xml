@@ -39,6 +39,7 @@
     <string name="cd_active_model">Активная модель</string>
     <string name="cd_delete_model">Удалить модель</string>
     <string name="cd_delete_replacement">Удалить замену</string>
+    <string name="cd_more_options">Другие параметры</string>
     <string name="cd_status_error">Ошибка</string>
     <string name="cd_talk_disabled">Кнопка записи отключена – движок не готов</string>
     <string name="cd_talk_stop_continuous">Остановить непрерывную запись</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Заменить на</string>
     <string name="replacements_to_hint">Оставьте пустым, чтобы удалить.</string>
     <string name="replacements_removed">(удаляется)</string>
+    <string name="replacements_import">Импорт из файла</string>
+    <string name="replacements_export">Экспорт в файл</string>
+    <string name="replacements_import_title">Импорт замен</string>
+    <string name="replacements_import_message">Добавить замены из файла в таблицу или заменить ими таблицу? При добавлении замена для слова, которое уже есть в таблице, перезаписывает существующую.</string>
+    <string name="replacements_import_add">Добавить</string>
+    <string name="replacements_import_replace">Заменить</string>
+    <string name="replacements_imported">Импортировано замен: %1$d</string>
+    <string name="replacements_exported">Экспортировано замен: %1$d</string>
+    <string name="replacements_import_failed">Не удалось прочитать файл.</string>
+    <string name="replacements_import_empty">В файле не найдено замен.</string>
+    <string name="replacements_export_failed">Не удалось записать файл.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Модели распознавания речи</string>

@@ -39,6 +39,7 @@
     <string name="cd_active_model">Modelo activo</string>
     <string name="cd_delete_model">Eliminar modelo</string>
     <string name="cd_delete_replacement">Eliminar sustitución</string>
+    <string name="cd_more_options">Más opciones</string>
     <string name="cd_status_error">Error</string>
     <string name="cd_talk_disabled">Botón de hablar desactivado: el motor no está listo</string>
     <string name="cd_talk_stop_continuous">Detener grabación continua</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Sustituir por</string>
     <string name="replacements_to_hint">Déjalo vacío para eliminarla.</string>
     <string name="replacements_removed">(eliminado)</string>
+    <string name="replacements_import">Importar desde archivo</string>
+    <string name="replacements_export">Exportar a archivo</string>
+    <string name="replacements_import_title">Importar sustituciones</string>
+    <string name="replacements_import_message">¿Añadir las sustituciones del archivo a tu tabla o reemplazar la tabla con ellas? Al añadir, una sustitución para una palabra que ya está en la tabla sobrescribe la existente.</string>
+    <string name="replacements_import_add">Añadir</string>
+    <string name="replacements_import_replace">Reemplazar</string>
+    <string name="replacements_imported">Sustituciones importadas: %1$d</string>
+    <string name="replacements_exported">Sustituciones exportadas: %1$d</string>
+    <string name="replacements_import_failed">No se pudo leer el archivo.</string>
+    <string name="replacements_import_empty">No se encontraron sustituciones en el archivo.</string>
+    <string name="replacements_export_failed">No se pudo escribir el archivo.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modelos de reconocimiento de voz</string>

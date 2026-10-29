@@ -39,6 +39,7 @@
     <string name="cd_active_model">Ενεργό μοντέλο</string>
     <string name="cd_delete_model">Διαγραφή μοντέλου</string>
     <string name="cd_delete_replacement">Διαγραφή αντικατάστασης</string>
+    <string name="cd_more_options">Περισσότερες επιλογές</string>
     <string name="cd_status_error">Σφάλμα</string>
     <string name="cd_talk_disabled">Το κουμπί ομιλίας είναι απενεργοποιημένο – η μηχανή δεν είναι έτοιμη</string>
     <string name="cd_talk_stop_continuous">Διακοπή συνεχούς εγγραφής</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Αντικατάσταση με</string>
     <string name="replacements_to_hint">Αφήστε το κενό για να αφαιρεθεί.</string>
     <string name="replacements_removed">(αφαιρείται)</string>
+    <string name="replacements_import">Εισαγωγή από αρχείο</string>
+    <string name="replacements_export">Εξαγωγή σε αρχείο</string>
+    <string name="replacements_import_title">Εισαγωγή αντικαταστάσεων</string>
+    <string name="replacements_import_message">Να προστεθούν οι αντικαταστάσεις του αρχείου στον πίνακά σας ή να τον αντικαταστήσουν; Κατά την προσθήκη, μια αντικατάσταση για λέξη που υπάρχει ήδη στον πίνακα αντικαθιστά την υπάρχουσα.</string>
+    <string name="replacements_import_add">Προσθήκη</string>
+    <string name="replacements_import_replace">Αντικατάσταση</string>
+    <string name="replacements_imported">Αντικαταστάσεις που εισήχθησαν: %1$d</string>
+    <string name="replacements_exported">Αντικαταστάσεις που εξήχθησαν: %1$d</string>
+    <string name="replacements_import_failed">Δεν ήταν δυνατή η ανάγνωση του αρχείου.</string>
+    <string name="replacements_import_empty">Δεν βρέθηκαν αντικαταστάσεις στο αρχείο.</string>
+    <string name="replacements_export_failed">Δεν ήταν δυνατή η εγγραφή του αρχείου.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Μοντέλα αναγνώρισης ομιλίας</string>

@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktives Modell</string>
     <string name="cd_delete_model">Modell löschen</string>
     <string name="cd_delete_replacement">Ersetzung löschen</string>
+    <string name="cd_more_options">Weitere Optionen</string>
     <string name="cd_status_error">Fehler</string>
     <string name="cd_talk_disabled">Sprechtaste deaktiviert – Engine nicht bereit</string>
     <string name="cd_talk_stop_continuous">Daueraufnahme beenden</string>
@@ -129,6 +130,17 @@
     <string name="replacements_to_label">Ersetzen durch</string>
     <string name="replacements_to_hint">Leer lassen, um es zu entfernen.</string>
     <string name="replacements_removed">(entfernt)</string>
+    <string name="replacements_import">Aus Datei importieren</string>
+    <string name="replacements_export">In Datei exportieren</string>
+    <string name="replacements_import_title">Ersetzungen importieren</string>
+    <string name="replacements_import_message">Die Ersetzungen aus der Datei zu deiner Tabelle hinzufügen oder deine Tabelle durch sie ersetzen? Beim Hinzufügen überschreibt eine Ersetzung für ein Wort, das schon in der Tabelle steht, die vorhandene.</string>
+    <string name="replacements_import_add">Hinzufügen</string>
+    <string name="replacements_import_replace">Ersetzen</string>
+    <string name="replacements_imported">Importierte Ersetzungen: %1$d</string>
+    <string name="replacements_exported">Exportierte Ersetzungen: %1$d</string>
+    <string name="replacements_import_failed">Die Datei konnte nicht gelesen werden.</string>
+    <string name="replacements_import_empty">Keine Ersetzungen in der Datei gefunden.</string>
+    <string name="replacements_export_failed">Die Datei konnte nicht geschrieben werden.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Spracherkennungsmodelle</string>

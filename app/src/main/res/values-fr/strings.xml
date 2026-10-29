@@ -39,6 +39,7 @@
     <string name="cd_active_model">Modèle actif</string>
     <string name="cd_delete_model">Supprimer le modèle</string>
     <string name="cd_delete_replacement">Supprimer le remplacement</string>
+    <string name="cd_more_options">Plus d\'options</string>
     <string name="cd_status_error">Erreur</string>
     <string name="cd_talk_disabled">Bouton Parler désactivé – moteur non prêt</string>
     <string name="cd_talk_stop_continuous">Arrêter l\'enregistrement continu</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Remplacer par</string>
     <string name="replacements_to_hint">Laissez vide pour le supprimer.</string>
     <string name="replacements_removed">(supprimé)</string>
+    <string name="replacements_import">Importer depuis un fichier</string>
+    <string name="replacements_export">Exporter vers un fichier</string>
+    <string name="replacements_import_title">Importer des remplacements</string>
+    <string name="replacements_import_message">Ajouter les remplacements du fichier à votre table ou remplacer la table par ceux-ci ? En cas d\'ajout, un remplacement pour un mot déjà présent dans la table écrase l\'existant.</string>
+    <string name="replacements_import_add">Ajouter</string>
+    <string name="replacements_import_replace">Remplacer</string>
+    <string name="replacements_imported">Remplacements importés : %1$d</string>
+    <string name="replacements_exported">Remplacements exportés : %1$d</string>
+    <string name="replacements_import_failed">Impossible de lire le fichier.</string>
+    <string name="replacements_import_empty">Aucun remplacement trouvé dans le fichier.</string>
+    <string name="replacements_export_failed">Impossible d\'écrire le fichier.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modèles de reconnaissance vocale</string>

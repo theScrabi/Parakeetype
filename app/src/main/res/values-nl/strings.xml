@@ -39,6 +39,7 @@
     <string name="cd_active_model">Actief model</string>
     <string name="cd_delete_model">Model verwijderen</string>
     <string name="cd_delete_replacement">Vervanging verwijderen</string>
+    <string name="cd_more_options">Meer opties</string>
     <string name="cd_status_error">Fout</string>
     <string name="cd_talk_disabled">Spreekknop uitgeschakeld - engine niet gereed</string>
     <string name="cd_talk_stop_continuous">Doorlopende opname stoppen</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Vervangen door</string>
     <string name="replacements_to_hint">Laat leeg om het te verwijderen.</string>
     <string name="replacements_removed">(verwijderd)</string>
+    <string name="replacements_import">Importeren uit bestand</string>
+    <string name="replacements_export">Exporteren naar bestand</string>
+    <string name="replacements_import_title">Vervangingen importeren</string>
+    <string name="replacements_import_message">De vervangingen uit het bestand aan je tabel toevoegen of je tabel ermee vervangen? Bij toevoegen overschrijft een vervanging voor een woord dat al in de tabel staat de bestaande.</string>
+    <string name="replacements_import_add">Toevoegen</string>
+    <string name="replacements_import_replace">Vervangen</string>
+    <string name="replacements_imported">Geïmporteerde vervangingen: %1$d</string>
+    <string name="replacements_exported">Geëxporteerde vervangingen: %1$d</string>
+    <string name="replacements_import_failed">Het bestand kon niet worden gelezen.</string>
+    <string name="replacements_import_empty">Geen vervangingen gevonden in het bestand.</string>
+    <string name="replacements_export_failed">Het bestand kon niet worden geschreven.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Spraakherkenningsmodellen</string>

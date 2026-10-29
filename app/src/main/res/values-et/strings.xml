@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktiivne mudel</string>
     <string name="cd_delete_model">Kustuta mudel</string>
     <string name="cd_delete_replacement">Kustuta asendus</string>
+    <string name="cd_more_options">Rohkem valikuid</string>
     <string name="cd_status_error">Viga</string>
     <string name="cd_talk_disabled">Rääkimisnupp on keelatud - mootor pole valmis</string>
     <string name="cd_talk_stop_continuous">Peata pidev salvestamine</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Asenda sõnaga</string>
     <string name="replacements_to_hint">Jätke tühjaks, et see eemaldada.</string>
     <string name="replacements_removed">(eemaldatud)</string>
+    <string name="replacements_import">Impordi failist</string>
+    <string name="replacements_export">Ekspordi faili</string>
+    <string name="replacements_import_title">Asenduste importimine</string>
+    <string name="replacements_import_message">Kas lisada faili asendused tabelisse või asendada tabel nendega? Lisamisel kirjutab asendus sõnale, mis on juba tabelis, olemasoleva üle.</string>
+    <string name="replacements_import_add">Lisa</string>
+    <string name="replacements_import_replace">Asenda</string>
+    <string name="replacements_imported">Imporditud asendusi: %1$d</string>
+    <string name="replacements_exported">Eksporditud asendusi: %1$d</string>
+    <string name="replacements_import_failed">Faili ei saanud lugeda.</string>
+    <string name="replacements_import_empty">Failist ei leitud asendusi.</string>
+    <string name="replacements_export_failed">Faili ei saanud kirjutada.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Kõnetuvastusmudelid</string>

@@ -79,6 +79,84 @@ class TextReplacements(rules: List<TextReplacement>) {
                 if (tab < 0) null else TextReplacement(line.substring(0, tab), line.substring(tab + 1))
             }
 
+        /**
+         * [existing] with [imported] added: an imported rule for a phrase that is already in
+         * the table replaces that rule in place, the others are appended in their order.
+         */
+        fun merge(existing: List<TextReplacement>, imported: List<TextReplacement>): List<TextReplacement> {
+            val merged = existing.toMutableList()
+            val indexByKey = mutableMapOf<String, Int>()
+            merged.forEachIndexed { i, rule -> indexByKey.putIfAbsent(key(rule.from), i) }
+            for (rule in imported) {
+                val index = indexByKey[key(rule.from)]
+                if (index != null) {
+                    merged[index] = rule
+                } else {
+                    indexByKey[key(rule.from)] = merged.size
+                    merged += rule
+                }
+            }
+            return merged
+        }
+
+        /** Writes [rules] as CSV (RFC 4180) for export: one `from,to` record per rule, no header. */
+        fun toCsv(rules: List<TextReplacement>): String = rules.joinToString("") {
+            "${csvField(it.from)},${csvField(it.to)}\r\n"
+        }
+
+        /**
+         * Reads an exported (or hand-written) table: the first two fields of every CSV record,
+         * quoted or not. Spreadsheets in locales with a decimal comma separate fields with `;`,
+         * so `;` and tab are accepted too — whichever delimiter splits the most records into
+         * two fields wins. Records without a phrase are skipped.
+         */
+        fun fromCsv(csv: String): List<TextReplacement> {
+            val text = csv.removePrefix("﻿")
+            return CSV_DELIMITERS
+                .map { parseCsv(text, it) }
+                .maxBy { records -> records.count { it.size >= 2 } }
+                .filter { it.size >= 2 }
+                .map { TextReplacement(it[0].toSingleLine().trim(), it[1].toSingleLine().trim()) }
+                .filter { it.from.isNotEmpty() }
+        }
+
+        private val CSV_DELIMITERS = listOf(',', ';', '\t')
+
+        private fun csvField(value: String): String =
+            if (value.none { it == '"' || it in CSV_DELIMITERS }) value
+            else "\"${value.replace("\"", "\"\"")}\""
+
+        private fun parseCsv(text: String, delimiter: Char): List<List<String>> {
+            val records = mutableListOf<List<String>>()
+            var fields = mutableListOf<String>()
+            val field = StringBuilder()
+            var quoted = false
+            var i = 0
+            while (i < text.length) {
+                val c = text[i]
+                when {
+                    quoted -> when {
+                        c != '"' -> field.append(c)
+                        text.getOrNull(i + 1) == '"' -> { field.append('"'); i++ }
+                        else -> quoted = false
+                    }
+                    c == '"' -> quoted = true
+                    c == delimiter -> { fields += field.toString(); field.clear() }
+                    c == '\r' || c == '\n' -> {
+                        if (c == '\r' && text.getOrNull(i + 1) == '\n') i++
+                        fields += field.toString()
+                        field.clear()
+                        records += fields
+                        fields = mutableListOf()
+                    }
+                    else -> field.append(c)
+                }
+                i++
+            }
+            if (field.isNotEmpty() || fields.isNotEmpty()) records += fields + field.toString()
+            return records
+        }
+
         private fun String.toSingleLine(): String = replace(Regex("""[\t\r\n]+"""), " ")
     }
 }

@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktivni model</string>
     <string name="cd_delete_model">Izbriši model</string>
     <string name="cd_delete_replacement">Izbriši zamenjavo</string>
+    <string name="cd_more_options">Več možnosti</string>
     <string name="cd_status_error">Napaka</string>
     <string name="cd_talk_disabled">Gumb za govor je onemogočen – pogon ni pripravljen</string>
     <string name="cd_talk_stop_continuous">Ustavi neprekinjeno snemanje</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Zamenjaj z</string>
     <string name="replacements_to_hint">Pustite prazno, da se odstrani.</string>
     <string name="replacements_removed">(odstranjeno)</string>
+    <string name="replacements_import">Uvozi iz datoteke</string>
+    <string name="replacements_export">Izvozi v datoteko</string>
+    <string name="replacements_import_title">Uvoz zamenjav</string>
+    <string name="replacements_import_message">Želite zamenjave iz datoteke dodati v tabelo ali z njimi zamenjati tabelo? Pri dodajanju zamenjava za besedo, ki je že v tabeli, prepiše obstoječo.</string>
+    <string name="replacements_import_add">Dodaj</string>
+    <string name="replacements_import_replace">Zamenjaj</string>
+    <string name="replacements_imported">Uvožene zamenjave: %1$d</string>
+    <string name="replacements_exported">Izvožene zamenjave: %1$d</string>
+    <string name="replacements_import_failed">Datoteke ni bilo mogoče prebrati.</string>
+    <string name="replacements_import_empty">V datoteki ni zamenjav.</string>
+    <string name="replacements_export_failed">Datoteke ni bilo mogoče zapisati.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modeli za prepoznavanje govora</string>

@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktívny model</string>
     <string name="cd_delete_model">Odstrániť model</string>
     <string name="cd_delete_replacement">Odstrániť nahradenie</string>
+    <string name="cd_more_options">Ďalšie možnosti</string>
     <string name="cd_status_error">Chyba</string>
     <string name="cd_talk_disabled">Tlačidlo hovorenia je vypnuté – modul nie je pripravený</string>
     <string name="cd_talk_stop_continuous">Zastaviť nepretržité nahrávanie</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Nahradiť za</string>
     <string name="replacements_to_hint">Nechajte prázdne na odstránenie.</string>
     <string name="replacements_removed">(odstránené)</string>
+    <string name="replacements_import">Importovať zo súboru</string>
+    <string name="replacements_export">Exportovať do súboru</string>
+    <string name="replacements_import_title">Importovať nahradenia</string>
+    <string name="replacements_import_message">Pridať nahradenia zo súboru do tabuľky, alebo nimi tabuľku nahradiť? Pri pridaní prepíše nahradenie pre slovo, ktoré už v tabuľke je, to existujúce.</string>
+    <string name="replacements_import_add">Pridať</string>
+    <string name="replacements_import_replace">Nahradiť</string>
+    <string name="replacements_imported">Importované nahradenia: %1$d</string>
+    <string name="replacements_exported">Exportované nahradenia: %1$d</string>
+    <string name="replacements_import_failed">Súbor sa nepodarilo prečítať.</string>
+    <string name="replacements_import_empty">V súbore sa nenašli žiadne nahradenia.</string>
+    <string name="replacements_export_failed">Súbor sa nepodarilo zapísať.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modely rozpoznávania reči</string>

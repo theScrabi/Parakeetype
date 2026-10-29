@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktivní model</string>
     <string name="cd_delete_model">Smazat model</string>
     <string name="cd_delete_replacement">Smazat nahrazení</string>
+    <string name="cd_more_options">Další možnosti</string>
     <string name="cd_status_error">Chyba</string>
     <string name="cd_talk_disabled">Tlačítko mluvení je vypnuté – modul není připraven</string>
     <string name="cd_talk_stop_continuous">Zastavit nepřetržité nahrávání</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Nahradit za</string>
     <string name="replacements_to_hint">Ponechte prázdné pro odstranění.</string>
     <string name="replacements_removed">(odstraněno)</string>
+    <string name="replacements_import">Importovat ze souboru</string>
+    <string name="replacements_export">Exportovat do souboru</string>
+    <string name="replacements_import_title">Importovat nahrazení</string>
+    <string name="replacements_import_message">Přidat nahrazení ze souboru do tabulky, nebo jimi tabulku nahradit? Při přidání přepíše nahrazení pro slovo, které už v tabulce je, to stávající.</string>
+    <string name="replacements_import_add">Přidat</string>
+    <string name="replacements_import_replace">Nahradit</string>
+    <string name="replacements_imported">Importovaná nahrazení: %1$d</string>
+    <string name="replacements_exported">Exportovaná nahrazení: %1$d</string>
+    <string name="replacements_import_failed">Soubor nelze přečíst.</string>
+    <string name="replacements_import_empty">V souboru nebyla nalezena žádná nahrazení.</string>
+    <string name="replacements_export_failed">Soubor nelze zapsat.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modely rozpoznávání řeči</string>

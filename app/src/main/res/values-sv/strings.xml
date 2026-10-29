@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktiv modell</string>
     <string name="cd_delete_model">Radera modell</string>
     <string name="cd_delete_replacement">Ta bort ersättning</string>
+    <string name="cd_more_options">Fler alternativ</string>
     <string name="cd_status_error">Fel</string>
     <string name="cd_talk_disabled">Talknappen är inaktiverad - motorn är inte redo</string>
     <string name="cd_talk_stop_continuous">Stoppa kontinuerlig inspelning</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Ersätt med</string>
     <string name="replacements_to_hint">Lämna tomt för att ta bort det.</string>
     <string name="replacements_removed">(tas bort)</string>
+    <string name="replacements_import">Importera från fil</string>
+    <string name="replacements_export">Exportera till fil</string>
+    <string name="replacements_import_title">Importera ersättningar</string>
+    <string name="replacements_import_message">Lägga till filens ersättningar i tabellen eller ersätta tabellen med dem? Vid tillägg skriver en ersättning för ett ord som redan finns i tabellen över den befintliga.</string>
+    <string name="replacements_import_add">Lägg till</string>
+    <string name="replacements_import_replace">Ersätt</string>
+    <string name="replacements_imported">Importerade ersättningar: %1$d</string>
+    <string name="replacements_exported">Exporterade ersättningar: %1$d</string>
+    <string name="replacements_import_failed">Filen kunde inte läsas.</string>
+    <string name="replacements_import_empty">Inga ersättningar hittades i filen.</string>
+    <string name="replacements_export_failed">Filen kunde inte skrivas.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Taligenkänningsmodeller</string>

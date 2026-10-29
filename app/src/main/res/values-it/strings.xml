@@ -39,6 +39,7 @@
     <string name="cd_active_model">Modello attivo</string>
     <string name="cd_delete_model">Elimina modello</string>
     <string name="cd_delete_replacement">Elimina sostituzione</string>
+    <string name="cd_more_options">Altre opzioni</string>
     <string name="cd_status_error">Errore</string>
     <string name="cd_talk_disabled">Pulsante Parla disattivato – motore non pronto</string>
     <string name="cd_talk_stop_continuous">Interrompi registrazione continua</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Sostituisci con</string>
     <string name="replacements_to_hint">Lascia vuoto per rimuoverla.</string>
     <string name="replacements_removed">(rimosso)</string>
+    <string name="replacements_import">Importa da file</string>
+    <string name="replacements_export">Esporta su file</string>
+    <string name="replacements_import_title">Importa sostituzioni</string>
+    <string name="replacements_import_message">Aggiungere le sostituzioni del file alla tabella o sostituire la tabella con esse? Aggiungendo, una sostituzione per una parola già presente nella tabella sovrascrive quella esistente.</string>
+    <string name="replacements_import_add">Aggiungi</string>
+    <string name="replacements_import_replace">Sostituisci</string>
+    <string name="replacements_imported">Sostituzioni importate: %1$d</string>
+    <string name="replacements_exported">Sostituzioni esportate: %1$d</string>
+    <string name="replacements_import_failed">Impossibile leggere il file.</string>
+    <string name="replacements_import_empty">Nessuna sostituzione trovata nel file.</string>
+    <string name="replacements_export_failed">Impossibile scrivere il file.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modelli di riconoscimento vocale</string>

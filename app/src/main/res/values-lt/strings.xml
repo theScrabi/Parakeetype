@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktyvus modelis</string>
     <string name="cd_delete_model">Ištrinti modelį</string>
     <string name="cd_delete_replacement">Ištrinti pakeitimą</string>
+    <string name="cd_more_options">Daugiau parinkčių</string>
     <string name="cd_status_error">Klaida</string>
     <string name="cd_talk_disabled">Kalbėjimo mygtukas išjungtas – variklis neparuoštas</string>
     <string name="cd_talk_stop_continuous">Sustabdyti nepertraukiamą įrašymą</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Pakeisti į</string>
     <string name="replacements_to_hint">Palikite tuščią, kad būtų pašalinta.</string>
     <string name="replacements_removed">(pašalinta)</string>
+    <string name="replacements_import">Importuoti iš failo</string>
+    <string name="replacements_export">Eksportuoti į failą</string>
+    <string name="replacements_import_title">Importuoti pakeitimus</string>
+    <string name="replacements_import_message">Pridėti failo pakeitimus prie lentelės ar pakeisti jais lentelę? Pridedant, žodžio, kuris jau yra lentelėje, pakeitimas perrašo esamą.</string>
+    <string name="replacements_import_add">Pridėti</string>
+    <string name="replacements_import_replace">Pakeisti</string>
+    <string name="replacements_imported">Importuota pakeitimų: %1$d</string>
+    <string name="replacements_exported">Eksportuota pakeitimų: %1$d</string>
+    <string name="replacements_import_failed">Nepavyko perskaityti failo.</string>
+    <string name="replacements_import_empty">Faile nerasta pakeitimų.</string>
+    <string name="replacements_export_failed">Nepavyko įrašyti failo.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Kalbos atpažinimo modeliai</string>

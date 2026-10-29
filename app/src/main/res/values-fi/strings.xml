@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktiivinen malli</string>
     <string name="cd_delete_model">Poista malli</string>
     <string name="cd_delete_replacement">Poista korvaus</string>
+    <string name="cd_more_options">Lisää vaihtoehtoja</string>
     <string name="cd_status_error">Virhe</string>
     <string name="cd_talk_disabled">Puhepainike ei käytössä - moottori ei ole valmis</string>
     <string name="cd_talk_stop_continuous">Lopeta jatkuva tallennus</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Korvaa tekstillä</string>
     <string name="replacements_to_hint">Jätä tyhjäksi poistaaksesi sen.</string>
     <string name="replacements_removed">(poistetaan)</string>
+    <string name="replacements_import">Tuo tiedostosta</string>
+    <string name="replacements_export">Vie tiedostoon</string>
+    <string name="replacements_import_title">Tuo korvaukset</string>
+    <string name="replacements_import_message">Lisätäänkö tiedoston korvaukset taulukkoon vai korvataanko taulukko niillä? Lisättäessä taulukossa jo olevan sanan korvaus korvaa nykyisen.</string>
+    <string name="replacements_import_add">Lisää</string>
+    <string name="replacements_import_replace">Korvaa</string>
+    <string name="replacements_imported">Tuotuja korvauksia: %1$d</string>
+    <string name="replacements_exported">Vietyjä korvauksia: %1$d</string>
+    <string name="replacements_import_failed">Tiedostoa ei voitu lukea.</string>
+    <string name="replacements_import_empty">Tiedostosta ei löytynyt korvauksia.</string>
+    <string name="replacements_export_failed">Tiedostoa ei voitu kirjoittaa.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Puheentunnistusmallit</string>

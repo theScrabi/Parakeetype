@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktiv model</string>
     <string name="cd_delete_model">Slet model</string>
     <string name="cd_delete_replacement">Slet udskiftning</string>
+    <string name="cd_more_options">Flere muligheder</string>
     <string name="cd_status_error">Fejl</string>
     <string name="cd_talk_disabled">Taleknap deaktiveret - motoren er ikke klar</string>
     <string name="cd_talk_stop_continuous">Stop kontinuerlig optagelse</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Erstat med</string>
     <string name="replacements_to_hint">Lad feltet være tomt for at fjerne det.</string>
     <string name="replacements_removed">(fjernet)</string>
+    <string name="replacements_import">Importér fra fil</string>
+    <string name="replacements_export">Eksportér til fil</string>
+    <string name="replacements_import_title">Importér udskiftninger</string>
+    <string name="replacements_import_message">Vil du tilføje filens udskiftninger til din tabel eller erstatte tabellen med dem? Ved tilføjelse overskriver en udskiftning for et ord, der allerede er i tabellen, den eksisterende.</string>
+    <string name="replacements_import_add">Tilføj</string>
+    <string name="replacements_import_replace">Erstat</string>
+    <string name="replacements_imported">Importerede udskiftninger: %1$d</string>
+    <string name="replacements_exported">Eksporterede udskiftninger: %1$d</string>
+    <string name="replacements_import_failed">Filen kunne ikke læses.</string>
+    <string name="replacements_import_empty">Ingen udskiftninger fundet i filen.</string>
+    <string name="replacements_export_failed">Filen kunne ikke skrives.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Talegenkendelsesmodeller</string>

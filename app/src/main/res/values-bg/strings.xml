@@ -39,6 +39,7 @@
     <string name="cd_active_model">Активен модел</string>
     <string name="cd_delete_model">Изтриване на модела</string>
     <string name="cd_delete_replacement">Изтриване на замяната</string>
+    <string name="cd_more_options">Още опции</string>
     <string name="cd_status_error">Грешка</string>
     <string name="cd_talk_disabled">Бутонът за запис е деактивиран – механизмът за разпознаване не е готов</string>
     <string name="cd_talk_stop_continuous">Спиране на непрекъснатия запис</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Замяна с</string>
     <string name="replacements_to_hint">Оставете празно, за да се премахне.</string>
     <string name="replacements_removed">(премахнато)</string>
+    <string name="replacements_import">Импортиране от файл</string>
+    <string name="replacements_export">Експортиране във файл</string>
+    <string name="replacements_import_title">Импортиране на замени</string>
+    <string name="replacements_import_message">Да се добавят ли замените от файла към таблицата, или да заменят таблицата? При добавяне замяна за дума, която вече е в таблицата, я презаписва.</string>
+    <string name="replacements_import_add">Добавяне</string>
+    <string name="replacements_import_replace">Замяна</string>
+    <string name="replacements_imported">Импортирани замени: %1$d</string>
+    <string name="replacements_exported">Експортирани замени: %1$d</string>
+    <string name="replacements_import_failed">Файлът не може да бъде прочетен.</string>
+    <string name="replacements_import_empty">Във файла няма замени.</string>
+    <string name="replacements_export_failed">Файлът не може да бъде записан.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Модели за разпознаване на говор</string>

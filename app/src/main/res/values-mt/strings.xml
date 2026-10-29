@@ -39,6 +39,7 @@
     <string name="cd_active_model">Mudell attiv</string>
     <string name="cd_delete_model">Ħassar il-mudell</string>
     <string name="cd_delete_replacement">Ħassar is-sostituzzjoni</string>
+    <string name="cd_more_options">Aktar għażliet</string>
     <string name="cd_status_error">Żball</string>
     <string name="cd_talk_disabled">Buttuna tat-taħdit diżattivata – il-magna mhijiex lesta</string>
     <string name="cd_talk_stop_continuous">Waqqaf ir-reġistrazzjoni kontinwa</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Issostitwixxi b\'</string>
     <string name="replacements_to_hint">Ħallih vojt biex titneħħa.</string>
     <string name="replacements_removed">(imneħħi)</string>
+    <string name="replacements_import">Importa minn fajl</string>
+    <string name="replacements_export">Esporta għal fajl</string>
+    <string name="replacements_import_title">Importa sostituzzjonijiet</string>
+    <string name="replacements_import_message">Iżżid is-sostituzzjonijiet tal-fajl mat-tabella tiegħek, jew tissostitwixxi t-tabella bihom? Meta żżid, sostituzzjoni għal kelma li diġà hemm fit-tabella tissostitwixxi dik eżistenti.</string>
+    <string name="replacements_import_add">Żid</string>
+    <string name="replacements_import_replace">Issostitwixxi</string>
+    <string name="replacements_imported">Sostituzzjonijiet importati: %1$d</string>
+    <string name="replacements_exported">Sostituzzjonijiet esportati: %1$d</string>
+    <string name="replacements_import_failed">Il-fajl ma setax jinqara.</string>
+    <string name="replacements_import_empty">Ma nstabet l-ebda sostituzzjoni fil-fajl.</string>
+    <string name="replacements_export_failed">Il-fajl ma setax jinkiteb.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Mudelli tar-Rikonoxximent tat-Taħdit</string>

@@ -39,6 +39,7 @@
     <string name="cd_active_model">Активна модель</string>
     <string name="cd_delete_model">Видалити модель</string>
     <string name="cd_delete_replacement">Видалити заміну</string>
+    <string name="cd_more_options">Інші параметри</string>
     <string name="cd_status_error">Помилка</string>
     <string name="cd_talk_disabled">Кнопку запису вимкнено – рушій не готовий</string>
     <string name="cd_talk_stop_continuous">Зупинити безперервний запис</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Замінити на</string>
     <string name="replacements_to_hint">Залиште порожнім, щоб видалити.</string>
     <string name="replacements_removed">(видаляється)</string>
+    <string name="replacements_import">Імпорт із файлу</string>
+    <string name="replacements_export">Експорт у файл</string>
+    <string name="replacements_import_title">Імпорт замін</string>
+    <string name="replacements_import_message">Додати заміни з файлу до таблиці чи замінити ними таблицю? Під час додавання заміна для слова, яке вже є в таблиці, перезаписує наявну.</string>
+    <string name="replacements_import_add">Додати</string>
+    <string name="replacements_import_replace">Замінити</string>
+    <string name="replacements_imported">Імпортовано замін: %1$d</string>
+    <string name="replacements_exported">Експортовано замін: %1$d</string>
+    <string name="replacements_import_failed">Не вдалося прочитати файл.</string>
+    <string name="replacements_import_empty">У файлі не знайдено замін.</string>
+    <string name="replacements_export_failed">Не вдалося записати файл.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Моделі розпізнавання мовлення</string>

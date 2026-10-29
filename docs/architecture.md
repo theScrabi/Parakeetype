@@ -537,7 +537,7 @@ The model (incl. the Silero VAD) is not in the repository; devtools/fetch-test-m
 | inference/ParakeetAllLanguagesTest | Post-processing does not block or corrupt any Parakeet-supported language's script |
 | inference/ParakeetLanguageTest | Language forcing threads into cleanTranscript (EN vs DE filler/disfluency handling) |
 | inference/NumberNormaliserTest | Number-word to digit normalisation |
-| inference/TextReplacementsTest | User word / phrase replacements: whole-word matching, ordering, encoding |
+| inference/TextReplacementsTest | User word / phrase replacements: whole-word matching, ordering, encoding, CSV import / export, merging |
 | inference/GrammarCorrectorTest | GrammarCorrector implementations and repository integration |
 | inference/TranscriptResultTest | TranscriptResult sealed class |
 | inference/WavReaderTest | WAV parsing, resampling, channel downmix |

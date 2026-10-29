@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktywny model</string>
     <string name="cd_delete_model">Usuń model</string>
     <string name="cd_delete_replacement">Usuń zamianę</string>
+    <string name="cd_more_options">Więcej opcji</string>
     <string name="cd_status_error">Błąd</string>
     <string name="cd_talk_disabled">Przycisk mówienia nieaktywny – silnik nie jest gotowy</string>
     <string name="cd_talk_stop_continuous">Zatrzymaj ciągłe nagrywanie</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Zamień na</string>
     <string name="replacements_to_hint">Pozostaw puste, aby usunąć.</string>
     <string name="replacements_removed">(usunięte)</string>
+    <string name="replacements_import">Importuj z pliku</string>
+    <string name="replacements_export">Eksportuj do pliku</string>
+    <string name="replacements_import_title">Importuj zamiany</string>
+    <string name="replacements_import_message">Dodać zamiany z pliku do tabeli czy zastąpić nimi tabelę? Przy dodawaniu zamiana słowa, które już jest w tabeli, nadpisuje istniejącą.</string>
+    <string name="replacements_import_add">Dodaj</string>
+    <string name="replacements_import_replace">Zastąp</string>
+    <string name="replacements_imported">Zaimportowane zamiany: %1$d</string>
+    <string name="replacements_exported">Wyeksportowane zamiany: %1$d</string>
+    <string name="replacements_import_failed">Nie można odczytać pliku.</string>
+    <string name="replacements_import_empty">W pliku nie znaleziono zamian.</string>
+    <string name="replacements_export_failed">Nie można zapisać pliku.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Modele rozpoznawania mowy</string>

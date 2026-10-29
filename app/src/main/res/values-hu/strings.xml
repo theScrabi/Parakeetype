@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktív modell</string>
     <string name="cd_delete_model">Modell törlése</string>
     <string name="cd_delete_replacement">Csere törlése</string>
+    <string name="cd_more_options">További lehetőségek</string>
     <string name="cd_status_error">Hiba</string>
     <string name="cd_talk_disabled">Beszéd gomb letiltva – a motor nem áll készen</string>
     <string name="cd_talk_stop_continuous">Folyamatos felvétel leállítása</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Csere erre</string>
     <string name="replacements_to_hint">Hagyja üresen az eltávolításhoz.</string>
     <string name="replacements_removed">(eltávolítva)</string>
+    <string name="replacements_import">Importálás fájlból</string>
+    <string name="replacements_export">Exportálás fájlba</string>
+    <string name="replacements_import_title">Cserék importálása</string>
+    <string name="replacements_import_message">Hozzáadod a fájl cseréit a táblázathoz, vagy lecseréled velük a táblázatot? Hozzáadáskor a táblázatban már szereplő szó cseréje felülírja a meglévőt.</string>
+    <string name="replacements_import_add">Hozzáadás</string>
+    <string name="replacements_import_replace">Csere</string>
+    <string name="replacements_imported">Importált cserék: %1$d</string>
+    <string name="replacements_exported">Exportált cserék: %1$d</string>
+    <string name="replacements_import_failed">A fájl nem olvasható.</string>
+    <string name="replacements_import_empty">A fájlban nem található csere.</string>
+    <string name="replacements_export_failed">A fájl nem írható.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Beszédfelismerő modellek</string>

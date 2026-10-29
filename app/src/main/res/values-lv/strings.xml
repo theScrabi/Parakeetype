@@ -39,6 +39,7 @@
     <string name="cd_active_model">Aktīvais modelis</string>
     <string name="cd_delete_model">Dzēst modeli</string>
     <string name="cd_delete_replacement">Dzēst aizstāšanu</string>
+    <string name="cd_more_options">Citas opcijas</string>
     <string name="cd_status_error">Kļūda</string>
     <string name="cd_talk_disabled">Runāšanas poga atspējota — dzinējs nav gatavs</string>
     <string name="cd_talk_stop_continuous">Apturēt nepārtraukto ierakstīšanu</string>
@@ -112,6 +113,17 @@
     <string name="replacements_to_label">Aizstāt ar</string>
     <string name="replacements_to_hint">Atstājiet tukšu, lai to noņemtu.</string>
     <string name="replacements_removed">(noņemts)</string>
+    <string name="replacements_import">Importēt no faila</string>
+    <string name="replacements_export">Eksportēt failā</string>
+    <string name="replacements_import_title">Importēt aizstāšanas</string>
+    <string name="replacements_import_message">Pievienot faila aizstāšanas tabulai vai aizstāt tabulu ar tām? Pievienojot vārda, kas jau ir tabulā, aizstāšana pārraksta esošo.</string>
+    <string name="replacements_import_add">Pievienot</string>
+    <string name="replacements_import_replace">Aizstāt</string>
+    <string name="replacements_imported">Importētas aizstāšanas: %1$d</string>
+    <string name="replacements_exported">Eksportētas aizstāšanas: %1$d</string>
+    <string name="replacements_import_failed">Failu neizdevās nolasīt.</string>
+    <string name="replacements_import_empty">Failā nav atrasta neviena aizstāšana.</string>
+    <string name="replacements_export_failed">Failu neizdevās ierakstīt.</string>
 
     <!-- Model screen -->
     <string name="model_screen_title">Runas atpazīšanas modeļi</string>
