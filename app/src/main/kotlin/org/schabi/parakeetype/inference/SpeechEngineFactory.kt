@@ -13,6 +13,7 @@ import org.schabi.parakeetype.settings.model.ModelId
 object SpeechEngineFactory {
     fun create(modelId: ModelId): SpeechEngine = when (modelId) {
         ModelId.PARAKEET_ULTRA -> ParakeetEngine()
+        ModelId.PARAKEET_LITHUANIAN -> ParakeetEngine()
         ModelId.VOXTRAL_MINI -> VoxtralEngine()
         ModelId.WHISPER_SMALL -> WhisperEngine()
     }

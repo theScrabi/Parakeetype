@@ -11,6 +11,7 @@ import org.schabi.parakeetype.settings.model.ModelId.Companion.DEFAULT
  */
 enum class ModelId(val storageDirName: String) {
     PARAKEET_ULTRA("parakeet-ultra"),
+    PARAKEET_LITHUANIAN("parakeet-lithuanian"),
     VOXTRAL_MINI("voxtral-mini-4b"),
     WHISPER_SMALL("whisper-small-int8"),
     ;
