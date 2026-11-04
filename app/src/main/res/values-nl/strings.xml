@@ -229,4 +229,8 @@
     <string name="home_bubble_enabled_subtitle">Er verschijnt een microfoonbubbel terwijl je met een ander toetsenbord typt</string>
     <string name="home_bubble_disabled">Dicteerbubbel uit</string>
     <string name="home_bubble_disabled_subtitle">Optioneel: zet "Parakeetype-dicteerbubbel" aan onder Toegankelijkheid om te dicteren met je gewone toetsenbord. Is de schakelaar grijs, sta dan eerst beperkte instellingen toe in de app-info van Parakeetype.</string>
+    <string name="bubble_done">Klaar, tekst invoegen</string>
+    <string name="bubble_cancel">Dicteren annuleren</string>
+    <string name="bubble_hide">Verbergen voor dit veld</string>
+    <string name="bubble_hidden_toast">Bubbel verborgen tot je op een ander tekstveld tikt</string>
 </resources>

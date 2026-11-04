@@ -6,12 +6,14 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.Gravity
+import android.view.HapticFeedbackConstants
 import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
@@ -32,40 +34,48 @@ import org.schabi.parakeetype.recognition.RecognitionOptions
 import org.schabi.parakeetype.recognition.RecognitionSession
 import org.schabi.parakeetype.settings.SettingsActivity
 import org.schabi.parakeetype.settings.preferences.AppPreferences
+import org.schabi.parakeetype.ui.theme.ParakeetypeKeyboardTheme
 
 private const val TAG = "BubbleService"
 
-/** Debounce for re-checking whether the bubble should show after accessibility events. */
-private const val UPDATE_DELAY_MS = 120L
+/** Debounce for re-checking the bubble after accessibility events. */
+private const val UPDATE_DELAY_MS = 150L
 
 private const val PREFS = "bubble"
-private const val PREF_X = "x"
-private const val PREF_Y = "y"
-private const val EDGE_MARGIN_DP = 8
+private const val PREF_RIGHT = "docked_right"
+private const val PREF_LIFT = "lift_px"
+private const val PREF_FREE_Y = "free_y"
+
+private const val EDGE_MARGIN_DP = 4
+private const val DEFAULT_LIFT_DP = 8
 
 /**
- * Shows a floating microphone bubble while another keyboard is open on a text field, so
- * dictation works without switching to the Parakeetype keyboard.
+ * Shows a floating microphone bubble on focused text fields while another keyboard is in use,
+ * so dictation works without switching to the Parakeetype keyboard.
  *
- * Tap the bubble to start a segmented [RecognitionSession] (the same pipeline and loaded model
- * as the keyboard and the system recognizer); each finished utterance is inserted at the
- * cursor of the field that was focused when dictation started. Tap again to stop; the audio
- * captured so far is still transcribed and inserted.
+ * The bubble docks to a screen side and rides just above the keyboard (a drag changes the side
+ * and the height above the keyboard). Tapping it starts a segmented [RecognitionSession] — the
+ * same pipeline and loaded model as the keyboard and the system recognizer — and turns it into
+ * a recording pill with a live waveform, cancel and done. Each finished utterance is inserted
+ * at the cursor of the field that was focused when dictation started. A long-press hides the
+ * bubble until another field is focused.
  *
  * Insertion uses [AccessibilityNodeInfo.ACTION_SET_TEXT] (splicing at the selection), and
- * falls back to the clipboard plus [AccessibilityNodeInfo.ACTION_PASTE] for fields that
- * reject it. The bubble draws as a [WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY],
- * so no separate "display over other apps" permission is needed. Nothing leaves the device.
+ * falls back to the clipboard plus [AccessibilityNodeInfo.ACTION_PASTE]. The bubble is a
+ * [WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY], so no "display over other apps"
+ * permission is needed. Nothing leaves the device.
  */
 class BubbleAccessibilityService : AccessibilityService() {
 
     private val scope = MainScope()
     private val handler = Handler(Looper.getMainLooper())
-    private val updateRunnable = Runnable { updateVisibility() }
+    private val updateRunnable = Runnable { updateBubble() }
 
     private lateinit var windowManager: WindowManager
     private lateinit var inference: InferenceConnection
-    private var bubble: BubbleView? = null
+    private val ui = BubbleUiState()
+    private val owner = OverlayOwner()
+    private var view: BubbleComposeView? = null
     private var params: WindowManager.LayoutParams? = null
     private var attached = false
 
@@ -74,17 +84,23 @@ class BubbleAccessibilityService : AccessibilityService() {
     /** The field dictation started in; utterances go here even if focus moves meanwhile. */
     private var target: AccessibilityNodeInfo? = null
 
+    /** The field the user hid the bubble for (long-press); it shows again on another field. */
+    private var hiddenFor: AccessibilityNodeInfo? = null
+
+    /** Top edge of the visible keyboard in screen pixels, or `null` when none is seen. */
+    private var keyboardTop: Int? = null
+
     private var keepModelLoaded = true
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
         inference = InferenceConnection(this)
+        ui.dockedRight = prefs().getBoolean(PREF_RIGHT, true)
         scope.launch {
             keepModelLoaded = AppPreferences(applicationContext).keepModelLoaded.first()
         }
-        Log.i(TAG, "Bubble service connected")
-        updateVisibility()
+        updateBubble()
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
@@ -92,41 +108,65 @@ class BubbleAccessibilityService : AccessibilityService() {
         handler.postDelayed(updateRunnable, UPDATE_DELAY_MS)
     }
 
-    override fun onInterrupt() {
-        cancelSession()
-    }
+    override fun onInterrupt() = Unit
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        cancelSession()
+        session?.cancel()
+        session = null
         removeBubble()
+        owner.destroy()
         if (::inference.isInitialized) inference.unbind()
         scope.cancel()
         super.onDestroy()
     }
 
-    // ── Visibility ────────────────────────────────────────────────────────────────────────────
+    // ── Visibility and placement ──────────────────────────────────────────────────────────────
 
-    private fun updateVisibility() {
-        if (session != null) return // keep the bubble while dictating
-        val show = isForeignKeyboardVisible() && findEditableFocus() != null
+    private fun updateBubble() {
+        val keyboard = findKeyboard()
+        keyboardTop = keyboard.top
+        if (session != null) {
+            // Keep the bubble (and follow the keyboard) while dictating.
+            placeBubble()
+            return
+        }
+        val field = findEditableFocus()
+        if (field == null || field != hiddenFor) hiddenFor = null
+        val show = field != null && !keyboard.isOwn && hiddenFor == null
         if (show) showBubble() else hideBubble()
     }
 
-    /** A keyboard other than Parakeetype's own is on screen. */
-    private fun isForeignKeyboardVisible(): Boolean = try {
-        windows.any { window ->
-            window.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD &&
-                    window.root?.packageName?.toString() != packageName
+    private class Keyboard(val top: Int?, val isOwn: Boolean)
+
+    /** The on-screen keyboard window, if any. */
+    private fun findKeyboard(): Keyboard = try {
+        val ime = windows.firstOrNull { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD }
+        if (ime == null) {
+            Keyboard(null, false)
+        } else {
+            val bounds = Rect().also { ime.getBoundsInScreen(it) }
+            val pkg = ime.root?.packageName?.toString()
+            Keyboard(
+                top = bounds.top.takeIf { bounds.height() > 0 },
+                isOwn = pkg == packageName,
+            )
         }
     } catch (e: Exception) {
         Log.w(TAG, "Could not read windows", e)
-        false
+        Keyboard(null, false)
     }
 
-    /** The focused, editable, non-password field of another app, or `null`. */
+    /**
+     * The focused, editable, non-password field of another app, or `null`. Looks at the
+     * input focus across windows first, then inside the active window.
+     */
     private fun findEditableFocus(): AccessibilityNodeInfo? = try {
-        findFocus(AccessibilityNodeInfo.FOCUS_INPUT)?.takeIf { node ->
+        val candidates = sequenceOf(
+            { findFocus(AccessibilityNodeInfo.FOCUS_INPUT) },
+            { rootInActiveWindow?.findFocus(AccessibilityNodeInfo.FOCUS_INPUT) },
+        )
+        candidates.mapNotNull { it() }.firstOrNull { node ->
             node.isEditable && !node.isPassword && node.packageName?.toString() != packageName
         }
     } catch (e: Exception) {
@@ -135,21 +175,45 @@ class BubbleAccessibilityService : AccessibilityService() {
     }
 
     private fun showBubble() {
-        if (attached) return
-        val view = bubble ?: BubbleView(
-            this,
-            onTap = ::onBubbleTap,
-            onDrag = ::moveBy,
-            onDragEnd = ::snapToEdge,
-        ).also { bubble = it }
-        val lp = params ?: createLayoutParams().also { params = it }
-        try {
-            windowManager.addView(view, lp)
-            attached = true
-            // Start loading the model now, so it is ready (or nearly) by the time of the tap.
-            inference.bind()
-        } catch (e: Exception) {
-            Log.e(TAG, "Could not add the bubble", e)
+        if (!attached) {
+            val v = view ?: BubbleComposeView(
+                this,
+                onDrag = ::moveBy,
+                onDragEnd = ::dropBubble,
+            ) {
+                ParakeetypeKeyboardTheme {
+                    BubbleContent(
+                        state = ui,
+                        onStart = ::startDictation,
+                        onHide = ::hideForField,
+                        onFinish = ::finishDictation,
+                        onCancel = ::cancelDictation,
+                    )
+                }
+            }.also {
+                owner.attachTo(it)
+                view = it
+            }
+            val lp = params ?: WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
+                        WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
+                PixelFormat.TRANSLUCENT,
+            ).also { params = it }
+            computePosition(lp)
+            try {
+                windowManager.addView(v, lp)
+                attached = true
+                // Start loading the model now, so it is ready (or nearly) by the time of the tap.
+                inference.bind()
+            } catch (e: Exception) {
+                Log.e(TAG, "Could not add the bubble", e)
+            }
+        } else {
+            placeBubble()
         }
     }
 
@@ -161,84 +225,98 @@ class BubbleAccessibilityService : AccessibilityService() {
     }
 
     private fun removeBubble() {
-        val view = bubble ?: return
+        val v = view ?: return
         if (!attached) return
         try {
-            windowManager.removeView(view)
+            windowManager.removeView(v)
         } catch (e: Exception) {
             Log.w(TAG, "Could not remove the bubble", e)
         }
         attached = false
     }
 
-    private fun createLayoutParams(): WindowManager.LayoutParams {
+    private var dragging = false
+
+    /** Re-anchors the bubble (e.g. the keyboard moved), unless the user is dragging it. */
+    private fun placeBubble() {
+        val lp = params ?: return
+        if (!attached || dragging) return
+        val oldX = lp.x; val oldY = lp.y; val oldGravity = lp.gravity
+        computePosition(lp)
+        if (lp.x != oldX || lp.y != oldY || lp.gravity != oldGravity) windowManager.updateViewLayout(view, lp)
+    }
+
+    /** Docked side → gravity; height → just above the keyboard, or the remembered free height. */
+    private fun computePosition(lp: WindowManager.LayoutParams) {
         val bounds = windowManager.currentWindowMetrics.bounds
-        val size = dp(BubbleView.BUBBLE_SIZE_DP)
-        val prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        return WindowManager.LayoutParams(
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL or
-                    WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-            PixelFormat.TRANSLUCENT,
-        ).apply {
-            gravity = Gravity.TOP or Gravity.START
-            x = prefs.getInt(PREF_X, bounds.width() - size - dp(EDGE_MARGIN_DP))
-            y = prefs.getInt(PREF_Y, (bounds.height() * 0.35f).toInt())
-            clampToScreen(this)
+        val windowSize = windowSizePx()
+        lp.gravity = Gravity.TOP or if (ui.dockedRight) Gravity.END else Gravity.START
+        lp.x = dp(EDGE_MARGIN_DP)
+        val kbTop = keyboardTop
+        lp.y = if (kbTop != null) {
+            kbTop - windowSize - prefs().getInt(PREF_LIFT, dp(DEFAULT_LIFT_DP))
+        } else {
+            prefs().getInt(PREF_FREE_Y, (bounds.height() * 0.45f).toInt())
         }
+        lp.y = lp.y.coerceIn(0, (bounds.height() - windowSize).coerceAtLeast(0))
     }
 
     private fun moveBy(dx: Int, dy: Int) {
         val lp = params ?: return
-        lp.x += dx
-        lp.y += dy
-        clampToScreen(lp)
-        if (attached) windowManager.updateViewLayout(bubble, lp)
-    }
-
-    /** Drops the bubble at the nearer side edge and remembers its position. */
-    private fun snapToEdge() {
-        val lp = params ?: return
-        val width = windowManager.currentWindowMetrics.bounds.width()
-        val size = dp(BubbleView.BUBBLE_SIZE_DP)
-        val margin = dp(EDGE_MARGIN_DP)
-        lp.x = if (lp.x + size / 2 < width / 2) margin else width - size - margin
-        clampToScreen(lp)
-        if (attached) windowManager.updateViewLayout(bubble, lp)
-        getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()
-            .putInt(PREF_X, lp.x)
-            .putInt(PREF_Y, lp.y)
-            .apply()
-    }
-
-    private fun clampToScreen(lp: WindowManager.LayoutParams) {
+        if (!attached) return
+        if (!dragging) {
+            dragging = true
+            // Switch to absolute left-based coordinates for the drag.
+            val width = windowManager.currentWindowMetrics.bounds.width()
+            val v = view ?: return
+            if (lp.gravity and Gravity.END == Gravity.END) lp.x = width - lp.x - v.width
+            lp.gravity = Gravity.TOP or Gravity.START
+        }
         val bounds = windowManager.currentWindowMetrics.bounds
-        val size = dp(BubbleView.BUBBLE_SIZE_DP)
-        lp.x = lp.x.coerceIn(0, (bounds.width() - size).coerceAtLeast(0))
-        lp.y = lp.y.coerceIn(0, (bounds.height() - size).coerceAtLeast(0))
+        lp.x = (lp.x + dx).coerceIn(0, (bounds.width() - (view?.width ?: 0)).coerceAtLeast(0))
+        lp.y = (lp.y + dy).coerceIn(0, (bounds.height() - (view?.height ?: 0)).coerceAtLeast(0))
+        windowManager.updateViewLayout(view, lp)
     }
+
+    /** Snaps to the nearer side and remembers the side and the height above the keyboard. */
+    private fun dropBubble() {
+        val lp = params ?: return
+        val v = view ?: return
+        dragging = false
+        val width = windowManager.currentWindowMetrics.bounds.width()
+        ui.dockedRight = lp.x + v.width / 2 >= width / 2
+        val editor = prefs().edit().putBoolean(PREF_RIGHT, ui.dockedRight)
+        val kbTop = keyboardTop
+        if (kbTop != null) {
+            // Never over the keys: at least flush with the keyboard's top edge.
+            editor.putInt(PREF_LIFT, (kbTop - windowSizePx() - lp.y).coerceAtLeast(0))
+        } else {
+            editor.putInt(PREF_FREE_Y, lp.y)
+        }
+        editor.apply()
+        v.performHapticFeedback(HapticFeedbackConstants.GESTURE_END)
+        computePosition(lp)
+        if (attached) windowManager.updateViewLayout(v, lp)
+    }
+
+    private fun hideForField() {
+        hiddenFor = findEditableFocus()
+        view?.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+        toast(R.string.bubble_hidden_toast)
+        hideBubble()
+    }
+
+    /** Height (and idle width) of the overlay window: the bubble plus its shadow padding. */
+    private fun windowSizePx(): Int = view?.height?.takeIf { it > 0 }
+        ?: dp((BUBBLE_SIZE + BUBBLE_WINDOW_PADDING * 2).value.toInt())
 
     // ── Dictation ─────────────────────────────────────────────────────────────────────────────
 
-    private fun onBubbleTap() {
-        val running = session
-        if (running != null) {
-            bubble?.state = BubbleState.Finishing
-            running.stop()
-            return
-        }
-        startDictation()
-    }
-
     private fun startDictation() {
+        if (session != null) return
         if (!PermissionHelper.hasRecordPermission(this)) {
             toast(R.string.bubble_need_permission)
-            startActivity(
-                Intent(this, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
+            startActivity(Intent(this, SettingsActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             return
         }
         val field = findEditableFocus()
@@ -247,11 +325,14 @@ class BubbleAccessibilityService : AccessibilityService() {
             return
         }
         target = field
-        // Give the process the microphone foreground-service state while the user is
-        // interacting with the bubble (see InferenceService.keepLoadedServiceTypes).
+        // Hold the microphone foreground-service state while dictating from the bubble (see
+        // InferenceService.keepLoadedServiceTypes).
         if (keepModelLoaded) InferenceService.startKeepLoaded(this)
 
-        bubble?.state = BubbleState.Listening
+        view?.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        ui.resetLevels()
+        ui.modelLoading = false
+        ui.phase = BubblePhase.Listening
         session = RecognitionSession(
             audioContext = this,
             inference = inference,
@@ -261,24 +342,30 @@ class BubbleAccessibilityService : AccessibilityService() {
         ).also { it.start() }
     }
 
-    private fun cancelSession() {
+    private fun finishDictation() {
+        val running = session ?: return
+        view?.performHapticFeedback(HapticFeedbackConstants.CONFIRM)
+        ui.phase = BubblePhase.Finishing
+        running.stop()
+    }
+
+    private fun cancelDictation() {
+        view?.performHapticFeedback(HapticFeedbackConstants.REJECT)
         session?.cancel()
-        session = null
-        target = null
-        bubble?.state = BubbleState.Idle
+        endSession()
     }
 
     private fun endSession() {
         session = null
         target = null
-        bubble?.state = BubbleState.Idle
-        updateVisibility()
+        ui.phase = BubblePhase.Idle
+        ui.modelLoading = false
+        updateBubble()
     }
 
     private inner class Listener : RecognitionSession.Listener {
         override fun onModelLoading(loading: Boolean) {
-            if (session == null) return
-            bubble?.state = if (loading) BubbleState.Loading else BubbleState.Listening
+            ui.modelLoading = loading
         }
 
         override fun onReadyForSpeech() = Unit
@@ -287,17 +374,18 @@ class BubbleAccessibilityService : AccessibilityService() {
         override fun onLanguageDetection(detection: LanguageDetection) = Unit
         override fun onPartialResult(text: String) = Unit
         override fun onEndOfSpeech() = Unit
-        override fun onResult(text: String, confidence: Float, words: List<WordTiming>) {
-            insert(text)
-            endSession()
-        }
 
         override fun onRmsChanged(rmsdB: Float) {
-            bubble?.setLevel(((rmsdB + 2f) / 12f).coerceIn(0f, 1f))
+            ui.pushLevel((rmsdB + 2f) / 12f)
         }
 
         override fun onSegmentResult(text: String, confidence: Float, words: List<WordTiming>) {
             insert(text)
+        }
+
+        override fun onResult(text: String, confidence: Float, words: List<WordTiming>) {
+            insert(text)
+            endSession()
         }
 
         override fun onEndOfSegmentedSession() = endSession()
@@ -365,6 +453,8 @@ class BubbleAccessibilityService : AccessibilityService() {
     private fun toast(resId: Int) {
         Toast.makeText(this, resId, Toast.LENGTH_SHORT).show()
     }
+
+    private fun prefs() = getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density + 0.5f).toInt()
 }

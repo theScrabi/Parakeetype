@@ -251,4 +251,8 @@
     <string name="home_bubble_enabled_subtitle">A microphone bubble appears while you type with another keyboard</string>
     <string name="home_bubble_disabled">Dictation bubble off</string>
     <string name="home_bubble_disabled_subtitle">Optional: turn on "Parakeetype dictation bubble" under Accessibility to dictate while using your normal keyboard. If the switch is greyed out, allow restricted settings in Parakeetype\'s app info first.</string>
+    <string name="bubble_done">Done, insert text</string>
+    <string name="bubble_cancel">Cancel dictation</string>
+    <string name="bubble_hide">Hide for this field</string>
+    <string name="bubble_hidden_toast">Bubble hidden until you tap another text field</string>
 </resources>
