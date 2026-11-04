@@ -236,4 +236,19 @@
     <string name="voice_input_error_permission">Parakeetype needs microphone access.</string>
     <string name="voice_input_error_audio">The microphone could not be opened.</string>
     <string name="voice_input_error_generic">Speech recognition failed.</string>
+
+    <!-- Floating dictation bubble (accessibility service) -->
+    <string name="bubble_service_label">Parakeetype dictation bubble</string>
+    <string name="bubble_service_description">Shows a floating microphone button while another keyboard is open. Tap it to dictate with Parakeetype; the text is inserted into the focused field. Parakeetype uses this access only to find the focused text field, to see whether a keyboard is shown and to insert the transcript. Speech is processed on this device and nothing is sent anywhere.</string>
+    <string name="bubble_start_dictation">Start dictation</string>
+    <string name="bubble_stop_dictation">Stop dictation</string>
+    <string name="bubble_model_loading">Loading the speech model</string>
+    <string name="bubble_transcribing">Transcribing</string>
+    <string name="bubble_copied">Could not insert the text, so it was copied to the clipboard</string>
+    <string name="bubble_no_field">Tap a text field first</string>
+    <string name="bubble_need_permission">Parakeetype needs microphone access</string>
+    <string name="home_bubble_enabled">Dictation bubble on</string>
+    <string name="home_bubble_enabled_subtitle">A microphone bubble appears while you type with another keyboard</string>
+    <string name="home_bubble_disabled">Dictation bubble off</string>
+    <string name="home_bubble_disabled_subtitle">Optional: turn on "Parakeetype dictation bubble" under Accessibility to dictate while using your normal keyboard. If the switch is greyed out, allow restricted settings in Parakeetype\'s app info first.</string>
 </resources>

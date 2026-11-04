@@ -28,6 +28,7 @@ It uses [Parakeet Ultra](https://huggingface.co/moondream/parakeet-ultra), Moond
 - **Voice Activity Detection** - Silero VAD v6 neural network (ONNX) filters silence before it reaches the ASR model; ships in the model archive and falls back to energy-threshold VAD if it can't load
 - **Configurable trigger modes** - hold-to-talk or tap-to-toggle
 - **Instant mode** - when you switch to Parakeetype (e.g. with the microphone key of another keyboard) it starts listening right away, types the text once you stop speaking and switches back to your keyboard (touch the talk button to stay on Parakeetype). Opt-in; off by default.
+- **Floating dictation bubble** - optional accessibility service that shows a draggable microphone bubble while you type with another keyboard (like Wispr Flow's bubble). Tap to dictate, tap again to stop; each finished sentence is inserted at the cursor of the focused field (falls back to the clipboard where a field refuses direct insertion). Hidden on password fields. Off until enabled under *Accessibility*.
 - **One-handed layout** - in landscape the keyboard controls are docked to the right (or left, for left-handed use); in portrait they can optionally be docked left or right too (useful on tablets); an opt-in left-handed mode mirrors the buttons (Enter on the left, drag right to lock)
 - **Keep model loaded** - keeps the ~630 MB model in RAM via a foreground service while you use another keyboard, so switching back to Parakeetype needs no reload. On by default; can be turned off in the settings.
 - **Optional microphone calibration** - a settings screen that records a short reference clip on each available microphone, ranks them by capture fidelity, and selects the best one for dictation. Opt-in; off by default.
@@ -183,6 +184,7 @@ A debug build for sideloading:
 | `RECORD_AUDIO` | Capturing microphone input for speech recognition |
 | `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_MICROPHONE` | Keeping the inference engine alive while the keyboard is in use |
 | `FOREGROUND_SERVICE_SPECIAL_USE` | *Keep model loaded* setting (on by default): keeps the model in RAM while another keyboard is active |
+| Accessibility service (`BIND_ACCESSIBILITY_SERVICE`, opt-in) | *Dictation bubble*: finding the focused text field, seeing whether a keyboard is open, drawing the bubble and inserting the transcript. Window content is not stored or transmitted |
 | `POST_NOTIFICATIONS` | Showing the required foreground service notification |
 
 No permission is used for any purpose beyond what is listed above.

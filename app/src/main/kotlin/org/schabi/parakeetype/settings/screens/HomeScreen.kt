@@ -38,6 +38,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
+import org.schabi.parakeetype.bubble.BubbleAccessibilityService
 import org.schabi.parakeetype.inference.InferenceService
 import org.schabi.parakeetype.settings.model.ModelRegistry
 import org.schabi.parakeetype.settings.model.ModelStorageManager
@@ -75,6 +76,7 @@ fun HomeScreen(
     var hasMicPermission by remember { mutableStateOf(PermissionHelper.hasRecordPermission(context)) }
     var isModelReady by remember { mutableStateOf(ModelRegistry.all.any { ModelStorageManager.isModelReady(context, it) }) }
     var isDefaultRecognizer by remember { mutableStateOf(isParakeetypeDefaultRecognizer(context)) }
+    var isBubbleEnabled by remember { mutableStateOf(isBubbleServiceEnabled(context)) }
 
     val micPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
@@ -93,6 +95,7 @@ fun HomeScreen(
                 hasMicPermission = PermissionHelper.hasRecordPermission(context)
                 isModelReady = ModelRegistry.all.any { ModelStorageManager.isModelReady(context, it) }
                 isDefaultRecognizer = isParakeetypeDefaultRecognizer(context)
+                isBubbleEnabled = isBubbleServiceEnabled(context)
             }
         }
         lifecycle.addObserver(observer)
@@ -107,6 +110,8 @@ fun HomeScreen(
         onOpenImeSettings = { context.startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)) },
         onRequestMicPermission = { micPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO) },
         onOpenVoiceInputSettings = { openVoiceInputSettings(context) },
+        isBubbleEnabled = isBubbleEnabled,
+        onOpenAccessibilitySettings = { context.startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)) },
         onNavigateToModel = onNavigateToModel,
         onNavigateToInput = onNavigateToInput,
         onNavigateToSpeech = onNavigateToSpeech,
@@ -129,6 +134,8 @@ private fun HomeScreenContent(
     onNavigateToSpeech: () -> Unit,
     onNavigateToTools: () -> Unit,
     onNavigateToReplacements: () -> Unit,
+    isBubbleEnabled: Boolean = false,
+    onOpenAccessibilitySettings: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -199,6 +206,19 @@ private fun HomeScreenContent(
             action = if (!isDefaultRecognizer) onOpenVoiceInputSettings else null,
         )
 
+        // 5. Floating dictation bubble - optional, dictate while using another keyboard
+        StatusRow(
+            icon = if (isBubbleEnabled) Icons.Rounded.Mic else Icons.Rounded.MicOff,
+            iconTint = if (isBubbleEnabled) MaterialTheme.colorScheme.primary
+            else MaterialTheme.colorScheme.onSurfaceVariant,
+            title = if (isBubbleEnabled) stringResource(R.string.home_bubble_enabled)
+            else stringResource(R.string.home_bubble_disabled),
+            subtitle = if (isBubbleEnabled) stringResource(R.string.home_bubble_enabled_subtitle)
+            else stringResource(R.string.home_bubble_disabled_subtitle),
+            actionLabel = stringResource(R.string.action_open_settings),
+            action = if (!isBubbleEnabled) onOpenAccessibilitySettings else null,
+        )
+
         Spacer(Modifier.height(8.dp))
         HorizontalDivider()
         Spacer(Modifier.height(4.dp))
@@ -230,6 +250,16 @@ private fun HomeScreenContent(
             onClick = onNavigateToTools,
         )
     }
+}
+
+/** Returns `true` if the dictation bubble's accessibility service is switched on. */
+private fun isBubbleServiceEnabled(context: Context): Boolean {
+    val component = ComponentName(context, BubbleAccessibilityService::class.java)
+    val enabled = Settings.Secure.getString(
+        context.contentResolver,
+        Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES,
+    ) ?: return false
+    return enabled.split(':').any { ComponentName.unflattenFromString(it) == component }
 }
 
 /** Returns `true` if the Parakeetype IME appears in the system's enabled-input-methods list. */

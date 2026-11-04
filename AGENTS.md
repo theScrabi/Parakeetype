@@ -26,6 +26,7 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 | `audio` | `AudioCaptureManager`, `MicCalibrationManager`, `SileroVadFilter`, `RMSVadFilter`, `VadFilter`, `SpeechEndpointer`, `AudioChunk`, `ClientAudioReader`, `PcmConverter`, `PermissionHelper` | Mic capture + client-supplied audio + VAD + end-of-speech detection + optional mic calibration |
 | `ime` | `ParakeetypeInputMethodService`, `TextInjector`, `TranscriptAligner`, `EnterAction` | Keyboard / text insertion |
 | `recognition` | `ParakeetypeRecognitionService`, `VoiceInputActivity`, `RecognitionSession`, `InferenceConnection`, `TranscriptAccumulator` | Speech recognizer for other apps (`RecognitionService` + `ACTION_RECOGNIZE_SPEECH`) |
+| `bubble` | `BubbleAccessibilityService`, `BubbleView`, `TextSplice` | Optional floating dictation bubble over other keyboards: accessibility overlay, `RecognitionSession` in segmented mode, insertion via `ACTION_SET_TEXT` (clipboard + `ACTION_PASTE` fallback) |
 | `settings/model` | `ModelRegistry`, `ModelId`, `ModelImporter`, `ModelStorageManager`, `ModelState`, `ModelViewModel` | Model lifecycle: single-archive import from local storage |
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
 | `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `ReplacementsScreen`, `MicCalibrationScreen` | Settings Compose UI |

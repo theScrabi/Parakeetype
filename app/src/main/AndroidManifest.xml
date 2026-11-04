@@ -103,6 +103,21 @@
             </intent-filter>
         </activity>
 
+        <!-- Optional floating dictation bubble shown over other keyboards. Draws its overlay
+             as an accessibility overlay and inserts text via accessibility actions; no network. -->
+        <service
+                android:name=".bubble.BubbleAccessibilityService"
+                android:label="@string/bubble_service_label"
+                android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+                android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
+            </intent-filter>
+            <meta-data
+                    android:name="android.accessibilityservice"
+                    android:resource="@xml/bubble_accessibility_service"/>
+        </service>
+
         <!-- Serves the crash report to the share sheet (CrashReporter.shareIntent). -->
         <provider
                 android:name="androidx.core.content.FileProvider"

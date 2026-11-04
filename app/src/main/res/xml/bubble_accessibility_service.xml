@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The bubble only needs to know which field has input focus and whether a keyboard window is
+     shown: focus, window and window-list changes trigger a re-check. Interactive windows are
+     needed to see the keyboard window. -->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+        android:accessibilityEventTypes="typeViewFocused|typeWindowStateChanged|typeWindowsChanged"
+        android:accessibilityFeedbackType="feedbackGeneric"
+        android:accessibilityFlags="flagRetrieveInteractiveWindows"
+        android:canRetrieveWindowContent="true"
+        android:notificationTimeout="100"
+        android:isAccessibilityTool="false"
+        android:description="@string/bubble_service_description"
+        android:settingsActivity="org.schabi.parakeetype.settings.SettingsActivity"/>

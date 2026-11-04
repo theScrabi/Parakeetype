@@ -214,4 +214,19 @@
     <string name="voice_input_error_permission">Parakeetype heeft toegang tot de microfoon nodig.</string>
     <string name="voice_input_error_audio">De microfoon kan niet worden geopend.</string>
     <string name="voice_input_error_generic">Spraakherkenning mislukt.</string>
+
+    <!-- Zwevende dicteerbubbel (toegankelijkheidsservice) -->
+    <string name="bubble_service_label">Parakeetype-dicteerbubbel</string>
+    <string name="bubble_service_description">Toont een zwevende microfoonknop terwijl een ander toetsenbord open is. Tik erop om met Parakeetype te dicteren; de tekst wordt in het actieve veld gezet. Parakeetype gebruikt deze toegang alleen om het actieve tekstveld te vinden, te zien of er een toetsenbord open is en de tekst in te voegen. Spraak wordt op dit apparaat verwerkt en er wordt niets verstuurd.</string>
+    <string name="bubble_start_dictation">Dicteren starten</string>
+    <string name="bubble_stop_dictation">Dicteren stoppen</string>
+    <string name="bubble_model_loading">Spraakmodel wordt geladen</string>
+    <string name="bubble_transcribing">Bezig met uitschrijven</string>
+    <string name="bubble_copied">De tekst kon niet worden ingevoegd en is naar het klembord gekopieerd</string>
+    <string name="bubble_no_field">Tik eerst op een tekstveld</string>
+    <string name="bubble_need_permission">Parakeetype heeft toegang tot de microfoon nodig</string>
+    <string name="home_bubble_enabled">Dicteerbubbel aan</string>
+    <string name="home_bubble_enabled_subtitle">Er verschijnt een microfoonbubbel terwijl je met een ander toetsenbord typt</string>
+    <string name="home_bubble_disabled">Dicteerbubbel uit</string>
+    <string name="home_bubble_disabled_subtitle">Optioneel: zet "Parakeetype-dicteerbubbel" aan onder Toegankelijkheid om te dicteren met je gewone toetsenbord. Is de schakelaar grijs, sta dan eerst beperkte instellingen toe in de app-info van Parakeetype.</string>
 </resources>
