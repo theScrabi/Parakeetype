@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">A Parakeetype alkalmazásnak mikrofon-hozzáférésre van szüksége.</string>
     <string name="voice_input_error_audio">Nem sikerült megnyitni a mikrofont.</string>
     <string name="voice_input_error_generic">A beszédfelismerés sikertelen.</string>
+
+    <!-- Lebegő diktálóbuborék (kisegítő szolgáltatás) -->
+    <string name="bubble_service_label">Parakeetype diktálóbuborék</string>
+    <string name="bubble_service_description">Lebegő mikrofongombot jelenít meg, amíg egy másik billentyűzet van nyitva. Koppintson rá a Parakeetype-pal való diktáláshoz; a szöveg az aktív mezőbe kerül. A Parakeetype ezt a hozzáférést csak az aktív szövegmező megtalálására, annak érzékelésére, hogy látható-e billentyűzet, és a szöveg beszúrására használja. A beszéd ezen az eszközön dolgozódik fel, és semmi sem kerül elküldésre.</string>
+    <string name="bubble_start_dictation">Diktálás indítása</string>
+    <string name="bubble_stop_dictation">Diktálás leállítása</string>
+    <string name="bubble_model_loading">Beszédmodell betöltése</string>
+    <string name="bubble_transcribing">Átírás folyamatban</string>
+    <string name="bubble_copied">A szöveget nem sikerült beszúrni, ezért a vágólapra lett másolva</string>
+    <string name="bubble_no_field">Előbb koppintson egy szövegmezőre</string>
+    <string name="bubble_need_permission">A Parakeetype-nak hozzáférés kell a mikrofonhoz</string>
+    <string name="home_bubble_enabled">Diktálóbuborék bekapcsolva</string>
+    <string name="home_bubble_enabled_subtitle">Mikrofonbuborék jelenik meg, amíg másik billentyűzettel gépel</string>
+    <string name="home_bubble_disabled">Diktálóbuborék kikapcsolva</string>
+    <string name="home_bubble_disabled_subtitle">Opcionális: kapcsolja be a „Parakeetype diktálóbuborék” szolgáltatást a Kisegítő lehetőségeknél, hogy a szokásos billentyűzetével diktálhasson. Ha a kapcsoló szürke, előbb engedélyezze a korlátozott beállításokat a Parakeetype alkalmazásadatainál.</string>
+    <string name="bubble_done">Kész, szöveg beszúrása</string>
+    <string name="bubble_cancel">Diktálás megszakítása</string>
+    <string name="bubble_hide">Elrejtés ehhez a mezőhöz</string>
+    <string name="bubble_hidden_toast">A buborék el van rejtve, amíg egy másik szövegmezőre nem koppint</string>
 </resources>

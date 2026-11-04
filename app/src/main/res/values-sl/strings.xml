@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype potrebuje dostop do mikrofona.</string>
     <string name="voice_input_error_audio">Mikrofona ni bilo mogoče odpreti.</string>
     <string name="voice_input_error_generic">Prepoznavanje govora ni uspelo.</string>
+
+    <!-- Lebdeči mehurček za narekovanje (storitev za dostopnost) -->
+    <string name="bubble_service_label">Mehurček za narekovanje Parakeetype</string>
+    <string name="bubble_service_description">Prikaže lebdeči gumb mikrofona, ko je odprta druga tipkovnica. Tapnite ga za narekovanje s Parakeetype; besedilo se vstavi v aktivno polje. Parakeetype ta dostop uporablja samo za iskanje aktivnega besedilnega polja, za zaznavanje, ali je prikazana tipkovnica, in za vstavljanje besedila. Govor se obdela v tej napravi in nič se ne pošlje nikamor.</string>
+    <string name="bubble_start_dictation">Začni narekovanje</string>
+    <string name="bubble_stop_dictation">Ustavi narekovanje</string>
+    <string name="bubble_model_loading">Nalaganje govornega modela</string>
+    <string name="bubble_transcribing">Prepisovanje</string>
+    <string name="bubble_copied">Besedila ni bilo mogoče vstaviti, zato je bilo kopirano v odložišče</string>
+    <string name="bubble_no_field">Najprej tapnite besedilno polje</string>
+    <string name="bubble_need_permission">Parakeetype potrebuje dostop do mikrofona</string>
+    <string name="home_bubble_enabled">Mehurček za narekovanje vklopljen</string>
+    <string name="home_bubble_enabled_subtitle">Med tipkanjem z drugo tipkovnico se prikaže mehurček mikrofona</string>
+    <string name="home_bubble_disabled">Mehurček za narekovanje izklopljen</string>
+    <string name="home_bubble_disabled_subtitle">Izbirno: vklopite »Mehurček za narekovanje Parakeetype« v Dostopnosti za narekovanje z običajno tipkovnico. Če je stikalo zatemnjeno, najprej dovolite omejene nastavitve v podatkih o aplikaciji Parakeetype.</string>
+    <string name="bubble_done">Končano, vstavi besedilo</string>
+    <string name="bubble_cancel">Prekliči narekovanje</string>
+    <string name="bubble_hide">Skrij za to polje</string>
+    <string name="bubble_hidden_toast">Mehurček skrit, dokler ne tapnete drugega besedilnega polja</string>
 </resources>

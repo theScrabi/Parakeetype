@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype potrebuje prístup k mikrofónu.</string>
     <string name="voice_input_error_audio">Mikrofón sa nepodarilo otvoriť.</string>
     <string name="voice_input_error_generic">Rozpoznávanie reči zlyhalo.</string>
+
+    <!-- Plávajúca bublina diktovania (služba dostupnosti) -->
+    <string name="bubble_service_label">Bublina diktovania Parakeetype</string>
+    <string name="bubble_service_description">Zobrazuje plávajúce tlačidlo mikrofónu, keď je otvorená iná klávesnica. Klepnutím naň diktujte cez Parakeetype; text sa vloží do aktívneho poľa. Parakeetype tento prístup používa len na nájdenie aktívneho textového poľa, na zistenie, či je zobrazená klávesnica, a na vloženie textu. Reč sa spracúva v tomto zariadení a nič sa nikam neodosiela.</string>
+    <string name="bubble_start_dictation">Spustiť diktovanie</string>
+    <string name="bubble_stop_dictation">Zastaviť diktovanie</string>
+    <string name="bubble_model_loading">Načítava sa model reči</string>
+    <string name="bubble_transcribing">Prepisuje sa</string>
+    <string name="bubble_copied">Text sa nepodarilo vložiť, preto bol skopírovaný do schránky</string>
+    <string name="bubble_no_field">Najprv klepnite na textové pole</string>
+    <string name="bubble_need_permission">Parakeetype potrebuje prístup k mikrofónu</string>
+    <string name="home_bubble_enabled">Bublina diktovania zapnutá</string>
+    <string name="home_bubble_enabled_subtitle">Pri písaní na inej klávesnici sa zobrazí bublina mikrofónu</string>
+    <string name="home_bubble_disabled">Bublina diktovania vypnutá</string>
+    <string name="home_bubble_disabled_subtitle">Voliteľné: zapnite „Bublina diktovania Parakeetype“ v Prístupnosti, aby ste mohli diktovať bežnou klávesnicou. Ak je prepínač sivý, najprv povoľte obmedzené nastavenia v informáciách o aplikácii Parakeetype.</string>
+    <string name="bubble_done">Hotovo, vložiť text</string>
+    <string name="bubble_cancel">Zrušiť diktovanie</string>
+    <string name="bubble_hide">Skryť pre toto pole</string>
+    <string name="bubble_hidden_toast">Bublina skrytá, kým neklepnete na iné textové pole</string>
 </resources>

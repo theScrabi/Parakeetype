@@ -240,4 +240,23 @@
     <string name="voice_input_error_permission">Parakeetype benötigt Zugriff auf das Mikrofon.</string>
     <string name="voice_input_error_audio">Das Mikrofon konnte nicht geöffnet werden.</string>
     <string name="voice_input_error_generic">Spracherkennung fehlgeschlagen.</string>
+
+    <!-- Schwebende Diktierblase (Bedienungshilfe) -->
+    <string name="bubble_service_label">Parakeetype-Diktierblase</string>
+    <string name="bubble_service_description">Zeigt eine schwebende Mikrofon-Schaltfläche an, während eine andere Tastatur geöffnet ist. Tippe darauf, um mit Parakeetype zu diktieren; der Text wird in das aktive Feld eingefügt. Parakeetype nutzt diesen Zugriff nur, um das aktive Textfeld zu finden, zu erkennen, ob eine Tastatur angezeigt wird, und den Text einzufügen. Die Sprache wird auf diesem Gerät verarbeitet, es wird nichts gesendet.</string>
+    <string name="bubble_start_dictation">Diktat starten</string>
+    <string name="bubble_stop_dictation">Diktat stoppen</string>
+    <string name="bubble_model_loading">Sprachmodell wird geladen</string>
+    <string name="bubble_transcribing">Wird transkribiert</string>
+    <string name="bubble_copied">Der Text konnte nicht eingefügt werden und wurde in die Zwischenablage kopiert</string>
+    <string name="bubble_no_field">Tippe zuerst auf ein Textfeld</string>
+    <string name="bubble_need_permission">Parakeetype benötigt Zugriff auf das Mikrofon</string>
+    <string name="home_bubble_enabled">Diktierblase an</string>
+    <string name="home_bubble_enabled_subtitle">Beim Tippen mit einer anderen Tastatur erscheint eine Mikrofonblase</string>
+    <string name="home_bubble_disabled">Diktierblase aus</string>
+    <string name="home_bubble_disabled_subtitle">Optional: Aktiviere „Parakeetype-Diktierblase“ unter Bedienungshilfen, um mit deiner normalen Tastatur zu diktieren. Ist der Schalter ausgegraut, erlaube zuerst eingeschränkte Einstellungen in den App-Infos von Parakeetype.</string>
+    <string name="bubble_done">Fertig, Text einfügen</string>
+    <string name="bubble_cancel">Diktat abbrechen</string>
+    <string name="bubble_hide">Für dieses Feld ausblenden</string>
+    <string name="bubble_hidden_toast">Blase ausgeblendet, bis du auf ein anderes Textfeld tippst</string>
 </resources>

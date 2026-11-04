@@ -215,4 +215,23 @@
     <string name="voice_input_error_permission">Parakeetype a besoin d\'accéder au micro.</string>
     <string name="voice_input_error_audio">Impossible d\'ouvrir le micro.</string>
     <string name="voice_input_error_generic">Échec de la reconnaissance vocale.</string>
+
+    <!-- Bulle de dictée flottante (service d\'accessibilité) -->
+    <string name="bubble_service_label">Bulle de dictée Parakeetype</string>
+    <string name="bubble_service_description">Affiche un bouton de microphone flottant lorsqu\'un autre clavier est ouvert. Touchez-le pour dicter avec Parakeetype ; le texte est inséré dans le champ actif. Parakeetype n\'utilise cet accès que pour repérer le champ de texte actif, voir si un clavier est affiché et insérer le texte. La voix est traitée sur cet appareil et rien n\'est envoyé.</string>
+    <string name="bubble_start_dictation">Démarrer la dictée</string>
+    <string name="bubble_stop_dictation">Arrêter la dictée</string>
+    <string name="bubble_model_loading">Chargement du modèle vocal</string>
+    <string name="bubble_transcribing">Transcription en cours</string>
+    <string name="bubble_copied">Le texte n\'a pas pu être inséré, il a été copié dans le presse-papiers</string>
+    <string name="bubble_no_field">Touchez d\'abord un champ de texte</string>
+    <string name="bubble_need_permission">Parakeetype a besoin d\'accéder au microphone</string>
+    <string name="home_bubble_enabled">Bulle de dictée activée</string>
+    <string name="home_bubble_enabled_subtitle">Une bulle de microphone apparaît quand vous tapez avec un autre clavier</string>
+    <string name="home_bubble_disabled">Bulle de dictée désactivée</string>
+    <string name="home_bubble_disabled_subtitle">Facultatif : activez « Bulle de dictée Parakeetype » dans Accessibilité pour dicter avec votre clavier habituel. Si l\'interrupteur est grisé, autorisez d\'abord les paramètres restreints dans les infos de l\'appli Parakeetype.</string>
+    <string name="bubble_done">Terminé, insérer le texte</string>
+    <string name="bubble_cancel">Annuler la dictée</string>
+    <string name="bubble_hide">Masquer pour ce champ</string>
+    <string name="bubble_hidden_toast">Bulle masquée jusqu\'à ce que vous touchiez un autre champ de texte</string>
 </resources>

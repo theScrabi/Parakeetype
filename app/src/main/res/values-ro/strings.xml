@@ -215,4 +215,23 @@
     <string name="voice_input_error_permission">Parakeetype are nevoie de acces la microfon.</string>
     <string name="voice_input_error_audio">Microfonul nu a putut fi deschis.</string>
     <string name="voice_input_error_generic">Recunoașterea vocală nu a reușit.</string>
+
+    <!-- Bulă de dictare flotantă (serviciu de accesibilitate) -->
+    <string name="bubble_service_label">Bulă de dictare Parakeetype</string>
+    <string name="bubble_service_description">Afișează un buton de microfon flotant cât timp este deschisă o altă tastatură. Atinge-l pentru a dicta cu Parakeetype; textul este inserat în câmpul activ. Parakeetype folosește acest acces doar pentru a găsi câmpul de text activ, a vedea dacă este afișată o tastatură și a insera textul. Vocea este procesată pe acest dispozitiv și nu se trimite nimic nicăieri.</string>
+    <string name="bubble_start_dictation">Începe dictarea</string>
+    <string name="bubble_stop_dictation">Oprește dictarea</string>
+    <string name="bubble_model_loading">Se încarcă modelul de voce</string>
+    <string name="bubble_transcribing">Se transcrie</string>
+    <string name="bubble_copied">Textul nu a putut fi inserat, așa că a fost copiat în clipboard</string>
+    <string name="bubble_no_field">Atinge mai întâi un câmp de text</string>
+    <string name="bubble_need_permission">Parakeetype are nevoie de acces la microfon</string>
+    <string name="home_bubble_enabled">Bulă de dictare activată</string>
+    <string name="home_bubble_enabled_subtitle">Apare o bulă de microfon cât timp scrii cu altă tastatură</string>
+    <string name="home_bubble_disabled">Bulă de dictare dezactivată</string>
+    <string name="home_bubble_disabled_subtitle">Opțional: activează „Bulă de dictare Parakeetype” în Accesibilitate pentru a dicta cu tastatura obișnuită. Dacă comutatorul este estompat, permite mai întâi setările restricționate în informațiile aplicației Parakeetype.</string>
+    <string name="bubble_done">Gata, inserează textul</string>
+    <string name="bubble_cancel">Anulează dictarea</string>
+    <string name="bubble_hide">Ascunde pentru acest câmp</string>
+    <string name="bubble_hidden_toast">Bula este ascunsă până atingi alt câmp de text</string>
 </resources>

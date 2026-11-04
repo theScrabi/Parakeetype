@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Lietotnei Parakeetype ir nepieciešama piekļuve mikrofonam.</string>
     <string name="voice_input_error_audio">Mikrofonu neizdevās atvērt.</string>
     <string name="voice_input_error_generic">Runas atpazīšana neizdevās.</string>
+
+    <!-- Peldošs diktēšanas burbulis (pieejamības pakalpojums) -->
+    <string name="bubble_service_label">Parakeetype diktēšanas burbulis</string>
+    <string name="bubble_service_description">Rāda peldošu mikrofona pogu, kamēr ir atvērta cita tastatūra. Pieskarieties tai, lai diktētu ar Parakeetype; teksts tiek ievietots aktīvajā laukā. Parakeetype šo piekļuvi izmanto tikai, lai atrastu aktīvo teksta lauku, noteiktu, vai ir parādīta tastatūra, un ievietotu tekstu. Runa tiek apstrādāta šajā ierīcē, un nekas netiek nekur sūtīts.</string>
+    <string name="bubble_start_dictation">Sākt diktēšanu</string>
+    <string name="bubble_stop_dictation">Apturēt diktēšanu</string>
+    <string name="bubble_model_loading">Notiek runas modeļa ielāde</string>
+    <string name="bubble_transcribing">Notiek transkripcija</string>
+    <string name="bubble_copied">Tekstu nevarēja ievietot, tāpēc tas tika kopēts starpliktuvē</string>
+    <string name="bubble_no_field">Vispirms pieskarieties teksta laukam</string>
+    <string name="bubble_need_permission">Parakeetype nepieciešama piekļuve mikrofonam</string>
+    <string name="home_bubble_enabled">Diktēšanas burbulis ieslēgts</string>
+    <string name="home_bubble_enabled_subtitle">Mikrofona burbulis parādās, kad rakstāt ar citu tastatūru</string>
+    <string name="home_bubble_disabled">Diktēšanas burbulis izslēgts</string>
+    <string name="home_bubble_disabled_subtitle">Neobligāti: ieslēdziet „Parakeetype diktēšanas burbulis“ sadaļā Pieejamība, lai diktētu ar parasto tastatūru. Ja slēdzis ir pelēks, vispirms atļaujiet ierobežotos iestatījumus Parakeetype lietotnes informācijā.</string>
+    <string name="bubble_done">Gatavs, ievietot tekstu</string>
+    <string name="bubble_cancel">Atcelt diktēšanu</string>
+    <string name="bubble_hide">Slēpt šim laukam</string>
+    <string name="bubble_hidden_toast">Burbulis paslēpts, līdz pieskaraties citam teksta laukam</string>
 </resources>

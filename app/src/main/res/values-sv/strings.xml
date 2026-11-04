@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype behöver åtkomst till mikrofonen.</string>
     <string name="voice_input_error_audio">Det gick inte att öppna mikrofonen.</string>
     <string name="voice_input_error_generic">Taligenkänningen misslyckades.</string>
+
+    <!-- Flytande dikteringsbubbla (tillgänglighetstjänst) -->
+    <string name="bubble_service_label">Parakeetype-dikteringsbubbla</string>
+    <string name="bubble_service_description">Visar en flytande mikrofonknapp medan ett annat tangentbord är öppet. Tryck på den för att diktera med Parakeetype; texten infogas i det aktiva fältet. Parakeetype använder den här åtkomsten enbart för att hitta det aktiva textfältet, se om ett tangentbord visas och infoga texten. Tal bearbetas på den här enheten och inget skickas någonstans.</string>
+    <string name="bubble_start_dictation">Starta diktering</string>
+    <string name="bubble_stop_dictation">Stoppa diktering</string>
+    <string name="bubble_model_loading">Läser in talmodellen</string>
+    <string name="bubble_transcribing">Transkriberar</string>
+    <string name="bubble_copied">Texten kunde inte infogas, så den kopierades till urklipp</string>
+    <string name="bubble_no_field">Tryck på ett textfält först</string>
+    <string name="bubble_need_permission">Parakeetype behöver åtkomst till mikrofonen</string>
+    <string name="home_bubble_enabled">Dikteringsbubbla på</string>
+    <string name="home_bubble_enabled_subtitle">En mikrofonbubbla visas medan du skriver med ett annat tangentbord</string>
+    <string name="home_bubble_disabled">Dikteringsbubbla av</string>
+    <string name="home_bubble_disabled_subtitle">Valfritt: slå på "Parakeetype-dikteringsbubbla" under Tillgänglighet för att diktera med ditt vanliga tangentbord. Om reglaget är nedtonat, tillåt först begränsade inställningar i Parakeetypes appinfo.</string>
+    <string name="bubble_done">Klar, infoga text</string>
+    <string name="bubble_cancel">Avbryt diktering</string>
+    <string name="bubble_hide">Dölj för det här fältet</string>
+    <string name="bubble_hidden_toast">Bubblan är dold tills du trycker på ett annat textfält</string>
 </resources>

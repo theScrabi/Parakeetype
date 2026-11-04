@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype teħtieġ aċċess għall-mikrofonu.</string>
     <string name="voice_input_error_audio">Il-mikrofonu ma setax jinfetaħ.</string>
     <string name="voice_input_error_generic">Ir-rikonoxximent tat-taħdit falla.</string>
+
+    <!-- Bużżieqa tad-dettat li tiċċaqlaq (servizz tal-aċċessibbiltà) -->
+    <string name="bubble_service_label">Bużżieqa tad-dettat ta\' Parakeetype</string>
+    <string name="bubble_service_description">Turi buttuna tal-mikrofonu li tiċċaqlaq waqt li tkun miftuħa tastiera oħra. Agħfasha biex tiddetta b\'Parakeetype; it-test jiddaħħal fil-qasam attiv. Parakeetype juża dan l-aċċess biss biex isib il-qasam tat-test attiv, jara jekk hemmx tastiera murija u jdaħħal it-test. Id-diskors jiġi pproċessat fuq dan l-apparat u xejn ma jintbagħat imkien.</string>
+    <string name="bubble_start_dictation">Ibda d-dettat</string>
+    <string name="bubble_stop_dictation">Waqqaf id-dettat</string>
+    <string name="bubble_model_loading">Qed jitgħabba l-mudell tad-diskors</string>
+    <string name="bubble_transcribing">Qed jiġi traskritt</string>
+    <string name="bubble_copied">It-test ma setax jiddaħħal, għalhekk ġie kkupjat fil-clipboard</string>
+    <string name="bubble_no_field">L-ewwel agħfas qasam tat-test</string>
+    <string name="bubble_need_permission">Parakeetype jeħtieġ aċċess għall-mikrofonu</string>
+    <string name="home_bubble_enabled">Bużżieqa tad-dettat mixgħula</string>
+    <string name="home_bubble_enabled_subtitle">Tidher bużżieqa tal-mikrofonu waqt li tikteb b\'tastiera oħra</string>
+    <string name="home_bubble_disabled">Bużżieqa tad-dettat mitfija</string>
+    <string name="home_bubble_disabled_subtitle">Mhux obbligatorju: ixgħel "Bużżieqa tad-dettat ta\' Parakeetype" taħt Aċċessibbiltà biex tiddetta bit-tastiera tas-soltu. Jekk il-buttuna hija griża, l-ewwel ippermetti l-issettjar ristrett fl-informazzjoni tal-app ta\' Parakeetype.</string>
+    <string name="bubble_done">Lest, daħħal it-test</string>
+    <string name="bubble_cancel">Ikkanċella d-dettat</string>
+    <string name="bubble_hide">Aħbi għal dan il-qasam</string>
+    <string name="bubble_hidden_toast">Il-bużżieqa moħbija sakemm tagħfas qasam tat-test ieħor</string>
 </resources>

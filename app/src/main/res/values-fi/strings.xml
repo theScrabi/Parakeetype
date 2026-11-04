@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype tarvitsee mikrofonin käyttöoikeuden.</string>
     <string name="voice_input_error_audio">Mikrofonia ei voitu avata.</string>
     <string name="voice_input_error_generic">Puheentunnistus epäonnistui.</string>
+
+    <!-- Kelluva sanelukupla (esteettömyyspalvelu) -->
+    <string name="bubble_service_label">Parakeetypen sanelukupla</string>
+    <string name="bubble_service_description">Näyttää kelluvan mikrofonipainikkeen, kun toinen näppäimistö on auki. Sanele Parakeetypella napauttamalla sitä; teksti lisätään aktiiviseen kenttään. Parakeetype käyttää tätä käyttöoikeutta vain aktiivisen tekstikentän löytämiseen, sen havaitsemiseen onko näppäimistö näkyvissä ja tekstin lisäämiseen. Puhe käsitellään tällä laitteella eikä mitään lähetetä mihinkään.</string>
+    <string name="bubble_start_dictation">Aloita sanelu</string>
+    <string name="bubble_stop_dictation">Lopeta sanelu</string>
+    <string name="bubble_model_loading">Ladataan puhemallia</string>
+    <string name="bubble_transcribing">Puretaan tekstiksi</string>
+    <string name="bubble_copied">Tekstiä ei voitu lisätä, joten se kopioitiin leikepöydälle</string>
+    <string name="bubble_no_field">Napauta ensin tekstikenttää</string>
+    <string name="bubble_need_permission">Parakeetype tarvitsee mikrofonin käyttöoikeuden</string>
+    <string name="home_bubble_enabled">Sanelukupla käytössä</string>
+    <string name="home_bubble_enabled_subtitle">Mikrofonikupla ilmestyy, kun kirjoitat toisella näppäimistöllä</string>
+    <string name="home_bubble_disabled">Sanelukupla pois käytöstä</string>
+    <string name="home_bubble_disabled_subtitle">Valinnainen: ota "Parakeetypen sanelukupla" käyttöön Esteettömyys-asetuksissa, jotta voit sanella tavallisella näppäimistölläsi. Jos kytkin on himmennetty, salli ensin rajoitetut asetukset Parakeetypen sovellustiedoissa.</string>
+    <string name="bubble_done">Valmis, lisää teksti</string>
+    <string name="bubble_cancel">Peruuta sanelu</string>
+    <string name="bubble_hide">Piilota tältä kentältä</string>
+    <string name="bubble_hidden_toast">Kupla piilotettu, kunnes napautat toista tekstikenttää</string>
 </resources>

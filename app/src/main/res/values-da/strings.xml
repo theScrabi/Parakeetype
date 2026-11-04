@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype skal have adgang til mikrofonen.</string>
     <string name="voice_input_error_audio">Mikrofonen kunne ikke åbnes.</string>
     <string name="voice_input_error_generic">Talegenkendelsen mislykkedes.</string>
+
+    <!-- Flydende dikteringsboble (tilgængelighedstjeneste) -->
+    <string name="bubble_service_label">Parakeetype-dikteringsboble</string>
+    <string name="bubble_service_description">Viser en flydende mikrofonknap, mens et andet tastatur er åbent. Tryk på den for at diktere med Parakeetype; teksten indsættes i det aktive felt. Parakeetype bruger kun denne adgang til at finde det aktive tekstfelt, se om et tastatur vises og indsætte teksten. Tale behandles på denne enhed, og intet sendes nogen steder.</string>
+    <string name="bubble_start_dictation">Start diktering</string>
+    <string name="bubble_stop_dictation">Stop diktering</string>
+    <string name="bubble_model_loading">Indlæser talemodellen</string>
+    <string name="bubble_transcribing">Transskriberer</string>
+    <string name="bubble_copied">Teksten kunne ikke indsættes, så den blev kopieret til udklipsholderen</string>
+    <string name="bubble_no_field">Tryk på et tekstfelt først</string>
+    <string name="bubble_need_permission">Parakeetype skal bruge adgang til mikrofonen</string>
+    <string name="home_bubble_enabled">Dikteringsboble til</string>
+    <string name="home_bubble_enabled_subtitle">En mikrofonboble vises, mens du skriver med et andet tastatur</string>
+    <string name="home_bubble_disabled">Dikteringsboble fra</string>
+    <string name="home_bubble_disabled_subtitle">Valgfrit: Slå "Parakeetype-dikteringsboble" til under Tilgængelighed for at diktere med dit almindelige tastatur. Hvis kontakten er nedtonet, skal du først tillade begrænsede indstillinger i Parakeetypes appinfo.</string>
+    <string name="bubble_done">Færdig, indsæt tekst</string>
+    <string name="bubble_cancel">Annullér diktering</string>
+    <string name="bubble_hide">Skjul for dette felt</string>
+    <string name="bubble_hidden_toast">Boble skjult, indtil du trykker på et andet tekstfelt</string>
 </resources>

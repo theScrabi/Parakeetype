@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype се нуждае от достъп до микрофона.</string>
     <string name="voice_input_error_audio">Микрофонът не можа да бъде отворен.</string>
     <string name="voice_input_error_generic">Разпознаването на говор не бе успешно.</string>
+
+    <!-- Плаващ балон за диктовка (услуга за достъпност) -->
+    <string name="bubble_service_label">Балон за диктовка на Parakeetype</string>
+    <string name="bubble_service_description">Показва плаващ бутон за микрофон, докато е отворена друга клавиатура. Докоснете го, за да диктувате с Parakeetype; текстът се вмъква в активното поле. Parakeetype използва този достъп само за да открие активното текстово поле, да види дали е показана клавиатура и да вмъкне текста. Говорът се обработва на това устройство и нищо не се изпраща никъде.</string>
+    <string name="bubble_start_dictation">Започване на диктовка</string>
+    <string name="bubble_stop_dictation">Спиране на диктовка</string>
+    <string name="bubble_model_loading">Зарежда се речевият модел</string>
+    <string name="bubble_transcribing">Преобразуване в текст</string>
+    <string name="bubble_copied">Текстът не можа да бъде вмъкнат, затова беше копиран в клипборда</string>
+    <string name="bubble_no_field">Първо докоснете текстово поле</string>
+    <string name="bubble_need_permission">Parakeetype се нуждае от достъп до микрофона</string>
+    <string name="home_bubble_enabled">Балонът за диктовка е включен</string>
+    <string name="home_bubble_enabled_subtitle">Балон с микрофон се появява, докато пишете с друга клавиатура</string>
+    <string name="home_bubble_disabled">Балонът за диктовка е изключен</string>
+    <string name="home_bubble_disabled_subtitle">По избор: включете „Балон за диктовка на Parakeetype“ в Достъпност, за да диктувате с обичайната си клавиатура. Ако превключвателят е сив, първо разрешете ограничените настройки в информацията за приложението Parakeetype.</string>
+    <string name="bubble_done">Готово, вмъкване на текста</string>
+    <string name="bubble_cancel">Отказ от диктовката</string>
+    <string name="bubble_hide">Скриване за това поле</string>
+    <string name="bubble_hidden_toast">Балонът е скрит, докато не докоснете друго текстово поле</string>
 </resources>

@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype potrzebuje dostępu do mikrofonu.</string>
     <string name="voice_input_error_audio">Nie udało się otworzyć mikrofonu.</string>
     <string name="voice_input_error_generic">Rozpoznawanie mowy nie powiodło się.</string>
+
+    <!-- Pływający dymek dyktowania (usługa ułatwień dostępu) -->
+    <string name="bubble_service_label">Dymek dyktowania Parakeetype</string>
+    <string name="bubble_service_description">Pokazuje pływający przycisk mikrofonu, gdy otwarta jest inna klawiatura. Dotknij go, aby dyktować w Parakeetype; tekst zostanie wstawiony do aktywnego pola. Parakeetype używa tego dostępu tylko do znalezienia aktywnego pola tekstowego, sprawdzenia, czy klawiatura jest wyświetlana, i wstawienia tekstu. Mowa jest przetwarzana na tym urządzeniu i nic nie jest wysyłane.</string>
+    <string name="bubble_start_dictation">Rozpocznij dyktowanie</string>
+    <string name="bubble_stop_dictation">Zatrzymaj dyktowanie</string>
+    <string name="bubble_model_loading">Wczytywanie modelu mowy</string>
+    <string name="bubble_transcribing">Transkrypcja</string>
+    <string name="bubble_copied">Nie udało się wstawić tekstu, więc został skopiowany do schowka</string>
+    <string name="bubble_no_field">Najpierw dotknij pola tekstowego</string>
+    <string name="bubble_need_permission">Parakeetype potrzebuje dostępu do mikrofonu</string>
+    <string name="home_bubble_enabled">Dymek dyktowania włączony</string>
+    <string name="home_bubble_enabled_subtitle">Dymek mikrofonu pojawia się podczas pisania inną klawiaturą</string>
+    <string name="home_bubble_disabled">Dymek dyktowania wyłączony</string>
+    <string name="home_bubble_disabled_subtitle">Opcjonalnie: włącz „Dymek dyktowania Parakeetype” w Ułatwieniach dostępu, aby dyktować przy użyciu zwykłej klawiatury. Jeśli przełącznik jest wyszarzony, najpierw zezwól na ograniczone ustawienia w informacjach o aplikacji Parakeetype.</string>
+    <string name="bubble_done">Gotowe, wstaw tekst</string>
+    <string name="bubble_cancel">Anuluj dyktowanie</string>
+    <string name="bubble_hide">Ukryj dla tego pola</string>
+    <string name="bubble_hidden_toast">Dymek ukryty, dopóki nie dotkniesz innego pola tekstowego</string>
 </resources>

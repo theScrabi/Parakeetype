@@ -215,4 +215,23 @@
     <string name="voice_input_error_permission">O Parakeetype precisa de acesso ao microfone.</string>
     <string name="voice_input_error_audio">Não foi possível abrir o microfone.</string>
     <string name="voice_input_error_generic">Falha no reconhecimento de voz.</string>
+
+    <!-- Balão de ditado flutuante (serviço de acessibilidade) -->
+    <string name="bubble_service_label">Balão de ditado do Parakeetype</string>
+    <string name="bubble_service_description">Mostra um botão de microfone flutuante enquanto outro teclado está aberto. Toque nele para ditar com o Parakeetype; o texto é inserido no campo ativo. O Parakeetype usa este acesso apenas para encontrar o campo de texto ativo, ver se há um teclado visível e inserir o texto. A voz é processada neste dispositivo e nada é enviado.</string>
+    <string name="bubble_start_dictation">Iniciar ditado</string>
+    <string name="bubble_stop_dictation">Parar ditado</string>
+    <string name="bubble_model_loading">A carregar o modelo de voz</string>
+    <string name="bubble_transcribing">A transcrever</string>
+    <string name="bubble_copied">Não foi possível inserir o texto, por isso foi copiado para a área de transferência</string>
+    <string name="bubble_no_field">Toque primeiro num campo de texto</string>
+    <string name="bubble_need_permission">O Parakeetype precisa de acesso ao microfone</string>
+    <string name="home_bubble_enabled">Balão de ditado ativado</string>
+    <string name="home_bubble_enabled_subtitle">Aparece um balão de microfone enquanto escreve com outro teclado</string>
+    <string name="home_bubble_disabled">Balão de ditado desativado</string>
+    <string name="home_bubble_disabled_subtitle">Opcional: ative «Balão de ditado do Parakeetype» em Acessibilidade para ditar com o seu teclado habitual. Se o botão estiver esbatido, permita primeiro as definições restritas nas informações da app do Parakeetype.</string>
+    <string name="bubble_done">Concluído, inserir texto</string>
+    <string name="bubble_cancel">Cancelar ditado</string>
+    <string name="bubble_hide">Ocultar para este campo</string>
+    <string name="bubble_hidden_toast">Balão oculto até tocar noutro campo de texto</string>
 </resources>

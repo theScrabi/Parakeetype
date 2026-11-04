@@ -215,4 +215,23 @@
     <string name="voice_input_error_permission">Parakeetype necesita acceso al micrófono.</string>
     <string name="voice_input_error_audio">No se ha podido abrir el micrófono.</string>
     <string name="voice_input_error_generic">Error en el reconocimiento de voz.</string>
+
+    <!-- Burbuja de dictado flotante (servicio de accesibilidad) -->
+    <string name="bubble_service_label">Burbuja de dictado de Parakeetype</string>
+    <string name="bubble_service_description">Muestra un botón de micrófono flotante mientras hay otro teclado abierto. Tócalo para dictar con Parakeetype; el texto se inserta en el campo activo. Parakeetype usa este acceso solo para encontrar el campo de texto activo, ver si hay un teclado visible e insertar el texto. La voz se procesa en este dispositivo y no se envía nada.</string>
+    <string name="bubble_start_dictation">Iniciar dictado</string>
+    <string name="bubble_stop_dictation">Detener dictado</string>
+    <string name="bubble_model_loading">Cargando el modelo de voz</string>
+    <string name="bubble_transcribing">Transcribiendo</string>
+    <string name="bubble_copied">No se pudo insertar el texto, así que se copió al portapapeles</string>
+    <string name="bubble_no_field">Toca primero un campo de texto</string>
+    <string name="bubble_need_permission">Parakeetype necesita acceso al micrófono</string>
+    <string name="home_bubble_enabled">Burbuja de dictado activada</string>
+    <string name="home_bubble_enabled_subtitle">Aparece una burbuja de micrófono mientras escribes con otro teclado</string>
+    <string name="home_bubble_disabled">Burbuja de dictado desactivada</string>
+    <string name="home_bubble_disabled_subtitle">Opcional: activa «Burbuja de dictado de Parakeetype» en Accesibilidad para dictar con tu teclado habitual. Si el interruptor está atenuado, permite primero los ajustes restringidos en la información de la app de Parakeetype.</string>
+    <string name="bubble_done">Listo, insertar texto</string>
+    <string name="bubble_cancel">Cancelar dictado</string>
+    <string name="bubble_hide">Ocultar para este campo</string>
+    <string name="bubble_hidden_toast">Burbuja oculta hasta que toques otro campo de texto</string>
 </resources>

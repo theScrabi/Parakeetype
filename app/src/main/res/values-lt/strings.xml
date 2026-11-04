@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Programai Parakeetype reikia prieigos prie mikrofono.</string>
     <string name="voice_input_error_audio">Nepavyko atidaryti mikrofono.</string>
     <string name="voice_input_error_generic">Kalbos atpažinti nepavyko.</string>
+
+    <!-- Slankusis diktavimo burbulas (pritaikymo neįgaliesiems paslauga) -->
+    <string name="bubble_service_label">Parakeetype diktavimo burbulas</string>
+    <string name="bubble_service_description">Rodo slankųjį mikrofono mygtuką, kol atidaryta kita klaviatūra. Palieskite jį, kad diktuotumėte su Parakeetype; tekstas įterpiamas į aktyvų lauką. Parakeetype šią prieigą naudoja tik tam, kad rastų aktyvų teksto lauką, nustatytų, ar rodoma klaviatūra, ir įterptų tekstą. Kalba apdorojama šiame įrenginyje ir niekur nieko nesiunčiama.</string>
+    <string name="bubble_start_dictation">Pradėti diktavimą</string>
+    <string name="bubble_stop_dictation">Stabdyti diktavimą</string>
+    <string name="bubble_model_loading">Įkeliamas kalbos modelis</string>
+    <string name="bubble_transcribing">Transkribuojama</string>
+    <string name="bubble_copied">Nepavyko įterpti teksto, todėl jis nukopijuotas į iškarpinę</string>
+    <string name="bubble_no_field">Pirmiausia palieskite teksto lauką</string>
+    <string name="bubble_need_permission">Parakeetype reikia prieigos prie mikrofono</string>
+    <string name="home_bubble_enabled">Diktavimo burbulas įjungtas</string>
+    <string name="home_bubble_enabled_subtitle">Rašant kita klaviatūra pasirodo mikrofono burbulas</string>
+    <string name="home_bubble_disabled">Diktavimo burbulas išjungtas</string>
+    <string name="home_bubble_disabled_subtitle">Nebūtina: skiltyje Pritaikymas neįgaliesiems įjunkite „Parakeetype diktavimo burbulas“, kad galėtumėte diktuoti įprasta klaviatūra. Jei jungiklis pilkas, pirmiausia leiskite apribotus nustatymus Parakeetype programos informacijoje.</string>
+    <string name="bubble_done">Atlikta, įterpti tekstą</string>
+    <string name="bubble_cancel">Atšaukti diktavimą</string>
+    <string name="bubble_hide">Slėpti šiam laukui</string>
+    <string name="bubble_hidden_toast">Burbulas paslėptas, kol paliesite kitą teksto lauką</string>
 </resources>

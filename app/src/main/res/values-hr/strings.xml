@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Parakeetype treba pristup mikrofonu.</string>
     <string name="voice_input_error_audio">Mikrofon se nije mogao otvoriti.</string>
     <string name="voice_input_error_generic">Prepoznavanje govora nije uspjelo.</string>
+
+    <!-- Plutajući mjehurić za diktiranje (usluga pristupačnosti) -->
+    <string name="bubble_service_label">Mjehurić za diktiranje Parakeetype</string>
+    <string name="bubble_service_description">Prikazuje plutajući gumb mikrofona dok je otvorena druga tipkovnica. Dodirnite ga za diktiranje pomoću Parakeetypea; tekst se umeće u aktivno polje. Parakeetype taj pristup koristi samo za pronalaženje aktivnog tekstnog polja, za provjeru je li prikazana tipkovnica i za umetanje teksta. Govor se obrađuje na ovom uređaju i ništa se ne šalje.</string>
+    <string name="bubble_start_dictation">Pokreni diktiranje</string>
+    <string name="bubble_stop_dictation">Zaustavi diktiranje</string>
+    <string name="bubble_model_loading">Učitavanje govornog modela</string>
+    <string name="bubble_transcribing">Prepisivanje</string>
+    <string name="bubble_copied">Tekst nije bilo moguće umetnuti pa je kopiran u međuspremnik</string>
+    <string name="bubble_no_field">Prvo dodirnite tekstno polje</string>
+    <string name="bubble_need_permission">Parakeetype treba pristup mikrofonu</string>
+    <string name="home_bubble_enabled">Mjehurić za diktiranje uključen</string>
+    <string name="home_bubble_enabled_subtitle">Mjehurić mikrofona pojavljuje se dok tipkate drugom tipkovnicom</string>
+    <string name="home_bubble_disabled">Mjehurić za diktiranje isključen</string>
+    <string name="home_bubble_disabled_subtitle">Neobavezno: uključite „Mjehurić za diktiranje Parakeetype“ u Pristupačnosti kako biste diktirali uobičajenom tipkovnicom. Ako je prekidač zasivljen, najprije dopustite ograničene postavke u informacijama o aplikaciji Parakeetype.</string>
+    <string name="bubble_done">Gotovo, umetni tekst</string>
+    <string name="bubble_cancel">Odustani od diktiranja</string>
+    <string name="bubble_hide">Sakrij za ovo polje</string>
+    <string name="bubble_hidden_toast">Mjehurić skriven dok ne dodirnete drugo tekstno polje</string>
 </resources>

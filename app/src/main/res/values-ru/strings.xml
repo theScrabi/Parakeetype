@@ -214,4 +214,23 @@
     <string name="voice_input_error_permission">Приложению Parakeetype нужен доступ к микрофону.</string>
     <string name="voice_input_error_audio">Не удалось открыть микрофон.</string>
     <string name="voice_input_error_generic">Ошибка распознавания речи.</string>
+
+    <!-- Плавающая кнопка диктовки (специальные возможности) -->
+    <string name="bubble_service_label">Кнопка диктовки Parakeetype</string>
+    <string name="bubble_service_description">Показывает плавающую кнопку микрофона, пока открыта другая клавиатура. Коснитесь её, чтобы диктовать с помощью Parakeetype; текст вставляется в активное поле. Parakeetype использует этот доступ только для того, чтобы найти активное текстовое поле, определить, показана ли клавиатура, и вставить текст. Речь обрабатывается на этом устройстве, и ничего никуда не отправляется.</string>
+    <string name="bubble_start_dictation">Начать диктовку</string>
+    <string name="bubble_stop_dictation">Остановить диктовку</string>
+    <string name="bubble_model_loading">Загрузка речевой модели</string>
+    <string name="bubble_transcribing">Расшифровка</string>
+    <string name="bubble_copied">Не удалось вставить текст, поэтому он скопирован в буфер обмена</string>
+    <string name="bubble_no_field">Сначала коснитесь текстового поля</string>
+    <string name="bubble_need_permission">Parakeetype требуется доступ к микрофону</string>
+    <string name="home_bubble_enabled">Кнопка диктовки включена</string>
+    <string name="home_bubble_enabled_subtitle">Кнопка микрофона появляется, когда вы печатаете на другой клавиатуре</string>
+    <string name="home_bubble_disabled">Кнопка диктовки выключена</string>
+    <string name="home_bubble_disabled_subtitle">Необязательно: включите «Кнопка диктовки Parakeetype» в разделе «Специальные возможности», чтобы диктовать с обычной клавиатуры. Если переключатель неактивен, сначала разрешите ограниченные настройки в сведениях о приложении Parakeetype.</string>
+    <string name="bubble_done">Готово, вставить текст</string>
+    <string name="bubble_cancel">Отменить диктовку</string>
+    <string name="bubble_hide">Скрыть для этого поля</string>
+    <string name="bubble_hidden_toast">Кнопка скрыта, пока вы не коснётесь другого текстового поля</string>
 </resources>

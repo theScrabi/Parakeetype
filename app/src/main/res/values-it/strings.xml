@@ -215,4 +215,23 @@
     <string name="voice_input_error_permission">Parakeetype ha bisogno dell\'accesso al microfono.</string>
     <string name="voice_input_error_audio">Impossibile aprire il microfono.</string>
     <string name="voice_input_error_generic">Riconoscimento vocale non riuscito.</string>
+
+    <!-- Bolla di dettatura fluttuante (servizio di accessibilità) -->
+    <string name="bubble_service_label">Bolla di dettatura Parakeetype</string>
+    <string name="bubble_service_description">Mostra un pulsante del microfono fluttuante mentre è aperta un\'altra tastiera. Toccalo per dettare con Parakeetype; il testo viene inserito nel campo attivo. Parakeetype usa questo accesso solo per trovare il campo di testo attivo, vedere se è visibile una tastiera e inserire il testo. La voce viene elaborata su questo dispositivo e non viene inviato nulla.</string>
+    <string name="bubble_start_dictation">Avvia dettatura</string>
+    <string name="bubble_stop_dictation">Interrompi dettatura</string>
+    <string name="bubble_model_loading">Caricamento del modello vocale</string>
+    <string name="bubble_transcribing">Trascrizione in corso</string>
+    <string name="bubble_copied">Non è stato possibile inserire il testo, è stato copiato negli appunti</string>
+    <string name="bubble_no_field">Tocca prima un campo di testo</string>
+    <string name="bubble_need_permission">Parakeetype ha bisogno dell\'accesso al microfono</string>
+    <string name="home_bubble_enabled">Bolla di dettatura attiva</string>
+    <string name="home_bubble_enabled_subtitle">Compare una bolla del microfono mentre scrivi con un\'altra tastiera</string>
+    <string name="home_bubble_disabled">Bolla di dettatura disattivata</string>
+    <string name="home_bubble_disabled_subtitle">Facoltativo: attiva «Bolla di dettatura Parakeetype» in Accessibilità per dettare con la tua tastiera abituale. Se l\'interruttore è disattivato, consenti prima le impostazioni con restrizioni nelle info dell\'app Parakeetype.</string>
+    <string name="bubble_done">Fatto, inserisci il testo</string>
+    <string name="bubble_cancel">Annulla dettatura</string>
+    <string name="bubble_hide">Nascondi per questo campo</string>
+    <string name="bubble_hidden_toast">Bolla nascosta finché non tocchi un altro campo di testo</string>
 </resources>
