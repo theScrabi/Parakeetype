@@ -50,10 +50,16 @@ fun spliceTranscript(current: CharSequence, selStart: Int, selEnd: Int, insert: 
 }
 
 /**
- * The text to put on the clipboard when the field only accepts a paste: the transcript with a
- * leading space when the field already holds text, since the cursor position is unknown.
+ * The text to put on the clipboard when the field only accepts a paste, which replaces the
+ * selection [selStart]..[selEnd]: spaced like [spliceTranscript]. When the selection is unknown
+ * (negative or out of range), the transcript gets a leading space if the field holds text.
  */
-fun pasteText(fieldHasText: Boolean, insert: String): String {
+fun pasteText(current: CharSequence, selStart: Int, selEnd: Int, insert: String): String {
     val trimmed = insert.trim()
-    return if (fieldHasText && trimmed.isNotEmpty() && trimmed.first() !in CLOSING_PUNCTUATION) " $trimmed" else trimmed
+    if (trimmed.isEmpty()) return ""
+    if (selStart !in 0..current.length || selEnd !in 0..current.length) {
+        return if (current.isNotEmpty() && trimmed.first() !in CLOSING_PUNCTUATION) " $trimmed" else trimmed
+    }
+    val splice = spliceTranscript(current, selStart, selEnd, trimmed)
+    return splice.text.substring(minOf(selStart, selEnd), splice.cursor)
 }

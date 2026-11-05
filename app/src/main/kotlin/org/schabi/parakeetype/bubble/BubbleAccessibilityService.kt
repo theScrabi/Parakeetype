@@ -22,7 +22,6 @@ import android.view.accessibility.AccessibilityWindowInfo
 import android.widget.Toast
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.audio.PermissionHelper
@@ -98,7 +97,11 @@ class BubbleAccessibilityService : AccessibilityService() {
         inference = InferenceConnection(this)
         ui.dockedRight = prefs().getBoolean(PREF_RIGHT, true)
         scope.launch {
-            keepModelLoaded = AppPreferences(applicationContext).keepModelLoaded.first()
+            AppPreferences(applicationContext).keepModelLoaded.collect {
+                keepModelLoaded = it
+                // Turned off while the bubble is hidden: release the model now, not on next hide.
+                if (!it && !attached && session == null) inference.unbind()
+            }
         }
         updateBubble()
     }
@@ -133,7 +136,8 @@ class BubbleAccessibilityService : AccessibilityService() {
         }
         val field = findEditableFocus()
         if (field == null || field != hiddenFor) hiddenFor = null
-        val show = field != null && !keyboard.isOwn && hiddenFor == null
+        // A field keeps focus after Back dismisses the keyboard; only show while one is up.
+        val show = field != null && keyboard.top != null && !keyboard.isOwn && hiddenFor == null
         if (show) showBubble() else hideBubble()
     }
 
@@ -250,7 +254,8 @@ class BubbleAccessibilityService : AccessibilityService() {
     private fun computePosition(lp: WindowManager.LayoutParams) {
         val bounds = windowManager.currentWindowMetrics.bounds
         val windowSize = windowSizePx()
-        lp.gravity = Gravity.TOP or if (ui.dockedRight) Gravity.END else Gravity.START
+        // Physical sides: START/END would flip in RTL locales and break the drag maths.
+        lp.gravity = Gravity.TOP or if (ui.dockedRight) Gravity.RIGHT else Gravity.LEFT
         lp.x = dp(EDGE_MARGIN_DP)
         val kbTop = keyboardTop
         lp.y = if (kbTop != null) {
@@ -269,8 +274,8 @@ class BubbleAccessibilityService : AccessibilityService() {
             // Switch to absolute left-based coordinates for the drag.
             val width = windowManager.currentWindowMetrics.bounds.width()
             val v = view ?: return
-            if (lp.gravity and Gravity.END == Gravity.END) lp.x = width - lp.x - v.width
-            lp.gravity = Gravity.TOP or Gravity.START
+            if (lp.gravity and Gravity.HORIZONTAL_GRAVITY_MASK == Gravity.RIGHT) lp.x = width - lp.x - v.width
+            lp.gravity = Gravity.TOP or Gravity.LEFT
         }
         val bounds = windowManager.currentWindowMetrics.bounds
         lp.x = (lp.x + dx).coerceIn(0, (bounds.width() - (view?.width ?: 0)).coerceAtLeast(0))
@@ -407,15 +412,9 @@ class BubbleAccessibilityService : AccessibilityService() {
 
     private fun insert(transcript: String) {
         if (transcript.isBlank()) return
-        val node = target?.takeIf { it.refresh() } ?: findEditableFocus()
-        if (node == null) {
-            copyToClipboard(transcript.trim())
-            toast(R.string.bubble_copied)
-            return
-        }
-        target = node
-        if (setText(node, transcript)) return
-        if (paste(node, transcript)) return
+        // Never switch to whatever field has focus now: that could be another chat.
+        val node = target?.takeIf { it.refresh() }
+        if (node != null && (setText(node, transcript) || paste(node, transcript))) return
         copyToClipboard(transcript.trim())
         toast(R.string.bubble_copied)
     }
@@ -440,8 +439,8 @@ class BubbleAccessibilityService : AccessibilityService() {
     /** Pastes [transcript] at the cursor through the clipboard. `false` if the field refused. */
     private fun paste(node: AccessibilityNodeInfo, transcript: String): Boolean {
         if (!node.actionList.contains(AccessibilityAction.ACTION_PASTE)) return false
-        val hasText = !node.isShowingHintText && !node.text.isNullOrEmpty()
-        copyToClipboard(pasteText(hasText, transcript))
+        val current: CharSequence = if (node.isShowingHintText) "" else node.text ?: ""
+        copyToClipboard(pasteText(current, node.textSelectionStart, node.textSelectionEnd, transcript))
         return node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
     }
 

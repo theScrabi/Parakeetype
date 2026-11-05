@@ -43,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -108,7 +109,7 @@ fun BubbleContent(
                 (fadeIn(tween(160)) + scaleIn(spring(dampingRatio = 0.7f, stiffness = Spring.StiffnessMediumLow), initialScale = 0.85f))
                     .togetherWith(fadeOut(tween(100)) + scaleOut(tween(120), targetScale = 0.9f))
             },
-            contentAlignment = if (state.dockedRight) Alignment.CenterEnd else Alignment.CenterStart,
+            contentAlignment = if (state.dockedRight) AbsoluteAlignment.CenterRight else AbsoluteAlignment.CenterLeft,
             label = "bubble",
         ) { idle ->
             if (idle) {
@@ -161,7 +162,8 @@ private fun RecordingPill(state: BubbleUiState, onFinish: () -> Unit, onCancel: 
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            // Absolute, so done stays on the docked side in RTL locales too.
+            horizontalArrangement = Arrangement.Absolute.spacedBy(6.dp),
             modifier = Modifier.padding(6.dp),
         ) {
             val cancel: @Composable () -> Unit = {

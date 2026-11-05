@@ -57,9 +57,21 @@ class TextSpliceTest {
     }
 
     @Test
-    fun `paste text gets a leading space only when the field has text`() {
-        assertEquals("Hello", pasteText(false, " Hello "))
-        assertEquals(" Hello", pasteText(true, "Hello"))
-        assertEquals(".", pasteText(true, "."))
+    fun `paste text without a cursor gets a leading space only when the field has text`() {
+        assertEquals("Hello", pasteText("", -1, -1, " Hello "))
+        assertEquals(" Hello", pasteText("world", -1, -1, "Hello"))
+        assertEquals(".", pasteText("world", -1, -1, "."))
+    }
+
+    @Test
+    fun `paste text follows the cursor`() {
+        assertEquals("Hello ", pasteText("world", 0, 0, "Hello"))
+        assertEquals(" there", pasteText("Hi", 2, 2, "there"))
+        assertEquals("Hello", pasteText("", 0, 0, "Hello"))
+    }
+
+    @Test
+    fun `paste text replacing the whole selection has no extra spaces`() {
+        assertEquals("Hello", pasteText("world", 0, 5, "Hello"))
     }
 }
