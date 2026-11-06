@@ -130,8 +130,10 @@ class BubbleAccessibilityService : AccessibilityService() {
         val keyboard = findKeyboard()
         keyboardTop = keyboard.top
         if (session != null) {
-            // Keep the bubble (and follow the keyboard) while dictating.
-            placeBubble()
+            // Dismissing the keyboard mid-dictation (Back, or navigating away) would otherwise
+            // leave this segmented session recording with no silence timeout; cancel it.
+            // Otherwise keep the bubble and follow the keyboard while dictating.
+            if (keyboard.top == null) cancelDictation() else placeBubble()
             return
         }
         val field = findEditableFocus()
@@ -415,21 +417,29 @@ class BubbleAccessibilityService : AccessibilityService() {
         // Never switch to whatever field has focus now: that could be another chat.
         val node = target?.takeIf { it.refresh() }
         if (node != null && (setText(node, transcript) || paste(node, transcript))) return
+        // The field takes neither direct insertion nor paste. Copy this segment and stop the
+        // session: a later segment would replace the clipboard and lose this sentence.
         copyToClipboard(transcript.trim())
         toast(R.string.bubble_copied)
+        session?.cancel()
+        endSession()
     }
 
     /**
-     * The field's real text, with a placeholder read as empty. Some apps (e.g. WhatsApp's
-     * compose box) surface their hint through [AccessibilityNodeInfo.getText] without setting
-     * [AccessibilityNodeInfo.isShowingHintText], so the hint would otherwise be spliced in as
-     * existing text. A transcript dictated into the empty box then came out as "Message hello".
+     * The field's real text, with a placeholder read as empty. Some apps surface their
+     * placeholder through [AccessibilityNodeInfo.getText] while the field is empty, without
+     * setting [AccessibilityNodeInfo.isShowingHintText], so it would otherwise be spliced in as
+     * existing text. WhatsApp's empty compose box, for instance, reports `text="Message"` with
+     * no hint and no caret, and a transcript came out as "Message hello".
+     *
+     * A focused editable field with real content always reports a caret, so non-empty text with
+     * no text selection is a leaked placeholder, not content. Hint equality is deliberately not
+     * used: a field may legitimately hold text equal to its hint (e.g. a typed "Search").
      */
     private fun fieldText(node: AccessibilityNodeInfo): CharSequence {
-        if (node.isShowingHintText) return ""
-        val text = node.text ?: return ""
-        val hint = node.hintText
-        if (hint != null && hint.isNotEmpty() && text.toString() == hint.toString()) return ""
+        val text = node.text
+        if (node.isShowingHintText || text.isNullOrEmpty()) return ""
+        if (node.textSelectionStart < 0 && node.textSelectionEnd < 0) return ""
         return text
     }
 
