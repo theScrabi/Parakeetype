@@ -3,20 +3,17 @@
 package org.schabi.parakeetype.bubble
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -106,8 +103,13 @@ fun BubbleContent(
         AnimatedContent(
             targetState = state.phase == BubblePhase.Idle,
             transitionSpec = {
-                (fadeIn(tween(160)) + scaleIn(spring(dampingRatio = 0.7f, stiffness = Spring.StiffnessMediumLow), initialScale = 0.85f))
-                    .togetherWith(fadeOut(tween(100)) + scaleOut(tween(120), targetScale = 0.9f))
+                // Grow/shrink the pill monotonically (a spring here overshoots and makes the
+                // overlay window relayout jerk), crossfading mic and pill over the same window.
+                ContentTransform(
+                    targetContentEnter = fadeIn(tween(150, delayMillis = 30)),
+                    initialContentExit = fadeOut(tween(150)),
+                    sizeTransform = SizeTransform(clip = true) { _, _ -> tween(220, easing = FastOutSlowInEasing) },
+                )
             },
             contentAlignment = if (state.dockedRight) AbsoluteAlignment.CenterRight else AbsoluteAlignment.CenterLeft,
             label = "bubble",

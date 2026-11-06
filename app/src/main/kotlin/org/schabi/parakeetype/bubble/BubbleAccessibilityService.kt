@@ -419,10 +419,24 @@ class BubbleAccessibilityService : AccessibilityService() {
         toast(R.string.bubble_copied)
     }
 
+    /**
+     * The field's real text, with a placeholder read as empty. Some apps (e.g. WhatsApp's
+     * compose box) surface their hint through [AccessibilityNodeInfo.getText] without setting
+     * [AccessibilityNodeInfo.isShowingHintText], so the hint would otherwise be spliced in as
+     * existing text. A transcript dictated into the empty box then came out as "Message hello".
+     */
+    private fun fieldText(node: AccessibilityNodeInfo): CharSequence {
+        if (node.isShowingHintText) return ""
+        val text = node.text ?: return ""
+        val hint = node.hintText
+        if (hint != null && hint.isNotEmpty() && text.toString() == hint.toString()) return ""
+        return text
+    }
+
     /** Splices [transcript] in at the field's selection. `false` if the field refused. */
     private fun setText(node: AccessibilityNodeInfo, transcript: String): Boolean {
         if (!node.actionList.contains(AccessibilityAction.ACTION_SET_TEXT)) return false
-        val current: CharSequence = if (node.isShowingHintText) "" else node.text ?: ""
+        val current: CharSequence = fieldText(node)
         val splice = spliceTranscript(current, node.textSelectionStart, node.textSelectionEnd, transcript)
         val textArgs = Bundle().apply {
             putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, splice.text)
@@ -439,7 +453,7 @@ class BubbleAccessibilityService : AccessibilityService() {
     /** Pastes [transcript] at the cursor through the clipboard. `false` if the field refused. */
     private fun paste(node: AccessibilityNodeInfo, transcript: String): Boolean {
         if (!node.actionList.contains(AccessibilityAction.ACTION_PASTE)) return false
-        val current: CharSequence = if (node.isShowingHintText) "" else node.text ?: ""
+        val current: CharSequence = fieldText(node)
         copyToClipboard(pasteText(current, node.textSelectionStart, node.textSelectionEnd, transcript))
         return node.performAction(AccessibilityNodeInfo.ACTION_PASTE)
     }
