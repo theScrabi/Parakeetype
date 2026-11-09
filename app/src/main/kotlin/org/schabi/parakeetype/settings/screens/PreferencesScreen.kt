@@ -27,7 +27,6 @@ import org.schabi.parakeetype.ui.theme.ParakeetypeTheme
  * Backed by [PreferencesViewModel] / DataStore; settings persist across
  * process restarts.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InputPreferencesScreen(
     viewModel: PreferencesViewModel = viewModel(),
@@ -247,12 +246,12 @@ private fun KeyboardPositionItem(
             text = stringResource(R.string.pref_position_portrait),
             style = MaterialTheme.typography.titleSmall,
         )
-        SegmentedChoice(listOf(left, center, right), positionPortrait, onPositionPortraitChange)
+        RadioChoice(listOf(left, center, right), positionPortrait, onPositionPortraitChange)
         Text(
             text = stringResource(R.string.pref_position_landscape),
             style = MaterialTheme.typography.titleSmall,
         )
-        SegmentedChoice(listOf(left, right), positionLandscape, onPositionLandscapeChange)
+        RadioChoice(listOf(left, right), positionLandscape, onPositionLandscapeChange)
     }
 }
 

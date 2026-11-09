@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -192,28 +194,44 @@ internal fun SwitchItem(
     )
 }
 
-/** A row of segmented buttons choosing one of [options] (value to label). */
-@OptIn(ExperimentalMaterial3Api::class)
+/**
+ * Radio buttons choosing one of [options] (value to label), one per row as in the Settings
+ * app, so long labels wrap within their own row. The whole row selects its option.
+ */
 @Composable
-internal fun SegmentedChoice(
+internal fun RadioChoice(
     options: List<Pair<String, String>>,
     selected: String,
     onSelect: (String) -> Unit,
 ) {
-    SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-        options.forEachIndexed { index, (value, label) ->
-            SegmentedButton(
-                selected = selected == value,
-                onClick = { onSelect(value) },
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
+    Column(modifier = Modifier.selectableGroup()) {
+        options.forEach { (value, label) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .selectable(
+                        selected = selected == value,
+                        role = Role.RadioButton,
+                        onClick = { onSelect(value) },
+                    )
+                    .heightIn(min = 48.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(label)
+                RadioButton(selected = selected == value, onClick = null)
+                Spacer(Modifier.width(16.dp))
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                )
             }
         }
     }
 }
 
-/** A settings item choosing one of [options] with segmented buttons below its title and summary. */
+/** A settings item choosing one of [options] with radio buttons below its title and summary. */
 @Composable
 internal fun ChoiceItem(
     title: String,
@@ -228,6 +246,6 @@ internal fun ChoiceItem(
             ItemTitle(title)
             ItemSummary(subtitle)
         }
-        SegmentedChoice(options, selected, onSelect)
+        RadioChoice(options, selected, onSelect)
     }
 }
