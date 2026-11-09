@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Parakeetype megnyitása</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Bekapcsolva</string>
-    <string name="state_disabled">Kikapcsolva</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Vissza</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">A Silero VAD segítségével kiszűri a csendet és a háttérzajt az átírás előtt. Csak akkor kapcsolja ki, ha a VAD levágja a beszéd elejét, vagy üres eredményt ad.</string>
     <string name="pref_postprocessing_title">Átirat utófeldolgozása</string>
     <string name="pref_postprocessing_subtitle">Eltávolítja a töltelékszavakat (ö, hm, hmm), összevonja a dadogást, és kitisztítja a modell által néha hallucinált ismétlődő kifejezéseket. Kapcsolja ki, ha a modell pontos, nyers kimenetét szeretné kapni – hasznos annak megállapításához, hogy a tisztítás okozza-e a kimaradt vagy megváltozott szavakat.</string>
-    <string name="pref_postprocessing_disabled_raw">Kikapcsolva (nyers kimenet)</string>
     <string name="pref_keep_loaded_title">Modell betöltve tartása</string>
     <string name="pref_keep_loaded_subtitle">A beszédmodellt a memóriában tartja, amíg másik billentyűzetet használ, így visszaváltáskor a diktálás azonnal elérhető, és nem kell újra betölteni a modellt. Előtérben futó szolgáltatásként, állandó értesítéssel működik, és körülbelül 700 MB RAM-ot foglal.</string>
     <string name="pref_diagnostics_title">Feldolgozási diagnosztika</string>
     <string name="pref_diagnostics_subtitle">Élő jelvényt jelenít meg a billentyűzeten, amely számolja az ablakvágásokat, az igazítás-helyreállításokat és az eldobott üres lépéseket. Hasznos a feldolgozási hibák diagnosztizálásához; alapértelmezés szerint ki van kapcsolva.</string>
-    <string name="pref_diagnostics_visible">Látható</string>
-    <string name="pref_diagnostics_hidden">Rejtett</string>
     <string name="replacements_description">Szavakat vagy kifejezéseket cserél le az átiratokban, pl. egy nevet, amelyet a modell mindig rosszul ír. Csak egész szavakra illeszkedik, és nem különbözteti meg a kis- és nagybetűket. Az átirat utófeldolgozásának részeként fut.</string>
     <string name="replacements_add">Csere hozzáadása</string>
     <string name="replacements_edit">Csere szerkesztése</string>

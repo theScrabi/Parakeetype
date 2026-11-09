@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Άνοιγμα Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Ενεργοποιημένο</string>
-    <string name="state_disabled">Απενεργοποιημένο</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Πίσω</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Χρησιμοποιεί το Silero VAD για να φιλτράρει τη σιωπή και τον θόρυβο περιβάλλοντος πριν από τη μεταγραφή. Απενεργοποιήστε το μόνο αν το VAD κόβει την αρχή της ομιλίας σας ή δίνει κενά αποτελέσματα.</string>
     <string name="pref_postprocessing_title">Μεταεπεξεργασία κειμένου</string>
     <string name="pref_postprocessing_subtitle">Αφαιρεί λέξεις γεμίσματος (εεε, εμ, χμ), συμπτύσσει τους δισταγμούς και καθαρίζει επαναλαμβανόμενες φράσεις που μερικές φορές επινοεί το μοντέλο. Απενεργοποιήστε το για να λαμβάνετε την ακατέργαστη έξοδο του μοντέλου – χρήσιμο για να διαπιστώσετε αν ο καθαρισμός ευθύνεται για λέξεις που λείπουν ή έχουν αλλοιωθεί.</string>
-    <string name="pref_postprocessing_disabled_raw">Απενεργοποιημένο (ακατέργαστη έξοδος)</string>
     <string name="pref_keep_loaded_title">Διατήρηση φορτωμένου μοντέλου</string>
     <string name="pref_keep_loaded_subtitle">Διατηρεί το μοντέλο ομιλίας στη μνήμη ενώ χρησιμοποιείτε άλλο πληκτρολόγιο, ώστε η υπαγόρευση να είναι αμέσως διαθέσιμη όταν επιστρέψετε, χωρίς επαναφόρτωση του μοντέλου. Εκτελεί υπηρεσία προσκηνίου με μόνιμη ειδοποίηση και δεσμεύει περίπου 700 MB μνήμης RAM.</string>
     <string name="pref_diagnostics_title">Διαγνωστικά ροής επεξεργασίας</string>
     <string name="pref_diagnostics_subtitle">Εμφανίζει στο πληκτρολόγιο μια ένδειξη σε πραγματικό χρόνο με μετρητές για περικοπές παραθύρου, ανακτήσεις στοίχισης και απορριφθέντα κενά βήματα. Χρήσιμο για τη διάγνωση προβλημάτων της ροής επεξεργασίας. Είναι κρυφή από προεπιλογή.</string>
-    <string name="pref_diagnostics_visible">Ορατή</string>
-    <string name="pref_diagnostics_hidden">Κρυφή</string>
     <string name="replacements_description">Αντικαθιστά λέξεις ή φράσεις στις μεταγραφές σας, π.χ. ένα όνομα που το μοντέλο γράφει συνεχώς λάθος. Ταιριάζει μόνο ολόκληρες λέξεις και αγνοεί κεφαλαία και πεζά. Εφαρμόζεται ως μέρος της μετεπεξεργασίας της μεταγραφής.</string>
     <string name="replacements_add">Προσθήκη αντικατάστασης</string>
     <string name="replacements_edit">Επεξεργασία αντικατάστασης</string>

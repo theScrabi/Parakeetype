@@ -11,14 +11,15 @@ import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +54,7 @@ fun ModelScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        containerColor = Color.Transparent,
     ) { padding ->
         ModelListContent(
             modelStates = modelStates,
@@ -80,23 +82,13 @@ private fun ModelListContent(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
-        item {
-            Text(
-                text = stringResource(R.string.model_screen_title),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = stringResource(R.string.model_screen_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        item { PageText(stringResource(R.string.model_screen_subtitle)) }
+        item { SectionHeader(stringResource(R.string.model_screen_title)) }
 
-        items(ModelRegistry.all, key = { it.id.name }) { modelInfo ->
+        itemsIndexed(ModelRegistry.all, key = { _, info -> info.id.name }) { index, modelInfo ->
             val state = modelStates[modelInfo.id] ?: ModelState.NotDownloaded
             val isSelected = selectedModel == modelInfo.id
             ModelCard(
@@ -108,6 +100,7 @@ private fun ModelListContent(
                 onCancel = { onCancel(modelInfo.id) },
                 onDelete = { onDelete(modelInfo.id) },
                 onSelect = { onSelect(modelInfo.id) },
+                shape = groupItemShape(index, ModelRegistry.all.size),
             )
         }
     }
@@ -123,67 +116,36 @@ private fun ModelCard(
     onCancel: () -> Unit,
     onDelete: () -> Unit,
     onSelect: () -> Unit,
+    shape: Shape,
 ) {
-    val borderColor = when {
-        isSelected -> MaterialTheme.colorScheme.primary
-        else -> MaterialTheme.colorScheme.outlineVariant
-    }
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        border = BorderStroke(width = if (isSelected) 2.dp else 1.dp, color = borderColor),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected)
-                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.25f)
-            else
-                MaterialTheme.colorScheme.surface,
-        ),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+    SettingsCard(shape) {
+        // Title row
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top,
         ) {
-            // Title row
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top,
-            ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = modelInfo.displayName,
-                        style = MaterialTheme.typography.titleMedium,
-                    )
-                    Text(
-                        text = stringResource(R.string.model_size_format, modelInfo.approximateSizeMb),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-                if (isSelected) {
-                    Icon(
-                        imageVector = Icons.Rounded.CheckCircle,
-                        contentDescription = stringResource(R.string.cd_active_model),
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                }
+            Column(modifier = Modifier.weight(1f)) {
+                ItemTitle(modelInfo.displayName)
+                ItemSummary(stringResource(R.string.model_size_format, modelInfo.approximateSizeMb))
             }
-
-            Text(
-                text = modelInfo.description,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-
-            // State-specific actions
-            when (state) {
-                is ModelState.NotDownloaded -> InstallActions(modelInfo, onImport, onNoBrowser)
-                is ModelState.Importing -> ImportingActions(state.progressFraction, onCancel)
-                is ModelState.Ready -> ReadyActions(isSelected, onSelect, onDelete)
+            if (isSelected) {
+                Icon(
+                    imageVector = Icons.Rounded.CheckCircle,
+                    contentDescription = stringResource(R.string.cd_active_model),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(22.dp),
+                )
             }
+        }
+
+        ItemSummary(modelInfo.description)
+
+        // State-specific actions
+        when (state) {
+            is ModelState.NotDownloaded -> InstallActions(modelInfo, onImport, onNoBrowser)
+            is ModelState.Importing -> ImportingActions(state.progressFraction, onCancel)
+            is ModelState.Ready -> ReadyActions(isSelected, onSelect, onDelete)
         }
     }
 }
@@ -392,6 +354,7 @@ private fun ModelCardNotInstalledPreview() {
             state = ModelState.NotDownloaded,
             isSelected = false,
             onImport = {}, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
+            shape = groupItemShape(0, 1),
         )
     }
 }
@@ -405,6 +368,7 @@ private fun ModelCardImportingPreview() {
             state = ModelState.Importing(0.45f),
             isSelected = false,
             onImport = {}, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
+            shape = groupItemShape(0, 1),
         )
     }
 }
@@ -418,6 +382,7 @@ private fun ModelCardReadySelectedPreview() {
             state = ModelState.Ready,
             isSelected = true,
             onImport = {}, onNoBrowser = {}, onCancel = {}, onDelete = {}, onSelect = {},
+            shape = groupItemShape(0, 1),
         )
     }
 }

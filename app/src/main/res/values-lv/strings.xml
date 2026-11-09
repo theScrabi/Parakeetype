@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Atvērt Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Iespējots</string>
-    <string name="state_disabled">Atspējots</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Atpakaļ</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Izmanto Silero VAD, lai pirms transkripcijas atfiltrētu klusumu un fona troksni. Atspējojiet tikai tad, ja VAD nogriež jūsu runas sākumu vai sniedz tukšus rezultātus.</string>
     <string name="pref_postprocessing_title">Transkripta pēcapstrāde</string>
     <string name="pref_postprocessing_subtitle">Noņem pildvārdus (ē, ēm, hmm), apvieno stostīšanos un notīra atkārtotas frāzes, ko modelis dažkārt halucinē. Atspējojiet, lai saņemtu precīzu, neapstrādātu modeļa izvadi — noderīgi, lai noskaidrotu, vai tīrīšana ir vainojama izlaistos vai mainītos vārdos.</string>
-    <string name="pref_postprocessing_disabled_raw">Atspējota (neapstrādāta izvade)</string>
     <string name="pref_keep_loaded_title">Paturēt modeli ielādētu</string>
     <string name="pref_keep_loaded_subtitle">Patur runas modeli atmiņā, kamēr izmantojat citu tastatūru, lai diktēšana būtu uzreiz gatava, kad pārslēdzaties atpakaļ, un modelis nebūtu jāielādē no jauna. Darbojas kā priekšplāna pakalpojums ar pastāvīgu paziņojumu un aizņem aptuveni 700 MB RAM.</string>
     <string name="pref_diagnostics_title">Konveijera diagnostika</string>
     <string name="pref_diagnostics_subtitle">Rāda tastatūrā tiešraides emblēmu ar loga apgriešanas, līdzinājuma atkopšanas un atmesto tukšo soļu skaitītājiem. Noderīgi konveijera problēmu diagnosticēšanai; pēc noklusējuma izslēgta.</string>
-    <string name="pref_diagnostics_visible">Redzama</string>
-    <string name="pref_diagnostics_hidden">Paslēpta</string>
     <string name="replacements_description">Aizstāj vārdus vai frāzes jūsu transkripcijās, piemēram, vārdu, ko modelis vienmēr uzraksta nepareizi. Atbilst tikai veseliem vārdiem un neņem vērā lielos un mazos burtus. Tiek piemērota transkripcijas pēcapstrādes laikā.</string>
     <string name="replacements_add">Pievienot aizstāšanu</string>
     <string name="replacements_edit">Rediģēt aizstāšanu</string>

@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Avaa Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Käytössä</string>
-    <string name="state_disabled">Ei käytössä</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Takaisin</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Suodattaa Silero VAD:n avulla hiljaisuuden ja taustamelun pois ennen litterointia. Poista käytöstä vain, jos VAD leikkaa puheesi alun pois tai tuottaa tyhjiä tuloksia.</string>
     <string name="pref_postprocessing_title">Litteroinnin jälkikäsittely</string>
     <string name="pref_postprocessing_subtitle">Poistaa täytesanat (öö, ömm, hmm), yhdistää änkytykset ja siivoaa toistuvat fraasit, joita malli joskus hallusinoi. Poista käytöstä, jos haluat mallin tarkan raakatulosteen - hyödyllistä, kun selvität, johtuvatko puuttuvat tai muuttuneet sanat siivouksesta.</string>
-    <string name="pref_postprocessing_disabled_raw">Ei käytössä (raakatuloste)</string>
     <string name="pref_keep_loaded_title">Pidä malli ladattuna</string>
     <string name="pref_keep_loaded_subtitle">Pitää puhemallin muistissa, kun käytät toista näppäimistöä, jotta sanelu on heti valmis, kun vaihdat takaisin, eikä mallia tarvitse ladata uudelleen. Käyttää etualan palvelua, jolla on pysyvä ilmoitus, ja varaa noin 700 Mt RAM-muistia.</string>
     <string name="pref_diagnostics_title">Putken diagnostiikka</string>
     <string name="pref_diagnostics_subtitle">Näyttää näppäimistöllä reaaliaikaisen merkin, jossa on laskurit ikkunan rajauksille, kohdistuksen palautuksille ja hylätyille tyhjille askelille. Hyödyllinen putken ongelmien selvittämiseen; oletuksena piilotettu.</string>
-    <string name="pref_diagnostics_visible">Näkyvissä</string>
-    <string name="pref_diagnostics_hidden">Piilotettu</string>
     <string name="replacements_description">Korvaa sanoja tai fraaseja litteroinneissasi, esim. nimen, jonka malli kirjoittaa aina väärin. Vain kokonaiset sanat täsmäävät, eikä isoilla ja pienillä kirjaimilla ole väliä. Tehdään osana litteroinnin jälkikäsittelyä.</string>
     <string name="replacements_add">Lisää korvaus</string>
     <string name="replacements_edit">Muokkaa korvausta</string>

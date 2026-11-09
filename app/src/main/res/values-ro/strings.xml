@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Deschideți Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Activat</string>
-    <string name="state_disabled">Dezactivat</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Înapoi</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Folosește Silero VAD pentru a filtra liniștea și zgomotul de fundal înainte de transcriere. Dezactivați doar dacă VAD taie începutul vorbirii sau produce rezultate goale.</string>
     <string name="pref_postprocessing_title">Post-procesarea transcrierii</string>
     <string name="pref_postprocessing_subtitle">Elimină cuvintele de umplutură (ă, îm, hmm), comprimă bâlbâielile și curăță frazele repetate pe care modelul le halucinează uneori. Dezactivați pentru a primi exact rezultatul brut al modelului – util pentru a afla dacă curățarea este responsabilă pentru cuvinte omise sau modificate.</string>
-    <string name="pref_postprocessing_disabled_raw">Dezactivat (rezultat brut)</string>
     <string name="pref_keep_loaded_title">Păstrați modelul încărcat</string>
     <string name="pref_keep_loaded_subtitle">Păstrează modelul vocal în memorie cât timp folosiți altă tastatură, astfel încât dictarea este gata imediat când reveniți, fără a reîncărca modelul. Rulează un serviciu în prim-plan cu o notificare permanentă și ocupă aproximativ 700 MB de RAM.</string>
     <string name="pref_diagnostics_title">Diagnosticarea pipeline-ului</string>
     <string name="pref_diagnostics_subtitle">Afișează pe tastatură o insignă în timp real cu contoare pentru tăierile ferestrei, recuperările de aliniere și pașii goi eliminați. Util pentru diagnosticarea problemelor pipeline-ului; ascunsă în mod prestabilit.</string>
-    <string name="pref_diagnostics_visible">Vizibilă</string>
-    <string name="pref_diagnostics_hidden">Ascunsă</string>
     <string name="replacements_description">Înlocuiește cuvinte sau expresii în transcrieri, de ex. un nume pe care modelul îl scrie mereu greșit. Se potrivesc doar cuvinte întregi, fără a ține cont de majuscule și minuscule. Se aplică în cadrul post-procesării transcrierii.</string>
     <string name="replacements_add">Adăugați o înlocuire</string>
     <string name="replacements_edit">Editați înlocuirea</string>

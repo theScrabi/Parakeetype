@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Отваряне на Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Активирано</string>
-    <string name="state_disabled">Деактивирано</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Назад</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Използва Silero VAD, за да филтрира тишината и фоновия шум преди разпознаването. Деактивирайте само ако VAD отрязва началото на говора ви или дава празни резултати.</string>
     <string name="pref_postprocessing_title">Последваща обработка на текста</string>
     <string name="pref_postprocessing_subtitle">Премахва думите паразити (ъъ, ъм, хм), обединява заекванията и изчиства повтарящи се фрази, които моделът понякога си измисля. Деактивирайте, за да получавате необработения изход на модела – полезно, за да проверите дали изчистването пропуска или променя думи.</string>
-    <string name="pref_postprocessing_disabled_raw">Деактивирано (необработен изход)</string>
     <string name="pref_keep_loaded_title">Моделът да остава зареден</string>
     <string name="pref_keep_loaded_subtitle">Държи модела за говор в паметта, докато използвате друга клавиатура, така че диктуването да е готово веднага щом превключите обратно, без повторно зареждане на модела. Работи като услуга на преден план с постоянно известие и заема около 700 МБ оперативна памет.</string>
     <string name="pref_diagnostics_title">Диагностика на конвейера</string>
     <string name="pref_diagnostics_subtitle">Показва на клавиатурата значка в реално време с броячи за изрязвания на прозореца, възстановявания на подравняването и отхвърлени празни стъпки. Полезно за диагностициране на проблеми в конвейера; по подразбиране е скрита.</string>
-    <string name="pref_diagnostics_visible">Видима</string>
-    <string name="pref_diagnostics_hidden">Скрита</string>
     <string name="replacements_description">Заменя думи или фрази в транскрипциите, например име, което моделът постоянно греши. Съвпадат само цели думи, без значение от главни и малки букви. Прилага се като част от последващата обработка на транскрипцията.</string>
     <string name="replacements_add">Добавяне на замяна</string>
     <string name="replacements_edit">Редактиране на замяна</string>

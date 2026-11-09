@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Otwórz Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Włączone</string>
-    <string name="state_disabled">Wyłączone</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Wstecz</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Używa Silero VAD do odfiltrowania ciszy i szumów tła przed transkrypcją. Wyłącz tylko wtedy, gdy VAD obcina początek wypowiedzi lub daje puste wyniki.</string>
     <string name="pref_postprocessing_title">Przetwarzanie końcowe transkrypcji</string>
     <string name="pref_postprocessing_subtitle">Usuwa słowa wypełniające (yyy, eee, hmm), scala zająknięcia i usuwa powtórzone frazy, które model czasem halucynuje. Wyłącz, aby otrzymywać dokładny, surowy wynik modelu – przydatne do sprawdzenia, czy to czyszczenie odpowiada za pominięte lub zmienione słowa.</string>
-    <string name="pref_postprocessing_disabled_raw">Wyłączone (surowy wynik)</string>
     <string name="pref_keep_loaded_title">Utrzymuj model w pamięci</string>
     <string name="pref_keep_loaded_subtitle">Utrzymuje model mowy w pamięci, gdy używasz innej klawiatury, dzięki czemu dyktowanie jest od razu gotowe po powrocie, bez ponownego wczytywania modelu. Działa jako usługa na pierwszym planie ze stałym powiadomieniem i zajmuje około 700 MB pamięci RAM.</string>
     <string name="pref_diagnostics_title">Diagnostyka potoku</string>
     <string name="pref_diagnostics_subtitle">Wyświetla na klawiaturze plakietkę na żywo z licznikami przycięć okna, odzyskań wyrównania i odrzuconych pustych kroków. Przydatne do diagnozowania problemów z potokiem; domyślnie ukryte.</string>
-    <string name="pref_diagnostics_visible">Widoczna</string>
-    <string name="pref_diagnostics_hidden">Ukryta</string>
     <string name="replacements_description">Zamienia słowa lub frazy w transkrypcjach, np. imię, które model ciągle zapisuje błędnie. Dopasowuje tylko całe słowa i nie rozróżnia wielkości liter. Stosowane w ramach końcowego przetwarzania transkrypcji.</string>
     <string name="replacements_add">Dodaj zamianę</string>
     <string name="replacements_edit">Edytuj zamianę</string>

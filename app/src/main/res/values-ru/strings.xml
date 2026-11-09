@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Открыть Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Включено</string>
-    <string name="state_disabled">Отключено</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Назад</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Использует Silero VAD, чтобы отфильтровывать тишину и фоновый шум перед распознаванием. Отключайте, только если VAD обрезает начало вашей речи или выдаёт пустые результаты.</string>
     <string name="pref_postprocessing_title">Постобработка текста</string>
     <string name="pref_postprocessing_subtitle">Удаляет слова-паразиты (э, эм, хм), убирает запинки и повторяющиеся фразы, которые модель иногда выдумывает. Отключите, чтобы получать необработанный вывод модели – это помогает понять, не очистка ли пропускает или искажает слова.</string>
-    <string name="pref_postprocessing_disabled_raw">Отключено (необработанный вывод)</string>
     <string name="pref_keep_loaded_title">Не выгружать модель</string>
     <string name="pref_keep_loaded_subtitle">Хранит речевую модель в памяти, пока вы пользуетесь другой клавиатурой, чтобы диктовка была доступна сразу после возврата, без повторной загрузки модели. Запускает службу с постоянным уведомлением и занимает около 700 МБ оперативной памяти.</string>
     <string name="pref_diagnostics_title">Диагностика конвейера</string>
     <string name="pref_diagnostics_subtitle">Показывает на клавиатуре значок со счётчиками обрезок окна, восстановлений выравнивания и отброшенных пустых шагов. Полезно для диагностики проблем конвейера; по умолчанию скрыт.</string>
-    <string name="pref_diagnostics_visible">Виден</string>
-    <string name="pref_diagnostics_hidden">Скрыт</string>
     <string name="replacements_description">Заменяет слова или фразы в расшифровках, например имя, которое модель постоянно пишет неправильно. Учитываются только целые слова, регистр букв не важен. Применяется в рамках постобработки расшифровки.</string>
     <string name="replacements_add">Добавить замену</string>
     <string name="replacements_edit">Изменить замену</string>

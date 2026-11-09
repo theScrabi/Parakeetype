@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Åbn Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Aktiveret</string>
-    <string name="state_disabled">Deaktiveret</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Tilbage</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Bruger Silero VAD til at filtrere stilhed og baggrundsstøj fra før transskriptionen. Deaktiver kun, hvis VAD skærer begyndelsen af din tale af eller giver tomme resultater.</string>
     <string name="pref_postprocessing_title">Efterbehandling af transskription</string>
     <string name="pref_postprocessing_subtitle">Fjerner fyldord (øh, øhm, hmm), samler stammen og rydder op i gentagne sætninger, som modellen nogle gange hallucinerer. Deaktiver for at få modellens præcise, rå output - nyttigt til at finde ud af, om oprydningen er skyld i manglende eller ændrede ord.</string>
-    <string name="pref_postprocessing_disabled_raw">Deaktiveret (råt output)</string>
     <string name="pref_keep_loaded_title">Hold modellen indlæst</string>
     <string name="pref_keep_loaded_subtitle">Holder talemodellen i hukommelsen, mens du bruger et andet tastatur, så diktering er klar med det samme, når du skifter tilbage, i stedet for at modellen skal indlæses igen. Kører en forgrundstjeneste med en vedvarende notifikation og optager ca. 700 MB RAM.</string>
     <string name="pref_diagnostics_title">Pipelinediagnosticering</string>
     <string name="pref_diagnostics_subtitle">Viser et live-badge på tastaturet med tællere for vinduesbeskæringer, gendannelser af justering og kasserede tomme skridt. Nyttigt til at diagnosticere pipelineproblemer; skjult som standard.</string>
-    <string name="pref_diagnostics_visible">Synlig</string>
-    <string name="pref_diagnostics_hidden">Skjult</string>
     <string name="replacements_description">Udskifter ord eller sætninger i dine transskriptioner, f.eks. et navn, som modellen bliver ved med at stave forkert. Matcher kun hele ord og ser bort fra store og små bogstaver. Anvendes som en del af efterbehandlingen af transskriptionen.</string>
     <string name="replacements_add">Tilføj udskiftning</string>
     <string name="replacements_edit">Rediger udskiftning</string>

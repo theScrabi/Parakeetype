@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Otevřít Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Zapnuto</string>
-    <string name="state_disabled">Vypnuto</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Zpět</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Pomocí Silero VAD odfiltruje před přepisem ticho a hluk v pozadí. Vypínejte jen tehdy, pokud VAD ořezává začátek vaší řeči nebo vrací prázdné výsledky.</string>
     <string name="pref_postprocessing_title">Následné zpracování přepisu</string>
     <string name="pref_postprocessing_subtitle">Odstraňuje výplňová slova (ehm, hm, no), slučuje zadrhávání a čistí opakované fráze, které si model někdy vymýšlí. Vypněte, chcete-li dostávat přesný nezpracovaný výstup modelu – užitečné pro zjištění, zda čištění nezpůsobuje vynechaná nebo změněná slova.</string>
-    <string name="pref_postprocessing_disabled_raw">Vypnuto (nezpracovaný výstup)</string>
     <string name="pref_keep_loaded_title">Ponechat model načtený</string>
     <string name="pref_keep_loaded_subtitle">Ponechá model řeči v paměti, zatímco používáte jinou klávesnici, takže diktování je po přepnutí zpět ihned připraveno a model se nemusí znovu načítat. Běží jako služba v popředí s trvalým oznámením a zabírá asi 700 MB paměti RAM.</string>
     <string name="pref_diagnostics_title">Diagnostika zpracování</string>
     <string name="pref_diagnostics_subtitle">Zobrazuje na klávesnici živý odznak s počítadly zkrácení okna, obnovení zarovnání a zahozených prázdných kroků. Užitečné pro diagnostiku problémů se zpracováním; ve výchozím stavu skryto.</string>
-    <string name="pref_diagnostics_visible">Zobrazeno</string>
-    <string name="pref_diagnostics_hidden">Skryto</string>
     <string name="replacements_description">Nahrazuje slova nebo fráze v přepisech, např. jméno, které model stále píše špatně. Hledá jen celá slova a nerozlišuje velká a malá písmena. Probíhá v rámci následného zpracování přepisu.</string>
     <string name="replacements_add">Přidat nahrazení</string>
     <string name="replacements_edit">Upravit nahrazení</string>

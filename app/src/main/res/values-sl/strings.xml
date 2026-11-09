@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Odpri Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Omogočeno</string>
-    <string name="state_disabled">Onemogočeno</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Nazaj</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Uporablja Silero VAD, da pred prepisom odstrani tišino in hrup v ozadju. Onemogočite samo, če VAD odreže začetek vašega govora ali vrača prazne rezultate.</string>
     <string name="pref_postprocessing_title">Naknadna obdelava prepisa</string>
     <string name="pref_postprocessing_subtitle">Odstrani mašila (eee, hm, mhm), združi jecljanje in počisti ponovljene besedne zveze, ki si jih model včasih izmisli. Onemogočite, če želite prejeti natančen neobdelan izhod modela – uporabno za ugotavljanje, ali čiščenje povzroča izpuščene ali spremenjene besede.</string>
-    <string name="pref_postprocessing_disabled_raw">Onemogočeno (neobdelan izhod)</string>
     <string name="pref_keep_loaded_title">Ohrani model naložen</string>
     <string name="pref_keep_loaded_subtitle">Ohrani govorni model v pomnilniku, medtem ko uporabljate drugo tipkovnico, tako da je narekovanje takoj pripravljeno, ko preklopite nazaj, in modela ni treba znova nalagati. Deluje kot storitev v ospredju s stalnim obvestilom in zaseda približno 700 MB pomnilnika RAM.</string>
     <string name="pref_diagnostics_title">Diagnostika obdelave</string>
     <string name="pref_diagnostics_subtitle">Na tipkovnici prikaže značko v živo s števci obrezovanj okna, obnovitev poravnave in zavrženih praznih korakov. Uporabno za diagnosticiranje težav z obdelavo; privzeto skrito.</string>
-    <string name="pref_diagnostics_visible">Prikazano</string>
-    <string name="pref_diagnostics_hidden">Skrito</string>
     <string name="replacements_description">Zamenja besede ali besedne zveze v vaših prepisih, npr. ime, ki ga model vedno napačno zapiše. Ujema se samo s celimi besedami in ne razlikuje med velikimi in malimi črkami. Uporabi se v okviru naknadne obdelave prepisa.</string>
     <string name="replacements_add">Dodaj zamenjavo</string>
     <string name="replacements_edit">Uredi zamenjavo</string>

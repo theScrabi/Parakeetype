@@ -93,6 +93,7 @@ private fun SettingsNavHost(navController: NavHostController) {
         SettingsRoutes.PREF_SPEECH -> stringResource(R.string.nav_title_speech)
         SettingsRoutes.PREF_TOOLS -> stringResource(R.string.nav_title_tools)
         SettingsRoutes.REPLACEMENTS -> stringResource(R.string.nav_title_replacements)
+        SettingsRoutes.CALIBRATION -> stringResource(R.string.pref_mic_calibrate)
         else -> stringResource(R.string.app_name)
     }
 
@@ -100,9 +101,8 @@ private fun SettingsNavHost(navController: NavHostController) {
     // so a page doesn't open with the title collapsed by the previous one.
     val topBarState = remember(currentRoute) { TopAppBarState(-Float.MAX_VALUE, 0f, 0f) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(topBarState)
-    // The home page is drawn on surfaceContainer (Settings-app style), so its bar is too.
-    val barColor = if (currentRoute == SettingsRoutes.HOME) MaterialTheme.colorScheme.surfaceContainer
-    else MaterialTheme.colorScheme.surface
+    // Every page is drawn like a Settings-app sub page on surfaceContainer, and so is its bar.
+    val barColor = MaterialTheme.colorScheme.surfaceContainer
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),

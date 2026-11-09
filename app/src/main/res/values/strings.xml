@@ -23,8 +23,6 @@
     <string name="action_open_parakeetype">Open Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Enabled</string>
-    <string name="state_disabled">Disabled</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Back</string>
@@ -106,7 +104,6 @@
         repeated phrases the model sometimes hallucinates. Disable to receive the exact raw model output - useful for
         diagnosing whether cleaning is responsible for dropped or altered words.
     </string>
-    <string name="pref_postprocessing_disabled_raw">Disabled (raw output)</string>
     <string name="pref_keep_loaded_title">Keep Model Loaded</string>
     <string name="pref_keep_loaded_subtitle">Keeps the speech model in memory while you use another keyboard, so
         dictation is ready instantly when you switch back instead of reloading the model. Runs a foreground service with
@@ -116,8 +113,6 @@
     <string name="pref_diagnostics_subtitle">Shows a live badge on the keyboard with counters for window trims,
         alignment recoveries, and discarded blank strides. Useful for diagnosing pipeline issues; off by default.
     </string>
-    <string name="pref_diagnostics_visible">Visible</string>
-    <string name="pref_diagnostics_hidden">Hidden</string>
     <string name="replacements_description">Replaces words or phrases in your transcripts, e.g. a name the model keeps getting wrong. Matches whole words and ignores upper and lower case. Applied as part of the transcript post-processing.</string>
     <string name="replacements_add">Add Replacement</string>
     <string name="replacements_edit">Edit Replacement</string>

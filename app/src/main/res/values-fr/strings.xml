@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Ouvrir Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Activé</string>
-    <string name="state_disabled">Désactivé</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Retour</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Utilise Silero VAD pour filtrer le silence et les bruits de fond avant la transcription. Ne désactivez cette option que si la VAD coupe le début de vos paroles ou produit des résultats vides.</string>
     <string name="pref_postprocessing_title">Post-traitement de la transcription</string>
     <string name="pref_postprocessing_subtitle">Supprime les mots de remplissage (euh, hum, hmm), réduit les bégaiements et nettoie les phrases répétées que le modèle hallucine parfois. Désactivez cette option pour recevoir la sortie brute exacte du modèle – utile pour savoir si le nettoyage est responsable de mots manquants ou modifiés.</string>
-    <string name="pref_postprocessing_disabled_raw">Désactivé (sortie brute)</string>
     <string name="pref_keep_loaded_title">Garder le modèle chargé</string>
     <string name="pref_keep_loaded_subtitle">Garde le modèle vocal en mémoire pendant que vous utilisez un autre clavier, afin que la dictée soit immédiatement disponible à votre retour, sans recharger le modèle. Exécute un service de premier plan avec une notification permanente et occupe environ 700 Mo de RAM.</string>
     <string name="pref_diagnostics_title">Diagnostic du pipeline</string>
     <string name="pref_diagnostics_subtitle">Affiche un badge en direct sur le clavier avec des compteurs pour les réductions de fenêtre, les récupérations d\'alignement et les pas vides ignorés. Utile pour diagnostiquer les problèmes du pipeline ; désactivé par défaut.</string>
-    <string name="pref_diagnostics_visible">Visible</string>
-    <string name="pref_diagnostics_hidden">Masqué</string>
     <string name="replacements_description">Remplace des mots ou des expressions dans vos transcriptions, par ex. un nom que le modèle écrit toujours mal. Seuls les mots entiers sont reconnus, sans tenir compte des majuscules et minuscules. Appliqué lors du post-traitement de la transcription.</string>
     <string name="replacements_add">Ajouter un remplacement</string>
     <string name="replacements_edit">Modifier le remplacement</string>

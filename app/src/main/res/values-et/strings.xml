@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Ava Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Lubatud</string>
-    <string name="state_disabled">Keelatud</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Tagasi</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Kasutab Silero VAD-i, et vaikus ja taustamüra enne transkribeerimist välja filtreerida. Keelake see ainult siis, kui VAD lõikab teie kõne alguse ära või annab tühje tulemusi.</string>
     <string name="pref_postprocessing_title">Transkriptsiooni järeltöötlus</string>
     <string name="pref_postprocessing_subtitle">Eemaldab täitesõnad (ee, õõ, hmm), ühendab kogelemise ja puhastab korduvad fraasid, mida mudel vahel hallutsineerib. Keelake, et saada mudeli täpne töötlemata väljund - kasulik, et selgitada, kas puhastamine põhjustab sõnade kadumist või muutumist.</string>
-    <string name="pref_postprocessing_disabled_raw">Keelatud (töötlemata väljund)</string>
     <string name="pref_keep_loaded_title">Hoia mudel laaditud</string>
     <string name="pref_keep_loaded_subtitle">Hoiab kõnemudelit mälus, kui kasutate teist klaviatuuri, nii et dikteerimine on tagasi lülitudes kohe valmis ja mudelit ei pea uuesti laadima. Käitab püsiva märguandega esiplaanil olevat teenust ja hoiab kasutuses umbes 700 MB muutmälu.</string>
     <string name="pref_diagnostics_title">Konveieri diagnostika</string>
     <string name="pref_diagnostics_subtitle">Kuvab klaviatuuril reaalajas märgi, millel on loendurid akna kärpimiste, joonduse taastamiste ja kõrvale jäetud tühjade sammude kohta. Kasulik konveieri probleemide diagnoosimiseks; vaikimisi peidetud.</string>
-    <string name="pref_diagnostics_visible">Nähtav</string>
-    <string name="pref_diagnostics_hidden">Peidetud</string>
     <string name="replacements_description">Asendab teie transkriptsioonides sõnu või fraase, nt nime, mille mudel ikka valesti kirjutab. Leiab ainult terveid sõnu ega erista suur- ja väiketähti. Rakendatakse transkriptsiooni järeltöötluse osana.</string>
     <string name="replacements_add">Lisa asendus</string>
     <string name="replacements_edit">Muuda asendust</string>

@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Atidaryti Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Įjungta</string>
-    <string name="state_disabled">Išjungta</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Atgal</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Naudoja Silero VAD, kad prieš transkribuojant būtų išfiltruota tyla ir foninis triukšmas. Išjunkite tik tada, jei VAD nukerpa jūsų kalbos pradžią arba pateikia tuščius rezultatus.</string>
     <string name="pref_postprocessing_title">Transkripcijos papildomas apdorojimas</string>
     <string name="pref_postprocessing_subtitle">Pašalina užpildų žodžius (ė, ėė, hmm), suglaudina mikčiojimą ir išvalo pasikartojančias frazes, kurias modelis kartais haliucinuoja. Išjunkite, kad gautumėte tikslią neapdorotą modelio išvestį – naudinga nustatant, ar dėl valymo praleidžiami ar pakeičiami žodžiai.</string>
-    <string name="pref_postprocessing_disabled_raw">Išjungta (neapdorota išvestis)</string>
     <string name="pref_keep_loaded_title">Laikyti modelį įkeltą</string>
     <string name="pref_keep_loaded_subtitle">Laiko kalbos modelį atmintyje, kol naudojate kitą klaviatūrą, kad grįžus diktavimas būtų paruoštas iškart ir nereikėtų iš naujo įkelti modelio. Veikia kaip priekinio plano paslauga su nuolatiniu pranešimu ir naudoja apie 700 MB RAM.</string>
     <string name="pref_diagnostics_title">Konvejerio diagnostika</string>
     <string name="pref_diagnostics_subtitle">Klaviatūroje rodo tiesioginį ženklelį su lango apkarpymų, lygiavimo atkūrimų ir atmestų tuščių žingsnių skaitikliais. Naudinga diagnozuojant konvejerio problemas; pagal numatytuosius nustatymus išjungta.</string>
-    <string name="pref_diagnostics_visible">Rodoma</string>
-    <string name="pref_diagnostics_hidden">Paslėpta</string>
     <string name="replacements_description">Pakeičia žodžius ar frazes jūsų transkripcijose, pvz., vardą, kurį modelis vis parašo neteisingai. Atpažįsta tik visus žodžius ir neskiria didžiųjų bei mažųjų raidžių. Taikoma kaip transkripcijos papildomo apdorojimo dalis.</string>
     <string name="replacements_add">Pridėti pakeitimą</string>
     <string name="replacements_edit">Redaguoti pakeitimą</string>

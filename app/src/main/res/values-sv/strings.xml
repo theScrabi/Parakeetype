@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Öppna Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Aktiverad</string>
-    <string name="state_disabled">Inaktiverad</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Tillbaka</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Använder Silero VAD för att filtrera bort tystnad och bakgrundsljud före transkriberingen. Inaktivera bara om VAD klipper bort början av det du säger eller ger tomma resultat.</string>
     <string name="pref_postprocessing_title">Efterbearbetning av transkription</string>
     <string name="pref_postprocessing_subtitle">Tar bort utfyllnadsord (eh, öh, hmm), slår ihop stamningar och rensar upprepade fraser som modellen ibland hallucinerar. Inaktivera för att få modellens exakta, obearbetade utdata - användbart för att ta reda på om rensningen orsakar utelämnade eller ändrade ord.</string>
-    <string name="pref_postprocessing_disabled_raw">Inaktiverad (obearbetad utdata)</string>
     <string name="pref_keep_loaded_title">Håll modellen inläst</string>
     <string name="pref_keep_loaded_subtitle">Behåller talmodellen i minnet medan du använder ett annat tangentbord, så att diktering är redo direkt när du byter tillbaka i stället för att modellen läses in på nytt. Kör en förgrundstjänst med en permanent avisering och använder cirka 700 MB RAM.</string>
     <string name="pref_diagnostics_title">Pipelinediagnostik</string>
     <string name="pref_diagnostics_subtitle">Visar en live-bricka på tangentbordet med räknare för fönsterbeskärningar, återställd justering och kasserade tomma steg. Användbart för att felsöka pipelineproblem; dold som standard.</string>
-    <string name="pref_diagnostics_visible">Synlig</string>
-    <string name="pref_diagnostics_hidden">Dold</string>
     <string name="replacements_description">Ersätter ord eller fraser i dina transkriptioner, t.ex. ett namn som modellen alltid stavar fel. Matchar bara hela ord och bryr sig inte om stora och små bokstäver. Tillämpas som en del av efterbearbetningen av transkriptionen.</string>
     <string name="replacements_add">Lägg till ersättning</string>
     <string name="replacements_edit">Redigera ersättning</string>

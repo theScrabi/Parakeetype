@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Abrir Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Activado</string>
-    <string name="state_disabled">Desactivado</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Atrás</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Usa Silero VAD para filtrar el silencio y el ruido de fondo antes de la transcripción. Desactívalo solo si el VAD corta el comienzo de lo que dices o produce resultados vacíos.</string>
     <string name="pref_postprocessing_title">Posprocesamiento de la transcripción</string>
     <string name="pref_postprocessing_subtitle">Elimina las muletillas (eh, em, mmm), reduce los tartamudeos y limpia las frases repetidas que el modelo a veces alucina. Desactívalo para recibir la salida sin procesar exacta del modelo: útil para averiguar si la limpieza es la causa de palabras omitidas o alteradas.</string>
-    <string name="pref_postprocessing_disabled_raw">Desactivado (salida sin procesar)</string>
     <string name="pref_keep_loaded_title">Mantener el modelo cargado</string>
     <string name="pref_keep_loaded_subtitle">Mantiene el modelo de voz en memoria mientras usas otro teclado, para que el dictado esté listo al instante cuando vuelvas en lugar de volver a cargar el modelo. Ejecuta un servicio en primer plano con una notificación persistente y ocupa unos 700 MB de RAM.</string>
     <string name="pref_diagnostics_title">Diagnóstico de la canalización</string>
     <string name="pref_diagnostics_subtitle">Muestra una insignia en tiempo real en el teclado con contadores de recortes de ventana, recuperaciones de alineación y pasos vacíos descartados. Útil para diagnosticar problemas de la canalización; oculta de forma predeterminada.</string>
-    <string name="pref_diagnostics_visible">Visible</string>
-    <string name="pref_diagnostics_hidden">Oculta</string>
     <string name="replacements_description">Sustituye palabras o frases en tus transcripciones, p. ej. un nombre que el modelo siempre escribe mal. Solo coincide con palabras completas y no distingue mayúsculas de minúsculas. Se aplica como parte del posprocesamiento de la transcripción.</string>
     <string name="replacements_add">Añadir sustitución</string>
     <string name="replacements_edit">Editar sustitución</string>

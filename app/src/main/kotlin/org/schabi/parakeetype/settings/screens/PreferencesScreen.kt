@@ -4,18 +4,14 @@ import android.Manifest
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.schabi.parakeetype.R
 import org.schabi.parakeetype.settings.preferences.PreferencesViewModel
@@ -45,38 +41,91 @@ fun InputPreferencesScreen(
     val positionLandscape by viewModel.keyboardPositionLandscape.collectAsState()
     val leftHandedMode by viewModel.leftHandedMode.collectAsState()
 
-    PreferencesColumn {
-        MicSection(
-            onNavigateToCalibration = onNavigateToCalibration,
-            rawMicCapture = rawMicCapture,
-            onRawMicCaptureChange = viewModel::setRawMicCapture,
+    SettingsColumn {
+        SectionHeader(stringResource(R.string.pref_mic_title))
+        SettingsGroup(
+            listOf(
+                {
+                    SettingsItem(
+                        title = stringResource(R.string.pref_mic_calibrate),
+                        subtitle = stringResource(R.string.pref_mic_subtitle),
+                        shape = it,
+                        onClick = onNavigateToCalibration,
+                    )
+                },
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_raw_mic_title),
+                        subtitle = stringResource(R.string.pref_raw_mic_subtitle),
+                        checked = rawMicCapture,
+                        onCheckedChange = viewModel::setRawMicCapture,
+                        shape = it,
+                    )
+                },
+            ),
         )
-        HorizontalDivider()
-        TriggerModeSection(
-            triggerMode = triggerMode,
-            onTriggerModeChange = viewModel::setTriggerMode,
+        GroupSpacer()
+        SettingsGroup(
+            listOf(
+                {
+                    ChoiceItem(
+                        title = stringResource(R.string.pref_trigger_mode_title),
+                        subtitle = stringResource(R.string.pref_trigger_mode_subtitle),
+                        options = listOf(
+                            "HOLD" to stringResource(R.string.pref_trigger_hold),
+                            "TAP_TOGGLE" to stringResource(R.string.pref_trigger_tap_toggle),
+                        ),
+                        selected = triggerMode,
+                        onSelect = viewModel::setTriggerMode,
+                        shape = it,
+                    )
+                },
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_instant_mode_title),
+                        subtitle = stringResource(R.string.pref_instant_mode_subtitle),
+                        checked = instantMode,
+                        onCheckedChange = viewModel::setInstantMode,
+                        shape = it,
+                    )
+                },
+                {
+                    ChoiceItem(
+                        title = stringResource(R.string.pref_delete_title),
+                        subtitle = stringResource(R.string.pref_delete_subtitle),
+                        options = listOf(
+                            "DELETE_ALL" to stringResource(R.string.pref_delete_all),
+                            "DELETE_LAST_SENTENCE" to stringResource(R.string.pref_delete_last_sentence),
+                        ),
+                        selected = deleteButtonMode,
+                        onSelect = viewModel::setDeleteButtonMode,
+                        shape = it,
+                    )
+                },
+            ),
         )
-        HorizontalDivider()
-        InstantModeSection(
-            instantMode = instantMode,
-            onInstantModeChange = viewModel::setInstantMode,
-        )
-        HorizontalDivider()
-        DeleteButtonSection(
-            deleteButtonMode = deleteButtonMode,
-            onDeleteButtonModeChange = viewModel::setDeleteButtonMode,
-        )
-        HorizontalDivider()
-        KeyboardPositionSection(
-            positionPortrait = positionPortrait,
-            positionLandscape = positionLandscape,
-            onPositionPortraitChange = viewModel::setKeyboardPositionPortrait,
-            onPositionLandscapeChange = viewModel::setKeyboardPositionLandscape,
-        )
-        HorizontalDivider()
-        LeftHandedModeSection(
-            leftHandedMode = leftHandedMode,
-            onLeftHandedModeChange = viewModel::setLeftHandedMode,
+        GroupSpacer()
+        SettingsGroup(
+            listOf(
+                {
+                    KeyboardPositionItem(
+                        positionPortrait = positionPortrait,
+                        positionLandscape = positionLandscape,
+                        onPositionPortraitChange = viewModel::setKeyboardPositionPortrait,
+                        onPositionLandscapeChange = viewModel::setKeyboardPositionLandscape,
+                        shape = it,
+                    )
+                },
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_left_handed_title),
+                        subtitle = stringResource(R.string.pref_left_handed_subtitle),
+                        checked = leftHandedMode,
+                        onCheckedChange = viewModel::setLeftHandedMode,
+                        shape = it,
+                    )
+                },
+            ),
         )
     }
 }
@@ -108,20 +157,38 @@ fun SpeechPreferencesScreen(
         viewModel.setKeepModelLoaded(enabled)
     }
 
-    PreferencesColumn {
-        VadSection(
-            vadSensitivity = vadSensitivity,
-            onVadSensitivityChange = viewModel::setVadSensitivity,
-        )
-        HorizontalDivider()
-        PostprocessingSection(
-            postprocessingEnabled = postprocessingEnabled,
-            onPostprocessingChange = viewModel::setPostprocessingEnabled,
-        )
-        HorizontalDivider()
-        KeepModelLoadedSection(
-            keepModelLoaded = keepModelLoaded,
-            onKeepModelLoadedChange = onKeepModelLoadedChange,
+    SettingsColumn {
+        GroupSpacer()
+        SettingsGroup(
+            listOf(
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_vad_title),
+                        subtitle = stringResource(R.string.pref_vad_subtitle),
+                        checked = vadSensitivity,
+                        onCheckedChange = viewModel::setVadSensitivity,
+                        shape = it,
+                    )
+                },
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_postprocessing_title),
+                        subtitle = stringResource(R.string.pref_postprocessing_subtitle),
+                        checked = postprocessingEnabled,
+                        onCheckedChange = viewModel::setPostprocessingEnabled,
+                        shape = it,
+                    )
+                },
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_keep_loaded_title),
+                        subtitle = stringResource(R.string.pref_keep_loaded_subtitle),
+                        checked = keepModelLoaded,
+                        onCheckedChange = onKeepModelLoadedChange,
+                        shape = it,
+                    )
+                },
+            ),
         )
     }
 }
@@ -138,504 +205,81 @@ fun ToolsPreferencesScreen(
 ) {
     val showPipelineDiagnostics by viewModel.showPipelineDiagnostics.collectAsState()
 
-    PreferencesColumn {
-        DiagnosticsSection(
-            showPipelineDiagnostics = showPipelineDiagnostics,
-            onShowPipelineDiagnosticsChange = viewModel::setShowPipelineDiagnostics,
+    SettingsColumn {
+        GroupSpacer()
+        SettingsGroup(
+            listOf(
+                {
+                    SwitchItem(
+                        title = stringResource(R.string.pref_diagnostics_title),
+                        subtitle = stringResource(R.string.pref_diagnostics_subtitle),
+                        checked = showPipelineDiagnostics,
+                        onCheckedChange = viewModel::setShowPipelineDiagnostics,
+                        shape = it,
+                    )
+                },
+            ),
         )
     }
 }
 
-/** Shared scroll container for the category preference screens. */
+/**
+ * Where the keyboard controls sit: a choice for portrait and one for landscape (always docked
+ * to an edge there, so the controls stay within thumb reach).
+ */
 @Composable
-private fun PreferencesColumn(content: @Composable ColumnScope.() -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-    ) {
-        content()
-    }
-}
-
-@Composable
-private fun MicSection(
-    onNavigateToCalibration: () -> Unit,
-    rawMicCapture: Boolean,
-    onRawMicCaptureChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_mic_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_mic_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Button(
-            onClick = onNavigateToCalibration,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(R.string.pref_mic_calibrate))
-        }
-
-        Text(
-            text = stringResource(R.string.pref_raw_mic_title),
-            style = MaterialTheme.typography.titleSmall,
-        )
-        Text(
-            text = stringResource(R.string.pref_raw_mic_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (rawMicCapture) stringResource(R.string.state_enabled)
-                else stringResource(R.string.state_disabled),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = rawMicCapture,
-                onCheckedChange = onRawMicCaptureChange,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TriggerModeSection(
-    triggerMode: String,
-    onTriggerModeChange: (String) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_trigger_mode_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_trigger_mode_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            SegmentedButton(
-                selected = triggerMode == "HOLD",
-                onClick = { onTriggerModeChange("HOLD") },
-                shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-            ) {
-                Text(stringResource(R.string.pref_trigger_hold))
-            }
-            SegmentedButton(
-                selected = triggerMode == "TAP_TOGGLE",
-                onClick = { onTriggerModeChange("TAP_TOGGLE") },
-                shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-            ) {
-                Text(stringResource(R.string.pref_trigger_tap_toggle))
-            }
-        }
-    }
-}
-
-@Composable
-private fun InstantModeSection(
-    instantMode: Boolean,
-    onInstantModeChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_instant_mode_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_instant_mode_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (instantMode) stringResource(R.string.state_enabled)
-                else stringResource(R.string.state_disabled),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = instantMode,
-                onCheckedChange = onInstantModeChange,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun DeleteButtonSection(
-    deleteButtonMode: String,
-    onDeleteButtonModeChange: (String) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_delete_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_delete_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-            SegmentedButton(
-                selected = deleteButtonMode == "DELETE_ALL",
-                onClick = { onDeleteButtonModeChange("DELETE_ALL") },
-                shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
-            ) {
-                Text(stringResource(R.string.pref_delete_all))
-            }
-            SegmentedButton(
-                selected = deleteButtonMode == "DELETE_LAST_SENTENCE",
-                onClick = { onDeleteButtonModeChange("DELETE_LAST_SENTENCE") },
-                shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
-            ) {
-                Text(stringResource(R.string.pref_delete_last_sentence))
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun KeyboardPositionSection(
+private fun KeyboardPositionItem(
     positionPortrait: String,
     positionLandscape: String,
     onPositionPortraitChange: (String) -> Unit,
     onPositionLandscapeChange: (String) -> Unit,
+    shape: Shape,
 ) {
-    val portraitOptions = listOf(
-        "LEFT" to R.string.pref_position_left,
-        "CENTER" to R.string.pref_position_center,
-        "RIGHT" to R.string.pref_position_right,
-    )
-    // Landscape is always docked to an edge so the controls stay within thumb reach.
-    val landscapeOptions = listOf(
-        "LEFT" to R.string.pref_position_left,
-        "RIGHT" to R.string.pref_position_right,
-    )
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_position_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_position_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        PositionChoiceRow(
-            label = stringResource(R.string.pref_position_portrait),
-            options = portraitOptions,
-            selected = positionPortrait,
-            onSelect = onPositionPortraitChange,
-        )
-        PositionChoiceRow(
-            label = stringResource(R.string.pref_position_landscape),
-            options = landscapeOptions,
-            selected = positionLandscape,
-            onSelect = onPositionLandscapeChange,
-        )
-    }
-}
-
-@Composable
-private fun LeftHandedModeSection(
-    leftHandedMode: Boolean,
-    onLeftHandedModeChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_left_handed_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_left_handed_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (leftHandedMode) stringResource(R.string.state_enabled)
-                else stringResource(R.string.state_disabled),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = leftHandedMode,
-                onCheckedChange = onLeftHandedModeChange,
-            )
+    val left = "LEFT" to stringResource(R.string.pref_position_left)
+    val center = "CENTER" to stringResource(R.string.pref_position_center)
+    val right = "RIGHT" to stringResource(R.string.pref_position_right)
+    SettingsCard(shape) {
+        Column {
+            ItemTitle(stringResource(R.string.pref_position_title))
+            ItemSummary(stringResource(R.string.pref_position_subtitle))
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PositionChoiceRow(
-    label: String,
-    options: List<Pair<String, Int>>,
-    selected: String,
-    onSelect: (String) -> Unit,
-) {
-    Text(text = label, style = MaterialTheme.typography.titleSmall)
-    SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-        options.forEachIndexed { index, (value, labelRes) ->
-            SegmentedButton(
-                selected = selected == value,
-                onClick = { onSelect(value) },
-                shape = SegmentedButtonDefaults.itemShape(index = index, count = options.size),
-            ) {
-                Text(stringResource(labelRes))
-            }
-        }
-    }
-}
-
-@Composable
-private fun VadSection(
-    vadSensitivity: Boolean,
-    onVadSensitivityChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            text = stringResource(R.string.pref_vad_title),
-            style = MaterialTheme.typography.titleMedium,
+            text = stringResource(R.string.pref_position_portrait),
+            style = MaterialTheme.typography.titleSmall,
         )
+        SegmentedChoice(listOf(left, center, right), positionPortrait, onPositionPortraitChange)
         Text(
-            text = stringResource(R.string.pref_vad_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            text = stringResource(R.string.pref_position_landscape),
+            style = MaterialTheme.typography.titleSmall,
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (vadSensitivity) stringResource(R.string.state_enabled)
-                else stringResource(R.string.state_disabled),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = vadSensitivity,
-                onCheckedChange = onVadSensitivityChange,
-            )
-        }
-    }
-}
-
-@Composable
-private fun PostprocessingSection(
-    postprocessingEnabled: Boolean,
-    onPostprocessingChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_postprocessing_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_postprocessing_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (postprocessingEnabled) stringResource(R.string.state_enabled)
-                else stringResource(R.string.pref_postprocessing_disabled_raw),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = postprocessingEnabled,
-                onCheckedChange = onPostprocessingChange,
-            )
-        }
-    }
-}
-
-@Composable
-private fun KeepModelLoadedSection(
-    keepModelLoaded: Boolean,
-    onKeepModelLoadedChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_keep_loaded_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_keep_loaded_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (keepModelLoaded) stringResource(R.string.state_enabled)
-                else stringResource(R.string.state_disabled),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = keepModelLoaded,
-                onCheckedChange = onKeepModelLoadedChange,
-            )
-        }
-    }
-}
-
-@Composable
-private fun DiagnosticsSection(
-    showPipelineDiagnostics: Boolean,
-    onShowPipelineDiagnosticsChange: (Boolean) -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = stringResource(R.string.pref_diagnostics_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.pref_diagnostics_subtitle),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                text = if (showPipelineDiagnostics) stringResource(R.string.pref_diagnostics_visible)
-                else stringResource(R.string.pref_diagnostics_hidden),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Switch(
-                checked = showPipelineDiagnostics,
-                onCheckedChange = onShowPipelineDiagnosticsChange,
-            )
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Microphone")
-@Composable
-private fun MicSectionPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            MicSection(onNavigateToCalibration = {}, rawMicCapture = false, onRawMicCaptureChange = {})
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, name = "Prefs · Trigger Mode (Hold)")
-@Composable
-private fun TriggerModeSectionHoldPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            TriggerModeSection(triggerMode = "HOLD", onTriggerModeChange = {})
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(showBackground = true, name = "Prefs · Trigger Mode (Tap Toggle)")
-@Composable
-private fun TriggerModeSectionTapTogglePreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            TriggerModeSection(triggerMode = "TAP_TOGGLE", onTriggerModeChange = {})
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Instant Mode")
-@Composable
-private fun InstantModeSectionPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            InstantModeSection(instantMode = true, onInstantModeChange = {})
-        }
+        SegmentedChoice(listOf(left, right), positionLandscape, onPositionLandscapeChange)
     }
 }
 
 @Preview(showBackground = true, name = "Prefs · Keyboard Position")
 @Composable
-private fun KeyboardPositionSectionPreview() {
+private fun KeyboardPositionItemPreview() {
     ParakeetypeTheme {
-        PreferencesColumn {
-            KeyboardPositionSection(
-                positionPortrait = "CENTER",
-                positionLandscape = "RIGHT",
-                onPositionPortraitChange = {},
-                onPositionLandscapeChange = {},
-            )
-        }
+        KeyboardPositionItem(
+            positionPortrait = "CENTER",
+            positionLandscape = "RIGHT",
+            onPositionPortraitChange = {},
+            onPositionLandscapeChange = {},
+            shape = groupItemShape(0, 1),
+        )
     }
 }
 
-@Preview(showBackground = true, name = "Prefs · VAD Enabled")
+@Preview(showBackground = true, name = "Prefs · Switch")
 @Composable
-private fun VadSectionPreview() {
+private fun SwitchItemPreview() {
     ParakeetypeTheme {
-        PreferencesColumn {
-            VadSection(vadSensitivity = true, onVadSensitivityChange = {})
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Post-Processing Disabled")
-@Composable
-private fun PostprocessingSectionPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            PostprocessingSection(postprocessingEnabled = false, onPostprocessingChange = {})
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Keep Model Loaded")
-@Composable
-private fun KeepModelLoadedSectionPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            KeepModelLoadedSection(keepModelLoaded = true, onKeepModelLoadedChange = {})
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Prefs · Diagnostics Visible")
-@Composable
-private fun DiagnosticsSectionPreview() {
-    ParakeetypeTheme {
-        PreferencesColumn {
-            DiagnosticsSection(showPipelineDiagnostics = true, onShowPipelineDiagnosticsChange = {})
-        }
+        SwitchItem(
+            title = "Voice Activity Detection (VAD)",
+            subtitle = "Filters out silence before transcription.",
+            checked = true,
+            onCheckedChange = {},
+            shape = groupItemShape(0, 1),
+        )
     }
 }

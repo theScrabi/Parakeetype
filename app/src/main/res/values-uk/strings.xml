@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Відкрити Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Увімкнено</string>
-    <string name="state_disabled">Вимкнено</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Назад</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Використовує Silero VAD, щоб відфільтровувати тишу й фоновий шум перед розпізнаванням. Вимикайте, лише якщо VAD обрізає початок вашого мовлення або дає порожні результати.</string>
     <string name="pref_postprocessing_title">Постобробка тексту</string>
     <string name="pref_postprocessing_subtitle">Видаляє слова-паразити (е, ем, хм), прибирає запинки й повторювані фрази, які модель іноді вигадує. Вимкніть, щоб отримувати необроблений вивід моделі – це допомагає зʼясувати, чи не очищення пропускає або змінює слова.</string>
-    <string name="pref_postprocessing_disabled_raw">Вимкнено (необроблений вивід)</string>
     <string name="pref_keep_loaded_title">Не вивантажувати модель</string>
     <string name="pref_keep_loaded_subtitle">Зберігає модель розпізнавання мовлення в памʼяті, поки ви користуєтеся іншою клавіатурою, щоб диктування було доступне одразу після повернення, без повторного завантаження моделі. Запускає службу з постійним сповіщенням і займає близько 700 МБ оперативної памʼяті.</string>
     <string name="pref_diagnostics_title">Діагностика конвеєра</string>
     <string name="pref_diagnostics_subtitle">Показує на клавіатурі значок із лічильниками обрізань вікна, відновлень вирівнювання й відкинутих порожніх кроків. Корисно для діагностики проблем конвеєра; за замовчуванням приховано.</string>
-    <string name="pref_diagnostics_visible">Показано</string>
-    <string name="pref_diagnostics_hidden">Приховано</string>
     <string name="replacements_description">Замінює слова або фрази у ваших розшифровках, наприклад ім\'я, яке модель постійно пише неправильно. Враховуються лише цілі слова, регістр літер не має значення. Застосовується під час постобробки розшифровки.</string>
     <string name="replacements_add">Додати заміну</string>
     <string name="replacements_edit">Редагувати заміну</string>

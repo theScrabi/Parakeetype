@@ -28,7 +28,7 @@ All source lives under `app/src/main/kotlin/` (package root `org.schabi.parakeet
 | `recognition` | `ParakeetypeRecognitionService`, `VoiceInputActivity`, `RecognitionSession`, `InferenceConnection`, `TranscriptAccumulator` | Speech recognizer for other apps (`RecognitionService` + `ACTION_RECOGNIZE_SPEECH`) |
 | `settings/model` | `ModelRegistry`, `ModelId`, `ModelImporter`, `ModelStorageManager`, `ModelState`, `ModelViewModel` | Model lifecycle: single-archive import from local storage |
 | `settings/preferences` | `AppPreferences`, `PreferencesViewModel` | DataStore-backed user preferences |
-| `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `ReplacementsScreen`, `MicCalibrationScreen` | Settings Compose UI |
+| `settings/screens` | `HomeScreen`, `ModelScreen`, `PreferencesScreen`, `ReplacementsScreen`, `MicCalibrationScreen`, `SettingsComponents` | Settings Compose UI, styled like a sub page of the Android Settings app (`SettingsComponents`: grouped rows, plain icons in the summary colour) |
 | `ui/keyboard` | `KeyboardViewModel`, `KeyboardUiState`, `KeyboardScreen`, `ImeComposeView` | IME Compose hosting, UI state |
 | `ui/keyboard/components` | `TalkButton`, `StatusIndicator`, `KeyboardActionButton`, `LanguageSelector` | Keyboard UI sub-components |
 | `ui/theme` | `ParakeetypeKeyboardTheme` | Compose theming |

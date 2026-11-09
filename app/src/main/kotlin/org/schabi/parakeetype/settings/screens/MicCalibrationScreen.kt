@@ -25,11 +25,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.clickable
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -80,33 +80,29 @@ fun MicCalibrationScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 24.dp),
     ) {
-        Text(
-            text = stringResource(R.string.calib_subtitle),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.calib_instructions),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        PageText(stringResource(R.string.calib_subtitle) + "\n\n" + stringResource(R.string.calib_instructions))
 
         when (val s = state) {
             CalibrationState.Idle -> {
                 if (mics.isEmpty()) {
-                    Text(stringResource(R.string.calib_no_mics))
+                    PageText(stringResource(R.string.calib_no_mics))
                 } else {
-                    mics.forEach { mic ->
-                        MicRow(
-                            mic = mic,
-                            score = null,
-                            isBest = false,
-                            isCurrent = mic.id == preferredMicId,
-                        )
-                    }
+                    SettingsGroup(
+                        mics.map { mic ->
+                            { shape: Shape ->
+                                MicRow(
+                                    mic = mic,
+                                    score = null,
+                                    isBest = false,
+                                    isCurrent = mic.id == preferredMicId,
+                                    shape = shape,
+                                )
+                            }
+                        },
+                    )
                 }
                 Box(
                     modifier = Modifier
@@ -137,39 +133,31 @@ fun MicCalibrationScreen(
             }
 
             is CalibrationState.Done -> {
-                Text(
-                    text = stringResource(R.string.calib_done),
-                    style = MaterialTheme.typography.titleMedium,
+                SectionHeader(stringResource(R.string.calib_done))
+                SettingsGroup(
+                    s.results
+                        .sortedByDescending { it.score.score }
+                        .map { result ->
+                            { shape: Shape ->
+                                MicRow(
+                                    mic = result.mic,
+                                    score = result.score,
+                                    isBest = result.mic.id == s.bestMicId,
+                                    isCurrent = false,
+                                    shape = shape,
+                                )
+                            }
+                        },
                 )
-                s.results
-                    .sortedByDescending { it.score.score }
-                    .forEach { result ->
-                        MicRow(
-                            mic = result.mic,
-                            score = result.score,
-                            isBest = result.mic.id == s.bestMicId,
-                            isCurrent = false,
-                        )
-                    }
-                if (s.bestMicId != 0) {
-                    Text(
-                        text = stringResource(R.string.calib_saved),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
+                if (s.bestMicId != 0) PageText(stringResource(R.string.calib_saved))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Surface(onClick = viewModel::reset) {
-                        Text(
-                            text = stringResource(R.string.calib_run_again),
-                            modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
+                    FilledTonalButton(onClick = viewModel::reset) {
+                        Text(stringResource(R.string.calib_run_again))
                     }
                 }
             }
@@ -189,12 +177,8 @@ fun MicCalibrationScreen(
                             textAlign = TextAlign.Center,
                         )
                         Spacer(modifier = Modifier.height(12.dp))
-                        Surface(onClick = viewModel::reset) {
-                            Text(
-                                text = stringResource(R.string.action_retry),
-                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-                                style = MaterialTheme.typography.bodyLarge,
-                            )
+                        FilledTonalButton(onClick = viewModel::reset) {
+                            Text(stringResource(R.string.action_retry))
                         }
                     }
                 }
@@ -213,37 +197,37 @@ private fun MicRow(
     score: MicScore?,
     isBest: Boolean,
     isCurrent: Boolean,
+    shape: Shape,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = mic.label, style = MaterialTheme.typography.bodyLarge)
-                if (score != null) {
+    SettingsItem(
+        title = mic.label,
+        subtitle = score?.let {
+            "${stringResource(R.string.calib_hf)} ${(it.hfFraction * 100f).roundToInt()}%  ·  " +
+                "${stringResource(R.string.calib_snr)} ${it.snrDb.roundToInt()} dB"
+        },
+        shape = shape,
+        trailing = when {
+            isBest -> {
+                {
                     Text(
-                        text = "${stringResource(R.string.calib_hf)} ${(score.hfFraction * 100f).roundToInt()}%  ·  " +
-                            "${stringResource(R.string.calib_snr)} ${score.snrDb.roundToInt()} dB",
-                        style = MaterialTheme.typography.bodySmall,
+                        text = stringResource(R.string.calib_best),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+            isCurrent -> {
+                {
+                    Text(
+                        text = stringResource(R.string.calib_current),
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
-            when {
-                isBest -> Text(
-                    text = stringResource(R.string.calib_best),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                isCurrent -> Text(
-                    text = stringResource(R.string.calib_current),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-    }
+            else -> null
+        },
+    )
 }
 
 /** A circular green record-style button with a mic glyph and a caption beneath it. */

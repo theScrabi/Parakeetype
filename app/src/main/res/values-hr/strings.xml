@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Otvori Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Omogućeno</string>
-    <string name="state_disabled">Onemogućeno</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Natrag</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Upotrebljava Silero VAD za uklanjanje tišine i pozadinske buke prije transkripcije. Onemogućite samo ako VAD odsijeca početak vašeg govora ili daje prazne rezultate.</string>
     <string name="pref_postprocessing_title">Naknadna obrada transkripta</string>
     <string name="pref_postprocessing_subtitle">Uklanja poštapalice (ovaj, hm, mhm), sažima mucanje i čisti ponovljene fraze koje model ponekad izmisli. Onemogućite da biste dobili točan sirovi izlaz modela – korisno za utvrđivanje je li čišćenje odgovorno za izostavljene ili izmijenjene riječi.</string>
-    <string name="pref_postprocessing_disabled_raw">Onemogućeno (sirovi izlaz)</string>
     <string name="pref_keep_loaded_title">Zadrži model učitan</string>
     <string name="pref_keep_loaded_subtitle">Zadržava model govora u memoriji dok upotrebljavate drugu tipkovnicu, tako da je diktiranje odmah spremno kad se vratite, bez ponovnog učitavanja modela. Radi kao usluga u prednjem planu sa stalnom obavijesti i zauzima oko 700 MB RAM-a.</string>
     <string name="pref_diagnostics_title">Dijagnostika obrade</string>
     <string name="pref_diagnostics_subtitle">Prikazuje značku uživo na tipkovnici s brojačima skraćivanja prozora, oporavaka poravnanja i odbačenih praznih koraka. Korisno za dijagnosticiranje problema s obradom; prema zadanim postavkama skriveno.</string>
-    <string name="pref_diagnostics_visible">Prikazano</string>
-    <string name="pref_diagnostics_hidden">Skriveno</string>
     <string name="replacements_description">Zamjenjuje riječi ili izraze u vašim transkripcijama, npr. ime koje model stalno pogrešno piše. Pronalazi samo cijele riječi i ne razlikuje velika i mala slova. Primjenjuje se u sklopu naknadne obrade transkripcije.</string>
     <string name="replacements_add">Dodaj zamjenu</string>
     <string name="replacements_edit">Uredi zamjenu</string>

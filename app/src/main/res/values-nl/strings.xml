@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Parakeetype openen</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Ingeschakeld</string>
-    <string name="state_disabled">Uitgeschakeld</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Terug</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Gebruikt Silero VAD om stilte en achtergrondgeluid weg te filteren vóór de transcriptie. Schakel dit alleen uit als VAD het begin van je spraak afkapt of lege resultaten geeft.</string>
     <string name="pref_postprocessing_title">Nabewerking van transcript</string>
     <string name="pref_postprocessing_subtitle">Verwijdert stopwoordjes (eh, uhm, hmm), voegt gestotter samen en ruimt herhaalde zinsdelen op die het model soms hallucineert. Schakel dit uit om de exacte, onbewerkte modeluitvoer te krijgen - handig om na te gaan of het opschonen de oorzaak is van weggevallen of gewijzigde woorden.</string>
-    <string name="pref_postprocessing_disabled_raw">Uitgeschakeld (onbewerkte uitvoer)</string>
     <string name="pref_keep_loaded_title">Model geladen houden</string>
     <string name="pref_keep_loaded_subtitle">Houdt het spraakmodel in het geheugen terwijl je een ander toetsenbord gebruikt, zodat dicteren direct klaar is als je terugschakelt, in plaats van dat het model opnieuw wordt geladen. Draait een voorgrondservice met een permanente melding en houdt ongeveer 700 MB RAM bezet.</string>
     <string name="pref_diagnostics_title">Pipelinediagnostiek</string>
     <string name="pref_diagnostics_subtitle">Toont een live badge op het toetsenbord met tellers voor venstertrims, uitlijningsherstel en verworpen lege stappen. Handig om pipelineproblemen te diagnosticeren; standaard uit.</string>
-    <string name="pref_diagnostics_visible">Zichtbaar</string>
-    <string name="pref_diagnostics_hidden">Verborgen</string>
     <string name="replacements_description">Vervangt woorden of zinsdelen in je transcripties, bijv. een naam die het model steeds verkeerd schrijft. Alleen hele woorden komen overeen, hoofdletters en kleine letters maken niet uit. Wordt toegepast als onderdeel van de nabewerking van de transcriptie.</string>
     <string name="replacements_add">Vervanging toevoegen</string>
     <string name="replacements_edit">Vervanging bewerken</string>

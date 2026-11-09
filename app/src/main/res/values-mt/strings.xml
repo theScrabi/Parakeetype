@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Iftaħ Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Attivat</string>
-    <string name="state_disabled">Diżattivat</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Lura</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Juża Silero VAD biex jiffiltra s-skiet u l-istorbju fl-isfond qabel it-traskrizzjoni. Iddiżattivah biss jekk il-VAD qed jaqta\' l-bidu tat-taħdit tiegħek jew qed jagħti riżultati vojta.</string>
     <string name="pref_postprocessing_title">Post-Proċessar tat-Traskrizzjoni</string>
     <string name="pref_postprocessing_subtitle">Ineħħi l-kliem ta\' mili (uh, um, hmm), jiġbor it-tlagħlim u jnaddaf frażijiet ripetuti li l-mudell kultant jallucina. Iddiżattivah biex tirċievi l-output eżatt u mhux ipproċessat tal-mudell — utli biex tiddijanjostika jekk it-tindif huwiex responsabbli għal kliem li jintilef jew jinbidel.</string>
-    <string name="pref_postprocessing_disabled_raw">Diżattivat (output mhux ipproċessat)</string>
     <string name="pref_keep_loaded_title">Żomm il-Mudell Mgħobbi</string>
     <string name="pref_keep_loaded_subtitle">Iżomm il-mudell tat-taħdit fil-memorja waqt li tuża tastiera oħra, biex id-dettatura tkun lesta mill-ewwel meta terġa\' taqleb lura minflok ma jerġa\' jitgħabba l-mudell. Iħaddem servizz fil-quddiem b\'notifika permanenti u juża madwar 700 MB ta\' RAM.</string>
     <string name="pref_diagnostics_title">Dijanjostika tal-Pipeline</string>
     <string name="pref_diagnostics_subtitle">Juri badge dirett fuq it-tastiera b\'counters għat-tqaċċit tat-tieqa, l-irkupri tal-allinjament u l-passi vojta mormija. Utli biex jiġu dijanjostikati problemi fil-pipeline; mitfi b\'mod awtomatiku.</string>
-    <string name="pref_diagnostics_visible">Viżibbli</string>
-    <string name="pref_diagnostics_hidden">Moħbi</string>
     <string name="replacements_description">Jissostitwixxi kliem jew frażijiet fit-traskrizzjonijiet tiegħek, eż. isem li l-mudell dejjem jiktbu ħażin. Iqabbel kliem sħiħ biss u ma jagħmilx differenza bejn ittri kbar u żgħar. Jiġi applikat bħala parti mill-ipproċessar ta\' wara tat-traskrizzjoni.</string>
     <string name="replacements_add">Żid sostituzzjoni</string>
     <string name="replacements_edit">Editja s-sostituzzjoni</string>

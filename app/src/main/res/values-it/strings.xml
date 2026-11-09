@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Apri Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Attivo</string>
-    <string name="state_disabled">Disattivato</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Indietro</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Usa Silero VAD per filtrare silenzio e rumori di fondo prima della trascrizione. Disattivalo solo se il VAD taglia l\'inizio del tuo parlato o produce risultati vuoti.</string>
     <string name="pref_postprocessing_title">Post-elaborazione della trascrizione</string>
     <string name="pref_postprocessing_subtitle">Rimuove le parole riempitive (ehm, uhm, mmh), riduce le balbuzie e ripulisce le frasi ripetute che il modello a volte allucina. Disattivala per ricevere l\'output grezzo esatto del modello – utile per capire se la pulizia è responsabile di parole mancanti o alterate.</string>
-    <string name="pref_postprocessing_disabled_raw">Disattivata (output grezzo)</string>
     <string name="pref_keep_loaded_title">Mantieni il modello caricato</string>
     <string name="pref_keep_loaded_subtitle">Mantiene il modello vocale in memoria mentre usi un\'altra tastiera, così la dettatura è subito pronta quando torni, senza ricaricare il modello. Esegue un servizio in primo piano con una notifica persistente e occupa circa 700 MB di RAM.</string>
     <string name="pref_diagnostics_title">Diagnostica della pipeline</string>
     <string name="pref_diagnostics_subtitle">Mostra un badge in tempo reale sulla tastiera con i contatori di tagli della finestra, recuperi di allineamento e passi vuoti scartati. Utile per diagnosticare problemi della pipeline; nascosto per impostazione predefinita.</string>
-    <string name="pref_diagnostics_visible">Visibile</string>
-    <string name="pref_diagnostics_hidden">Nascosto</string>
     <string name="replacements_description">Sostituisce parole o frasi nelle trascrizioni, ad es. un nome che il modello scrive sempre in modo sbagliato. Considera solo parole intere e ignora maiuscole e minuscole. Viene applicata durante la post-elaborazione della trascrizione.</string>
     <string name="replacements_add">Aggiungi sostituzione</string>
     <string name="replacements_edit">Modifica sostituzione</string>

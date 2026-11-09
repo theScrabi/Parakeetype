@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Abrir o Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Ativado</string>
-    <string name="state_disabled">Desativado</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Voltar</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Utiliza o Silero VAD para filtrar o silêncio e o ruído de fundo antes da transcrição. Desative apenas se o VAD cortar o início da sua fala ou produzir resultados vazios.</string>
     <string name="pref_postprocessing_title">Pós-processamento da transcrição</string>
     <string name="pref_postprocessing_subtitle">Remove palavras de preenchimento (hã, hum, hmm), reduz gaguejos e limpa frases repetidas que o modelo por vezes alucina. Desative para receber a saída em bruto exata do modelo – útil para diagnosticar se a limpeza é responsável por palavras omitidas ou alteradas.</string>
-    <string name="pref_postprocessing_disabled_raw">Desativado (saída em bruto)</string>
     <string name="pref_keep_loaded_title">Manter o modelo carregado</string>
     <string name="pref_keep_loaded_subtitle">Mantém o modelo de voz na memória enquanto utiliza outro teclado, para que o ditado esteja pronto de imediato quando voltar, em vez de recarregar o modelo. Executa um serviço em primeiro plano com uma notificação persistente e ocupa cerca de 700 MB de RAM.</string>
     <string name="pref_diagnostics_title">Diagnóstico do pipeline</string>
     <string name="pref_diagnostics_subtitle">Mostra um distintivo em tempo real no teclado com contadores de cortes de janela, recuperações de alinhamento e passos vazios descartados. Útil para diagnosticar problemas do pipeline; oculto por predefinição.</string>
-    <string name="pref_diagnostics_visible">Visível</string>
-    <string name="pref_diagnostics_hidden">Oculto</string>
     <string name="replacements_description">Substitui palavras ou frases nas suas transcrições, p. ex. um nome que o modelo escreve sempre mal. Só corresponde a palavras inteiras e ignora maiúsculas e minúsculas. É aplicada como parte do pós-processamento da transcrição.</string>
     <string name="replacements_add">Adicionar substituição</string>
     <string name="replacements_edit">Editar substituição</string>

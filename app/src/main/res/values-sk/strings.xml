@@ -24,8 +24,6 @@
     <string name="action_open_parakeetype">Otvoriť Parakeetype</string>
 
     <!-- Common states -->
-    <string name="state_enabled">Zapnuté</string>
-    <string name="state_disabled">Vypnuté</string>
 
     <!-- Content descriptions -->
     <string name="cd_back">Späť</string>
@@ -98,13 +96,10 @@
     <string name="pref_vad_subtitle">Pomocou Silero VAD odfiltruje pred prepisom ticho a hluk v pozadí. Vypnite iba vtedy, ak VAD odrezáva začiatok vašej reči alebo vracia prázdne výsledky.</string>
     <string name="pref_postprocessing_title">Následné spracovanie prepisu</string>
     <string name="pref_postprocessing_subtitle">Odstraňuje výplňové slová (ehm, hm, no), zlučuje zajakávanie a čistí opakované frázy, ktoré si model niekedy vymýšľa. Vypnite, ak chcete dostávať presný nespracovaný výstup modelu – užitočné na zistenie, či čistenie nespôsobuje vynechané alebo zmenené slová.</string>
-    <string name="pref_postprocessing_disabled_raw">Vypnuté (nespracovaný výstup)</string>
     <string name="pref_keep_loaded_title">Ponechať model načítaný</string>
     <string name="pref_keep_loaded_subtitle">Ponechá model reči v pamäti, kým používate inú klávesnicu, takže diktovanie je po prepnutí späť okamžite pripravené a model sa nemusí znova načítavať. Beží ako služba v popredí s trvalým upozornením a zaberá približne 700 MB pamäte RAM.</string>
     <string name="pref_diagnostics_title">Diagnostika spracovania</string>
     <string name="pref_diagnostics_subtitle">Zobrazuje na klávesnici živý odznak s počítadlami skrátení okna, obnovení zarovnania a zahodených prázdnych krokov. Užitočné na diagnostiku problémov so spracovaním; predvolene skryté.</string>
-    <string name="pref_diagnostics_visible">Zobrazené</string>
-    <string name="pref_diagnostics_hidden">Skryté</string>
     <string name="replacements_description">Nahrádza slová alebo frázy v prepisoch, napr. meno, ktoré model stále píše nesprávne. Hľadá len celé slová a nerozlišuje veľké a malé písmená. Prebieha v rámci následného spracovania prepisu.</string>
     <string name="replacements_add">Pridať nahradenie</string>
     <string name="replacements_edit">Upraviť nahradenie</string>
