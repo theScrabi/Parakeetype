@@ -1,0 +1,4 @@
+Third Parakeetype release (v0.6.0).
+
+- The settings now look like a page of the Android Settings app: grouped items, plain icons, a large title that collapses on scroll, switch and radio rows you can tap anywhere
+- Instant mode: recordings started with the talk button now also switch back to your previous keyboard once their text is typed

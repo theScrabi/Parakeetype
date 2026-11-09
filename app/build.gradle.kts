@@ -18,8 +18,8 @@ configure<ApplicationExtension> {
         applicationId = "org.schabi.parakeetype"
         minSdk = 31
         targetSdk = 37
-        versionCode = 130
-        versionName = "0.5.0"
+        versionCode = 131
+        versionName = "0.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
