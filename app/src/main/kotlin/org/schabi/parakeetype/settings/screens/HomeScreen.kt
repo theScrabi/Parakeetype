@@ -20,17 +20,24 @@ import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.DefaultLifecycleObserver
@@ -130,104 +137,126 @@ private fun HomeScreenContent(
     onNavigateToTools: () -> Unit,
     onNavigateToReplacements: () -> Unit,
 ) {
+    // Laid out like a page of the Android 16/17 Settings app: primary-coloured section
+    // headers over groups of rounded items on the surfaceContainer background.
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+            .padding(horizontal = 16.dp)
+            .padding(bottom = 24.dp),
     ) {
-        Text(
-            text = stringResource(R.string.home_section_setup),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        SectionHeader(stringResource(R.string.home_section_setup))
+        SettingsGroup(
+            listOf(
+                // 1. IME enabled
+                {
+                    StatusItem(
+                        done = isImeEnabled,
+                        icon = if (isImeEnabled) Icons.Rounded.Keyboard else Icons.Rounded.Warning,
+                        title = if (isImeEnabled) stringResource(R.string.home_ime_enabled)
+                        else stringResource(R.string.home_ime_not_enabled),
+                        subtitle = if (isImeEnabled) stringResource(R.string.home_ime_enabled_subtitle)
+                        else stringResource(R.string.home_ime_not_enabled_subtitle),
+                        actionLabel = stringResource(R.string.action_open_settings),
+                        action = if (!isImeEnabled) onOpenImeSettings else null,
+                        shape = it,
+                    )
+                },
+                // 2. Microphone permission
+                {
+                    StatusItem(
+                        done = hasMicPermission,
+                        icon = if (hasMicPermission) Icons.Rounded.Mic else Icons.Rounded.MicOff,
+                        title = if (hasMicPermission) stringResource(R.string.home_mic_granted)
+                        else stringResource(R.string.home_mic_required),
+                        subtitle = if (hasMicPermission) stringResource(R.string.home_mic_granted_subtitle)
+                        else stringResource(R.string.home_mic_required_subtitle),
+                        actionLabel = stringResource(R.string.action_grant_permission),
+                        action = if (!hasMicPermission) onRequestMicPermission else null,
+                        shape = it,
+                    )
+                },
+                // 3. Model installed - always clickable so the model screen stays reachable
+                {
+                    StatusItem(
+                        done = isModelReady,
+                        icon = if (isModelReady) Icons.Rounded.CheckCircle else Icons.Rounded.CloudDownload,
+                        title = if (isModelReady) stringResource(R.string.home_model_ready)
+                        else stringResource(R.string.home_model_not_downloaded),
+                        subtitle = if (isModelReady) stringResource(R.string.home_model_ready_subtitle)
+                        else stringResource(R.string.home_model_not_downloaded_subtitle),
+                        actionLabel = if (isModelReady) stringResource(R.string.action_manage)
+                        else stringResource(R.string.action_download),
+                        action = onNavigateToModel,
+                        shape = it,
+                    )
+                },
+                // 4. System voice input - optional, lets other apps use Parakeetype for speech-to-text
+                {
+                    StatusItem(
+                        done = isDefaultRecognizer,
+                        icon = if (isDefaultRecognizer) Icons.Rounded.RecordVoiceOver else Icons.Rounded.Warning,
+                        title = if (isDefaultRecognizer) stringResource(R.string.home_recognizer_default)
+                        else stringResource(R.string.home_recognizer_not_default),
+                        subtitle = when {
+                            isDefaultRecognizer -> stringResource(R.string.home_recognizer_default_subtitle)
+                            VOICE_INPUT_IN_LANGUAGE_SETTINGS -> stringResource(R.string.home_recognizer_not_default_speech_subtitle)
+                            else -> stringResource(R.string.home_recognizer_not_default_subtitle)
+                        },
+                        actionLabel = stringResource(R.string.action_open_settings),
+                        action = if (!isDefaultRecognizer) onOpenVoiceInputSettings else null,
+                        shape = it,
+                    )
+                },
+            ),
         )
 
-        // 1. IME enabled
-        StatusRow(
-            icon = if (isImeEnabled) Icons.Rounded.Keyboard else Icons.Rounded.Warning,
-            iconTint = if (isImeEnabled) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.error,
-            title = if (isImeEnabled) stringResource(R.string.home_ime_enabled)
-            else stringResource(R.string.home_ime_not_enabled),
-            subtitle = if (isImeEnabled) stringResource(R.string.home_ime_enabled_subtitle)
-            else stringResource(R.string.home_ime_not_enabled_subtitle),
-            actionLabel = stringResource(R.string.action_open_settings),
-            action = if (!isImeEnabled) onOpenImeSettings else null,
-        )
-
-        // 2. Microphone permission
-        StatusRow(
-            icon = if (hasMicPermission) Icons.Rounded.Mic else Icons.Rounded.MicOff,
-            iconTint = if (hasMicPermission) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.error,
-            title = if (hasMicPermission) stringResource(R.string.home_mic_granted)
-            else stringResource(R.string.home_mic_required),
-            subtitle = if (hasMicPermission) stringResource(R.string.home_mic_granted_subtitle)
-            else stringResource(R.string.home_mic_required_subtitle),
-            actionLabel = stringResource(R.string.action_grant_permission),
-            action = if (!hasMicPermission) onRequestMicPermission else null,
-        )
-
-        // 3. Model installed - always show an action so the model screen stays reachable
-        StatusRow(
-            icon = if (isModelReady) Icons.Rounded.CheckCircle else Icons.Rounded.CloudDownload,
-            iconTint = if (isModelReady) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.error,
-            title = if (isModelReady) stringResource(R.string.home_model_ready)
-            else stringResource(R.string.home_model_not_downloaded),
-            subtitle = if (isModelReady) stringResource(R.string.home_model_ready_subtitle)
-            else stringResource(R.string.home_model_not_downloaded_subtitle),
-            actionLabel = if (isModelReady) stringResource(R.string.action_manage)
-            else stringResource(R.string.action_download),
-            action = onNavigateToModel,
-        )
-
-        // 4. System voice input - optional, lets other apps use Parakeetype for speech-to-text
-        StatusRow(
-            icon = if (isDefaultRecognizer) Icons.Rounded.RecordVoiceOver else Icons.Rounded.Warning,
-            iconTint = if (isDefaultRecognizer) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.error,
-            title = if (isDefaultRecognizer) stringResource(R.string.home_recognizer_default)
-            else stringResource(R.string.home_recognizer_not_default),
-            subtitle = when {
-                isDefaultRecognizer -> stringResource(R.string.home_recognizer_default_subtitle)
-                VOICE_INPUT_IN_LANGUAGE_SETTINGS -> stringResource(R.string.home_recognizer_not_default_speech_subtitle)
-                else -> stringResource(R.string.home_recognizer_not_default_subtitle)
-            },
-            actionLabel = stringResource(R.string.action_open_settings),
-            action = if (!isDefaultRecognizer) onOpenVoiceInputSettings else null,
-        )
-
-        Spacer(Modifier.height(8.dp))
-        HorizontalDivider()
-        Spacer(Modifier.height(4.dp))
-
-        Text(
-            text = stringResource(R.string.home_section_configuration),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-
-        ConfigurationButton(
-            icon = Icons.Rounded.Mic,
-            label = stringResource(R.string.home_pref_input),
-            onClick = onNavigateToInput,
-        )
-        ConfigurationButton(
-            icon = Icons.Rounded.Keyboard,
-            label = stringResource(R.string.home_pref_speech),
-            onClick = onNavigateToSpeech,
-        )
-        ConfigurationButton(
-            icon = Icons.Rounded.FindReplace,
-            label = stringResource(R.string.home_pref_replacements),
-            onClick = onNavigateToReplacements,
-        )
-        ConfigurationButton(
-            icon = Icons.Rounded.Settings,
-            label = stringResource(R.string.home_pref_tools),
-            onClick = onNavigateToTools,
+        SectionHeader(stringResource(R.string.home_section_configuration))
+        SettingsGroup(
+            listOf(
+                {
+                    SettingsItem(
+                        icon = Icons.Rounded.Mic,
+                        iconContainer = MaterialTheme.colorScheme.primaryContainer,
+                        iconTint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        title = stringResource(R.string.home_pref_input),
+                        shape = it,
+                        onClick = onNavigateToInput,
+                    )
+                },
+                {
+                    SettingsItem(
+                        icon = Icons.Rounded.Keyboard,
+                        iconContainer = MaterialTheme.colorScheme.secondaryContainer,
+                        iconTint = MaterialTheme.colorScheme.onSecondaryContainer,
+                        title = stringResource(R.string.home_pref_speech),
+                        shape = it,
+                        onClick = onNavigateToSpeech,
+                    )
+                },
+                {
+                    SettingsItem(
+                        icon = Icons.Rounded.FindReplace,
+                        iconContainer = MaterialTheme.colorScheme.tertiaryContainer,
+                        iconTint = MaterialTheme.colorScheme.onTertiaryContainer,
+                        title = stringResource(R.string.home_pref_replacements),
+                        shape = it,
+                        onClick = onNavigateToReplacements,
+                    )
+                },
+                {
+                    SettingsItem(
+                        icon = Icons.Rounded.Settings,
+                        iconContainer = MaterialTheme.colorScheme.surfaceContainerHighest,
+                        iconTint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        title = stringResource(R.string.home_pref_tools),
+                        shape = it,
+                        onClick = onNavigateToTools,
+                    )
+                },
+            ),
         )
     }
 }
@@ -279,62 +308,121 @@ private fun openVoiceInputSettings(context: Context) {
     }
 }
 
-/** A labelled outlined button in the Configuration section of the home screen. */
+/** Outer corners of a group of settings items, as in the Android 16/17 Settings app. */
+private val GROUP_CORNER = 24.dp
+
+/** Corners between two items of the same group. */
+private val ITEM_CORNER = 4.dp
+
+/** A section title above a group: small, in the primary colour. */
 @Composable
-private fun ConfigurationButton(
-    icon: ImageVector,
-    label: String,
-    onClick: () -> Unit,
-) {
-    OutlinedButton(
-        onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            modifier = Modifier.size(18.dp),
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(label)
+private fun SectionHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleSmall,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(start = 16.dp, top = 20.dp, bottom = 8.dp),
+    )
+}
+
+/**
+ * A group of settings items separated by small gaps: the first item has large top
+ * corners, the last large bottom corners, everything in between small ones.
+ */
+@Composable
+private fun SettingsGroup(items: List<@Composable (Shape) -> Unit>) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        items.forEachIndexed { index, item ->
+            val top = if (index == 0) GROUP_CORNER else ITEM_CORNER
+            val bottom = if (index == items.lastIndex) GROUP_CORNER else ITEM_CORNER
+            item(RoundedCornerShape(topStart = top, topEnd = top, bottomStart = bottom, bottomEnd = bottom))
+        }
     }
 }
 
+/** One row of a [SettingsGroup]: an icon in a coloured circle, a title and an optional summary. */
 @Composable
-private fun StatusRow(
+private fun SettingsItem(
     icon: ImageVector,
+    iconContainer: Color,
     iconTint: Color,
     title: String,
-    subtitle: String,
-    actionLabel: String,
-    action: (() -> Unit)?,
+    shape: Shape,
+    subtitle: String? = null,
+    onClickLabel: String? = null,
+    onClick: (() -> Unit)? = null,
 ) {
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(shape)
+            .background(MaterialTheme.colorScheme.surfaceBright)
+            .then(
+                if (onClick != null) Modifier.clickable(onClickLabel = onClickLabel, onClick = onClick)
+                else Modifier
+            )
+            .heightIn(min = 72.dp)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(iconContainer),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = iconTint,
-                modifier = Modifier.size(32.dp),
+                modifier = Modifier.size(24.dp),
             )
-            Spacer(Modifier.width(16.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = title, style = MaterialTheme.typography.bodyLarge)
+        }
+        Spacer(Modifier.width(16.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Normal),
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            if (subtitle != null) {
                 Text(
                     text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            if (action != null) {
-                Spacer(Modifier.width(8.dp))
-                TextButton(onClick = action) { Text(actionLabel) }
-            }
         }
     }
+}
+
+/**
+ * A setup step: a done step shows its icon in the primary colours, a missing one in the error
+ * colours. Tapping the row runs [action] (announced as [actionLabel]); without one it is static.
+ */
+@Composable
+private fun StatusItem(
+    done: Boolean,
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    actionLabel: String,
+    action: (() -> Unit)?,
+    shape: Shape,
+) {
+    SettingsItem(
+        icon = icon,
+        iconContainer = if (done) MaterialTheme.colorScheme.primaryContainer
+        else MaterialTheme.colorScheme.errorContainer,
+        iconTint = if (done) MaterialTheme.colorScheme.onPrimaryContainer
+        else MaterialTheme.colorScheme.onErrorContainer,
+        title = title,
+        subtitle = subtitle,
+        shape = shape,
+        onClickLabel = actionLabel,
+        onClick = action,
+    )
 }
 
 @Preview(showBackground = true, name = "Home · Nothing Set Up")
@@ -400,33 +488,35 @@ private fun HomeScreenPartialSetupPreview() {
     }
 }
 
-@Preview(showBackground = true, name = "Status Row · Done (no action)")
+@Preview(showBackground = true, name = "Status Item · Done / Pending")
 @Composable
-private fun StatusRowDonePreview() {
+private fun StatusItemPreview() {
     ParakeetypeTheme {
-        StatusRow(
-            icon = Icons.Rounded.CheckCircle,
-            iconTint = Color.Unspecified,
-            title = "Keyboard enabled",
-            subtitle = "Parakeetype is in the keyboard list.",
-            actionLabel = "Open Settings",
-            action = null,
+        SettingsGroup(
+            listOf(
+                {
+                    StatusItem(
+                        done = true,
+                        icon = Icons.Rounded.CheckCircle,
+                        title = "Keyboard enabled",
+                        subtitle = "Parakeetype is in the keyboard list.",
+                        actionLabel = "Open Settings",
+                        action = null,
+                        shape = it,
+                    )
+                },
+                {
+                    StatusItem(
+                        done = false,
+                        icon = Icons.Rounded.Warning,
+                        title = "Keyboard not enabled",
+                        subtitle = "Add Parakeetype in system keyboard settings.",
+                        actionLabel = "Open Settings",
+                        action = {},
+                        shape = it,
+                    )
+                },
+            ),
         )
     }
 }
-
-@Preview(showBackground = true, name = "Status Row · Pending (with action)")
-@Composable
-private fun StatusRowPendingPreview() {
-    ParakeetypeTheme {
-        StatusRow(
-            icon = Icons.Rounded.Warning,
-            iconTint = Color.Unspecified,
-            title = "Keyboard not enabled",
-            subtitle = "Add Parakeetype in system keyboard settings.",
-            actionLabel = "Open Settings",
-            action = {},
-        )
-    }
-}
-
