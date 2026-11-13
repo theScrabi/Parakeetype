@@ -58,7 +58,7 @@ object ModelRegistry {
 
     //    val all: List<ModelInfo> = listOf(parakeetUltra, voxtralMini, whisperLargeV3Turbo)
     val all: List<ModelInfo> =
-        listOf(parakeetUltra) // for now removed voxtralMini and whisperLargeV3Turbo as I could not get it to run on-device within reasonable resource limits
+        listOf(parakeetUltra, parakeetLithuanian) // for now removed voxtralMini and whisperLargeV3Turbo as I could not get it to run on-device within reasonable resource limits
 
     private val byId: Map<ModelId, ModelInfo> = all.associateBy { it.id }
 
@@ -86,6 +86,29 @@ private val parakeetUltra = ModelInfo(
         ModelFile("joiner.int8.onnx", "20ae4350c2484ba607d94f08ef25ae3ead762d8aaf70753758ffcc504e255ebb"),
         ModelFile("nemo128.onnx", "a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"),
         ModelFile("vocab.txt", "d58544679ea4bc6ac563d1f545eb7d474bd6cfa467f0a6e2c1dc1c7d37e3c35d"),
+        ModelFile(SILERO_VAD_FILE, "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3"),
+    ),
+)
+
+// Parakeet TDT 0.6B v3 fine-tuned on Lithuanian (kmynas v4 by Kristijonas Jakubsonas, CC BY 4.0),
+// re-exported into the same layout as Parakeet Ultra (640-dim encoder output, separate
+// decoder / joiner) so it runs on ParakeetEngine unchanged. Vocabulary 8196 + blank, 5 durations.
+private val parakeetLithuanian = ModelInfo(
+    id = ModelId.PARAKEET_LITHUANIAN,
+    displayName = "Parakeet Lithuanian",
+    description = "Parakeet TDT v3 fine-tuned for Lithuanian (kmynas v4 by Kristijonas Jakubsonas, " +
+            "trained on the LIEPA-3 corpus). Recognises Lithuanian far better than the default model; " +
+            "for other languages use the default model. " +
+            "The archive also contains the Silero VAD model.",
+    approximateSizeMb = 910,
+    // Converted from https://huggingface.co/kristijonas/kmynas-parakeet-lt-v4; the archive's NOTICE.txt lists the changes.
+    archiveUrl = "https://github.com/RobertasTa/android-lt/releases/tag/v1.1.0",
+    files = listOf(
+        ModelFile("encoder.int8.onnx", "8f4dafb7d62ae117dc5f1133d44457b6ae8d4f91e6d899588581a519f14319dc"),
+        ModelFile("decoder.int8.onnx", "78246a6d979ddecf47b3c66b2c332a32cb60abef75b019692b78f2bcb3d9aad2"),
+        ModelFile("joiner.int8.onnx", "0c965ab9c66720bb101ca6457c3c54dfd6d7780b668e8d0b641abef459b49cf5"),
+        ModelFile("nemo128.onnx", "a9fde1486ebfcc08f328d75ad4610c67835fea58c73ba57e3209a6f6cf019e9f"),
+        ModelFile("vocab.txt", "fab30a2363a8eccd053cf0def763db0b2f9e37a4b321070698f36da013e448e4"),
         ModelFile(SILERO_VAD_FILE, "1a153a22f4509e292a94e67d6f9b85e8deb25b4988682b7e174c65279d8788e3"),
     ),
 )
